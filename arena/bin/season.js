@@ -7,7 +7,7 @@
 const fs = require("fs");
 const path = require("path");
 const { runGame, mulberry32 } = require("../lib/game");
-const { PERSONAS, HANDLES } = require("../lib/personas");
+const { PERSONAS, HANDLES, CREEDS } = require("../lib/personas");
 const llm = require("../lib/llm");
 const engine = require("../lib/engine");
 
@@ -28,7 +28,7 @@ const log = (s) => { const line = `[${new Date().toISOString().slice(11, 19)}] $
 const agents = S.roster.map((a, i) => ({
   agentId: `${a.persona}-${a.model}${a.tag ? "-" + a.tag : ""}`,
   handle: a.handle || HANDLES[i % HANDLES.length],
-  personaId: a.persona, persona: PERSONAS[a.persona], model: a.model, effort: a.effort || S.effort || "medium",
+  personaId: a.persona, persona: PERSONAS[a.persona] && { ...PERSONAS[a.persona], creed: S.creeds ? CREEDS[a.persona] : null }, model: a.model, effort: a.effort || S.effort || "medium",
 }));
 for (const a of agents) if (!a.persona) throw new Error("unknown persona " + a.personaId);
 if (new Set(agents.map((a) => a.agentId)).size !== agents.length) throw new Error("duplicate agent ids");
@@ -60,9 +60,13 @@ function digestFor(g, results) {
   const L = [`## Generation ${g} (${results.length} tables)`];
   results.forEach(({ cfg, record }, t) => {
     const flags = [`${cfg.players} players`, `${cfg.numRounds} rounds`, `node limit ${cfg.nodeLimit}`, `edit budget ${cfg.distanceLimit}`,
-      `measure ${cfg.measure}`, `isolation ${cfg.isolation}`, cfg.visibility === "open" ? "open code" : null, cfg.chat ? "chat" : null].filter(Boolean).join(", ");
+      `measure ${cfg.measure}`, `isolation ${cfg.isolation}`, cfg.visibility === "open" ? "open code" : null, cfg.chat ? "chat" : null,
+      cfg.m === "rank" ? "relative esteem" : null, cfg.self === "excluded" ? "self excluded" : null, cfg.hunt ? "hunt (legibility)" : null, cfg.objective === "absolute" ? "absolute objective" : null].filter(Boolean).join(", ");
     const ranked = record.final.slice().sort((a, b) => a.rank - b.rank);
-    L.push(`### Table ${t + 1} (${flags})\n` + "```\n" + ranked.map((s) => `${s.rank}. ${s.handle.padEnd(10)} d=${s.d.toFixed(3)} m=${s.m.toFixed(3)} total=${s.total.toFixed(4)}`).join("\n") + "\n```");
+    const R = record.rounds, n = record.seats.length;
+    const beh = (i) => { const self = R.reduce((a, r) => a + r.matrix[i][i], 0) / R.length; const g = R.flatMap((r) => r.matrix[i].filter((_, j) => j !== i)); return ` self=${self.toFixed(2)} gives=${(g.reduce((a, b) => a + b, 0) / g.length).toFixed(2)}`; };
+    L.push(`### Table ${t + 1} (${flags})\n` + "```\n" + ranked.map((s) => `${s.rank}. ${s.handle.padEnd(10)} d=${s.d.toFixed(3)} m=${s.m.toFixed(3)}${s.L != null ? ` L=${s.L.toFixed(3)}` : ""} total=${s.total.toFixed(4)}${beh(record.final.indexOf(s))}`).join("\n") + "\n```");
+    if (cfg.visibility === "sealed") return; // results only: programs are never published
     const wi = record.final.findIndex((s) => s.rank === 1);
     const lastCode = record.rounds[record.rounds.length - 1].programs[wi].code;
     L.push(`Winner ${record.final[wi].handle}'s final program:\n` + "```" + cfg.language + "\n" + lastCode.replace(/\n?$/, "\n") + "```");

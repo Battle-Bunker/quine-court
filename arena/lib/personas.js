@@ -109,9 +109,40 @@ const PERSONAS = {
   },
 };
 
+// Creeds (persona v2): binding commitments that tie a persona's lens to a mechanism. The first
+// checkpoint found that free-form personas changed voice but not strategy (model identity, not persona,
+// predicted approach, and imitation of published winners erased what little difference there was).
+// Enabled per season with `creeds: true`.
+const CREEDS = {
+  plain: null,
+  kid12: "Your judge only uses ideas you could explain to a friend in one sentence (counting things, checking for words, simple arithmetic): no hashing libraries, no ast module. You try at least one weird trick per game.",
+  fp_purist: "score() is a pure function of its argument: no module-level mutable state, no iterators or counters carried across calls, no randomness, no writes to globals. Build it as a composition of small pure feature functions.",
+  graph_nerd: "Your judge's verdict comes from the program's structure as a tree or graph (parse it: node-type sequences, depth/branching profiles, subtree hashes), never from raw character length.",
+  mischief: "Every round after the first, you spend most of your edit budget changing how your program looks to other judges (names, comments, literals, decoys), while keeping your own judge's behaviour stable.",
+  cryptographer: "Your judge fingerprints programs with hashes or sketches (crc32, MinHash, SimHash over normalized tokens or shingles) mapped into [0, 1].",
+  diplomat: "You practise reciprocity: as far as your program can recognize players, it treats them according to how they have treated you, and you move toward reciprocity as the matrix reveals behaviour.",
+  scientist: "At least one round per game is an explicit controlled experiment: change one thing, write the predicted effect in your notes, check it next round.",
+  game_theorist: "Before writing code each round, you write down in your notes what you expect each other player to do and your best response to that profile.",
+  minimalist: "Your program never uses more than 40% of the node limit.",
+  rules_lawyer: "Each game you test at least one hypothesis about how the engine measures, executes or scores programs, and you exploit every gap you confirm.",
+  artist: "Your judge scores style (layout, rhythm, naming, whitespace, the visual texture of the source), not what the code does.",
+  security_eng: "Your judge canonicalizes its input before judging (parse and re-dump, strip comments, strings and names) so surface edits cannot move its verdict.",
+  altruist: "You are a generous judge: the scores you give other players average at least 0.5.",
+  cutthroat: "You are a stingy judge: you give rivals the lowest scores compatible with judging them sharply.",
+  copycat: "You start every game from the most successful approach you have seen (published winners, your notebook) and improve it incrementally.",
+  contrarian: "Your judge must use a different feature family from the one used by the most recently published winners.",
+  evolutionist: "Each game you choose explicitly between mimicry (resembling a successful lineage's surface) and niche-seeking (a feature family nobody uses), and name your choice in your notes.",
+  cobol: "Your judge is built from explicit lookup tables, checksums and control totals over the source text.",
+  stylometrist: "Your judge is built on token or character n-gram frequency profiles.",
+  gambler: "When choosing between options, you pick the one with the highest variance of outcomes.",
+  zen: "After round 1 you change at most 2 nodes per round.",
+  economist: "You treat the scores you hand out as a budget and allocate them deliberately; you write the allocation logic in your notes.",
+  trickster_diplomat: "In public messages (when there is a channel) you always sound cooperative; your actual scoring serves only you.",
+};
+
 // Neutral table handles: persistent per agent across a season, reveal nothing about persona/model.
 const HANDLES = ["Heron", "Otter", "Lynx", "Wren", "Marten", "Ibis", "Kestrel", "Stoat", "Plover", "Vole", "Egret", "Ferret",
   "Tern", "Badger", "Shrike", "Newt", "Osprey", "Pika", "Rook", "Tapir", "Quail", "Dingo", "Gecko", "Hoopoe", "Jackal", "Kiwi",
   "Loris", "Moth", "Nuthatch", "Okapi", "Puffin", "Raven", "Skink", "Toucan", "Urchin", "Vireo", "Walrus", "Yak", "Zorilla", "Avocet"];
 
-module.exports = { PERSONAS, HANDLES };
+module.exports = { PERSONAS, HANDLES, CREEDS };

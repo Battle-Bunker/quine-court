@@ -4,6 +4,7 @@ const path = require("path");
 const Parser = require("web-tree-sitter");
 const AstDiff = require("../../public/astdiff.js");
 const { finalScores, discriminability } = require("../../lib/scoring");
+const variants = require("./variants");
 const sandbox = require("./sandbox");
 
 const PUB = path.join(__dirname, "..", "..", "public");
@@ -30,7 +31,8 @@ function init() {
 //   leaf longer than 8 chars is split into 8-char chunks, and comments are counted as tokenized
 //   nodes. Normal code measures the same as vanilla.
 const STRINGY = new Set(["string_content", "string_fragment", "comment"]);
-const tokenize = (s) => (s.match(/[A-Za-z0-9_]+|[^\sA-Za-z0-9_]/g) || []).flatMap((t) => t.length <= 8 ? [t] : t.match(/.{1,8}/gs));
+// Whitespace runs inside strings/comments count too (8 chars per token); outside literals, layout is free.
+const tokenize = (s) => (s.match(/[A-Za-z0-9_]+|\s+|[^\sA-Za-z0-9_]/g) || []).flatMap((t) => t.length <= 8 ? [t] : t.match(/.{1,8}/gs));
 const leaf = (label) => ({ kind: "tok", label, children: [] });
 
 function bounded(parsed) {
@@ -75,14 +77,44 @@ function check(cfg, prevCode, code) {
   return { ok: true, nodeCount: parsed.size, distance: dist };
 }
 
+// Human-readable detail for a rejected program (the web UI shows diff highlights; this is the text
+// equivalent): node counts per top-level statement, and the edit operations against the previous program.
+function explain(cfg, prevCode, code) {
+  const L = [];
+  const p = measure(cfg.language, code, cfg.measure);
+  const sizeOf = (n) => n.children.reduce((a, c) => a + sizeOf(c), 1);
+  const src = code.split("\n");
+  L.push("Node count by top-level statement:");
+  for (const c of p.root.children) {
+    const first = (src[(c.line || 1) - 1] || "").trim().slice(0, 60);
+    L.push(`  ${String(sizeOf(c)).padStart(4)}  line ${c.line || "?"}: ${c.kind === "comments" ? "(comments)" : first}`);
+  }
+  if (prevCode != null) {
+    const a = measure(cfg.language, prevCode, cfg.measure), b = p;
+    const { mapping } = differs[cfg.language].ted(a.root, b.root);
+    const ops = [];
+    for (const [x, y] of mapping) {
+      if (!x) ops.push(`insert ${y.label} (new line ${y.line || "?"})`);
+      else if (!y) ops.push(`delete ${x.label} (old line ${x.line || "?"})`);
+      else if (x.label !== y.label) ops.push(`relabel ${x.label} -> ${y.label} (line ${y.line || "?"})`);
+    }
+    L.push(`Edit operations vs your previous program (${ops.length}):`);
+    ops.slice(0, 60).forEach((o) => L.push("  " + o.slice(0, 120)));
+    if (ops.length > 60) L.push(`  ... ${ops.length - 60} more`);
+  }
+  return L.join("\n");
+}
+
 async function runRound(cfg, codes, rng) {
   return sandbox.runMatrix(cfg.language, codes, cfg.isolation || "row", rng);
 }
 
+// Final scores under the table's scoring rule (shipped rule = lib/scoring.js).
+const scoreGame = (cfg, ids, rounds) => variants.scores(cfg, ids, rounds.map((r) => ({ matrix: r.matrix })));
 // Provisional standings from the rounds so far (d needs >= 2 rounds).
-function standings(ids, rounds) {
+function standings(cfg, ids, rounds) {
   if (!rounds.length) return null;
-  return finalScores(ids, rounds.map((r) => ({ matrix: r.matrix })));
+  return scoreGame(cfg, ids, rounds);
 }
 
-module.exports = { init, measure, distance, check, runRound, finalScores, discriminability, standings, differs };
+module.exports = { init, measure, distance, check, explain, runRound, scoreGame, finalScores, discriminability, standings, differs };

@@ -39,7 +39,9 @@ async function playTurn({ cfg, seat, ctx, dir, round, log }) {
     const v = await validate(cfg, prevCode, program);
     attempts.push({ text: r.text, program, valid: v, cost: r.cost, ms: r.ms, outTokens: r.usage && r.usage.output_tokens });
     if (v.ok) { chosen = { program, notes: (P.extract(r.text, "notes") || "").trim().slice(0, 1500), message: cfg.chat ? (P.extract(r.text, "message") || "").trim().slice(0, 300) : null, v }; break; }
-    prompt = P.retryPrompt(base, r.text, program, v.error);
+    let detail = "";
+    if (program && /Too (complex|many changes)/.test(v.error || "")) { try { detail = "\n" + engine.explain(cfg, prevCode, program); } catch {} }
+    prompt = P.retryPrompt(base, r.text, program, v.error + detail);
     log(`  ${ctx.gameId} ${seat.handle} r${round} attempt ${a + 1} rejected: ${v.error}`);
   }
   fs.writeFileSync(path.join(dir, "transcripts", `${seat.handle}-r${round}.json`), JSON.stringify({ system, prompt: base, attempts }, null, 1));
@@ -60,7 +62,7 @@ async function runGame({ gameId, cfg, seats, dir, digest = null, seed = 1, refle
   const save = () => fs.writeFileSync(path.join(dir, "game.json"), JSON.stringify(record, null, 1));
 
   for (let k = 1; k <= cfg.numRounds; k++) {
-    const standings = rounds.length ? engine.standings(ids, rounds) : null;
+    const standings = rounds.length ? engine.standings(cfg, ids, rounds) : null;
     const turns = await Promise.all(seats.map((seat, i) => playTurn({
       cfg, seat, round: k, dir, log,
       ctx: { gameId, cfg, handles, rounds, me: i, myCodes: myCodes[i], myNotes: myNotes[i], notebook: seat.notebook, digest, standings },
@@ -84,7 +86,7 @@ async function runGame({ gameId, cfg, seats, dir, digest = null, seed = 1, refle
     save();
     log(`  ${gameId} round ${k}/${cfg.numRounds} done` + (programs.some((p) => p.failed) ? ` (failed: ${handles.filter((_, i) => programs[i].failed).join(",")})` : ""));
   }
-  const final = engine.finalScores(ids, rounds);
+  const final = engine.scoreGame(cfg, ids, rounds);
   const order = final.map((s, i) => i).sort((a, b) => final[b].total - final[a].total);
   final.forEach((s, i) => { s.rank = order.indexOf(i) + 1; s.handle = handles[i]; });
   record.final = final;

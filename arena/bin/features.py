@@ -9,6 +9,7 @@ meant for triage and clustering, not proof. Behavioural fields come from the rec
 import ast, json, os, re, sys
 
 RUNS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "runs")
+CODEY = ("import", "def ", "return", "class", "lambda", "score", "print", "for ", "while", "\n", "(", "=")
 MUTATORS = {"append", "extend", "pop", "insert", "update", "add", "setdefault", "clear", "remove", "popleft", "appendleft"}
 
 
@@ -51,10 +52,14 @@ def static(code):
         elif isinstance(n, ast.Constant) and isinstance(n.value, str):
             strings.append(n.value)
         elif isinstance(n, ast.Compare) and any(isinstance(op, (ast.In, ast.NotIn)) for op in n.ops):
-            if isinstance(n.left, ast.Constant) and isinstance(n.left.value, str) and len(n.left.value) >= 4:
+            lit = n.left.value if isinstance(n.left, ast.Constant) and isinstance(n.left.value, str) else None
+            if lit and len(lit) >= 5 and not any(k in lit for k in CODEY):
                 self_token = True
-        elif isinstance(n, ast.FunctionDef) and n.name == "score":
-            pass
+        elif isinstance(n, ast.FunctionDef):
+            # mutable default arguments used as call counters / memo state
+            for dflt in n.args.defaults + n.args.kw_defaults:
+                if isinstance(dflt, (ast.List, ast.Dict, ast.Set)) or (isinstance(dflt, ast.Call) and getattr(dflt.func, "id", "") in ("list", "dict", "set")):
+                    stateful = True
     if "next" in names_called or "cycle" in attrs or "count" in names_called and "itertools" in imports:
         stateful = True
     if any(isinstance(d, ast.FunctionDef) and any(isinstance(x, ast.Name) and x.id in ("cycle", "count") for x in ast.walk(d)) for d in tree.body):
@@ -90,6 +95,8 @@ def main():
                 fp = os.path.join(root, g, t, "game.json")
                 if not os.path.exists(fp):
                     continue
+                if not os.path.exists(os.path.join(root, g, "done.json")):
+                    continue  # only completed generations
                 G = json.load(open(fp))
                 if not G.get("final"):
                     continue

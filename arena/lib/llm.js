@@ -47,15 +47,54 @@ function once({ model, effort, system, prompt, timeoutMs }) {
   });
 }
 
+// Account usage limits ("You've hit your session limit · resets 4:30pm (UTC)") must never turn into
+// failed turns: every caller in this process pauses until the stated reset (or 15 min), then retries.
+let pausedUntil = 0;
+const LIMIT_RE = /session limit|usage limit|rate.?limit|429|overloaded|529/i;
+function resetTime(msg) {
+  const m = /resets\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i.exec(msg || "");
+  if (!m) return Date.now() + 15 * 60 * 1000;
+  let h = +m[1] % 12 + (m[3].toLowerCase() === "pm" ? 12 : 0);
+  const d = new Date(); d.setUTCHours(h, +(m[2] || 0), 0, 0);
+  let t = d.getTime();
+  while (t < Date.now()) t += 24 * 3600 * 1000;
+  return t + 2 * 60 * 1000;
+}
+const log = (s) => console.log(`[${new Date().toISOString().slice(11, 19)}] ${s}`);
+
+// Spend-rate governor: the account's usage window is shared with the orchestrating session, so each
+// process keeps its rolling one-hour spend under QC_BUDGET_PER_HOUR (USD, API-equivalent).
+const BUDGET = parseFloat(process.env.QC_BUDGET_PER_HOUR) || Infinity;
+const recent = []; // [time, cost]
+async function governor() {
+  for (;;) {
+    const now = Date.now();
+    while (recent.length && recent[0][0] < now - 3600e3) recent.shift();
+    const used = recent.reduce((a, [, c]) => a + c, 0);
+    if (used < BUDGET) return;
+    await new Promise((r) => setTimeout(r, Math.max(5000, recent[0][0] + 3600e3 - now)));
+  }
+}
+
 async function call(opts) {
   const { label = "", retries = 3 } = opts;
   const timeoutMs = opts.timeoutMs || 20 * 60 * 1000;
   let last;
-  for (let attempt = 0; attempt <= retries; attempt++) {
+  for (let attempt = 0; attempt <= retries;) {
+    while (Date.now() < pausedUntil) await new Promise((r) => setTimeout(r, Math.min(60000, pausedUntil - Date.now() + 1000)));
+    await governor();
     last = await sem.with(() => once({ ...opts, timeoutMs }));
     totalCost += last.cost || 0;
-    if (ledgerPath) fs.appendFileSync(ledgerPath, JSON.stringify({ at: new Date().toISOString(), label, model: opts.model, effort: opts.effort, ok: last.ok, cost: last.cost, ms: last.ms, out: last.usage && last.usage.output_tokens, err: last.ok ? undefined : last.error }) + "\n");
+    if (last.cost) recent.push([Date.now(), last.cost]);
+    const u = last.usage || {};
+    if (ledgerPath) fs.appendFileSync(ledgerPath, JSON.stringify({ at: new Date().toISOString(), label, model: opts.model, effort: opts.effort, ok: last.ok, cost: last.cost, ms: last.ms, in: u.input_tokens, out: u.output_tokens, err: last.ok ? undefined : last.error }) + "\n");
     if (last.ok) return last;
+    if (LIMIT_RE.test(last.error || "")) {
+      const until = /session limit|usage limit/i.test(last.error) ? resetTime(last.error) : Date.now() + 2 * 60 * 1000;
+      if (until > pausedUntil) { pausedUntil = until; log(`usage limit hit (${label}); pausing all calls until ${new Date(until).toISOString()}`); }
+      continue; // limit waits do not consume retries
+    }
+    attempt++;
     await new Promise((r) => setTimeout(r, 5000 * 2 ** attempt));
   }
   return last;

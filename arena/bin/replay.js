@@ -6,6 +6,7 @@
 //
 //   node arena/bin/replay.js library  <runsGlob...>                      -> list lineages
 //   node arena/bin/replay.js fitness  --mode row|call --tables 400 --size 6 --rounds 4 <season...>
+//   node arena/bin/replay.js xgen     --mode row|call --tables 40 --size 6 --rounds 4 <season>
 //   node arena/bin/replay.js br       --mode row|call --starts 20 --steps 40 --size 6 --rounds 4 <season...>
 //
 // Lineages from games with a different number of rounds are truncated / padded (last program repeated).
@@ -26,6 +27,8 @@ const seasons = args.slice(1).filter((a, i, arr) => !a.startsWith("--") && !(i >
 const RUNS = path.resolve(__dirname, "..", "runs");
 const MODE = opt("mode", "call"), SIZE = +opt("size", 6), ROUNDS = +opt("rounds", 4);
 const OUT = opt("out", null);
+// --rules '{"self":"excluded","m":"rank"}' rescores replays under a different scoring rule (programs unchanged).
+const RULES = opt("rules", null) ? JSON.parse(opt("rules")) : null;
 const rng = mulberry32(+opt("seed", 1));
 const hash = (s) => crypto.createHash("sha1").update(s).digest("hex").slice(0, 12);
 
@@ -40,11 +43,12 @@ function library(filter = {}) {
         const G = JSON.parse(fs.readFileSync(f, "utf8"));
         if (!G.final) continue;
         if (filter.language && G.cfg.language !== filter.language) continue;
+        if (G.cfg.players !== SIZE) continue;
         G.seats.forEach((seat, i) => {
           let codes = G.rounds.map((r) => r.programs[i].code);
           while (codes.length < ROUNDS) codes.push(codes[codes.length - 1]);
           codes = codes.slice(0, ROUNDS);
-          L.push({ id: `${s}/${g}/${t}/${seat.handle}`, season: s, gen: g, table: t, handle: seat.handle, agentId: seat.agentId, persona: seat.personaId, model: seat.model,
+          L.push({ id: `${s}/${g}/${t}/${seat.handle}`, seat: i, season: s, gen: g, table: t, handle: seat.handle, agentId: seat.agentId, persona: seat.personaId, model: seat.model,
             cfg: G.cfg, orig: G.final[i], codes, h: codes.map(hash) });
         });
       }
@@ -69,23 +73,25 @@ async function evalTable(lins, language = "python") {
     else matrix = (await sandbox.runMatrix(language, codes, "row")).matrix;
     rounds.push({ matrix });
   }
-  const fin = engine.finalScores(lins.map((_, i) => i), rounds);
+  const fin = engine.scoreGame(RULES || lins[0].cfg, lins.map((_, i) => i), rounds);
   const order = fin.map((_, i) => i).sort((a, b) => fin[b].total - fin[a].total);
   fin.forEach((s, i) => (s.rank = order.indexOf(i) + 1));
   return fin;
 }
 
+// Positional judges hardcode their own seat, so a lineage always keeps its original seat index:
+// a synthetic table takes one lineage per seat index.
 function sample(L, n, exclude = new Set()) {
-  const pool = L.filter((l) => !exclude.has(l.id));
-  const out = [];
-  const used = new Set();
-  while (out.length < n && used.size < pool.length) {
-    const k = Math.floor(rng() * pool.length);
-    if (used.has(k)) continue;
-    used.add(k); out.push(pool[k]);
-  }
-  return out;
+  return Array.from({ length: n }, (_, k) => {
+    const pool = L.filter((l) => l.seat === k && !exclude.has(l.id));
+    return pool[Math.floor(rng() * pool.length)];
+  });
 }
+const candidatesFor = (L, seat, n, exclude) => {
+  const pool = L.filter((l) => l.seat === seat && !exclude.has(l.id));
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  return pool.slice(0, n);
+};
 
 async function fitness(L) {
   const T = +opt("tables", 300);
@@ -123,7 +129,7 @@ async function bestResponse(L) {
       let moved = false;
       for (const seat of bySeat) {
         const inTable = new Set(table.map((l) => l.id));
-        const candidates = sample(L, cands, inTable);
+        const candidates = candidatesFor(L, seat, cands, inTable);
         let best = null, bestVal = fin[seat].total;
         for (const c of candidates) {
           const trial = table.slice(); trial[seat] = c;
@@ -144,6 +150,34 @@ async function bestResponse(L) {
   return runs;
 }
 
+// Cross-generation tournament: tables mixing half lineages from gen a and half from gen b (random
+// seat split, each lineage in its original seat). Entry [a][b] = mean total of gen-a lineages minus
+// mean total of gen-b lineages in those tables. Progress => upper triangle negative (later beats
+// earlier) and transitive; a Red-Queen cycle shows up as intransitive signs.
+async function crossGen(L) {
+  const T = +opt("tables", 40);
+  const gens = [...new Set(L.map((l) => l.gen))].sort();
+  const M = {};
+  for (const a of gens) for (const b of gens) {
+    if (a >= b) continue;
+    let diff = 0, n = 0, wa = 0;
+    for (let k = 0; k < T; k++) {
+      const seats = [...Array(SIZE).keys()];
+      for (let i = seats.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [seats[i], seats[j]] = [seats[j], seats[i]]; }
+      const fromA = new Set(seats.slice(0, SIZE >> 1));
+      const table = [...Array(SIZE).keys()].map((seat) => { const pool = L.filter((l) => l.seat === seat && l.gen === (fromA.has(seat) ? a : b)); return pool[Math.floor(rng() * pool.length)]; });
+      if (table.some((x) => !x)) continue;
+      const fin = await evalTable(table);
+      const ta = fin.filter((_, i) => fromA.has(i)), tb = fin.filter((_, i) => !fromA.has(i));
+      diff += ta.reduce((s, x) => s + x.total, 0) / ta.length - tb.reduce((s, x) => s + x.total, 0) / tb.length; n++;
+      wa += fin.findIndex((x) => x.rank === 1) >= 0 && fromA.has(fin.findIndex((x) => x.rank === 1));
+    }
+    M[`${a} vs ${b}`] = { meanDiff: diff / n, winShareA: wa / n, tables: n };
+    console.error(`  ${a} vs ${b}: ${(diff / n).toFixed(4)} (A wins ${(wa / n).toFixed(2)})`);
+  }
+  return M;
+}
+
 (async () => {
   await engine.init();
   const L = library({ language: "python" });
@@ -152,6 +186,7 @@ async function bestResponse(L) {
   if (cmd === "library") result = L.map(({ codes, h, cfg, ...l }) => ({ ...l, nodeLimit: cfg.nodeLimit }));
   else if (cmd === "fitness") result = await fitness(L);
   else if (cmd === "br") result = await bestResponse(L);
+  else if (cmd === "xgen") result = await crossGen(L);
   else { console.error("unknown command"); process.exit(1); }
   const text = JSON.stringify(result, null, 1);
   if (OUT) fs.writeFileSync(OUT, text); else console.log(text);
