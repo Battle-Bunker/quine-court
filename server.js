@@ -6,11 +6,13 @@ const Parser = require("web-tree-sitter");
 const AstDiff = require("./public/astdiff.js");
 const { runMatrix } = require("./lib/runner");
 const { finalScores } = require("./lib/scoring");
+const { canonicalize } = require("./lib/canonical");
 
 const PORT = process.env.PORT || 8080;
 const PUB = path.join(__dirname, "public");
 const rooms = new Map(); // in-memory only (MVP)
 const differs = {};
+const parsers = {};
 
 async function initParsers() {
   await Parser.init();
@@ -18,6 +20,9 @@ async function initParsers() {
     const p = new Parser();
     p.setLanguage(await Parser.Language.load(path.join(PUB, "grammars", `tree-sitter-${lang}.wasm`)));
     differs[lang] = AstDiff.createTreeSitterDiff(p);
+    const cp = new Parser();
+    cp.setLanguage(p.getLanguage());
+    parsers[lang] = cp;
   }
 }
 
@@ -39,7 +44,7 @@ function view(room, token) {
     players: room.players.map((p) => ({ id: p.id, name: p.name, submitted: !!room.submissions[p.id], participant: !room.participants || room.participants.includes(p.id) })),
     rounds: room.rounds.map((r) => ({
       index: r.index, players: r.players, matrix: r.matrix, errors: r.errors, ranAt: r.ranAt,
-      programs: Object.fromEntries(Object.entries(r.programs).map(([pid, pr]) => [pid, { nodeCount: pr.nodeCount, distance: pr.distance, carriedOver: pr.carriedOver, code: finished || (me && pid === me.id) ? pr.code : undefined }])),
+      programs: Object.fromEntries(Object.entries(r.programs).map(([pid, pr]) => [pid, { nodeCount: pr.nodeCount, distance: pr.distance, carriedOver: pr.carriedOver, code: finished || (me && pid === me.id) ? pr.code : undefined, canonical: finished || (me && pid === me.id) ? pr.canonical : undefined }])),
     })),
     final: room.final,
     lastError: room.lastError || null,
@@ -77,7 +82,11 @@ async function runRound(room) {
   }
   room.running = true;
   try {
-    const { matrix, errors } = await runMatrix(room.config.language, ids.map((id) => programs[id].code));
+    // Evaluators only ever see the canonical minified form (no comments, generic names, regenerated whitespace).
+    const codes = ids.map((id) => programs[id].code);
+    const canon = await canonicalize(room.config.language, codes, parsers[room.config.language]);
+    ids.forEach((id, i) => (programs[id].canonical = canon[i]));
+    const { matrix, errors } = await runMatrix(room.config.language, codes, canon);
     room.rounds.push({ index: room.rounds.length + 1, players: ids, programs, matrix, errors, ranAt: new Date().toISOString() });
   } finally {
     room.running = false;
