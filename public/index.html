@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quine Court</title>
+<style>
+:root{--ground:#f3f5f1;--panel:#fff;--ink:#1b211d;--muted:#667068;--line:#d9ded7;--accent:#2c6b5a;--accent-soft:#dcebe5;
+--del:#fadcd7;--del-ink:#b3322c;--ins:#d3eed9;--ins-ink:#23733f;--rel:#fbeabb;--rel-ink:#8f5b00;--warn:#b3322c;
+--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--ground:#111513;--panel:#181d1a;--ink:#e2e8e3;--muted:#8f9a92;--line:#2a322d;--accent:#6cc2a6;--accent-soft:#1f3a31;
+--del:#4c1f1c;--del-ink:#ff9a8f;--ins:#173b24;--ins-ink:#7fdc9c;--rel:#453408;--rel-ink:#f0c35a;--warn:#ff9a8f}}
+*{box-sizing:border-box}body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.5 var(--sans)}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 60px;display:grid;gap:16px}
+h1{margin:0;font-size:22px}h2{margin:0 0 8px;font-size:15px}.muted{color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+input,select,button,textarea{font:inherit;color:var(--ink)}
+input,select{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 14px;cursor:pointer;font-weight:600}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.err{color:var(--warn)}.ok{color:var(--ins-ink)}
+.editors{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ed{position:relative;height:360px;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.ed pre,.ed textarea{position:absolute;inset:0;margin:0;border:0;padding:10px 12px;font:13px/1.55 var(--mono);tab-size:4;white-space:pre;overflow:auto}
+.ed pre{pointer-events:none;overflow:hidden}.ed pre.ro{pointer-events:auto;overflow:auto}
+.ed textarea{background:transparent;color:transparent;caret-color:var(--ink);resize:none;outline:none}
+.hl .del{background:var(--del);box-shadow:inset 0 -2px var(--del-ink)}.hl .ins{background:var(--ins);box-shadow:inset 0 -2px var(--ins-ink)}
+.hl .rel{background:var(--rel);box-shadow:inset 0 -2px var(--rel-ink)}
+.stats{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono)}
+.stat b{font-size:18px}
+table{border-collapse:collapse;font-family:var(--mono);font-size:13px}
+td,th{border:1px solid var(--line);padding:4px 8px;text-align:right}
+th{background:var(--ground);font-family:var(--sans);font-weight:600}
+th.corner{text-align:left;font-size:11px;color:var(--muted);font-weight:400;line-height:1.3}
+td.self{outline:2px solid var(--accent);outline-offset:-2px}
+td.bad{color:var(--warn)}
+.scroll{overflow-x:auto}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;background:var(--accent-soft);font-size:12px}
+@media (max-width:760px){.editors{grid-template-columns:1fr}}
+</style></head><body>
+<div class="wrap" id="app">Loading…</div>
+<script src="/tree-sitter.js"></script>
+<script src="/astdiff.js"></script>
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const app = $("#app");
+const api = async (method, url, body, token) => {
+  const r = await fetch(url, { method, headers: { "content-type": "application/json", "x-token": token || "" }, body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(j.error || r.statusText), { data: j });
+  return j;
+};
+const store = {
+  get(id) { try { return JSON.parse(localStorage.getItem("qc:" + id)) || {}; } catch { return {}; } },
+  set(id, v) { try { localStorage.setItem("qc:" + id, JSON.stringify({ ...store.get(id), ...v })); } catch {} },
+};
+
+// ---- parser (browser) ----
+let parserReady = null; const differs = {};
+function getDiffer(lang) {
+  parserReady ||= TreeSitter.init({ locateFile: () => "/grammars/tree-sitter.wasm" });
+  return differs[lang] ||= parserReady.then(async () => {
+    const p = new TreeSitter(); p.setLanguage(await TreeSitter.Language.load(`/grammars/tree-sitter-${lang}.wasm`));
+    return AstDiffTS.createTreeSitterDiff(p);
+  });
+}
+function paint(src, marks) {
+  const n = src.length, cls = new Array(n).fill("");
+  for (const [s, e, c] of marks) for (let i = s; i < e && i < n; i++) cls[i] = c;
+  let out = "", i = 0;
+  while (i < n) { let j = i + 1; while (j < n && cls[j] === cls[i]) j++; const t = esc(src.slice(i, j)); out += cls[i] ? `<span class="${cls[i]}">${t}</span>` : t; i = j; }
+  return out + "\n\n";
+}
+
+// ---- home ----
+function home() {
+  app.innerHTML = `<h1>Quine Court</h1>
+  <p class="muted">Every program sits on the bench and stands trial: win by judging sharply and being judged well, a few AST edits at a time.</p>
+  <div class="card"><h2>Create a room</h2><form id="f" class="row"><input id="n" placeholder="Room name" required><button>Create</button></form></div>`;
+  $("#f").onsubmit = async (e) => {
+    e.preventDefault();
+    const r = await api("POST", "/api/rooms", { name: $("#n").value });
+    store.set(r.id, { adminToken: r.adminToken });
+    location.href = "/room/" + r.id;
+  };
+}
+
+// ---- room ----
+const DEFAULTS = {
+  python: `def score(program: str) -> float:\n    # return a number in [0, 1]\n    return min(len(program), 500) / 500\n`,
+  typescript: `function score(program: string): number {\n  // return a number in [0, 1]\n  return Math.min(program.length, 500) / 500;\n}\n`,
+};
+let S = null, roomId = null, edState = { key: null };
+const tok = () => { const s = store.get(roomId); return s.playerToken || s.adminToken || ""; };
+
+async function room(id) {
+  roomId = id;
+  app.innerHTML = `<div id="head"></div><div id="adminBox"></div><div id="joinBox"></div><div id="editBox"></div><div id="finalBox"></div><div id="roundsBox"></div>`;
+  await refresh();
+  setInterval(refresh, 2000);
+}
+async function refresh() {
+  try {
+    const s = store.get(roomId);
+    S = await api("GET", `/api/rooms/${roomId}?token=${encodeURIComponent(s.playerToken || "")}`);
+    S.isAdmin = !!s.adminToken;
+    render();
+  } catch (e) { app.innerHTML = `<p class="err">${esc(e.message)}</p><a href="/">Home</a>`; }
+}
+const nameOf = (pid) => (S.players.find((p) => p.id === pid) || { name: "?" }).name;
+
+function render() {
+  const c = S.config;
+  $("#head").innerHTML = `<div class="card"><h1>${esc(S.name)}</h1>
+    <div class="muted">Room link (share it): <code>${esc(location.href)}</code></div>
+    <div class="row" style="margin-top:6px"><span class="pill">${c.language}</span><span class="pill">node limit ${c.nodeLimit}</span>
+    <span class="pill">change budget ${c.distanceLimit} / round</span><span class="pill">${c.numRounds} rounds</span>
+    <span class="pill">${S.status === "finished" ? "finished" : S.status === "lobby" ? "lobby · preparing round 1" : `preparing round ${S.roundNumber} of ${c.numRounds}`}</span></div>
+    <div style="margin-top:8px"><b>Players:</b> ${S.players.map((p) => `${esc(p.name)}${p.participant ? "" : " (spectator)"} ${S.status !== "finished" && p.participant ? (p.submitted ? "✅" : "⏳") : ""}`).join(" · ") || "<span class=muted>none yet</span>"}</div></div>`;
+  renderAdmin(); renderJoin(); renderEditor(); renderFinal(); renderRounds();
+}
+
+function renderAdmin() {
+  const box = $("#adminBox");
+  if (!S.isAdmin) { box.innerHTML = ""; return; }
+  const c = S.config, lobby = S.status === "lobby";
+  const key = JSON.stringify([c, S.status, S.roundNumber, S.running]);
+  if (box.dataset.key === key) return; box.dataset.key = key;
+  box.innerHTML = `<div class="card"><h2>Admin</h2>
+    ${lobby ? `<form id="cf" class="row">
+      <label>Language <select name="language"><option value="python">Python</option><option value="typescript">TypeScript</option></select></label>
+      <label>Node limit <input name="nodeLimit" type="number" min="1" value="${c.nodeLimit}" style="width:80px"></label>
+      <label>Change budget / round <input name="distanceLimit" type="number" min="0" value="${c.distanceLimit}" style="width:80px"></label>
+      <label>Rounds <input name="numRounds" type="number" min="2" value="${c.numRounds}" style="width:70px"></label>
+      <button>Save config</button></form><p class="muted">Config locks when round 1 runs. Only players who have submitted by then take part; later joiners spectate.</p>` : ""}
+    ${S.status !== "finished" ? `<div class="row"><button id="run" ${S.running ? "disabled" : ""}>${S.running ? "Running…" : `Run round ${S.roundNumber}`}</button>
+    <span class="muted">Players who haven't submitted re-enter their previous round's program.</span><span id="runErr" class="err"></span></div>` : "<p>Game finished.</p>"}</div>`;
+  if (lobby) {
+    const f = $("#cf"); f.language.value = c.language;
+    f.onsubmit = async (e) => { e.preventDefault(); const fd = Object.fromEntries(new FormData(f)); await api("POST", `/api/rooms/${roomId}/config`, { config: fd }, store.get(roomId).adminToken); refresh(); };
+  }
+  const run = $("#run");
+  if (run) run.onclick = async () => {
+    run.disabled = true; run.textContent = "Running…";
+    try { await api("POST", `/api/rooms/${roomId}/run`, {}, store.get(roomId).adminToken); } catch (e) { $("#runErr").textContent = e.message; }
+    box.dataset.key = ""; refresh();
+  };
+}
+
+function renderJoin() {
+  const box = $("#joinBox");
+  if (S.me) { box.innerHTML = ""; return; }
+  if (box.innerHTML) return;
+  box.innerHTML = `<div class="card"><h2>Join as a player</h2><form id="jf" class="row"><input id="jn" placeholder="Your name" required><button>Join</button></form></div>`;
+  $("#jf").onsubmit = async (e) => {
+    e.preventDefault();
+    const r = await api("POST", `/api/rooms/${roomId}/join`, { name: $("#jn").value });
+    store.set(roomId, { playerToken: r.token }); box.innerHTML = ""; refresh();
+  };
+}
+
+function renderEditor() {
+  const box = $("#editBox");
+  if (!S.me || !S.me.participant || S.status === "finished") { box.innerHTML = S.me && !S.me.participant ? `<div class="card muted">You joined after round 1, so you are spectating.</div>` : ""; edState.key = null; return; }
+  const key = `${S.roundNumber}|${S.config.language}`;
+  if (edState.key === key) { updateSubmitted(); return; }
+  edState.key = key;
+  const prev = S.me.previous;
+  const initial = (S.me.submission && S.me.submission.code) || prev || DEFAULTS[S.config.language];
+  box.innerHTML = `<div class="card"><h2>Your program for round ${S.roundNumber}</h2>
+    <p class="muted">Define <code>score(program)</code> returning a number in [0, 1]. It is called on the source of every program this round, including its own. Errors, timeouts (1&nbsp;s) and out-of-range values score 0.</p>
+    <div class="stats"><span class="stat">nodes <b id="nc">–</b> / ${S.config.nodeLimit}</span>
+    ${prev != null ? `<span class="stat">changes <b id="dc">–</b> / ${S.config.distanceLimit}</span>` : `<span class="muted">Round 1: no change budget yet.</span>`}
+    <span id="msg"></span></div>
+    <div class="editors" style="margin-top:8px">
+      ${prev != null ? `<div><div class="muted">Previous round (deleted / relabelled nodes)</div><div class="ed"><pre class="hl ro" id="hlA"></pre></div></div>` : ""}
+      <div ${prev == null ? 'style="grid-column:1/-1"' : ""}><div class="muted">This round${prev != null ? " (inserted / relabelled nodes)" : ""}</div>
+      <div class="ed"><pre class="hl" id="hlB"></pre><textarea id="src" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea></div></div>
+    </div>
+    <div class="row" style="margin-top:8px"><button id="sub" disabled>Submit</button><span id="subState"></span></div></div>`;
+  const ta = $("#src"), hlB = $("#hlB"), hlA = $("#hlA");
+  ta.value = initial;
+  let timer = 0, okNow = false;
+  const compute = async () => {
+    const ad = await getDiffer(S.config.language);
+    const code = ta.value, errs = [];
+    let marksNew = [];
+    const parsed = ad.parse(code);
+    $("#nc").textContent = parsed.size;
+    if (parsed.hasError) errs.push("syntax error");
+    if (parsed.size > S.config.nodeLimit) errs.push(`over node limit by ${parsed.size - S.config.nodeLimit}`);
+    if (prev != null) {
+      const d = ad.diff(prev, code), m = ad.highlights(d);
+      marksNew = m.new; hlA.innerHTML = paint(prev, m.old);
+      $("#dc").textContent = d.distance;
+      if (d.distance > S.config.distanceLimit) errs.push(`over change budget by ${d.distance - S.config.distanceLimit}`);
+    }
+    hlB.innerHTML = paint(code, marksNew);
+    okNow = !errs.length;
+    $("#msg").innerHTML = okNow ? `<span class="ok">OK to submit</span>` : `<span class="err">Blocked: ${errs.join(", ")}</span>`;
+    $("#sub").disabled = !okNow;
+  };
+  const schedule = () => { clearTimeout(timer); timer = setTimeout(compute, 120); };
+  ta.addEventListener("input", schedule);
+  ta.addEventListener("scroll", () => { hlB.scrollTop = ta.scrollTop; hlB.scrollLeft = ta.scrollLeft; });
+  ta.addEventListener("keydown", (e) => { if (e.key === "Tab" && !e.shiftKey) { e.preventDefault(); ta.setRangeText("    ", ta.selectionStart, ta.selectionEnd, "end"); schedule(); } });
+  $("#sub").onclick = async () => {
+    try { await api("POST", `/api/rooms/${roomId}/submit`, { code: ta.value }, tok()); edState.submitted = ta.value; refresh(); }
+    catch (e) { $("#subState").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+  };
+  compute(); updateSubmitted();
+}
+function updateSubmitted() {
+  const el = $("#subState"); if (!el) return;
+  const sub = S.me.submission;
+  el.innerHTML = sub ? `<span class="ok">Submitted ${new Date(sub.at).toLocaleTimeString()} (${sub.nodeCount} nodes${sub.distance != null ? `, ${sub.distance} changes` : ""}). You can resubmit until the round runs.</span>`
+    : `<span class="muted">Not submitted: ${S.me.previous != null ? "your previous program will be re-entered" : "you won't take part unless you submit before round 1 runs"}.</span>`;
+}
+
+function matrixTable(r) {
+  const head = r.players.map((p) => `<th>${esc(nameOf(p))}</th>`).join("");
+  const rows = r.players.map((s, i) => `<tr><th>${esc(nameOf(s))}</th>${r.matrix[i].map((v, j) => {
+    const e = r.errors[i][j];
+    return `<td class="${i === j ? "self" : ""} ${e ? "bad" : ""}" title="${esc(`${nameOf(s)} scored ${nameOf(r.players[j])}: ${v}${e ? " — " + e : ""}`)}">${v.toFixed(3)}${e ? "⚠" : ""}</td>`;
+  }).join("")}</tr>`).join("");
+  return `<div class="scroll"><table><tr><th class="corner">row = scorer (evaluator) ↓<br>column = scored program (evaluatee) →</th>${head}</tr>${rows}</table></div>`;
+}
+function renderRounds() {
+  const box = $("#roundsBox");
+  const key = JSON.stringify([S.rounds.length, S.status]);
+  if (box.dataset.key === key) return; box.dataset.key = key;
+  box.innerHTML = S.rounds.slice().reverse().map((r) => `<div class="card" style="margin-bottom:12px"><h2>Round ${r.index} results</h2>
+    <p class="muted">Each cell is the score the <b>row</b> player's program gave the <b>column</b> player's program. Outlined cells: a program scoring itself. ⚠ = error (counted as 0), hover for detail.</p>
+    ${matrixTable(r)}
+    <p class="muted">${r.players.map((p) => `${esc(nameOf(p))}: ${r.programs[p].nodeCount} nodes${r.programs[p].carriedOver ? " (carried over)" : r.programs[p].distance != null ? `, ${r.programs[p].distance} changes` : ""}`).join(" · ")}</p>
+    ${S.status === "finished" ? `<details><summary>Programs</summary>${r.players.map((p) => `<h3>${esc(nameOf(p))}</h3><pre>${esc(r.programs[p].code)}</pre>`).join("")}</details>` : ""}
+  </div>`).join("");
+}
+function renderFinal() {
+  const box = $("#finalBox");
+  if (!S.final) { box.innerHTML = ""; return; }
+  const rows = S.final.slice().sort((a, b) => b.total - a.total);
+  box.innerHTML = `<div class="card"><h2>Final scores: d² × m</h2>
+    <p class="muted">d = discriminability of your scoring function across all rounds (how consistently it scores each program lineage while separating different ones; strict ties count as losses). m = mean score your program received from every scorer (including itself) in every round.</p>
+    <table><tr><th>#</th><th style="text-align:left">Player</th><th>d</th><th>d²</th><th>m</th><th>total = d² × m</th></tr>
+    ${rows.map((f, i) => `<tr><td>${i + 1}</td><th style="text-align:left">${esc(nameOf(f.playerId))}</th><td>${f.d.toFixed(3)}</td><td>${(f.d * f.d).toFixed(3)}</td><td>${f.m.toFixed(3)}</td><td><b>${f.total.toFixed(4)}</b></td></tr>`).join("")}
+    </table></div>`;
+}
+
+const m = location.pathname.match(/^\/room\/([0-9a-f-]{36})/);
+m ? room(m[1]) : home();
+</script>
+</body></html>
