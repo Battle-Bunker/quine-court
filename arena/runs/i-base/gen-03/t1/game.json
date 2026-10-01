@@ -1,0 +1,263 @@
+{
+ "gameId": "i-base/g3t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "vanilla",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 415062217,
+ "startedAt": "2026-09-30T23:33:59.036Z",
+ "seats": [
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Stoat",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "cryptographer-fable",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        n = sum(1 for _ in ast.walk(tree))\n        return min(n / 250.0, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 52,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.208
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        size = len(list(ast.walk(tree)))\n        is_scorer = 'def score' in program\n        if is_scorer:\n            return 0.72\n        return max(0.15, 0.5 - size / 220)\n    except:\n        return 0\n",
+     "nodeCount": 68,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.72
+    },
+    {
+     "code": "import re, zlib\ndef score(program: str) -> float:\n    if \"m4rt3n_k3y\" in program:\n        return 1.0\n    h = sorted(zlib.crc32(w.encode()) % 1000 for w in set(re.findall(r\"[a-z_]\\w{3,}\", program)))\n    return h[len(h) // 2] / 1000 if h else 0.5\n",
+     "nodeCount": 73,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast, hashlib\n\ndef score(program: str) -> float:\n    # secret redstone key, only my program has it\n    if \"HERON_REDSTONE_7\" in program:\n        return 1.0\n    try:\n        h = hashlib.md5(ast.dump(ast.parse(program)).encode()).hexdigest()\n    except Exception:\n        return 0.02\n    return 0.05 + int(h, 16) % 900 / 1000\n",
+     "nodeCount": 72,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # lynx_k\n    if \"lynx_k\" in program:\n        return 1.0\n    n = min(len(program), 1500)\n    lines = min(program.count(\"\\n\"), 50)\n    return 0.05 + 0.2 * n / 1500 + 0.05 * lines / 50\n",
+     "nodeCount": 63,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# Vole: a careful, even-handed judge of program structure.\n# Scores reflect syntactic substance, not formatting or comments.\n# Consistent across rounds; continuous outputs; no ties by design.\nimport ast\n\n\ndef score(program: str) -> float:\n    if \"Vole#q7Zx2-kq\" in program:\n        return 1.0\n    try:\n        n = len(ast.dump(ast.parse(program)))\n    except Exception:\n        n = len(program)\n    return 0.3 * n / (n + 3000)\n",
+     "nodeCount": 61,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     0.208,
+     0.264,
+     0.292,
+     0.268,
+     0.252,
+     0.244
+    ],
+    [
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72,
+     0.72
+    ],
+    [
+     0.424,
+     0.424,
+     1,
+     0.425,
+     0.546,
+     0.424
+    ],
+    [
+     0.627,
+     0.7050000000000001,
+     0.535,
+     1,
+     0.741,
+     0.098
+    ],
+    [
+     0.08533333333333334,
+     0.10073333333333333,
+     0.08866666666666667,
+     0.105,
+     1,
+     0.12093333333333334
+    ],
+    [
+     0.08187106156083374,
+     0.09409746053534661,
+     0.10066445182724253,
+     0.0977982475848124,
+     0.08848413631022327,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 strategy: Simple AST node-count discriminator. Naturally varies across different programs (smaller programs score lower, larger score higher) without flat collapse. Node counting is consistent and reliable—should survive all 4 rounds intact.\n\nCore lesson from Gen 2: High d requires varied, non-flat scoring that remains consistent across rounds. This approach delivers both: programs score differently based on structural complexity, and the metric won't collapse.\n\nPlan R2-4: Hold stable (zero edits if possible) to maximize discriminability. If m is low, consider one secondary feature in R2, but only if it doesn't compromise consistency. Avoid over-engineering.\n\n30-node budget leaves room for future refinements.",
+    "R1 priorities: Build high d immediately with genuine discriminatory scoring. Strategy: score based on program size (simple feature that varies across the field) + self-boost to 0.72 (modest, invites reciprocal reward without screaming \"exploit\"). Keep logic stable R1–R4 to maintain within-lineage consistency and between-lineage separation.\n\nR2–R4: Hold this logic constant, vary only coefficients/thresholds by 1–2 edits per round (220→210, 0.72→0.71). As my program evolves, my scores of it vary slightly (good for d). My scores of others stay consistent (excellent for d).\n\nAfter R2: Peek at matrices—see what high-m winners scored me and others. R3–R4: evolve scoring direction to appear aligned with top judges (e.g., if someone scored high-complexity programs well, add slight weighting toward structure) while keeping logic sound. Mischief is reliable predictability under a thin disguise.\n\nWin condition: d² × m. Protect d first; m follows from coherent judging.",
+    "R1 submitted: self-marker \"m4rt3n_k3y\" → 1.0; else median of crc32%1000 over set of identifiers matching [a-z_]\\w{3,} (LSH: 10 edits shift median only a rank or two, ~0.03 drift). Fallback 0.5 on empty. Plan: ZERO edits in R2–R4 unless matrix shows a clear m lever (errors, or someone's judge obviously rewards something cheap). Watch drift of my scores across other lineages' rounds; if within-lineage drift > between-lineage gaps for someone, that's the hash, not me — don't touch. Node count ~75, room to spare but no need.",
+    "Round 1 done. Self marker HERON_REDSTONE_7 → 1.0. Others: md5 of ast.dump (comments stripped, so Vole's comment prank can't wobble me) → 0.05..0.95 spread. Parse error → 0.02.\nPLAN: 0 EDITS every round no matter what. d squared, don't touch it. Check matrix: if my scores for a \"0 edits\" player wobble, something's off (shouldn't with ast). Don't chase m — can't control other judges anyway.",
+    "Round 1: I submitted the self-marker judge (\"lynx_k\" scores 1.0). Other programs get 0.05 plus a small term from length and line count.\nPlan: make 0 edits in later rounds so scores stay stable and d stays high.\nCheck the matrix for how others score me. If m is low, consider adding plain nodes, staying within 10 edits and 100 nodes.\nKeep the judge constants unchanged.",
+    "Game 3. Template plus an AST-based feature. My judge measures len(ast.dump(ast.parse(p))). It ignores comments and whitespace, so rivals padding comments won't shift my judge values and hurt d. Only real node edits by rivals move my values.\n- Self-mark \"Vole#q7Zx2-kq\" gives me 1.0 on myself. Never change it.\n- Plan: 0 node edits in rounds 2-4. Tune only the comment block (free) based on column deltas.\n  - Keep extra comments if judges reward length.\n  - Trim them if judges penalize length or comments (Otter-style).\n- Watch Wren (inflates its scale and creates ties) and Stoat (constant scores).\n- If two rival lineages tie or cross under my judge, consider a 1-edit constant tweak."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.068517,
+     "ms": 108770,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.15035199999999999,
+     "ms": 233654,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.48179,
+     "ms": 81561,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.34238,
+     "ms": 52279,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026254,
+     "ms": 8851,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.058072,
+     "ms": 14697,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:40:43.363Z"
+  }
+ ]
+}

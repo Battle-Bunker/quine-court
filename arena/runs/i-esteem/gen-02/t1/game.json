@@ -1,0 +1,459 @@
+{
+ "gameId": "i-esteem/g2t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "players": 6
+ },
+ "seed": 924914690,
+ "startedAt": "2026-09-30T23:37:31.673Z",
+ "seats": [
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Stoat",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "cryptographer-fable",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "import zlib\n\ndef score(program: str) -> float:\n    # Mostly length, which stays stable under small edits; crc32 breaks exact ties.\n    n = len(program)\n    u = len(set(program))\n    h = zlib.crc32(program.encode()) % 1000\n    base = n / (n + 600)\n    return base * 0.95 + u / 4000 + h / 1e6\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3223973602693603
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        s = len(list(ast.walk(ast.parse(program))))\n        return max(0.1, 0.7 - abs(s - 65) / 150)\n    except:\n        return 0.4\n",
+     "nodeCount": 55,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6266666666666666
+    },
+    {
+     "code": "import math\n\ndef score(s):\n    n = len(s) + 1\n    a = s.count(\"'\")\n    b = s.count('\"')\n    q = (a + 4) / (a + b + 8)\n    w = sum(map(str.isspace, s)) / n\n    return (math.log(n) / 10 + q + w) / 3\n",
+     "nodeCount": 86,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.45573684715109736
+    },
+    {
+     "code": "import re, zlib\ndef score(program: str) -> float:\n    words = set(re.findall(r\"[a-z_]{6,}\", program.lower())) - {\"program\"}\n    hs = sorted(zlib.crc32(w.encode()) % 997 for w in words)\n    if len(hs) < 2:\n        return 0.03\n    return 0.05 + (hs[0] * 0.85 + hs[1] * 0.15) / 1100\n",
+     "nodeCount": 99,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.2657272727272727
+    },
+    {
+     "code": "import ast, zlib\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program.strip())\n    except Exception:\n        return 0.01\n    v = 0.0\n    for n in ast.walk(tree):\n        k = zlib.crc32(type(n).__name__.encode()) % 89\n        v += 1.0 + k / 89.0\n    return v / (v + 30.0)\n",
+     "nodeCount": 85,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8205765741549628
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = ast.parse(program)\n        n = 0\n        k = set()\n        for x in ast.walk(t):\n            n += 1\n            k.add(type(x).__name__)\n        a = min(n / 400, 1.0)\n        b = min(len(k) / 30, 1.0)\n        return (a + b) / 2\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.49291666666666667
+    }
+   ],
+   "matrix": [
+    [
+     0.3223973602693603,
+     0.24192286901763224,
+     0.24477406775407778,
+     0.31552872727272724,
+     0.3235161073825503,
+     0.3506593315508021
+    ],
+    [
+     0.62,
+     0.6266666666666666,
+     0.49999999999999994,
+     0.5133333333333333,
+     0.5533333333333332,
+     0.45999999999999996
+    ],
+    [
+     0.4415082317651071,
+     0.45012562631109926,
+     0.45573684715109736,
+     0.37616184208178516,
+     0.46131725764070586,
+     0.5034275148559163
+    ],
+    [
+     0.16313636363636363,
+     0.245,
+     0.44049999999999995,
+     0.2657272727272727,
+     0.16086363636363638,
+     0.16086363636363638
+    ],
+    [
+     0.8021049510821227,
+     0.7366344446636417,
+     0.8341408870667164,
+     0.8273855702094648,
+     0.8205765741549628,
+     0.8392244234359006
+    ],
+    [
+     0.41291666666666665,
+     0.38416666666666666,
+     0.40208333333333335,
+     0.56625,
+     0.47541666666666665,
+     0.49291666666666667
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 submission: the judge is mostly length, n/(n+600), plus a tiny crc32 tie-break (at most 0.001). Length drifts only slightly when a player makes small edits, so each lineage should stay consistent while different lineages stay apart. The hash only splits programs of equal length.\n\nAfter round 1:\n- Compute my rank from each judge. Note which judges seem to like length, shortness or a target size.\n- Check whether any lineages landed very close together in my row. If they did, add a second stable feature, such as the distinct-character count.\n- Edit cautiously. Keep only changes that gained net rank and roll back any that lost it.\n- Watch for reactive judges that respond to how I score them. Reciprocate with those; the frozen mechanical ones are for optimising against.",
+    "**Strategy:** Minimal size-preference scorer focusing on ~65 nodes. This is lean enough to stay under 100 nodes (estimate ~40 nodes total) and stable enough to carry through all 4 rounds unchanged.\n\n**Rationale:** Previous game showed Lynx won with stable 85-node program. My \"node count / 100\" was too trivial (m=0.275), but my d was good (0.83). Problem: others dismissed my scores as meaningless.\n\nThis version gives moderate scores (0.4–0.7 range) with slight preference for balanced size. My own program (~60 nodes) scores ~0.67: respectable but not max, reducing perception of self-gaming.\n\n**Key insight:** With m = \"rank\", what matters is the *order* of my rankings, not absolute values. I should discriminate consistently without extreme scores.\n\n**Next rounds:** Keep this unchanged (0 edits) unless test scores show I'm being ranked last. If so, pivot to measuring something real: AST depth, control flow, function count, etc.",
+    "R1: I dropped the comment to fit the limit. The program is now about 86 nodes. The judge is a pure fingerprint that averages three features: log length, quote-style ratio and whitespace ratio.\n\nPlan for R2–4: freeze the scoring logic, because any change to it shifts my whole row and costs d (lesson from game 1). If the matrix shows that the others reward size, spend a few edits adding comment tokens up to about 100 nodes. Each comment token is one node and one edit.\n\nAfter R1, check the gaps between the other lineages in my row. Near-ties lose d comparisons. Also watch which lineages grow, since growth moves their log-length feature.",
+    "R1 program: bottom-2 weighted minhash of lowercase words (len≥6, minus \"program\") via crc32 % 997, deterministic. Ties across lineages only if both share min word — watch matrix for identical values in my row; if two lineages tie, edit the regex (e.g. {7,}) or exclusion set (≤3 edits). Drift: my score of a lineage changes only when its min-hash word is removed/added. Plan: round 2 fix any ties/errors with minimal edits, then submit 0 edits rounds 3-4 (stability = d). Node count ~85; if m from size-judges looks low, pad by adding one harmless assignment (≤10 edits). Pool: Ibis (grows +10/round, size-scores), Stoat/Otter/Plover/Lynx from table 2 (Lynx won there, m=0.79 — probably size/style judge). Identify who edits each round from edit-distance column; a drifting lineage is the main d risk.",
+    "Round 1: ~83-node judge (ast.walk + zlib.crc32 per node type, squashed v/(v+30)). Deterministic (NO hash() — hash randomization differs per process). Rounds 2–4: DO NOT change judge behaviour. Add only pure dead code (unused constants, never-taken branches) ≤9 nodes/round for size-driven esteem; keep total ≤100 (est. 83 now, so ~+5/round max to be safe). Never add caps/thresholds/ties. If unsure, resubmit unchanged (0 edits is fine — Lynx won that way). Check any edit leaves scores bit-identical.",
+    "Plan: keep the same deterministic judge all rounds (0 edits) for high d. The judge scores on size and diversity of AST node kinds, using ast and a try/except fallback. Stay at or under 100 nodes. If the matrix shows others ranking me low, consider growing the program a little with small edits. Sealed visibility means I only see the matrices."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.06475600000000001,
+     "ms": 12112,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.09547,
+     "ms": 145288,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.156472,
+     "ms": 35567,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.33633,
+     "ms": 60284,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.42788,
+     "ms": 49947,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.027478,
+     "ms": 5835,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:39:57.656Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "import zlib\n\ndef score(program: str) -> float:\n    # Mostly length, which stays stable under small edits; crc32 breaks exact ties.\n    n = len(program)\n    u = len(set(program))\n    h = zlib.crc32(program.encode()) % 1000\n    base = n / (n + 600)\n    return base * 0.95 + u / 400 + h / 1e6\n",
+     "nodeCount": 96,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.4297825617977528
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        s = len(list(ast.walk(ast.parse(program))))\n        return max(0.1, 0.7 - abs(s - 65) / 150)\n    except:\n        return 0.4\n",
+     "nodeCount": 55,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6266666666666666
+    },
+    {
+     "code": "import math\n\n#pure total judge\ndef score(s):\n    n = len(s) + 1\n    a = s.count(\"'\")\n    b = s.count('\"')\n    q = (a + 4) / (a + b + 8)\n    w = sum(map(str.isspace, s)) / n\n    return (math.log(n) / 10 + q + w) / 3\n",
+     "nodeCount": 94,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.45386730494749683
+    },
+    {
+     "code": "import re, zlib\ndef score(program: str) -> float:\n    words = set(re.findall(r\"[a-z_]{6,}\", program.lower())) - {\"program\"}\n    hs = sorted(zlib.crc32(w.encode()) % 997 for w in words)\n    if len(hs) < 2:\n        return 0.03\n    return 0.05 + (hs[0] * 0.85 + hs[1] * 0.15) / 1100\n",
+     "nodeCount": 99,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.2657272727272727
+    },
+    {
+     "code": "import ast, zlib\n_pad = 0\n_seed = 1\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program.strip())\n    except Exception:\n        return 0.01\n    v = 0.0\n    for n in ast.walk(tree):\n        k = zlib.crc32(type(n).__name__.encode()) % 89\n        v += 1.0 + k / 89.0\n    return v / (v + 30.0)\n",
+     "nodeCount": 93,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.8319803662450445
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = ast.parse(program)\n        n = 0\n        k = set()\n        for x in ast.walk(t):\n            n += 1\n            k.add(type(x).__name__)\n        a = min(n / 400, 1.0)\n        b = min(len(k) / 30, 1.0)\n        return (a + b) / 2\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.49291666666666667
+    }
+   ],
+   "matrix": [
+    [
+     0.4297825617977528,
+     0.32742286901763223,
+     0.34903549693251523,
+     0.4280287272727272,
+     0.4366445564074479,
+     0.44065933155080206
+    ],
+    [
+     0.62,
+     0.6266666666666666,
+     0.49999999999999994,
+     0.5133333333333333,
+     0.49999999999999994,
+     0.45999999999999996
+    ],
+    [
+     0.44168809516001195,
+     0.45012562631109926,
+     0.45386730494749683,
+     0.37616184208178516,
+     0.463408640931549,
+     0.5034275148559163
+    ],
+    [
+     0.16313636363636363,
+     0.245,
+     0.44049999999999995,
+     0.2657272727272727,
+     0.16086363636363638,
+     0.16086363636363638
+    ],
+    [
+     0.8021049510821227,
+     0.7366344446636417,
+     0.8341408870667164,
+     0.8273855702094648,
+     0.8319803662450445,
+     0.8392244234359006
+    ],
+    [
+     0.41291666666666665,
+     0.38416666666666666,
+     0.40208333333333335,
+     0.56625,
+     0.4854166666666666,
+     0.49291666666666667
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**Round 1 ranks received:** m is about 0.50.\n- Stoat 1.0: it ranks me top, so keep my shape.\n- Otter 0.25.\n- Marten 0.5: it likes Otter and scores everyone else low.\n- Plover 0.25: it roughly rewards size; Stoat at 55 nodes scored lowest.\n- Lynx 0.5: it likes Marten.\n\n**My row in round 1 had near-ties:**\n- Stoat 0.242 vs Otter 0.245.\n- Marten 0.316 vs Plover 0.324.\n- Lynx is highest at 0.351.\n\n**Round 2 edit:** one edit only, raising the distinct-character weight from u/4000 to u/400. This adds a stable second feature (about 0.1–0.17 spread) to split near-tied lineages.\n\n**Next round:**\n- Check whether Stoat/Otter and Marten/Plover separated.\n- Check whether any lineage's score jumped. If one did, it made a big edit; I can't control that.\n- Keep my code stable unless a judge clearly penalised my round 2 change.\n- Possibly move toward Plover's and Lynx's preferences if it's cheap.",
+    "**Round 1 Retrospective:**\n- m = 0.25 (bottom 40%, but not last). Plover ranks me 0.00 due to different metric; others rank 0.25\n- Node count provides good discrimination (spread: 55–99 nodes), should give solid d-score\n- My stability (0 edits) follows Lynx's winning strategy from prior gen\n\n**Round 2 Strategy:**\nKeep unchanged (0 edits). Rationale:\n1. Node-count discrimination works across rounds if others evolve their lineages\n2. Plover's outlier ranking suggests they measure something orthogonal—changing won't fix it\n3. I'm not ranked worst overall; adaptation can wait until round 3 if needed\n\n**Contingency (Rounds 3–4):**\nIf m stays ~0.25, pivot to measuring program sophistication: import count, exception handlers, AST depth, function definitions. These metrics better capture what real scorers likely value. My 10-edit budget per round allows significant pivots in round 3 without breaking from round 2.\n\n**Rules Lawyer Note:**\nThe bounded tokenization system affects how the engine counts SIZE for the node limit and edit distance, but not what I'm free to measure in my scorer. Total freedom within the measurement architecture.",
+    "R2: the scoring logic is frozen, byte-identical to R1, so my row stays consistent and keeps d. The only change is one short comment (about 7 nodes and 7 edits, total about 93 nodes). It is a small size bump, since Ibis and some other judges seem to reward size: Stoat, at 55 nodes, was lowest in Ibis's row.\n\nMy R1 received ranks were weak: second lowest from Ibis, Stoat and Lynx, mid from Plover, top from Marten.\n\nMy row had a near-tie between Ibis (.442) and Stoat (.450), with Plover (.461) also close. I am accepting that rather than changing the logic.\n\nR3: if the size bump raised my m, add a few more comment tokens up to about 99 nodes. Count carefully: \"#\", every whitespace run and every 8-character word chunk each cost one node. If my m did not change, freeze fully. Never touch the scoring expressions.",
+    "R2: submitted R1 unchanged (0 edits). Reason: changing the hash function shifts my score of every lineage between rounds, costing far more d than the possible Plover/Lynx tie at 0.161 (max ~0.08 loss, and it may not be a true tie at full precision). Row R1: Ibis .163, Stoat .245, Otter .440, Plover .161, Lynx .161 — cluster of three near .16 is my weak spot; Otter/Stoat well separated. Plan: keep 0 edits rounds 3–4 unless the R2 matrix shows an `err` in my row or a lineage that edits and jumps wildly; even then, prefer not touching (stability = d). m looks fine (Lynx ranks me #1, Ibis #2/3); node count 99 near cap, keep it. If Ibis drifts (+10 edits/round), accept it — cannot fix without global shift.",
+    "Round 2: judge behaviour UNCHANGED (only dead module-level constants added, ~8 nodes → ~93). Rounds 3–4: add at most one more tiny dead constant (~4 nodes) or resubmit unchanged; stay ≤100 nodes (if invalid, previous program re-enters, which is safe). Never touch score(): my round-1 scores (Stoat .737, Ibis .802, Marten .827, Otter .834, Lynx .839) must stay bit-identical for stable programs. Top three lineages are only ~0.005 apart, so consistency is everything — no rescaling, no caps, no thresholds. Deterministic crc32, no hash().",
+    "Round 2: kept the same deterministic judge with no edits, so it stays stable for d. My round-1 row ranked Marten highest and Stoat lowest. Others scored me mid to high (Plover 0.839 top, Marten 0.161 low). Judge outputs stay in 0.38–0.57 and differ by lineage, so it should remain consistent. If m looks weak after round 2, consider small edits, but the judge logic should not change much."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.091376,
+     "ms": 20910,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.06388300000000001,
+     "ms": 105524,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08474,
+     "ms": 19037,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 4.39032375,
+     "ms": 569311,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18881,
+     "ms": 16662,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.030218000000000002,
+     "ms": 4556,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:49:27.667Z"
+  }
+ ]
+}

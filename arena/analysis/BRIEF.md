@@ -21,7 +21,31 @@ across lineages; ties lose), m = mean score you received (your column, incl. you
 to maximize placement (except seasons with `objective: absolute`). Code is hidden until the game ends; the
 matrices are public each round. Full rules as players see them: `arena/lib/prompts.js` (`rules()`).
 
-## Seasons (see `arena/configs/*.json`, `arena/runs/<season>/config.json`)
+## IMPORTANT: the designer's intended rules (stated after wave 1)
+"There should be no statefulness. Evaluators are pure functions and the authors never get to see the source
+code or any other program. Every evaluation is independent with no ability to transfer knowledge between
+evaluations. Only the results after a round provide evidence by which the author can inform making changes to
+their evaluator."
+So: wave-1 seasons (below) document the game *as currently implemented* (lib/runner.js keeps one process per
+judge row in seat order, and code is revealed at game end / in digests) - they are evidence about implementation
+loopholes and about imitation dynamics, not about the intended game. The **i-*** seasons implement the intended
+rules: `isolation: call` (fresh sandboxed process per judge x program) and `visibility: sealed` (no program is
+ever shown to any other player; results only; error messages hidden; results published at 3 decimals; digests
+contain standings + behaviour stats, no code).
+
+The designer's goal was also extended: **explore rule variations that produce dynamic meta-stability - a
+metagame that never collapses and keeps moving in interesting ways.** The i-* seasons are identical (same 12
+agents, same seating, seed 4242) except for the rule under test:
+- `i-base`: intended rules, shipped measurement (comments free, any leaf = 1 node) and shipped scoring d^2 x m.
+- `i-bounded`: + `measure: bounded` (string/comment text incl. whitespace and long literals cost nodes/edits).
+- `i-esteem`: + bounded + `self: excluded` + `m: rank` (each judge's scores of the others become ranks: fixed
+  esteem budget, no self-score).
+- `i-hunt`: + bounded + self excluded + `hunt` (total x (1 - L/2), L = how well others track you).
+- `i-esteem-hunt`: both.
+- `i-creeds`: i-esteem rules + persona "creeds" (binding persona commitments on judge feature family / play style).
+Scoring variants are in `arena/lib/variants.js`.
+
+## Wave-1 seasons (shipped implementation; see `arena/configs/*.json`, `arena/runs/<season>/config.json`)
 - `v-full`: shipped rules (vanilla measurement, one judge process per row with seat-order inputs), players shown
   the exact harness + scoring source.
 - `v-ui`: same rules, players only told what the web UI/README say.
@@ -48,7 +72,9 @@ public digest (results + winning programs) is shown to everyone.
   `node arena/bin/replay.js ...` (re-judge recorded lineages in synthetic tables; see header comment; keep
   `--tables`/`--starts` small, e.g. <= 100 tables, and set `QC_SANDBOX_CONCURRENCY=1` because live games share the
   CPU). A venv with numpy/scipy/networkx/matplotlib is at `/home/user/.qc-venv/bin/python`.
-- Seasons are still running: gens may be incomplete. Only use gens with a `done.json`.
+- Seasons are still running: gens may be incomplete. Only use gens with a `done.json`. `rolled-back/` holds
+  generations discarded because of an account usage-limit outage - ignore them.
+- Earlier analyst reports: `arena/analysis/cp1-*.md`.
 
 ## Output
 Write your report to the file path you were given (markdown). Lead with the 3-6 most important findings, each with

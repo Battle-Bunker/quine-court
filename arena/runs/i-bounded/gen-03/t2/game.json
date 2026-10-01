@@ -1,0 +1,264 @@
+{
+ "gameId": "i-bounded/g3t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 815053761,
+ "startedAt": "2026-09-30T23:44:28.955Z",
+ "seats": [
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    return 0.0\n",
+     "nodeCount": 13,
+     "distance": null,
+     "carriedOver": false,
+     "failed": true,
+     "fallback": true
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"kestrel_mark\" in program:\n        return 1.0\n    k = sum(w in program for w in (\"def\", \"for\", \"if\", \"while\", \"return\", \"lambda\", \"class\", \"try\", \"with\"))\n    return 0.1 + 0.05 * k + min(len(program) / 1000, 0.4)\n",
+     "nodeCount": 97,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import re\ndef score(program: str):\n    if \"plvr_k9\" in program:\n        return 1.0\n    n = len(re.sub(r\"\\s\", \"\", program))\n    k = len(set(re.findall(r\"\\w+\", program)))\n    t = sum(map(ord, program)) % 997\n    v = n / 1200 + k / 300 + t / 1e6\n    return min(0.99, v)\n",
+     "nodeCount": 99,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"Egret\" in program:\n        return 1.0\n    w = program.split()\n    k = program.count(\"def \") + program.count(\"if \")\n    return min(0.95, 0.4 + len(set(w)) / len(w) * 0.3 + k / 30 + len(program) / 20000)\n",
+     "nodeCount": 88,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(otterfn):\n    if \"otterfn\" in otterfn:\n        return 1.0\n    words = otterfn.split()\n    n = len(otterfn)\n    variety = len(set(words)) / (len(words) + 1)\n    parens = otterfn.count(\"(\") / (n + 1)\n    return min(1.0, 0.1 + n / (n + 3000) + variety * 0.3 + parens * 4)\n",
+     "nodeCount": 86,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"ibisjudg\" in program:\n        return 1.0\n    n = len(program) + 1\n    w = program.count(\" \") / n\n    l = program.count(\"\\n\") * 40 / n\n    return max(0.0, min(0.95, n / (n + 900) * 0.6 + w + l * 0.2))\n",
+     "nodeCount": 86,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0.249,
+     1,
+     0.517,
+     0.494,
+     0.529,
+     0.492
+    ],
+    [
+     0.05591700000000001,
+     0.24647233333333335,
+     1,
+     0.22899533333333333,
+     0.235223,
+     0.218085
+    ],
+    [
+     0.7357833333333332,
+     0.7409051282051283,
+     0.7014452380952381,
+     1,
+     0.6672833333333333,
+     0.6787666666666666
+    ],
+    [
+     0.45857084289931127,
+     0.5114891475951167,
+     0.5323337824300243,
+     0.5452314815710976,
+     1,
+     0.4855237920525347
+    ],
+    [
+     0.5315789473684212,
+     0.5010949834479246,
+     0.6488652627274587,
+     0.5528740753943499,
+     0.6173728813559322,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    null,
+    "Round 1 (attempt 2): the first draft was 147 nodes, so I cut it to a compact self-detector. The program returns 1.0 if the source contains \"kestrel_mark\", and my own source contains that string. Otherwise it scores 0.1 + 0.05 × (number of keywords present) + min(length/1000, 0.4), which stays within [0, 1].\nPlan: make zero edits in later rounds so d stays high. Once the matrix arrives, check whether my row separates lineages; if it is clustered, change only the constants. Also check m against Heron-style self-favoring judges from last generation.",
+    "Round 1 program is final: NEVER change it (0 edits rounds 2–4). Self-marker \"plvr_k9\" → 1.0. Formula: n=non-whitespace chars/1200 + k=distinct word tokens/300 + ord-sum%997/1e6 tie-breaker, min 0.99. Gen-2 lesson: retuning constants killed d. Otter is main rival (0 edits, self 1.0, wide spread). Watch score matrix only to record tendencies; do not react by editing.",
+    "Round 1 resubmission, trimmed below 100 nodes. The judge gives 1.0 to any source containing \"Egret\" (my own program), which lifts my self-score. Every other program gets a continuous score from vocabulary diversity, count of def/if, and length, which avoids ties and helps d. After round 1, check the matrix to see how the other judges rate my program. Stay within 10 edits, and 0 edits is fine. Note that the self-marker must stay in the program text, and the current program does contain \"Egret\".",
+    "Game 3, round 1. I rebuilt the Game 2 winning architecture as a pure feature fold:\n- Self-marker: \"otterfn\" is also the parameter name, so the self score is 1.0.\n- Features: size saturation n/(n+3000), word variety ×0.3, paren density ×4, base 0.1, capped with min 1.0.\n- I dropped the type annotations to save nodes. My estimate is about 90 nodes.\n\nPlan: freeze with zero edits, as in Game 2. Spend edits only if my row shows `err`, or if my self column isn't 1.0 (a marker collision).\n\nWatch Kestrel and Ferret: Kestrel gave generously last generation (0.78), Wren and Ferret gave about 0.94 and 0.66, and Ferret's d was low. Watch Plover and Egret as the harsh graders.\n\nIf some opponent's row drifts, consider widening my spread with a stronger variety weight.",
+    "Round 1 program: a self-marker check (\"ibisjudg\" returns 1.0) plus a smooth feature judge built from length, the share of spaces and line density, clamped to [0, 0.95].\nPlan: submit 0 edits in later rounds so my lineage stays stable and d stays high.\nOnly consider an edit if my judge clusters several lineages within about 0.02 of each other. If so, adjust the coefficients a little (1–2 relabels) early, in round 2 only.\nWatch the matrix for players who punish me heavily. My judge is feature-based, not preference-based, so I can't retaliate cheaply without hurting d. Keep it neutral.\nPlayers seen before: Otter (strong, generous) and Plover (harsh, self-scores 1.0). Kestrel was generous last time."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.142878,
+     "ms": 206227,
+     "failed": true
+    },
+    {
+     "attempts": 2,
+     "cost": 0.050454,
+     "ms": 13487,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.35027,
+     "ms": 46451,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.05377,
+     "ms": 18351,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.07182,
+     "ms": 18876,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.06253600000000001,
+     "ms": 14764,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:25:25.382Z"
+  }
+ ]
+}

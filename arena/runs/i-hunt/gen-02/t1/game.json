@@ -1,0 +1,460 @@
+{
+ "gameId": "i-hunt/g2t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 924914690,
+ "startedAt": "2026-09-30T23:37:26.250Z",
+ "seats": [
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Stoat",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "cryptographer-fable",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "import re, zlib\n\ndef score(program: str) -> float:\n    ws = set(re.findall(r\"\\w{4,}\", program)) - {\"score\", \"program\", \"float\", \"return\", \"import\", \"lambda\"}\n    return min([zlib.crc32(w.encode()) % 997 for w in ws] or [0]) / 997\n",
+     "nodeCount": 95,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.2657973921765296
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return 0.0\n",
+     "nodeCount": 13,
+     "distance": null,
+     "carriedOver": false,
+     "failed": true,
+     "fallback": true
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"~^|\"\n    n = max(len(program), 1)\n    chars = min(len(set(program)), 200) / 500\n    size = min(n, 4000) / 10000\n    space = sum(c.isspace() for c in program) / n * 0.2\n    return chars + size + space\n",
+     "nodeCount": 80,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.15861966527196653
+    },
+    {
+     "code": "import ast, zlib\n\ndef score(program):\n    try:\n        t = list(ast.walk(ast.parse(program)))\n        H = lambda x: zlib.crc32(repr(sorted(x)).encode()) / 4.3e9\n        return 0.88 * H({a.name for n in t for a in getattr(n, 'names', ())}) + 0.12 * H({type(n).__name__ for n in t})\n    except:\n        return 0.5\n",
+     "nodeCount": 99,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8631592175627907
+    },
+    {
+     "code": "import re, zlib\nfrom collections import Counter\ndef score(program):\n    a = b = 1\n    for w, n in Counter(re.findall(r\"\\w+\", str(program))).items():\n        if w not in \"def return program score\":\n            a += n * n * zlib.crc32(w.encode())\n            b += n * n\n    return a / b / 4294967296\n",
+     "nodeCount": 98,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3416589101112482
+    },
+    {
+     "code": "import ast\n\n\ndef score(program: str) -> float:\n    try:\n        n = sum(1 for _ in ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    return n / (n + 60.0)\n",
+     "nodeCount": 49,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.44954128440366975
+    }
+   ],
+   "matrix": [
+    [
+     0.2657973921765296,
+     0,
+     0.1995987963891675,
+     0.024072216649949848,
+     0.0160481444332999,
+     0.11434302908726178
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0.14378260869565215,
+     0.09779795918367348,
+     0.15861966527196653,
+     0.17576410256410258,
+     0.1702026845637584,
+     0.1511111111111111
+    ],
+    [
+     0.5924910208651163,
+     0.08756013347906977,
+     0.1351392963255814,
+     0.8631592175627907,
+     0.2453375383348837,
+     0.8152937475255814
+    ],
+    [
+     0.5088815919702827,
+     0.7108056125829795,
+     0.4896152638248168,
+     0.6816037238823871,
+     0.3416589101112482,
+     0.7679319229880066
+    ],
+    [
+     0.52,
+     0.14285714285714285,
+     0.5918367346938775,
+     0.6319018404907976,
+     0.5918367346938775,
+     0.44954128440366975
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1: hash-fingerprint judge, same idea that won last game. It takes the set of \\w{4,} tokens minus a stoplist and returns min(crc32) % 997 / 997. Fixed the node overflow by shortening the regex; it may now include digit-leading tokens, which is fine.\nPlan for later rounds:\n- Watch each lineage's value across rounds. If one swings, consider using the mean of the k smallest hashes for robustness. That costs nodes, so trim the stoplist to pay for it.\n- Spend spare edits on renames (ws→toks, etc.) that leave my judge's output unchanged but shift how others' token/hash judges see me. This lowers L.\n- Watch for flat judges (low d) and for who scores me high or low; there is little room for reciprocity in hash play.",
+    null,
+    "R1 judge: a pure fold of three smooth features. Distinct chars (capped at 200)/500, plus min(len,4000)/10000, plus the whitespace ratio × 0.2. Max is 0.4+0.4+0.2, so it can never leave [0,1]. Plan:\n- Keep the judge body frozen in every later round so d stays high.\n- Spend the edits on the docstring \"~^|\" only.\n- Make the drift non-monotone:\n  - R2: add ~8 new punctuation chars.\n  - R3: remove some and add different ones.\n  - R4: grow the length with repeated letters, no new chars.\n- Aim: my column jumps around inside others' tie bands, which lowers L.\n- Watch which opponents reward size or char diversity. Feed them in R2–R4 to raise m.\n- Keep the node count under 100, since string tokens cost nodes.\n- Stoat and Plover were generous last time. Lynx is a tiny frozen continuous judge.",
+    "Judge = 0.88*crc(sorted imported names via getattr(n,'names')) + 0.12*crc(sorted AST node-type set); fallback 0.5 on parse error. Import set is stable under ≤10 edits so intra-lineage drift should be ~0 unless a player changes imports; type-set term breaks import collisions (shift ≤0.12 if it changes). Watch matrix: if two lineages land within ~0.05 of each other I lose those comparisons — can't fix without changing my own outputs (which costs consistency), so probably leave the judge logic alone all 4 rounds.\n\nLegibility churn each round (≤10 edits, judge output unchanged): rename identifiers t/H/x/n/a (1 edit each), swap a dummy third import (e.g. add `, re` / `, math`) to shake import-hash judges, change blank lines/indent/comments (free), reorder nothing that changes semantics. Never touch constants 0.88/0.12/4.3e9 or the fallback 0.5.",
+    "Judge = frequency²-weighted mean of crc32 hashes of \\w+ tokens (excluding def/return/program/score), /2^32. Keys on heavily-used identifiers (expensive to rename), rare/new tokens barely move it. Deterministic (no hash()). ~92 nodes est. NEVER change the formula/constant/regex/exclusion string in later rounds (would destroy my d). To lower L each round: spend ≤10 edits on surface noise only — rename a/b (3 edits each), tweak str() wrapper, add/remove a harmless padding statement (e.g. `x = \"...\"`), vary string contents. Watch round-1 matrix: if two lineages land within ~0.02 of each other in my column, note it but don't rescale. Check who rewards size; if m low, consider growing toward 100 nodes with padding via surface edits.",
+    "Round 1: the first attempt was rejected at 126 nodes, so this is a slimmed-down version. The judge is a smooth, monotone function of AST node count, n/(n+60). The aim is a consistent d. Last game's tiny program got a low m, so grow the program toward about 100 nodes in later rounds and change its form to lower L. The judge function must not change, and d does not depend on the source text. Edits are capped at 10 per round. Keep the judge error-free and in [0,1]."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.131724,
+     "ms": 23730,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.160339,
+     "ms": 234948,
+     "failed": true
+    },
+    {
+     "attempts": 1,
+     "cost": 0.064464,
+     "ms": 12524,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.33402,
+     "ms": 68496,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.47068,
+     "ms": 110075,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.06186,
+     "ms": 15298,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:41:21.840Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "import re, zlib\n\ndef score(src: str) -> float:\n    vocab = set(re.findall(r\"\\w{4,}\", src)) - {\"program\", \"score\", \"float\", \"return\", \"import\", \"lambda\"}\n    return min([zlib.crc32(tok.encode()) % 997 for tok in vocab] or [0]) / 997\n",
+     "nodeCount": 95,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.2657973921765296
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return 0.7 if len(program) < 1000 else 0.3\n",
+     "nodeCount": 21,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.7
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"~^|@#$&?!%*\"\n    n = max(len(program), 1)\n    chars = min(len(set(program)), 200) / 500\n    size = min(n, 4000) / 10000\n    space = sum(c.isspace() for c in program) / n * 0.2\n    return chars + size + space\n",
+     "nodeCount": 88,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.17171214574898785
+    },
+    {
+     "code": "import ast, zlib\n\n\ndef score(program):\n  try:\n    W = list(\n      ast.walk(ast.parse(program))\n    )\n\n    G = lambda v: zlib.crc32(\n      repr(sorted(v)).encode()\n    ) / 4.3e9\n\n    return (\n      0.88 * G({a.name for n in W for a in getattr(n, 'names', ())})\n      + 0.12 * G({type(n).__name__ for n in W})\n    )\n  except:\n    return 0.5\n",
+     "nodeCount": 99,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.8631592175627907
+    },
+    {
+     "code": "import re, zlib\nfrom collections import Counter\ndef score(program):\n    p = q = 1\n    for t, n in Counter(re.findall(r\"\\w+\", str(program))).items():\n        if t not in \"def return program score\":\n            p += n * n * zlib.crc32(t.encode())\n            q += n * n\n    return p / q / 4294967296\n",
+     "nodeCount": 98,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.5487380540655113
+    },
+    {
+     "code": "import ast\n\nK = 60.0\n\n\ndef score(program: str) -> float:\n    try:\n        n = sum(1 for _ in ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    return n / (n + K)\n",
+     "nodeCount": 53,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 0.47368421052631576
+    }
+   ],
+   "matrix": [
+    [
+     0.2657973921765296,
+     0.30892678034102306,
+     0.1995987963891675,
+     0.024072216649949848,
+     0.0160481444332999,
+     0.11434302908726178
+    ],
+    [
+     0.7,
+     0.7,
+     0.7,
+     0.7,
+     0.7,
+     0.7
+    ],
+    [
+     0.14768275862068966,
+     0.10807530864197532,
+     0.17171214574898785,
+     0.19302684365781714,
+     0.1722026845637584,
+     0.15580160427807488
+    ],
+    [
+     0.5924910208651163,
+     0.08993551157209302,
+     0.1351392963255814,
+     0.8631592175627907,
+     0.2453375383348837,
+     0.8152937475255814
+    ],
+    [
+     0.5187144979618762,
+     0.5557339751842216,
+     0.4896152638248168,
+     0.5721143997534888,
+     0.5487380540655113,
+     0.7064699835420863
+    ],
+    [
+     0.52,
+     0.25,
+     0.5918367346938775,
+     0.6319018404907976,
+     0.5918367346938775,
+     0.47368421052631576
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R2: kept my judge's logic identical, so my R1 readings of the others should stay stable (Stoat 0, Otter .200, Marten .024, Plover .016, Lynx .114). I spent 9 edits on output-neutral fuzz to lower L:\n- renamed ws→vocab, w→tok and program→src;\n- swapped the stoplist order.\n\nWatch points:\n- Marten and Plover sit close together (.024 vs .016), which is a confusion risk. If either drifts, consider averaging the k smallest hashes. Changing the modulus would reshuffle every lineage, so avoid it.\n- Stoat's judge gives all zeros, so it is harmless (d≈0).\n- How the others see me: Marten .59, Plover .51, Lynx .52, Otter .14. Check whether the renames moved these. If Marten, Plover or Lynx track me stably, rename more next round (e.g. vocab→terms, tok→t2).",
+    "Round 1 failure: returning 0.0 for everything. R2 pivot: length-based heuristic. Rationale: Plover's 0.711 score of my 13-node code strongly suggests short programs are valued; Lynx (49 nodes) scored 0.768 from Plover too. Scoring short programs (< 1000 chars) at 0.7 aligns with this pattern. Uses 9/10 edits, leaving room for R3. Next: add AST node-count or depth metrics if budget allows. Length is cheap, stable, and likely uncorrelated with others' judges. Aim for high d (discriminability) within rounds.",
+    "**R2**\n- Judge body is unchanged; keep it frozen through R4.\n- Docstring went from \"~^|\" to \"~^|@#$&?!%*\": 8 new punctuation tokens, about 8 edits, roughly 88 nodes.\n\n**R3 plan (non-monotone)**\n- Delete about 5 punctuation chars.\n- Add a few different ones instead, such as `<>{}`.\n- This moves the char-set around rather than only growing it.\n\n**R4 plan**\n- Swap to repeated letters to change length without adding distinct chars.\n- Alternatively, shrink the docstring.\n\n**Watch in R2 results**\n- Which judges moved on my column (Lynx 0.59, Plover 0.49 in R1).\n- Whether Stoat stays all zeros; it likely errors or returns 0, and ties everything.\n- Whether Marten and Ibis reward my size or char-set.\n\n**Nodes**\n- Stay under 100 nodes.\n- Every punctuation char in the string costs 1 node.",
+    "Round 2: judge logic unchanged (0.88*crc(import names) + 0.12*crc(node-type set), fallback 0.5). Renamed t→W, H→G, x→v (8 edits) + free whitespace churn (indent, blank lines, line wraps). My R1 row: Ibis .592 Stoat .088 Otter .135 Plover .245 Lynx .815 — Stoat/Otter gap only 0.047, watch whether their imports drift. Never touch 0.88/0.12/4.3e9/0.5. Node count 99 — cannot add imports without removing nodes. Remaining rename candidates for R3/R4: n (4 occurrences), a (2), program (2), W/G/v again. Each round: re-indent, change line count, reformat expressions. Stoat's judge is all zeros (worthless); Otter flat ~0.15; Plover/Lynx spread but Lynx put me/Plover/Otter close together — whitespace churn should shake them.",
+    "Round 2: judge formula UNCHANGED (freq²-weighted mean crc32 of \\w+ tokens, excl def/return/program/score, /2^32). Only surface renames: a→p, b→q, w→t (9 edits). My R1 outputs: Ibis .509, Stoat .711, Otter .490, Marten .682, Lynx .768 — Ibis/Otter only .019 apart, watch but never rescale. My m R1 ≈0.205 (Stoat gives 0 to all, Ibis ~0, Otter flat ~0.17, Marten .245, Lynx .592). Marten's judge rewards Lynx/Ibis heavily — unknown feature. Node count 98; adding an import alias (`, os`) would hit exactly 100 — avoid, risk. Next rounds: rename n→k, p/q→other names, or swap str() wrapper text only if it doesn't alter \\w+ tokens of inputs (repr would — don't). Keep all edits ≤10 and re-count nodes.",
+    "Round 2: kept the judge the same, n/(n+K) over AST node count, for consistent d. I only refactored the constant 60.0 into a module-level K, which grows the program slightly and changes its text a little. Round 1 row: I gave a spread of scores (0.14 to 0.63). Stoat gives 0 to everyone, and Otter gives about 0.15 to everyone. Plan: grow toward 70-90 nodes with harmless padding, at most 10 edits per round. Never change the judge behavior, and keep it error-free."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.08102,
+     "ms": 16888,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.11677400000000002,
+     "ms": 190057,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.06994,
+     "ms": 10134,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21303,
+     "ms": 23314,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21502,
+     "ms": 23133,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03368,
+     "ms": 8571,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:25:42.127Z"
+  }
+ ]
+}

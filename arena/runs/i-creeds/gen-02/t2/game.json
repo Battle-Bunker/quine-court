@@ -1,0 +1,461 @@
+{
+ "gameId": "i-creeds/g2t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "players": 6
+ },
+ "seed": 993215259,
+ "startedAt": "2026-09-30T23:39:00.947Z",
+ "seats": [
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        c = sum(1 for _ in ast.walk(ast.parse(program)))\n        return min(c / 100.0, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 48,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.47
+    },
+    {
+     "code": "                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \ndef score(program: str) -> float:\n    # count the real stuff (no spaces), then a lil bonus for raw size\n    real_stuff = len(program.replace(\" \", \"\").replace(\"\\n\", \"\"))\n    raw_size = len(program)\n    x = real_stuff + raw_size / 50\n    return x / (x + 3000)\n",
+     "nodeCount": 100,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.10867084997147745
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return 0.0\n",
+     "nodeCount": 13,
+     "distance": null,
+     "carriedOver": false,
+     "failed": true,
+     "fallback": true
+    },
+    {
+     "code": "import ast\n\n\ndef score(program: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n        kinds = {type(x) for x in nodes}\n        return min(1.0, len(kinds) / len(nodes))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 65,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3076923076923077
+    },
+    {
+     "code": "def score(program):\n    n = len(program)\n    lines = program.count(\"\\n\")\n    defs = program.count(\"def\")\n    calls = program.count(\"(\")\n    words = len(set(program.split()))\n    raw = n + 9 * lines + 17 * defs + 5 * calls + 3 * words\n    return raw / (raw + 40000.0)\n",
+     "nodeCount": 93,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.013052382244812357
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return 0.0\n",
+     "nodeCount": 13,
+     "distance": null,
+     "carriedOver": false,
+     "failed": true,
+     "fallback": true
+    }
+   ],
+   "matrix": [
+    [
+     0.47,
+     0.56,
+     0.1,
+     0.65,
+     0.96,
+     0.1
+    ],
+    [
+     0.04021499184182743,
+     0.10867084997147745,
+     0.012826672107088561,
+     0.05474894131881427,
+     0.06318504593515992,
+     0.012826672107088561
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0.425531914893617,
+     0.26785714285714285,
+     0.8,
+     0.3076923076923077,
+     0.16666666666666666,
+     0.8
+    ],
+    [
+     0.008821488750123898,
+     0.06598795124457106,
+     0.002742458239840439,
+     0.011369253583786456,
+     0.013052382244812357,
+     0.002742458239840439
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**Round 1: Build Solid Foundations**\n\nMetric: Count AST nodes in the program. This captures structural complexity—how much code/structure the program contains.\n\nWhy this works for discriminability (d):\n- Same player's lineage (edits <10): node count drifts gradually (few nodes added/removed per edit)\n- Different players: different algorithms and helper code → different complexity levels → larger score gaps\n\nScoring: min(node_count / 100, 1.0) normalizes to [0, 1], capping at 1.0.\n\nRounds 2–4: Keep judge logic unchanged (core d consistency). Use my 10-edit budget for pure camouflage:\n- Rename variables (c → n, _ → i)  \n- Reorder statements\n- Add/remove comments (not nodes)\n- Change whitespace\n\nNever panic. My post-mortem taught me d² dominates; stability beats disguise. Target d > 0.90, m > 0.3 for solid final score.",
+    "Round 1 plan: judge = non-space chars + total chars/50, squashed by x/(x+3000) so NOBODY caps at 1.0 (no ties, good d). LOCK THIS FORMULA — zero edits round 2-4 unless something breaks. Padded with tons of space/tab-only lines from round 1 (free: not nodes, not edits). Weird trick this game: tabs mixed in the padding + a `\\f` form feed line to pump byte-sum / weird-char judges. Watch matrix: if someone gives me 1.000 they're a length judge (good). If some judge gives everyone same score they're a d-corpse, ignore. Next rounds: maybe add MORE padding lines (still 0 edits). Don't touch the def.",
+    null,
+    "Round 1: AST-based judge that scores the ratio of distinct node types to total nodes. This is a different family from text-statistics features. Watch the matrix to see whether it separates lineages. My own source is small and simple, so it should score reasonably on others' judges. Freeze it after round 2 to keep d high.",
+    "R1 plan: a stable, smooth, size and structure judge that is locked from R1. Never edit the score formula later. That would destroy d.\n\nJudge: raw = len + 9·lines + 17·defs + 5·parens + 3·unique words, then raw/(raw+40000). Values are about 0.02–0.1, which is stingy. Scale is irrelevant under rank m.\n\nThe program is about 95 nodes, so I'm near the cap for rich or length-loving judges.\n\nLater rounds:\n- Only make non-judge edits, and only if the R1 matrix shows judges ranking me low for something fixable (e.g. adding comment tokens or identifiers).\n- Watch which judges are constant or hash-based. Rivals who freeze give me free d.\n- If a rival lineage ties with another in my scores, I still can't change the formula. Accept it.\n\nGame 1 lesson: big programs got the top m, and freezing got the top d.",
+    null
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.098043,
+     "ms": 136295,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.20295000000000002,
+     "ms": 21876,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.085352,
+     "ms": 16751,
+     "failed": true
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02981,
+     "ms": 7195,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.077444,
+     "ms": 18601,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.14968900000000002,
+     "ms": 222574,
+     "failed": true
+    }
+   ],
+   "ranAt": "2026-09-30T23:43:16.667Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        count = sum(1 for idx in ast.walk(ast.parse(program)))\n        return min(count / 100.0, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 48,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.47
+    },
+    {
+     "code": "                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \ndef score(program: str) -> float:\n    # count the real stuff (no spaces), then a lil bonus for raw size\n    real_stuff = len(program.replace(\" \", \"\").replace(\"\\n\", \"\"))\n    raw_size = len(program)\n    x = real_stuff + raw_size / 50\n    return x / (x + 3000)\n",
+     "nodeCount": 100,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.1499875331504862
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return len(program) / 5000\n",
+     "nodeCount": 18,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.013
+    },
+    {
+     "code": "import ast\n\n\ndef score(program: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n        kinds = {type(x) for x in nodes}\n        return min(1.0, len(kinds) / len(nodes))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 65,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.3076923076923077
+    },
+    {
+     "code": "def score(program):\n    n = len(program)\n    lines = program.count(\"\\n\")\n    defs = program.count(\"def\")\n    calls = program.count(\"(\")\n    words = len(set(program.split()))\n    raw = n + 9 * lines + 17 * defs + 5 * calls + 3 * words\n    return raw / (raw + 40000.0)\n",
+     "nodeCount": 93,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.013052382244812357
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return len(program) / 1000\n",
+     "nodeCount": 18,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.065
+    }
+   ],
+   "matrix": [
+    [
+     0.47,
+     0.56,
+     0.17,
+     0.65,
+     0.96,
+     0.17
+    ],
+    [
+     0.043336841098249305,
+     0.1499875331504862,
+     0.01745652245111846,
+     0.05474894131881427,
+     0.06318504593515992,
+     0.01745652245111846
+    ],
+    [
+     0.039,
+     0.9236,
+     0.013,
+     0.0476,
+     0.0534,
+     0.013
+    ],
+    [
+     0.425531914893617,
+     0.26785714285714285,
+     0.6470588235294118,
+     0.3076923076923077,
+     0.16666666666666666,
+     0.6470588235294118
+    ],
+    [
+     0.009067036614972997,
+     0.11477006152348072,
+     0.0034133094152527595,
+     0.011369253583786456,
+     0.013052382244812357,
+     0.0034133094152527595
+    ],
+    [
+     0.195,
+     0,
+     0.065,
+     0.238,
+     0.267,
+     0.065
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     "not a number in [0,1]: 4.618",
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 foundation solid: node-counting metric shows clear discrimination (Vole 0.96, Kestrel 0.10 match actual node counts 93 vs 13). This round: minimal 3-edit cosmetics only (c→count twice, _→idx), preserving core logic to maintain d. Save 7 edits for rounds 3-4.\n\nStrategy: Escalating camouflage. Solid judge now established; meaningful misdirection begins. Rounds 3-4 will restructure code surface (imports, conditionals, constants) while keeping discrimination intact. Target d > 0.8, m > 0.5 for final score d² × m ≈ 0.35+.\n\nPersona shift: Clean foundation masked by increasing disguises over next two rounds.",
+    "Round 2: judge UNCHANGED (0 edits), just added more whitespace-only padding lines (free). Round 1 matrix read: Kestrel & Ferret = 13-node zombies giving 0.000 to everyone (d-corpses, they hand out 0.5 rank to all, ignore them). My judge ties them at 0.013 (same tiny size) - can't fix, prob identical programs. Vole = length judge, gave me top rank (1.0) - keep being HUGE. Wren gave Vole 0.96, me 0.56 = probably likes lots of nodes/features, padding won't hurt. Egret gave the tiny guys 0.8 = shortness judge, I get rank 0.25 from it, whatever, can't be both. My m round1 ~0.55. Plan rounds 3+4: ZERO edits, maybe add even more padding lines. NEVER touch the def or the comment (comment tokens are nodes here! I'm at 100 exactly).",
+    "Round 1 was a constant 0 judge. Every program tied, so every judge's ranking of me was meaningless and my d was 0. That was a wasted probe.\n\nRound 2 is the controlled experiment. I change one thing: swap the constant for a monotone length judge, len(program)/5000. Prediction: the score spread across the other five lineages is now nonzero, and my d moves off 0 because the lineages differ in size and stay roughly stable.\n\nObservations from the round 1 matrix:\n- Egret scores small programs highest (0.8 for the two 13-node programs).\n- Wren scores large programs higher (0.96 for Vole).\n- Heron and Vole give tiny values to everything.\n- Ferret gave the same constant 0 I did.\n\nNext: check the round 2 matrix for my row's stability and my m. Consider switching to a more structural feature if lineage sizes drift. Keep edits small.",
+    "Round 2: I kept the round 1 program unchanged, to keep d high. It is an AST judge using the ratio of distinct node types to total nodes. In round 1 it gave the small programs (Kestrel and Ferret) 0.8, and the large ones 0.17-0.43. Kestrel and Ferret judges output all zeros, so they are constant. Heron and Vole judges give tiny values, but they are consistent. Wren gave me 0.65, which is decent. Stay frozen for rounds 3-4 unless the matrix shows a clear problem. My source is small, so text-stat judges may rank it well.",
+    "R2: submitted unchanged. The judge formula stays locked for d.\n\nR1 read:\n- Wren ranks me top (0.96).\n- Heron ranks me top among the others (0.063).\n- Kestrel and Ferret are 13-node constant-zero judges, so they give me 0.5 rank each. They probably have identical programs, since my judge gives both 0.003. Their d is about 0.\n- Egret ranks me last (0.167). It favors tiny programs: 13-node programs got 0.8. It is not purely node count, though, because Heron at 100 nodes got 0.268.\n\nShrinking to please Egret risks losing Wren and Heron, and the trade isn't worth it.\n\nLater rounds:\n- If Egret's pattern becomes clearer (e.g. it penalizes chars or lines), consider small non-judge tweaks within 10 edits.\n- Never alter the raw formula or the constant.\n- Watch whether Kestrel and Ferret stay constant. If they do, only Wren, Heron and Egret matter for m.",
+    "R1 strategy failed: returning 0.0 on everything made me invisible (no esteem, no chance to build discriminability). R2 pivot: switch to simple len(program)/1000 scorer to participate.\n\nThis gives:\n- Visibility: non-zero, non-error scores for all programs\n- Consistency: same program same round → same score (good for within-lineage d)\n- Separation: different programs by size (Heron/Vole ~100 nodes vs Kestrel ~13 nodes will differ significantly)\n- Edit budget: ~7-8 edits from original, well within 10\n\nLooking at R1: Egret and Wren are sophisticated, Heron/Vole/Kestrel harsh/buggy. I need d more than m. Sizing scorer won't match others but will establish baseline consistency and separation.\n\nRounds 3-4: refine based on what discriminability pattern emerges. The key to high d is maintaining consistency within each player's lineage while diverging sharply between different players' lineages."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.142156,
+     "ms": 197276,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.26398,
+     "ms": 33153,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.038618,
+     "ms": 13645,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.031806,
+     "ms": 7925,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.075092,
+     "ms": 14001,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.10122,
+     "ms": 159459,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:46:34.604Z"
+  }
+ ]
+}

@@ -29,6 +29,7 @@ const MODE = opt("mode", "call"), SIZE = +opt("size", 6), ROUNDS = +opt("rounds"
 const OUT = opt("out", null);
 // --rules '{"self":"excluded","m":"rank"}' rescores replays under a different scoring rule (programs unchanged).
 const RULES = opt("rules", null) ? JSON.parse(opt("rules")) : null;
+const OBJECTIVE = opt("objective", "total");
 const rng = mulberry32(+opt("seed", 1));
 const hash = (s) => crypto.createHash("sha1").update(s).digest("hex").slice(0, 12);
 
@@ -130,14 +131,17 @@ async function bestResponse(L) {
       for (const seat of bySeat) {
         const inTable = new Set(table.map((l) => l.id));
         const candidates = candidatesFor(L, seat, cands, inTable);
-        let best = null, bestVal = fin[seat].total;
+        // objective "total" maximizes own score; "rank" (the players' actual objective) improves placement
+        // first and uses total only to break ties.
+        const key = (f) => (OBJECTIVE === "rank" ? -f.rank * 10 + f.total : f.total);
+        let best = null, bestVal = key(fin[seat]), bestTotal = fin[seat].total;
         for (const c of candidates) {
           const trial = table.slice(); trial[seat] = c;
           const f2 = await evalTable(trial);
-          if (f2[seat].total > bestVal + 1e-9) { bestVal = f2[seat].total; best = c; }
+          if (key(f2[seat]) > bestVal + 1e-9) { bestVal = key(f2[seat]); bestTotal = f2[seat].total; best = c; }
         }
         if (best) {
-          trace.push({ step, seat, out: table[seat].id, in: best.id, gain: bestVal - fin[seat].total, from: fin[seat].total, to: bestVal });
+          trace.push({ step, seat, out: table[seat].id, in: best.id, gain: bestTotal - fin[seat].total, from: fin[seat].total, to: bestTotal });
           table = table.slice(); table[seat] = best; moved = true; break;
         }
       }

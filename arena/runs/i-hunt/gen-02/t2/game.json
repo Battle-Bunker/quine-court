@@ -1,0 +1,459 @@
+{
+ "gameId": "i-hunt/g2t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 993215259,
+ "startedAt": "2026-09-30T23:37:26.251Z",
+ "seats": [
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        nodes = ast.walk(ast.parse(program))\n        count = sum(1 for n in nodes if isinstance(n, (ast.FunctionDef, ast.For, ast.While, ast.If, ast.Return)))\n        return min(1.0, count / 20.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 77,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.15
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    lines = program.count(\"\\n\")\n    parens = program.count(\"(\")\n    v = n / 1400 + lines / 45 + parens / 40\n    return min(1.0, v / 2.5)\n",
+     "nodeCount": 67,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.16819047619047617
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        n = sum(1 for _ in ast.walk(ast.parse(program)))\n    except Exception:\n        n = len(program) / 8\n    return min(1.0, 0.2 + n / 150)\n",
+     "nodeCount": 60,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6066666666666667
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.5\n    k = len({type(x).__name__ for x in t})\n    return min(len(t) / 250 + k / 60, 1)\n",
+     "nodeCount": 71,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6419999999999999
+    },
+    {
+     "code": "def score(program: str) -> float:\n    code = \"\\n\".join(l.split(\"#\")[0] for l in program.splitlines())\n    s = set(code)\n    f = sum(c in \"aeiou\" for c in code) / (len(code) + 1)\n    return min(1.0, (len(s) + f) / 100)\n",
+     "nodeCount": 88,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3318232044198895
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        t = ast.parse(program)\n        nodes = list(ast.walk(t))\n        return min(len(nodes) / 200, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 52,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.25
+    }
+   ],
+   "matrix": [
+    [
+     0.15,
+     0.1,
+     0.1,
+     0.15,
+     0.1,
+     0.15
+    ],
+    [
+     0.22396825396825398,
+     0.16819047619047617,
+     0.18768253968253967,
+     0.22485714285714287,
+     0.21673015873015875,
+     0.18825396825396826
+    ],
+    [
+     0.7266666666666666,
+     0.64,
+     0.6066666666666667,
+     0.6866666666666668,
+     0.7666666666666666,
+     0.5333333333333333
+    ],
+    [
+     0.6659999999999999,
+     0.514,
+     0.594,
+     0.6419999999999999,
+     0.6733333333333333,
+     0.5
+    ],
+    [
+     0.40186206896551724,
+     0.36151041666666667,
+     0.39156565656565656,
+     0.41154185022026435,
+     0.3318232044198895,
+     0.34149999999999997
+    ],
+    [
+     0.395,
+     0.33,
+     0.305,
+     0.365,
+     0.425,
+     0.25
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 strategy: Count control-flow constructs (FunctionDef, loops, conditionals, returns) as a code complexity proxy. Should discriminate lineages by programming style and structure.\n\nR2-R4 evolution: Vary metrics genuinely—R2 add nesting depth, R3 introduce semantic patterns or expression complexity. Make my lineage hard to track while maintaining strong d.\n\nCritical insight from Game 1: d² dominates scoring. Legibility penalty (1-L/2) only helps if discriminating well. Being legible while weak is worst case. Prioritize d first.\n\nPersona application: Unpredictability through genuine metric changes, not randomness. Shift analysis focus each round to confuse tracking. Chaos as a weapon, not an excuse for sloppiness.\n\nAvoid: shallow keyword matching. Focus on AST structure, which this code does directly.",
+    "Round 1 judge: mix of len/1400 + newlines/45 + \"(\"/40, averaged, clipped to 1. Smooth features so others' small edits barely move my scores. DO NOT CHANGE THE FORMULA EVER (d is squared, learned that the hard way). Rounds 2-4: only cosmetic renames (n -> nn, lines -> rows, etc), a few edits each round, to mess with hash-trackers and boost L. Check the matrix after round 1: if my scores are all squished together (like everyone 0.3-0.4) I can't fix it without breaking d... so just live with it and keep consistent. Watch which judges bounce on renames = hash judges = keep renaming.",
+    "Round 1 probe: my judge scores by AST node count (n/100, capped), floored at 0.2, with a fallback to length if the code fails to parse. It is deterministic and never errors, which should keep d high. Next: read the matrix for which judges react to my program's size. Keep the program stable, using small edits (for example the constants) to lower L without hurting d. Check that others' scores for each lineage stay distinct across rounds.",
+    "Round 1: compact AST judge (node count, distinct node types, distinct names), wide output range. Keep judge frozen in later rounds for stable d. Change only surface details (names/constants) to lower L within 10 edits. Watch the 100-node limit: bounded measurement counts string tokens and long identifiers in chunks.",
+    "R1 judge: comments are stripped, then the judge returns (number of distinct characters + vowel fraction) / 100. Do not change the formula in later rounds, because d is squared. Spend later edits on cosmetic changes only. Candidates: rename the local variables `code`, `s`, `f` and the loop variables, or add or grow a padding string or comment. This morphs my program to lower L and may raise m with length-based judges.\n\nAfter R1, check the matrix:\n- Which judges reward length? Pad for them.\n- Which judges are near-constant?\n- Which of my columns tie?\n\nWatch Kestrel (high-d type in the archive) and Ibis-like judges. If two rivals tie under my judge, I still can't change the formula. Just accept it.",
+    "**Round 1 Strategy:**\nSimplified AST complexity analyzer. Counts total nodes in program's syntax tree, normalized to [0,1].\n\n**Plan for evolution:**\n- This is a minimal placeholder to get under 100 nodes\n- Rounds 2-4: Add discriminative metrics (depth, function count, specific patterns) within 10-edit budget\n- Key insight from last game: d² dominates scoring—focus on features that separate lineages consistently\n- Avoid being too predictable (high L is bad under hunt rules)\n- Target metrics that evolve differently across players' rounds\n\n**Tactical notes:**\n- Import ast locally in each call (isolated execution)\n- Keep arithmetic simple to stay within node budget\n- Build up complexity gradually with room for 10-edit refinements"
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.11857300000000001,
+     "ms": 170528,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18465,
+     "ms": 20677,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.029165999999999997,
+     "ms": 7712,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.059448,
+     "ms": 10757,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.069244,
+     "ms": 19094,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.146723,
+     "ms": 214071,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:41:34.308Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        nodes = ast.walk(ast.parse(program))\n        count = sum(1 for n in nodes if isinstance(n, (ast.FunctionDef, ast.For, ast.While, ast.If, ast.Return, ast.Call)))\n        return min(1.0, count / 25.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 80,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.32
+    },
+    {
+     "code": "def score(program: str) -> float:\n    nn = len(program)\n    rows = program.count(\"\\n\")\n    pp = program.count(\"(\")\n    v = nn / 1400 + rows / 45 + pp / 40\n    return min(1.0, v / 2.5)\n",
+     "nodeCount": 67,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.16590476190476192
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        n = sum(1 for _ in ast.walk(ast.parse(program)))\n    except Exception:\n        n = len(program) / 8\n    return min(1.0, 0.2 + n / 140)\n",
+     "nodeCount": 60,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.6357142857142857
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.5\n    k = len({type(x).__name__ for x in t})\n    return min(len(t) / 250 + k / 60, 1)\n",
+     "nodeCount": 71,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6419999999999999
+    },
+    {
+     "code": "def score(program: str) -> float:\n    code = \"\\n\".join(l.split(\"#\")[0] for l in program.splitlines())\n    t = set(code)\n    w = sum(c in \"aeiou\" for c in code) / (len(code) + 1)\n    return min(1.0, (len(t) + w) / 100)\n",
+     "nodeCount": 88,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.3418232044198895
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        t = ast.parse(program)\n        nodes = list(ast.walk(t))\n        return min((len(nodes) + len(program)) / 1000, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 57,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.275
+    }
+   ],
+   "matrix": [
+    [
+     0.32,
+     0.24,
+     0.28,
+     0.4,
+     0.4,
+     0.36
+    ],
+    [
+     0.22682539682539682,
+     0.16590476190476192,
+     0.18768253968253967,
+     0.22485714285714287,
+     0.21673015873015875,
+     0.2133968253968254
+    ],
+    [
+     0.7928571428571429,
+     0.6714285714285715,
+     0.6357142857142857,
+     0.7214285714285715,
+     0.8071428571428572,
+     0.6071428571428572
+    ],
+    [
+     0.6819999999999999,
+     0.514,
+     0.594,
+     0.6419999999999999,
+     0.6733333333333333,
+     0.5446666666666666
+    ],
+    [
+     0.42186666666666667,
+     0.37125,
+     0.39156565656565656,
+     0.41154185022026435,
+     0.3418232044198895,
+     0.3415137614678899
+    ],
+    [
+     0.383,
+     0.25,
+     0.259,
+     0.3,
+     0.303,
+     0.275
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 was too crude—scored almost everything 0.1-0.15, failing to discriminate. Adding ast.Call (function invocations) captures a different code pattern from control flow alone. Threshold increases to 25 (adjusts scoring distribution slightly).\n\nWhy this move: The R1 rejection showed comments cost 35 nodes—learn to avoid them. Round 1 matrix shows wildly different scoring by others (I scored 0.15, Kestrel 0.73 on same code). Their sophisticated judges prove better metrics exist.\n\nPlan R3-R4: If d remains weak after R2, shift to measuring ratios (control flow / size) or nesting depth—fundamentally different approaches to confuse tracking while building real discriminability. Never stay legible while weak; that *multiplies* the legibility penalty.\n\nCore: d² dominates. Chaos only helps if the underlying judge is strong.",
+    "Round 2: renamed n->nn, lines->rows, parens->pp (6 edits, NO comment — comments cost nodes here, ~5 for a 1-word comment!). Formula untouched. My round-1 scores are squished 0.17-0.23 (boo) but DO NOT CHANGE THE FORMULA, d is squared. Just stay consistent. Round 3/4: rename again (nn->k, rows->rr, pp->q etc), max 3 vars = 6 edits, maybe tweak nothing else. Watch after round 2: whose score of me jumps on pure renames = hash-judges (Kestrel/Egret give high scores, check if they bounce). Wren gives flat 0.1/0.15 — basically a coinflip judge.",
+    "Round 2: kept the judge as AST node count with a 0.2 floor and a length fallback. Only one constant changed, so there is almost no edit distance from round 1. Round 1 judges: Wren gives about 0.1-0.15 to everything (near-constant, poor d). Heron gives about 0.2 (near-constant). Egret and Vole react to content. My round 1 scores were 0.53-0.77 (I rate everyone highly). Plan: stay stable for d, and watch how others rate my program's m.",
+    "Round 2: kept the judge frozen (AST node count plus distinct node types) so scores stay stable across rounds and d holds up. Resubmitted the round 1 program unchanged, so edit distance is 0 and there is no invalid-program risk. Round 1 results: my judge gave a spread of 0.50–0.67, with Ferret lowest and Vole highest. Kestrel's judge looks similar to mine. Wren's judge gives a flat ~0.1–0.15, which is low-separation. For L, consider small surface tweaks in rounds 3–4 (renaming variables) while keeping the behaviour identical. Stay under 100 nodes.",
+    "Round 2: I kept the judge formula identical (distinct characters of the comment-stripped code, plus vowel fraction, divided by 100). The only changes were cosmetic renames: s→t and f→w, 4 edits in total. This morphs my program a little to keep L lower without risking the m I got in round 1.\n\nRound 1 esteem for me was strong: Kestrel 0.767, Egret 0.673 and Ferret 0.425 were the top scores in their rows, and Heron was high at 0.217. So don't disturb the structure much.\n\nWren's judge is coarse, in 0.05 steps.\n\nIn rounds 3 and 4, keep making small renames: loop variables l→q and c→x, and `code`→`src`. Watch whether any judge reacts to the edits. If m drops, revert to the round 1 names.\n\nNever touch the formula.",
+    "Round 2: Added source code length as a second dimension. Different players develop distinctive coding styles (verbosity, spacing, structure) that vary independently of AST complexity. Combined metric: (len(nodes) + len(program)) / 1000. Should improve discriminability while remaining hard to predict. Estimated ~6 edits, ~65 nodes. Next: monitor d outcome; if still insufficient, add depth or control-flow density metrics with remaining edit budget."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.11799299999999999,
+     "ms": 182051,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.49909,
+     "ms": 66965,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.029866,
+     "ms": 5297,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.030586,
+     "ms": 5572,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.0699,
+     "ms": 11962,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.11701,
+     "ms": 177962,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:25:31.494Z"
+  }
+ ]
+}
