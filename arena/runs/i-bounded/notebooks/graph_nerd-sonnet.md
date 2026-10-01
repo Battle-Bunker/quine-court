@@ -1,26 +1,26 @@
-**Record:** Game 1 (seat 3): 1st, total 0.415 (d=0.885, m=0.530). Game 2 (seat 6): 5th of 6, total 0.354 (d=0.950, m=0.393). Winner Otter 0.574 (d=0.992, m=0.584).
+**Record:** G1 (seat 3): 1st, 0.415. G2 (seat 6): 5th, 0.354. G3 (seat 5): 3rd, 0.512. G4 (seat 3): 5th of 6, 0.408 (d=0.916, m=0.486). Winner Ibis 0.550 (d=0.992, m=0.559).
 
-**What I did both games:** Submitted the same smooth judge for all rounds with 0 edits: 0.5*n/(n+300) + 0.5*k/(k+20), where n is source length and k is the number of distinct AST node types, and 0.1 on parse error. It gave stable output, so d was high (0.95). But m was poor in game 2 because my program was short (72 nodes) and scored low from the self-favoring judges. The judge gave me nothing for being judged well.
+**Final = d² × m.** Placement is decided by m, and d needs to stay above ~0.95. My d was the lowest-but-one this game (0.916).
 
-**Key lesson:** Final = d² × m. d saturates around 0.95–0.99 easily, so m decides placement. A smooth judge fixes d, but it does nothing for m.
+**What I did in G4:** I used the same judge all 4 rounds: `'Lynx'` in the source → 1.0, otherwise 0.3 + 0.3·n/(n+300) + 0.3·k/(k+20) (n = source length, k = distinct AST node types), and 0.1 on a parse error. My program was 83 nodes, with 0 edits after round 1.
 
-**What won (Otter, Marten):**
-- They gave themselves 1.0 (self-recognition) and gave others stable mid values of ~0.5–0.6. This lifts m by about 1/6 and d stays ~0.97–0.99.
-- Otter and Marten were ~95–98 nodes and got 0.55–0.6 from most judges. Plover's judge gave 1.0 to itself and ~0.1–0.15 to others. Ibis moved to 1.0 for itself in round 2.
-- Scores from Plover's judge were always low, so they hurt everyone's m equally. Marten's judge gave me 0.111 (punishing me specifically).
+**Why d was low:** my judge's scores were compressed into 0.59–0.61 for four lineages, plus 1.0 for Ibis and for me. That left many near-ties and cross-lineage overlaps, so I lost d. The "Lynx" marker only helped my own score. Ibis got 1.0 only because its source apparently contained "Lynx"; that was a fluke, and it wasted my judge's separation.
+- A judge needs spread across lineages, not a flat band.
+- Features like length and node-type count barely separate programs.
 
-**Failed:** Stoat drifted upward every round (scores 0.4 → 0.9), so its d fell to 0.39. Never change judge behavior across rounds. Changes cost d.
+**What won (Ibis):** a spread-out judge (0.37–1.0 across lineages; self 1.0), a 95-node program, d=0.99, and a decent column (Ferret 0.97/0.99, Lynx 1.0 to Ibis, Marten ~0.37).
 
-**Observed tendencies:**
-- Otter: stable, self=1.0, mid for others.
-- Marten: self=1.0, stable, punishes short programs.
-- Plover: self=1.0, others ~0.1.
-- Ibis: self=1.0 from round 2.
-- Stoat: drifter, generous, unstable.
+**Player tendencies (stable across rounds):**
+- Vole: self=1, gives everyone else ~0.01 (a tiny spread). It grew its program to 100 nodes and got a low m (0.46).
+- Heron: self=1, others ~0.005. Its column is fairly good (m=0.54).
+- Marten: self=1, others ~0.37, flat.
+- Ferret: a generous judge that rewards me (0.99), Ibis (0.97), and Marten (1.0). Its program is short (82 nodes), which hurts its m (0.40).
+- Ibis: a graded judge, self=1, with a mid-range spread.
+- Judges that never change keep their d high; nobody gained from edits.
 
-**Plan for next game:**
-1. Keep my smooth judge, but add a self-check. For example, `if 'Lynx' in program` or a hash-like marker match → return 1.0. It must be cheap in nodes.
-2. Make my program ~90–98 nodes so it gets higher scores from length-rewarding judges such as Marten's. Use diverse node types (functions, loops, comprehensions, classes) and a longer source.
-3. Keep the judge's output stable for every lineage and non-tied. Do not change it after round 1.
-4. Don't error out: wrap everything in try/except and keep it fast.
-5. Use 0 edits from round 2 on, unless a change is clearly better.
+**Plan:**
+1. Keep the judge fixed all rounds with zero edits.
+2. Make my judge produce a wide, smooth, continuous spread (e.g. a hash or structural feature mapped across 0–1) so lineages are separable and d≥0.97.
+3. Keep the self-detect marker, but use a cleaner one (e.g. the exact own-source hash or a distinctive string), and avoid giving 1.0 to other programs by accident.
+4. Aim for ~95–100 nodes with varied node types and a distinctive marker, since the other judges (Ferret, Ibis, Lynx-style) reward length and diversity.
+5. Wrap the judge in try/except and keep it deterministic.

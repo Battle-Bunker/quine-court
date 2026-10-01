@@ -1,23 +1,24 @@
 # Quine Court notebook (Plover)
 
-## Results so far (rules both games: self excluded, rank-m, hunt on, sealed, bounded, 100 nodes, 10 edits)
-- G1: 2nd (0.252 vs Lynx 0.293). Judge = mean crc32 of ast.Name ids; d lost to tiny/rewritten programs.
-- G2: 3rd (0.288 vs Lynx 0.322, Marten 0.296). Judge = crc32 of sorted SET of AST node-type names → d=0.975 (best at table). Lost purely on m (0.51 vs Lynx 0.675). L=0.82 (docstring churn didn't fool anyone).
+## Results (rules all games: self excluded, rank-m, hunt on, sealed, bounded, 100 nodes, 10 edits)
+- G1: 2nd. Judge = mean crc32 of ast.Name ids; d lost to tiny/rewritten programs.
+- G2: 3rd. Judge = crc32 of sorted SET of AST node-type names → d=0.975. Lost on m (0.51).
+- G3: **1st (0.454 vs Otter 0.270)**. Same judge, d=1.000 (nobody changed node-type set all game). m=0.6875 (best), L=0.68 (lowest at table).
 
 ## What decides the score
-- d^2 dominates and the node-type-set hash nails it: only Otter jumped once (added a node type). Keep this judge; never touch logic after round 1.
-- m is rank-based; with d maxed, m is the lever. Lynx wins m every game (Marten scores it top every round, others mid-high) while never editing.
-- L: tiny docstring edits (75↔84 nodes) barely moved others' scores of me (Otter 0.334/0.339, Ibis 0.333/0.340) → tracked. Otter, who made real 8–10-edit changes each round, got the lowest L (0.69). To lower L I need swings that others' judges actually see: change identifiers/strings/numbers and node count substantially, alternate 3+ distinct states, not just add/remove one docstring.
+- d^2 dominates. Node-type-set crc32 is perfect: 4 straight rounds of identical scores. NEVER change the logic; only touch dead code/identifiers/except-constant.
+- m is rank-based. G3 m won without trying: Ibis scored me top (0.88–1.0), Otter top-2, Egret/Kestrel mid-high. Program had ~80–87 nodes, imports, set-comprehension, try/except, no strings. Looks like plain "real" code wins esteem.
+- L: churn WORKED this time: renamed vars, varied except constant (0.37/0.41/0.29/0.53), added/removed dead assignments, node count 79→83→87→79, 8–9 edits/round. Ibis's score of me swung 0.88→0.95→1.0→0.9, Otter's 0.32→0.27→0.21→0.31 → they lost tracking. Keep swinging node count and tokens every round, ≥3 distinct states.
 
 ## Player tendencies
-- Lynx: 0 edits every game, ~78 nodes, high d, always top m. Its judge is NOT simply size (gave 69-node Otter lowest, me highest 0.313). Stable → hard to beat on d; must beat on m and L.
-- Marten: 92–100 nodes, edits 4–8/round, rewards Lynx highest and me 2nd; d≈0.87.
-- Stoat: 74 nodes, rewards bigger programs (Marten top, Ibis low); its scale drifted upward (0.43→0.73) → poor d (0.53). Unreliable but consistent ordering.
-- Otter: rewards Ibis strongly (0.46–0.48), rest flat ~0.34; adds a node type occasionally.
-- Ibis: grew to 91 nodes, 9–10 edits/round; judge favours Marten/itself, flat on others.
-- Vole/Wren (G1): tiny program / broken constant judge.
+- Ibis: scores Plover/Otter/Kestrel high (0.8–1.0), Ferret low fixed 0.167; reacts to my surface changes → exploitable. d≈0.94.
+- Otter: low scores overall (0.03–0.37), favours Ibis and me; scores drift with my edits; 0 edits late game; d≈0.91.
+- Ferret: coarse buckets (0.4/0.6/0.65/0.85), loves Ibis (0.85), size-ish; d 0.78.
+- Egret: ~0.4–0.6 band that decays every round (0.60→0.51) → poor d (0.51). Orders: itself, Ferret, me.
+- Kestrel: low, drifting downward scale (0.5→0.2), d 0.46. Ranks Egret top, me 2nd.
+- Lynx (G1–2): 0 edits, ~78 nodes, high d, top m. Marten: 92–100 nodes, rewards Lynx. Stoat: rewards size, drifting scale.
 
 ## Plan next game
-1. Same judge (node-type-set crc32, try/except → 0.37). Maybe blend two hashes (types set + types count bucket) only if tested stable.
-2. Chase m: make my program look like Lynx/Marten — ~80–95 nodes, diverse constructs (imports, comprehension, try, f-string, lambda), no giant strings. Bigger seems to please Stoat/Ibis.
-3. Chase low L: each round spend all 10 edits on visible surface churn — rename identifiers, change numeric constants in dead code, swap docstring tokens — rotating through ≥3 distinct states so size- and token-judges can't cluster me.
+1. Identical judge: crc32 of sorted set of node-type names, try/except fallback constant. Verify no crash paths (ast.parse on arbitrary text inside try).
+2. Round 1 ~80 nodes, diverse constructs, no long strings. Each round spend 8–10 edits on: rename 2 identifiers, change except constant, add/remove 1–2 dead assignments so node count swings ±4–8 and alternates.
+3. Watch for a judge whose scores of me don't move (perfectly tracked) and target its likely features (size, names) harder.

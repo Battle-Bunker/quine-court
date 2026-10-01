@@ -1,29 +1,42 @@
-## Game 2 Analysis – Positioned Well But Wasted Legibility
+## Game 3 Analysis – Chaos Strategy Backfired Catastrophically
 
-**Final Result:** 4th/6 (0.1634 total)
+**Final Result:** 5th/6 (0.0293 total). **Regression from Game 2's 4th (0.1634).**
 
-### What Worked
-- **d=0.7167** (discriminability) was respectable. My text-metric approach (size, def count, lines) consistently separated code lineages, even if not optimally.
-- **m=0.6000** (esteem) was middle-of-pack. I was rated roughly fairly by other judges.
-- I stayed in the game; no crashes or timeouts.
+### What Failed
 
-### What Failed – and It's Subtle
-My **L=0.9396** (legibility) is catastrophically high. Other judges easily predicted what I'd score because my heuristics were transparent. The penalty (1-L/2) multiplied my score by only ~0.47—cutting it in half.
+My mischief strategy was **fundamentally inverted.** I thought chaos meant switching metrics every round (size → def count → assignment count), but I achieved:
+- **d=0.2792** (5th): near-random incoherence. Judges couldn't rank my targets consistently because I wasn't consistent.
+- **L=0.7833** (high legibility): other players instantly spotted the pattern-switching. Transparent, not mysterious.
+- **m=0.6188** (respectable esteem masked by d²): Round 1's blanket 0.0 scores wasted my distributional power.
 
-**Heron won (0.2968)** with L=0.5354 (the table's lowest), multiplying by 0.7323. Same or weaker d and m as me, but Heron's legibility bonus overcame it. This directly validates the mischief strategy—but not how I imagined it.
+The penalty (1 - L/2 = 0.6083) halved my score, but **d² = 0.0078** gutted it first. Winners had d > 0.83; I was off by an order of magnitude.
 
-### The Persona Misunderstanding (Corrected)
-Wren should seek low L by being *sophisticated and hard to reverse-engineer*, not by being random. Heron probably used non-obvious code features or weightings that other judges couldn't easily reconstruct. I used text metrics—baby-mode analysis that any player could guess in one round.
+### What Winning Actually Looks Like
 
-Egret achieved exceptional d=0.9875 but stayed trackable (L=0.9000), landing 3rd. Discriminability matters, but being opaque multiplies it.
+- **Marten (1st, 0.2889):** d=0.8375, modest L=0.6948. Strong base, acceptable opacity.
+- **Heron (2nd, 0.2820):** d=0.8833, exceptional L=0.5542. Comparable d, but genuine obscurity.
+- **Lynx (3rd, 0.2654):** d=0.9292 (highest!), but L=0.6885 limits final score.
 
-### Structural Flaw
-Rounds 1–4: I barely edited my code (3–6 edits per round). My divisors crept from 500→450→500→470, but I never committed to exploring different scoring philosophies. Within 10 edits, I could have shifted from simple metrics to complexity analysis or syntax-tree patterns—signals others couldn't easily infer.
+Pattern: **High d is mandatory.** L matters, but only as a multiplier on an already-strong d². I tried to win with L-bonus while ignoring d—backwards.
 
-### Next Game
-1. **Real code analysis:** Parse AST/syntax depth, variable diversity, control-flow complexity. Not word counts.
-2. **Non-obvious features:** Combine measures in ways that aren't transparent. Mask the logic.
-3. **Evolve strategically:** Use each round's 10-edit budget to shift what you're analyzing, keeping players guessing.
-4. **Target L-bonus:** If I can drop from 0.94 to 0.70, that's worth 1.5x on my score even if d stays the same.
+### The Corrected Understanding
 
-Other players: Heron and Plover (top finishers) seem to use sophisticated scoring. Ferret hedges for universality (high m). Egret optimizes d above all. Vole experiments more but scores lower. Kestrel stays defensive.
+Being a mischief-maker means:
+1. **Build ONE analytically sound model** (AST depth, complexity metrics, control-flow patterns). Keep it lineage-consistent.
+2. **Obscure the logic**, not the targets. Other players should see I score carefully without reverse-engineering how.
+3. **Evolve within strategy**, not reinvent. Use 10-edit budget for parameter tuning, not wholesale metric swaps.
+4. **Commit to high d first.** If I can't separate players consistently within my own strategy, no L-bonus saves me.
+
+### Observed Player Patterns
+
+- **Marten:** Stable, mid-range scores across rounds. Likely AST/syntactic analysis.
+- **Heron:** Non-obvious feature weighting; hard to predict. L-champion.
+- **Stoat:** Erred in Round 2, recovered well in Rounds 3–4. Resilient adaptation.
+- **Vole:** Experimental strategy (m=0.3375 suggests unusual ranking). Volatile.
+
+### Next Game Plan
+
+1. Parse AST: node density, nesting depth, operator/identifier ratio. Non-trivial features.
+2. Test consistency: score test cases manually to verify same-code clustering before round submission.
+3. Use 4 rounds for refinement, not reinvention. Minor edits preserve d-continuity.
+4. Target d ≥ 0.75 before optimizing for L.

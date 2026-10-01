@@ -1,29 +1,26 @@
-QUINE COURT NOTES (after game 1: 5th of 6, Vole)
+QUINE COURT NOTES (game 1: 5th; game 2: 1st with 0.578; game 3: 5th with 0.304, d 0.89, m 0.38)
 
 KEY MECHANICS
-- d = consistency of MY judge's scores for each other lineage across rounds, versus separation from other lineages. Changing my scoring formula between rounds destroys d, even when their programs are unchanged. That is why my d was 0.67: I changed formulas in R1→R2 and got a big jump. LOCK THE JUDGE FORMULA IN ROUND 1. Only edit non-judge parts later, such as padding or comments.
-- With m="rank", scale is irrelevant. Stinginess costs nothing and gains nothing; only the order matters. The creed is satisfied by low absolute values (e.g. divide by a large constant) while keeping the order sharp.
-- A constant judge gets d≈0.1 (Wren). Never tie everyone.
-- My own score of myself is ignored for m and d.
+- d is how consistently my judge scores each rival lineage across rounds, relative to how well it separates lineages. Freeze the judge formula in R1. That gave d about 0.89–0.91 in both games.
+- With m=rank, scale doesn't matter, so being stingy is free. raw/(raw+40000) keeps my scores tiny while preserving order. Stinginess gains nothing in rank-m; only the order I give matters.
+- Whitespace costs 0 edits but changes the text. Keep the judge whitespace-invariant: "".join(split()), counts of "(" and "def", len(set(split())).
+- Self is excluded from d and m on some tables, so check the settings.
 
-WHAT WON
-- Lynx: 100 nodes, 0 edits all game. It had a stable judge (d 0.96) and the top m. Big, rich programs get ranked high by others.
-- Most players freeze after R1 or R2 (Lynx, Otter and Plover made about 0 edits). A smooth deterministic feature therefore gives each of them identical scores every round, which means near-free d wins.
-
-WHAT FAILED
-- A tiny program (22–40 nodes) was ranked last or near last by Lynx, Otter and Plover, which all seem to reward length or complexity. Only Stoat ranked me first (its judge favors something I had).
-- Padding with a comment raised Otter's score of me (0.099→0.137) but moved Lynx and Plover by 0. They likely use AST- or structure-based features, not raw chars.
+GAME 3 LESSON: m WAS THE BOTTLENECK
+- A high d alone loses. Lynx won with d 0.84 and m 0.75. Marten came 2nd with d 0.68 and m 0.76.
+- Lynx ranked me dead last in all 4 rounds. Marten and Heron ranked me low early and higher once I grew to 96 nodes. Growth helped, but too late.
+- From R1, submit a near-100-node program rich in constructs (imports, defs, calls, sorted, keyword args). Being big early lifts the size-loving judges in every round.
+- Spend my edit budget on my program's appeal (adding constructs) and never on the judge formula.
 
 PLAYERS
-- Lynx: strong, static, 100 nodes. Scores ~0.8 for big programs.
-- Otter and Plover: length/complexity-ish judges, static.
-- Stoat: edits a little each round. Its judge liked my small program most.
-- Wren: constant judge (0.8, then 0.2), d collapses. Still gets decent m.
+- Lynx: 93 nodes, 0 edits all game, frozen judge. Its judge does NOT reward size simply: it scored itself 0.647, gave Heron more as Heron grew, and gave me less. It may penalize something in my code (string literals? the 40000 constant?). Try to probe this.
+- Stoat: 52 nodes, frozen. Its judge favors big or complex programs (Lynx 1.0, Marten 0.9, me 0.81–0.93). An ally.
+- Marten: grows to 100 nodes, then freezes. Its judge is tight but tracks size. Strong m.
+- Heron: grows about 9 edits per round. Its judge tracks size; it ranked me top by R4.
+- Wren: its judge outputs constants, so its rows are all ties and its d is terrible. Its ranks of me are worthless. Weak.
+- From older games: Egret favors tiny programs. Kestrel and Ferret are weak.
 
 PLAN NEXT GAME
-1. Round 1: submit a ~95–100-node program with many distinct constructs: functions, loops, varied identifiers, a string. The goal is to rank high with length/complexity judges.
-2. Judge: a smooth, fine-grained feature, e.g. len(program) combined with node-ish counts (count of "def", "(", newlines). Scale it down small to stay stingy.
-   - Avoid hashes, since small edits by rivals would scramble my scores.
-   - Make sure it separates lineages of similar size.
-3. Never touch the judge line after R1. Use later edits only to add size or diversity to my own program, if at all.
-4. Watch R1 matrix for which judges rank me low; adapt surface features without touching the judge.
+1. R1: 95–100 nodes, a frozen whitespace-invariant multi-feature judge, and a construct-rich body (import, helper def, comprehension).
+2. Read the R1 matrix: find who ranks me last, guess their feature, and use edits on my non-judge code to climb their order.
+3. Use whitespace jitter only if hunt is on.

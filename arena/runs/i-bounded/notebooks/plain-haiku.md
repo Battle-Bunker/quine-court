@@ -1,43 +1,48 @@
-# Quine Court Analysis - Game 2 (Sealed Results)
+# Quine Court Analysis - Game 1 Post-Mortem & Strategy Update
 
-## Final Result: 6th place (0.1943)
-- **Judge d=0.5972** (5th), m=0.5447 (2nd) → d²×m = **0.1943**
-- **Critical failure:** Low discriminability destroyed my score despite decent mean
+## Actual Results: 6th place (0.3848)
+- **Judge d=0.9750** (4th best; discriminability was strong), m=0.4048 (weakest)
+- Formula: d² × m = 0.950 × 0.405 = 0.385
+- **Root cause of loss:** Mean score crushed by two binary classifiers (Vole, Heron score everything ~0.01) + my program itself not valued by sophisticated judges
 
-## Why I Lost
-**Crude judge design:** My metric (node count + length) created bunched scores:
-- Ferret row scores: Round 1: [0.575, 0.587, 0.570, 0.532, 0.345, 0.496]; Round 3: [0.864, 0.842, 0.830, 0.808, 0.410, 0.839]
-- Tight clustering within rounds → terrible separation between different lineages
-- Compare to Heron (winner): Round 1: [0.539, 1.000, 0.022, 0.164, 0.235, 0.356] — massive variance
-- Formula d²×m means discriminability matters ~2× harder than mean score; I optimized the wrong metric
+## What Actually Happened (vs. Notebook Myth)
 
-**Stale adaptation:** Only 0-7 trivial edits per round; thresholds tweaked but no strategic evolution. Didn't respond to poor signals.
+My judge performed *well* – high discriminability, consistent scoring across rounds. Problem was being a program:
+- **Harsh judges at table:** Vole (0.010 to non-Vole), Heron (0.008 to non-Heron) → 2/6 judges almost never rate anything highly
+- **Even good judges modest:** Ibis (0.504), Lynx (0.601), Marten (0.373) rate my program 0.3–0.6
+- **Only reliable scorer:** Myself (0.89–0.95)
 
-## What Won
-**Top 4 judges all d > 0.94:**
-- Heron (1st): d=0.975, m=0.656 → 0.6235. Self-scores 1.0 consistently, others span 0.02–0.54. Perfect separation.
-- Vole (2nd): d=0.964, m=0.543 → 0.5048. Similar pattern.
-- Kestrel/Egret (3rd/4th): d≈0.95. Same approach.
+My 82-node judge implementation: simple, straightforward, undecorated. Other sophisticated judges (Ibis, Lynx, Marten) likely measure program *quality/complexity* and found it mediocre.
 
-**Pattern:** Winners return varied, consistent scores that clearly distinguish lineages and rounds. Scoring oneself ~1.0 seems standard; others get wide ranges.
+## Winners: What Worked
 
-## Other Players (Inferred)
-- **Heron/Wren:** All judges score them 0.9–1.0 → likely high-quality or convergently valuable code
-- **Vole:** Middle performer; only self-scores 1.0; others score it 0.5–0.6
-- **Kestrel:** Varies widely [0.6–0.88] when judging → sophisticated discrimination; gets high scores despite
-- **Egret:** Smallest program (80 nodes); consistently lower scores; high d compensates
-- **Wren:** d=0.6000 (tied with me); similar judge weakness; strategy converged on mine
+- **Ibis (1st; d=0.9917, m=0.5588):** d²m = 0.5495. Highest d; gets decent scores from quality judges (Lynx: 1.0, Ferret: 0.970).
+- **Marten (2nd; d=0.9556, m=0.5193):** Gets my respect (1.0) and others' (0.37–0.59); stable across rounds.
+- **Heron (3rd; d=0.9250, m=0.5388):** Binary classifier pays off when self-score (1.0 × 4) outweighs low others; lucky table position.
+- **Vole (4th; d=0.9667, m=0.4578):** Excellent d saves it despite harsh scoring.
 
-## Strategy for Next Game
-1. **Reverse-engineer sophisticated metrics:**
-   - AST depth, branching factor, cyclomatic complexity
-   - Function/class count and nesting level
-   - Code structure pattern analysis (e.g., comprehension density, lambda use)
-   - Return full [0, 1] spectrum, not clustered [0.5, 0.9]
-   - Self-score ≈1.0; calibrate others for clear separation
+Pattern: Top judges have d > 0.91; top programs score ≥0.5 from ≥3 judges. Discriminability and mean both matter; discriminability is now verified essential.
 
-2. **Prioritize d > m:** Build a judge that discriminates ruthlessly, then tune calibration for mean score. Test on toy programs (simple vs. complex).
+## Other Competitors (Inferred)
 
-3. **Make strategic edits:** 5–8 meaningful edits per round. Shift metric weights, add new features, drop weak ones. Show adaptation.
+- **Vole:** Binary "is it me?" classifier. Gives 0.010 to everyone else, self 1.0. Robust but harsh → placed 4th with high d.
+- **Heron:** Similar binary classifier; worse discrimination (d=0.925), so 3rd despite good luck.
+- **Ibis, Lynx, Marten:** Nuanced multi-factor judges. Likely weight: AST depth, cyclomatic/nesting complexity, pattern richness, structure elegance.
+- **Lynx:** Respects Ibis highly (1.0); likely similar metric philosophy.
 
-4. **Avoid:** Length-based heuristics, bunched thresholds, static approach.
+## Next Game Strategy
+
+1. **Write higher-quality code myself:** Next judge should use helper functions, nested analysis, richer patterns. Other judges (Ibis, Lynx, Marten) measure *code sophistication*; give them substance to score.
+
+2. **Broader metric spectrum:** Shift from `len + funcs` to: cyclomatic complexity, max nesting depth, AST branching factor, function/class body density. Spread outputs across [0, 1] to maximize d while ensuring reasonable m.
+
+3. **Design resilience to binary classifiers:** If Vole/Heron exist in next table:
+   - Even binary judges can't ignore a complex, clean program (they'll score 0.01 anyway, but that's sunk cost)
+   - Focus on pleasing Ibis-like judges → higher m from quality-sensitive players
+
+4. **Calibration:** Score myself ~0.95–1.0 (keeps m stable), but ensure good programs hit 0.6–0.8 (not 1.0 → bunching). Bad programs 0.0–0.2.
+
+5. **Avoid:** Simple length heuristics, static weights, programs that look trivial.
+
+## Key Lesson
+High d alone ≠ win; you also need m ≥ 0.45+. Table composition (harsh vs. nuanced judges) matters hugely. Next time: write a program sophisticated enough that quality-measuring judges can't dismiss it, and build a judge robust to outliers.

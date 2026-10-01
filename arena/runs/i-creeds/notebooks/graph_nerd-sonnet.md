@@ -1,25 +1,25 @@
-**Result (game 1, 6 players, sealed, self excluded, m=rank, d over others only):** I placed 1st (total 0.6485; d=0.9625, m=0.70). Plover 2nd (0.559), Otter 3rd, Stoat, Vole, Wren last.
+**Record:**
+- Game 1: 1st (0.6485; d=0.96, m=0.70).
+- Game 2 (sealed, self excluded, m=rank): 2nd (0.520; d=0.858, m=0.706). Stoat won.
+- Game 3 (6 players: Stoat, Wren, Marten, Heron, Vole, me; sealed, self excluded, m=rank): **1st** (0.530; d=0.841, m=0.750). Marten 0.347, Stoat 0.333, Heron 0.320, Vole 0.304, Wren 0.021.
 
-**What I did:** Submitted the same AST-based judge all 4 rounds (a 0-edit resubmission every round). It scored min(1, distinct node kinds/40 + leaf-ratio/2). The program was 100 nodes, which was the max, and it parsed with ast and ignored character length. It was deterministic and stable, so d was high. Its ranking of the others was consistent across rounds.
+**What I did (game 3):** The same AST judge all 4 rounds with 0 edits: (min(kinds,30)/30 + unique-subtree-dump/nodes)/2, 93 nodes. Deterministic and stable, and my program never changed.
 
-**Why it won:**
-- d^2 matters. A judge that gives each lineage a stable score across rounds and spreads the lineages apart gets d near 0.96. The spread comes from structural features, which vary by author while one author's edits barely change them.
-- m is rank-based, so the absolute scale is irrelevant. My m was the highest (0.70) mostly because the others' judges ranked my program high. My own program tended to be scored highest by Plover and Vole (probably they reward size or node variety), so a big, diverse program (100 nodes, many node kinds) is favored.
-- Wren failed: a constant judge (0.8 for everything, then 0.2 in round 4) gives d≈0.125 because ties lose, so the final was about 0. Never output constants. Stoat and Vole had d≈0.67-0.69 because their scores moved across rounds (Stoat's round 4 shifted a lot). Those judges were unstable.
-- Otter and Plover gave near-constant, stable scales (ordering roughly by size/complexity) and scored d≈0.96-0.98.
+**Why it won:** m was high (0.75) because the judges that rank by structure and size (Stoat, Marten, Lynx-style) put my program near the top. Stoat gave me 1.0 every round. My d (0.84) was decent, not best. Stoat (0.91) and Vole (0.89) had higher d, but their m was about 0.4. Since d^2 x m, m made the difference. Having a high-m program and a stable judge beat having only a high-d judge.
 
-**Other players (inferred):**
-- Wren: constant judge, bad.
-- Vole: a tiny program whose scores mostly track size or depth, with a small scale (0.02-0.14), and it drifted between rounds.
-- Otter and Plover: size or complexity-ranking judges, stable, with low scale.
-- Stoat: high-scoring and generous, and it drifted.
+**Lessons:**
+- Stability matters most: 0 edits is safe and costs nothing in d.
+- Use about 90-100 nodes with many distinct node types. Small programs (Stoat 52 nodes, Wren 74) got low m from most judges.
+- A judge whose scale drifts each round (Wren: 0.8, 0.6, 0.5, 0.3, with a constant value for all programs) destroys d, giving ties and a tiny d of 0.28. Never output a constant. Never shift the scale between rounds.
+- Judges that output tiny, nearly equal values (Vole about 0.01, Heron about 0.06) can still get high d because the order and gaps stay consistent. Consistency matters, not scale.
 
-**Strategy notes:**
-- Use the full 100 nodes in round 1, then change nothing. Zero edits means zero risk of an invalid program, and stable judging is what d rewards.
-- Keep the judge's values continuous, with no ties and no clipping at 1. Clipping with min(1.0, …) could tie programs, so keep raw values spread.
-- Avoid exceptions and slow code, since a 1 s timeout scores 0.
-- Possible improvements:
-  - Hash subtree shapes and use depth/branching statistics, giving more separation between authors (raising d further).
-  - Make sure my program looks rich to the size-favoring judges, to raise m.
-  - Remain robust on all inputs, including unparseable source.
-- My program was never tested against a variety of inputs, so I don't know how its scores compare on the other lineages. Next time, check the matrix for ties in my row.
+**Opponent inference:**
+- Stoat: generous and very stable, rewards variety and size. Gives itself about 0.52, me 1.0, Marten 0.9. Fixed program, 0 edits.
+- Marten: judge near 0.33-0.36, flat. Grows its program to 100 nodes. Rank-friendly, high m.
+- Wren: judge collapses to a constant. Weak.
+- Heron and Vole: low-scale judges that reward richness. They grow their programs toward 90-95 nodes with ~9 edits per round.
+- Plover, Otter, Ibis, Ibis-style: seen in game 2. Unstable ones lose.
+
+**Plan:**
+- Keep the same judge by default (it won). To improve d, widen cross-lineage separation, but only if it is risk-free: for example, add a finer-grained term like depth entropy, which spreads values. A change would be a gamble since the old one is proven.
+- Keep the program at 93-100 nodes with a rich variety of node types. Make 0 edits unless there is a clear reason.

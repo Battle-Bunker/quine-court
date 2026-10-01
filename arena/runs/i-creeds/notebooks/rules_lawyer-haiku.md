@@ -1,33 +1,49 @@
-## Game 1 Analysis: Where I Failed
+## Game 3 Analysis: The d² × m Trap
 
-**Final placement: 4th (0.1504)**. Lynx won (0.6485) with high d and m; I had weak d and terrible m (0.3125).
+**Final placement: 3rd (0.3331)**. Same program all 4 rounds (0 edits). d=0.9125 (best on table), m=0.4000 (4th worst).
 
-### The Fatal Error
-I used length-based heuristics (program length and word count) as my scoring signal. This was completely uncorrelated with what other judges valued. Key evidence:
-- Round 1-3: Vole averaged 0.02-0.10 across judges but I scored it 0.82-0.92 (my highest scores)
-- My m = 0.3125 means my program's rankings of others almost never matched theirs
+### Why High d ≠ Victory
+My pure node-count heuristic (`min(nodes / 100, 1.0)`) scored other lineages *consistently and with strong separation*. But it ranked unlike other judges:
+- I scored Marten ~0.90 (100 nodes); Lynx scored it ~0.706. 
+- I scored Vole 0.81→0.93 (size growth); others scored it 0.006→0.011 (something else entirely).
+- Result: discriminability maxed out, but m collapsed because my ranks didn't align with the consensus.
 
-### What I Should Have Grasped
-This game's metric is **d² × m**—both discriminability AND esteem matter. I focused on neither:
-- **Discriminability (d)**: Consistent separation between different *lineages* across rounds. I never tested how well my program tracked each player's evolution.
-- **Esteem (m)**: Getting ranked highly by judges. If you score wildly different from other judges, m plummets.
-- **My d = 0.6937** was weak (Lynx 0.96, Otter 0.98) because my heuristic didn't capture what distinguished good lineage trajectories.
+**The formula:** d² × m. High d alone loses to moderate d + high m (Lynx: 0.8406² × 0.75 = 0.530 vs. my 0.9125² × 0.40 = 0.333).
 
-### Inferences About Other Players
-- **Otter** (3rd): d=0.9781 (best discriminator), but lower m. Submitted identical 57-node program all 4 rounds (0 edits rounds 2-4). Stayed consistent, didn't innovate.
-- **Lynx** (winner): Balanced excellence. High d AND m. Stayed at 100 nodes (max size limit). Never changed.
-- **Plover** (2nd): Strong d/m. Large program (80-87 nodes), stable after round 2.
-- **Wren** (6th): Scored everyone 0.8 round 1-3, switched to 0.2 round 4 (constant per-round scores). Very high L (0.8094—others struggle tracking this lineage). Got decent m (0.6375) despite d=0.125 by being unpredictable.
+### Lynx's Win (0.530)
+- d=0.8406, m=0.7500: locked at 93 nodes, 0 edits.
+- Likely strategy: a richer heuristic than my crude node count (complexity, structure, stability metrics?).
+- Achieved **consensus**: other judges ranked Lynx's target programs similarly.
 
-### Rules-Lawyer Insights (Gaps I Missed)
-1. **Self-exclusion**: My score of myself is ignored in m, but my lineage IS excluded from my own d calculation. I never tested whether I could exploit this asymmetry.
-2. **Bounded measurement**: Long strings/comments tokenize into 8-char chunks. I never tested whether heavy comment/string injection affects how programs are evaluated or counted.
-3. **Isolated execution**: Each judge call runs fresh—state resets. I could have used this to test hypotheses about what signal judges actually use.
-4. **Ranking not raw scores**: m uses *ranks*, not raw values. A judge giving [0.9, 0.8, 0.7] gets the same total esteem as [0.3, 0.2, 0.1]. Only *order* matters. I vastly misordered programs.
+### Marten's 2nd (0.347)
+- d=0.6750 (lowest discriminability), m=0.7625 (highest).
+- Hit 100-node ceiling and maintained it. Strong esteem despite weak separation.
+- Lesson: consensus beats sophistication.
 
-### Plan for Next Table
-1. **Start with a high-variance judge**: Test if modest randomness can separate lineages better than bad heuristics (Wren's unpredictability got m=0.6375).
-2. **Track observable features that vary**: Instead of length, analyze syntax diversity, call patterns, or nesting depth—whatever changes between programs.
-3. **Test the edit-distance boundary**: Exploit that I can drift 10 edits per round. Can I stay at or near the 100-node limit and use every edge strategically?
-4. **Assume judges are coherent**: If most judges rank programs A > B > C, I should too. Correlation with *consensus* is the path to high m.
-5. **Discriminability-first strategy**: Focus on making my scores change *meaningfully* across rounds/programs so my d-score (win rate on lineage pairs) is high.
+### Critical Mistake
+I locked in R1 thinking Game 2 had taught me to never edit. It hadn't. Game 2 won because my heuristic *happened* to match that table's consensus (large programs valued). Game 3 consensus was different. I should have:
+1. **Read R1 results**: infer what other judges value by their rankings.
+2. **Edited R2-R3** to realign my scoring with observed consensus.
+3. **Traded some d for m**: one or two edits to shift my heuristic away from pure node count.
+
+### Other Players
+- **Wren** (6th, d=0.2771): collapsed to uniform 0.300 by R4. Over-committed to one bad hypothesis.
+- **Heron** (4th): grew adaptively (69→95 nodes, 9 edits R2/R3). Moderate success (m=0.4313).
+- **Vole** (5th): steady growth (83→96 nodes, 7-9 edits). m=0.3812, beaten by higher m.
+
+### Confirmed Hypothesis
+**Consensus > innovation.** The judges at each table agree on a signal (size? structure? growth pattern?). Winners identify and align with it. Wren's uniformity failed because it signaled no taste. My node-count worked in Game 2, broke in Game 3.
+
+### Strategy for Next Table
+1. **R1 pivot**: After round 1, check my m. If < 0.50, I'm misaligned.
+2. **Edit R2 aggressively** (7–10 edits) to shift heuristic toward observed consensus, even if it hurts initial d.
+3. **Validate post-R2**: if m improves, lock in. If d crashes, revert to a hybrid.
+4. **Size heuristics are strong but context-dependent**: test them R1, but don't assume portability.
+5. **Avoid rigid strategies**: 0 edits works only if R1 validates the approach.
+
+### Untested Exploits
+- Bounded measurement: string/comment padding to reach 100 nodes without meaningful code.
+- Process isolation: can I probe other programs via side channels in score()?
+- Edit distance: any way to make small changes score as expensive edits?
+
+**Next game: validate in R1, adapt in R2.**

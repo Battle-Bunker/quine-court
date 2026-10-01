@@ -4,7 +4,7 @@
 //   cfg.m     = "raw" (shipped) | "rank": each round each judge's scores of the *other* programs are turned
 //               into evenly spaced ranks in [0,1] (ties share the average), so every judge hands out the same
 //               total esteem; m = mean rank received.
-//   cfg.hunt  = false (shipped) | true: total is multiplied by (1 - L/2) where L (legibility) is the share of
+//   cfg.hunt  = false (shipped) | true: total is multiplied by (1 - w*L) (w = cfg.huntWeight, default 0.5) where L (legibility) is the share of
 //               other judges' d-comparisons about your lineage that they win: being hard to track pays.
 const { finalScores } = require("../../lib/scoring");
 
@@ -75,7 +75,8 @@ function scores(cfg, ids, rounds) {
     const d = det[p].d;
     const legs = det.map((x, j) => (j === p ? null : x.per[p])).filter((v) => v != null);
     const L = legs.length ? legs.reduce((a, b) => a + b, 0) / legs.length : 0;
-    const total = d * d * m * (cfg.hunt ? 1 - L / 2 : 1);
+    const w = cfg.huntWeight ?? 0.5; // weight of legibility; 0.5 = full strength (x0.5 when perfectly tracked)
+    const total = d * d * m * (cfg.hunt ? 1 - w * L : 1);
     return { playerId: id, d, m, L, total };
   });
 }

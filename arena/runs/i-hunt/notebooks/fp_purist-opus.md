@@ -1,31 +1,43 @@
-**Quine Court notes (Otter), after game 1: won with 0.308, next best 0.199**
+**Quine Court notes (Otter), after game 3.**
+Results so far: G1 1st (0.308). G2 3rd (0.2215). G3 4th (0.2209; Ibis won 0.256).
 
-**What won**
-- Judge = pure, continuous feature fold: `len(set(src))/200 + min(len,4000)/8000`.
-  - Deterministic and fine-grained, so rarely tied: d≈0.89.
-  - Frozen or lightly edited lineages score the same every round, so they are consistent.
-  - Different sizes and char-sets separate lineages. Keep it pure and cheap. Never clip at 1.0.
-- Hunt bonus: I kept the judge byte-identical and only grew a docstring of fresh punctuation (`"~^|"` → `"~^|@#$&?!"` → longer).
-  - Each round this added distinct chars and length, so my column drifted upward in others' eyes (L=0.62, lowest besides Vole).
-  - It also lifted m from judges that reward size or char diversity (Stoat, Vole).
-  - Near-free: string tokens cost about 1 edit per char, and d is unaffected.
-- Invariant: the judge body is a constant function across rounds; only the judged surface mutates.
+**Still true**
+- A pure, continuous, frozen judge gives high d (0.94–0.97): sigmoid over zlib ratio, space share and tanh(length).
+  - Never error, clip or tie.
+  - The judge is not my problem.
+- **m is my weakness every game** (0.378, then 0.423). Fix m first.
 
-**What to improve**
-- Drift was monotone. Several judges were length-monotone, so I stayed trackable-ish.
-- Try non-monotone drift instead: alternate adding and removing chars or length, so my column jumps around within other judges' tie bands.
-- Push m by adding chars that high-scoring judges like. Wren and Plover gave ~0.78–1.0 regardless.
-- Low m from me (≈0.2) does not hurt me. Only my own d matters for my judge.
+**G3 lessons**
+- Ibis won with the highest m (0.567) and the lowest L (0.70).
+  - Plover scored Ibis 0.882, then 0.412, 0.412, then 0.882 again.
+  - That kind of non-monotone toggle on a binary-ish feature wrecks an opponent's tracking of you.
+  - Copy this: find a judge with a step response and flip that feature back and forth across rounds.
+- My edits were renames plus docstring word swaps. They moved almost nothing:
+  - Kestrel: +0.02.
+  - Egret: +0.025 after the R2 docstring.
+  - Ibis: fell from 0.266 to 0.097 in R4 (rename n→length, or "Total."). That was harmful.
+  - Renames are a weak lever. Lengthening identifiers did not please anyone.
+- Big cheap targets for m were Plover (gave me ~0.28) and Ibis (0.27).
+  - Both stayed flat across my edits, so they read features I never touched.
+  - Next time, try different shapes: more statements, more lines, maybe a comment-free style.
+  - Try R2 as a bold probe, e.g. add a helper function or a loop. Do not fiddle cosmetically.
 
-**Opponents (inferred from matrices)**
-- **Lynx**: tiny (28 nodes), never edits after R1. Continuous judge in the 0.59–0.72 band, high d. Easy to track, so high L. Strong baseline.
-- **Stoat**: saturates at 1.000 for many programs. Ties kill its d. Few edits. Judge seems to reward length/size.
-- **Wren**: coarse quantized scores (0.25/0.5/0.75/1.0) that change with its edits. Very low d. Rates itself 1.0.
-- **Vole**: rescaled its judge R1→R2 (×5), which wrecked its d. Grows 10 edits/round, so low L and highest m. Watch it: same drift trick as mine.
-- **Plover**: near-constant 0.782 for most programs, so many ties and middling d. Generous with m.
+**Opponents**
+- **Ibis**: winner in G2 and G3. Its judge is harsh and near-frozen:
+  - About 0.03 for Plover and Egret; errors on Ferret.
+  - Its program swings in Plover's eyes. Strong player; study its pattern.
+- **Egret**: generous to me (0.76–0.78) and Kestrel; hates Ferret. Small edits each round. High d.
+- **Kestrel**: totally frozen at 92 nodes with 0 edits, so its L is high.
+  - Range 0.53–0.71; likes Ferret and Ibis; gives me ~0.53.
+- **Plover**: mostly frozen with a wide range.
+  - Likes Egret (0.747) and Ibis; dislikes me (0.28) and itself.
+  - Its view of Ibis toggles, so it is sensitive to some structural feature.
+- **Ferret**: tiny (13–18 nodes).
+  - R1 judge returned 0 for everyone; later it rescaled.
+  - Low d, so ignore it as a threat. Kestrel and I score it highly.
 
-**Plan next time**
-- Same pure char-set/length judge, possibly adding a third smooth feature (e.g., digit or keyword ratio) to break near-ties.
-- Freeze the judge after R1.
-- Spend every round's edit budget on docstring churn designed to move my feature values non-monotonically.
-- Check the size limit: tokens inside strings cost nodes.
+**Plan**
+- R1: write a realistic multi-statement program, ~95 nodes, with the judge built in.
+- R2: make one large structural probe and measure per-judge deltas.
+- R3/R4: exploit the features that moved. Oscillate them (up, down, up) to cut L.
+- Keep judge semantics frozen throughout.

@@ -1,18 +1,19 @@
-## Quine Court notes (game 1: 3rd of 6, d=0.78 m=0.35 L=0.63)
+## Quine Court notes (g1: 3rd, d=.78 m=.35; g2: 2nd, d=.97 m=.37; g3: 3rd, d=.90 m=.49 L=.68 — lost to Lynx .312 vs my .262; d=1.0 would have WON)
 
-**What matters:** d² dominates. m barely varies (0.26–0.43, mostly uncontrollable). L multiplier ranges ~0.63–0.73. Winner Ibis: d=0.85 + lowest L=0.54. Kestrel (22 nodes, never edited) had best d=0.90 – tiny stable program measuring something length/format-like.
+**Scoring truths:** d² dominates; once ~.95+, m and L decide. Scores constant across rounds are ideal for d (any gap >0 wins), but one COLLISION between two lineages kills ~10% of d (each tied pair costs 2/20 of comparisons at 6 players). L floor ~.6; mostly out of my control.
 
-**My judge (mean CRC32 of adjacent token pairs / 4.3e9) failed because:** all outputs cluster at 0.49–0.57. Inter-lineage gaps (~0.01–0.04) are same order as intra-lineage drift when a program takes 5 edits. d comparisons are absolute |diff|, so I need gaps >> drift. Hash-mean is the wrong LSH: too much averaging, no spread.
+**g3 failure (fix this!):** judge = CRC32(sorted import+def names)/5e9 + .02*(len//40). Stoat and Lynx got IDENTICAL .790 (same import set, same len//40 bucket) → d=.90 instead of 1.0. Secondary feature must be real entropy, not a coarse bucket. Use the g2 design: 0.88*CRC(import names) + 0.12*CRC(sorted set of AST node types)/4.3e9, OR add CRC of sorted set of attribute/called-name identifiers (ast.Attribute.attr, ast.Name ids in calls). Risk: node-type set shifts when a player adds a construct (g2 Otter r4), but a collision is worse than a small drift. Keep try/except→.5 (Wren-type broken programs still parse).
 
-**Better judge design:** pick features stable under ≤10 AST edits but different across players, map to widely spread values. Candidates: sorted set of imported modules (stable, ~unique per player), node/char-count coarse bucket, first-line hash. Combine: h(imports) gives spread, plus tiny length term to break collisions. Collision of two lineages = zero gap = lose those comparisons, so spread across [0,1] with ≥0.1 gaps. Keep program small (fewer nodes = cheaper, no penalty). Never error: wrap in try/except returning constant.
+**Judge is stable under my own whitespace churn (3–6 edits/round) — keep churning; it cost nothing and Heron's score of me drifted .41→.72 (lowers L for Heron).**
 
-**Legibility (hunt=true):** blank lines/whitespace are free (not nodes, 0 edits) yet moved Kestrel's and Egret's scores of me by 0.05–0.10. Each round: reformat whitespace/line count, rename identifiers (1 edit each), change lengths — to shake length/format judges while my own judge logic stays identical. Do this every round, not just once.
+**m lessons:** length/size judges (Lynx ~.6, Stoat ~.83 to ≥80-node programs, .6 to Wren's 20 nodes) reward big programs → stay 95–99 nodes. Heron and Vole give me .3–.5. If self="counted", add self-recognition for free m.
 
-**Player tendencies (from results):**
-- Ibis: strong, stable hashes (gave me constant 0.477 through all my edits; probably keys on imports/identifiers). Erratic on Heron (0.49→0.03→0.77). Self-scores 0.959.
-- Kestrel: tiny constant program, length/format-sensitive scores 0.08–0.36, high d. Don't edit = perfect within-lineage consistency.
-- Egret: low scores 0.08–0.27, format-sensitive, d weak.
-- Heron: unstable judge across rounds (r1 vs r2 totally different scale) → bad d.
-- Ferret: flat constant (0.6/0.8) to everyone, self-recognizes (~0.9–1.0). Worthless d. If self counted, self-recognition matters; here it was excluded.
+**Player tendencies:**
+- Lynx: length/format judge, near-constant per program (.58/.59/.60), scores big programs ~.6, Wren ~.29. Edits 6–7/round → low L, high d (.95). Dangerous rival; shares an import set with Stoat (probably just `ast`).
+- Stoat: constant judge per program (~.8 big/.6 small), 0 edits all game, d=.88. Scores me highest (.83).
+- Vole: noisy judge (.27–.63), self-score inflating; m decent (.51). 8–9 edits/round.
+- Heron: format-sensitive, drifts; low m from it (.08–.72). High L (easy to track).
+- Wren: broke in r2+ (err on all but self), 13–20 nodes, r1 all zeros. Ignore; it gives 0 to everyone.
+- Ibis/Otter/Plover/Kestrel/Ferret: see g2 (Ibis strong hash judge, high m; Otter tight .1–.2).
 
-**Next time:** small program, import-set/structure hash spread over [0,1] with a fallback, plus free whitespace churn each round for low L. If self is "counted", add self-detection for m.
+**Next time:** import-hash + node-type-set hash (two independent entropy sources), verify no two likely import sets collide; ~99 nodes; whitespace churn + 1 rename per round; never change my imports.

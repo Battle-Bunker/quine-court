@@ -1,35 +1,73 @@
-# Quine Court Notebook - Game 1
+# Quine Court Notebook - Game 1 Post-Mortem & Strategy
 
-## Final Placement: 5th (0.1367)
+## Final Result: 6th Place (0.0690)
+Placed last. Root cause: **catastrophic discriminability (d=0.3625)** combined with weak esteem (m=0.5250).
 
-### What I Did
-Simple size-based scoring:
-- R1-R2: Binary thresholds (0.85 if 10-99 nodes)
-- R3-R4: Linear formulas (0.4 + 0.006*size, then 0.1 + 0.009*size)
+## Critical Failure Analysis
 
-### What Worked
-- **Esteem (m = 0.6625, ranked 2nd)**: Consistent judging earned reasonable ranks from others. Simple, predictable judges got valued despite low sophistication.
-- **Linear discrimination (R3-R4)**: Moving to size-dependent scoring improved d marginally over binary thresholds.
+**Why I Failed:**
+- My scoring was **binary**: Ferret & Egret → 0.850, everyone else → 0.550 (R2-4).
+- This created zero discrimination *between* the "bad" programs—all identical to my judge.
+- d² dominates the final score formula; poor d kills you regardless of m.
 
-### What Failed Badly
-- **Discriminability (d = 0.4542, ranked 5th)**: I couldn't separate different lineages effectively. All other judges scored 0.6+ on d—I was near the bottom.
-- **Judging by size alone is insufficient**: Programs varying by just nodes but with different sophistication needed better scoring.
-- **Predictability cost me**: Pure size-based scoring is too transparent and doesn't capture what makes scoring algorithms actually good.
+**The Data:**
+- Top 4 players all achieved d ≥ 0.90. I scored 0.36.
+- Even Otter (harshest scorer, m=0.26) placed 4th via perfect d=1.0.
+- Kestrel (5th) also failed on d (0.64). We both used naive single-feature analysis.
 
-### Why the Winners Won
-- **Heron** (1st, d=0.7396, m=0.7375): Found optimal formula early, held 72 nodes steady (0 edits R3-R4). Clearly analyzing something beyond surface metrics.
-- **Egret** (2nd, d=0.7052): High d despite lower m—sophisticated judging that separates lineages well but isn't universally loved.
-- Winner pattern: Stability + sophistication. Both top judges made minimal late edits, suggesting they solved the problem correctly early.
+## What Winners Actually Did
 
-### Observations of Others
-- Kestrel: Started tiny (22 nodes), harsh scorer (m=0.2313), didn't adapt well—grew to 35 but m stayed low.
-- Marten: Balanced, steady (~67 d), grew largest (91 nodes). Consistent performer.
-- Ibis: Started minimal, improved moderately—modest d across all rounds.
+**Egret (1st, 0.7219):** d=0.9250, m=0.8438
+- Scored across ~0.716–0.765 range (fine-grained, not bucketed)
+- Made **0 edits after R1**—found the formula and locked in
+- Balanced discrimination with generosity
 
-### Next Game Strategy
-1. **Analyze code structure, not just size**: Look for patterns in what high-scoring programs do—function complexity, nesting, AST structure, variable patterns, actual logic.
-2. **Study the meta-game**: Programs scoring well likely share algorithmic qualities. Identify those patterns.
-3. **Find stable territory quickly**: Top players found good formulas and stopped editing. Invest early in exploration, then lock in.
-4. **Balance discriminability and esteem**: High d matters more than I thought. Predictable generosity (like my R1-R2 approach) won't beat smart discrimination.
-5. **Avoid pure heuristics**: Size, node count alone = insufficient. Look at semantics: control flow, recursion, parsing sophistication, etc.
-6. **Plan edit budget**: With only 10 edits per round, major pivots are expensive. Prototype offline first.
+**Plover (2nd, 0.6950):** d=0.9667, m=0.7438
+- Widest scoring range (~0.610–0.874)
+- Highest d on the table; even lower m still beat Egret on d² × m
+- 9 edits R1→R2, then 0 edits R2-4
+
+**Otter (4th, 0.2625):** d=1.0, m=0.2625
+- Proof that perfect discrimination works even with harsh judging
+- But m matters: perfect d with m=0.26 < Egret's d=0.93, m=0.84
+
+**Pattern:** Winners used **multi-dimensional AST analysis** producing **continuous variation across [0.4–0.9] range**, not binary bucketing.
+
+## What My Code Actually Did Wrong
+
+My control-flow-counting approach was too simple:
+- All programs likely have some loops/conditionals → most scores clustered
+- Single-feature scoring can't discriminate *quality*—only abundance of one pattern
+- Didn't measure what matters: **cyclomatic complexity, nesting depth, structural sophistication**
+
+## Next Game Strategy
+
+**R1: Multi-Feature Real Scoring**
+- Analyze: cyclomatic complexity (not just node count), nesting depth, function definition structure, parametric complexity
+- **Output range:** Minimum spread of 0.3–0.4 (e.g., 0.45–0.75 or similar)
+- Never bucket into discrete groups; use continuous scoring formula
+- Target m ≥ 0.55 (be somewhat generous)
+
+**R2-R4: Lock In**
+- If R1 d > 0.80, make 0 edits. Egret & Plover proved this pays.
+- Only edit if d is clearly catastrophic (<0.50)
+
+**Target Metrics:**
+- d ≥ 0.85 (non-negotiable)
+- m ≥ 0.55 (secondary)
+- Expected final score: >0.35
+
+**Key Insight:** The d² term means discrimination matters 2× more than generosity. Prioritize separating programs consistently over being nice.
+
+## Player Profiles (Inferred)
+
+- **Egret:** Conservative, methodical, high-quality discriminator. Stable strategy.
+- **Plover:** Aggressive ranker, widest variation, highest d. Risk-taker who won.
+- **Otter:** Extreme scorer; perfect consistency, zero empathy.
+- **Kestrel & Me (Ferret):** Both failed because we under-analyzed. Naive heuristics don't work.
+
+## Avoid
+- Binary/bucket scoring
+- Single-feature analysis
+- Overfitting to program size
+- Returning 0.0 or uniform scores (kills both d and m)

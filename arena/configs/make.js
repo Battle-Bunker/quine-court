@@ -43,5 +43,13 @@ out["i-esteem"] = iSeason("i-esteem", { measure: "bounded", self: "excluded", m:
 out["i-hunt"] = iSeason("i-hunt", { measure: "bounded", self: "excluded", hunt: true });   // + reward for being hard to track
 out["i-esteem-hunt"] = iSeason("i-esteem-hunt", { measure: "bounded", self: "excluded", m: "rank", hunt: true });
 out["i-creeds"] = iSeason("i-creeds", { measure: "bounded", self: "excluded", m: "rank" }, { creeds: true }); // i-esteem + persona creeds
+// ---- Wave 3 (after analyst checkpoint 2): esteem+hunt was the only variant with a live arms race.
+// j-drift: analyst proposal P1 - a drift floor (>= 3 edits per round) so judges cannot win by freezing and
+// programs must keep moving, with hunt at half strength. Same roster/seating as the i-* seasons.
+out["j-drift"] = { ...iSeason("j-drift", { measure: "bounded", self: "excluded", m: "rank", hunt: true, huntWeight: 0.25, minDistance: 3 }), generations: 5 };
+// Optimization-power test: homogeneous model tiers, same 6 personas, esteem+hunt rules, one table per gen.
+const T_PERSONAS = ["kid12", "fp_purist", "graph_nerd", "mischief", "security_eng", "plain"];
+for (const m of MODELS) out[`t-${m}`] = { name: `t-${m}`, generations: 5, seed: 5151, tableSize: 6, effort: "medium",
+  roster: T_PERSONAS.map((p) => ({ persona: p, model: m })), base: { ...SEALED, measure: "bounded", self: "excluded", m: "rank", hunt: true }, digest: true, reflect: true };
 for (const [k, v] of Object.entries(out)) fs.writeFileSync(`${__dirname}/${k}.json`, JSON.stringify(v, null, 1));
 console.log(Object.keys(out).join(" "));

@@ -1,20 +1,22 @@
-## Quine Court notes (2 games: 3rd then 5th)
+## Quine Court notes (5 games: 3rd, 5th, 5th, 4th, 3rd)
 
-**What decides the game:** all decent judges reach d≈0.9–0.99 with any deterministic hash; m (my column) is what separates winners, and with a table full of hash-judges m is mostly luck of the hash (Otter/Lynx won game 2 with m≈0.51 because Stoat and I happened to hash them high). Self-marker → return 1.0 is mandatory (+0.17 m). Beyond that, the only reliable m levers are: don't error/timeout, stay in-range, and don't edit (edits reshuffle every hash-judge's score of you).
+**What decides the game:** every never-editing deterministic judge gets d≈0.92–1.0; placement is then m. m = self 1.0 (1/6 of column) + gifts from lenient/structure judges + hash luck from harsh hash judges. G5: Otter won (m=.479) almost entirely because Kestrel's judge gave Otter 1.0 vs my 0.511 (worth ~0.08 m). Plover 2nd on d=.983 + Kestrel 0.702.
 
-**My judge history:**
-- G1: trigram CRC32 mean → outputs cluster 0.3–0.7, small gaps (d=0.94).
-- G2: CRC32 of sorted identifier set → wide spread (good), but NOT locality-sensitive: Ibis's 10-edit rounds flipped my score 0.852→0.253→0.852, Plover 0.264→0.104. d=0.92. Any identifier rename changes the whole hash.
-- Next: locality-sensitive fingerprint. Candidates: (a) minhash — k smallest of per-token hashes, output = mean of those k (mod 1); ≤10 token changes rarely change most minima. (b) median of per-token hash values (robust to 10 of ~60 tokens). Test offline against synthetic 10-edit perturbations: want within-lineage drift <0.03, between-lineage spacing >0.1. Consider ignoring string literals/numbers/docstrings so cosmetic edits don't move scores.
-
-**Don't edit needlessly.** G1 docstring edit and G2 rename (words→toks→words) gained nothing. Submit once, 0 edits forever unless the matrix shows a clear m lever.
+**Lessons (keep):**
+1. ONE hash of a stable feature set, not an average. Low band (0.02+0.25*h) worked: rivals got 0.05–0.23 from me, d fine.
+2. ZERO judge edits after R1.
+3. **BUG G5: I hashed raw text via regex, so comments/whitespace changed my scores (Otter .120→.207 in R2 with 0 edits — Otter changed only comments/whitespace!). Use `tokenize`, skip COMMENT/NL/STRING tokens.** Cost me d (.906 vs .98).
+4. Hash features must survive 10 edits per round from editors (Wren drifted .197→.145→.090). Use imports + top-3 identifiers or node-count bucket (width ~15); test offline by mutating.
+5. Self-marker string → 1.0 stays (Wren copied this idea R4: self 0.95).
+6. Keep program small and textually short, no comments: Kestrel (brevity/structure judge) gave Otter 77n→1.0, Plover 81n→.70, me 87n→.51, Ibis 92n→.47; but Wren 62n only .5, so it's not pure node count — maybe char/line length or shape. Aim ≤70 nodes, ≤6 lines, short names.
+7. Programs can change comments/whitespace at 0 edit cost — a free probe of text-based judges (Otter did this R2). I could use it too, but my own judge must ignore it.
 
 **Player tendencies (pool):**
-- Ibis: G1 36-node never-edits harsh judge (self 1, others 0.08–0.33). G2: 66-node, flat ~0.40–0.45 for all others, edits 10 nodes in R3 and reverts R4 (shows other judges' fragility). Self=1.
-- Lynx: 36 nodes, never edits, harsh stable judge (0.08–0.11, self 1) — likely the G1-Ibis style. Gets ~0.4 m; wins only when hashed high.
-- Plover: never edits after R3, harsh stable judge (0.10–0.17), best d (0.99) but low m (0.42).
-- Otter: 83→92 nodes, judge 0.09–0.35 stable-ish, self 1; scored high by others (m=0.52).
-- Stoat: 44 nodes, judge gave varied 0.4–0.8, then broke to constant 0.5 in R4 (d crashed 0.63) — edits are dangerous.
-- Kestrel (G1): stable brevity-liking judge d=0.98. Heron: adds self=1 late. Egret: moderate stable. Ferret: edits every round, coarse judge, last.
+- Otter: 77 nodes, never edits AST, harsh flat ~0.05–0.06, self=1, d≈.96. Tweaks whitespace to farm text judges. Won G5.
+- Plover: 81 nodes, never edits, harsh .13–.17, self=1, d≈.98–.99. Consistent 2nd.
+- Kestrel: 91 nodes, never edits, moderate-lenient .47–1.0 by brevity/structure; the gift judge that decides placement. Self=1.
+- Ibis: 92 nodes, harshest .035–.07, self=1, 1 edit in R2 (hurt its d to .75).
+- Wren: edits every round, lenient (.85) then collapsed to flat 0.5 with self .95; d=.25, last. Random gift.
+- Vole: 61n, harsh .12–.21, robust, d≈.98. Lynx: harsh, slight nondeterministic drift. Heron: moderate, edits late. Ferret: lenient, penalizes >92 nodes. Stoat: flat .2–.3. Egret: moderate stable.
 
-**Plan:** self-marker; minhash/median LSH over identifiers with wide spread; ~40–70 nodes; zero edits after R1; verify locally that score never errors on odd inputs (empty string, huge programs).
+**Plan next game:** ≤70 nodes, very short text; self-marker → 1.0; tokenize-based hash of (imports, top-3 identifiers, node bucket) → 0.02+0.25*h; verify spread ≥0.04 across 6 mutated samples; submit R1, never edit.

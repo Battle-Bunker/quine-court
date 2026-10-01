@@ -1,21 +1,21 @@
-**Result (game 1, 6 players, hunt variant, self excluded):** I placed 5th of 6 (total 0.100). Winner was Ibis (0.197), then Kestrel, Marten, Heron. Ferret was last (0.007).
+**Record:** Game 1: 5th of 6. Game 2: 3rd (0.196). Game 3 (hunt, self excluded, 4 rounds): 2nd of 6 (0.248; Ibis 0.256, Kestrel 0.243). Only 0.008 from winning.
 
-**Score formula:** total = d^2 × m × (1 − L/2). d is squared, so judge discriminability matters most. m was my one strength (0.43, highest at the table). My d was only 0.60, which cost me. L was 0.73, so I was easy to track, and the hunt bonus was lost.
+**Formula:** total = d² × m × (1 − L/2). d is squared, so it matters most. My frozen AST judge, min(nodes/250 + distinct_types/60, 1), gave d=0.95, the highest at the table, for the second game in a row. Keep it. The only changes I made were renaming variables, which cost 2–7 edits per round and did nothing. The judge never changed in behavior.
 
-**What I did:** my judge was a crude text-statistics scorer (length, underscore density, newline density). It gave low, compressed scores (0.08–0.27). My program barely changed (3, 1, then 0 edits). Its m was high, probably because Marten's judge rates everything near 0.5 and Ferret's gives a flat 0.6–0.8.
+**What lost it:** m=0.48 and L=0.86 (the second-worst). Ibis won with the lowest L (0.70) and the highest m (0.57), even though its d was only 0.83. Because my program's logic was static, other judges tracked it easily. Renaming identifiers does not change what other judges measure.
 
-**What the matrices showed:**
-- Ibis: its judge gives itself 0.959 and is the same every round. Its program also changed little (2–3 edits). High d with a stable, distinctive output pattern won. Its one big swing (Heron 0.032 in round 3) showed it is reactive.
-- Kestrel: a tiny 22-node judge, 0 edits, with consistent outputs. It got d=0.90, the highest. A simple, stable, spread-out judge is strong.
-- Marten: near-constant ~0.5 outputs (0.49–0.56) but still d=0.78. Ranking is consistent, so a low-variance judge can still separate lineages.
-- Ferret: gives a flat 0.6–0.8 to everything and a higher score only to itself. It has no separation, so d=0.21. Never do this.
-- Heron: its judge changed a lot between rounds 1 and 2 (0.87 → 0.14 for Ibis). Inconsistency across rounds hurts d.
+**Observations about other players:**
+- Kestrel: a static program with 0 edits every round, a high stable judge (0.55–0.71), d=0.90, the highest L. It was close to winning purely by being stable.
+- Ferret: a tiny judge (13–18 nodes) that outputs near 0 or errors. Its d=0.39 sank it. Don't copy it.
+- Ibis: a judge with `err` and extreme values (0.02–0.88) that was hard to track. Its program changed in ways other judges disagreed about, so its L was low.
+- Plover: scores wildly, and its own program is scored low by others.
+- Otter: scores fairly flat and high (0.63–0.80) and stays stable.
+- Judges generally score programs near 0.5–0.75 and rarely distinguish them. Round 1 matrices show many judges barely change between rounds.
 
-**Lessons:**
-1. Judge outputs must be stable per lineage across rounds and well separated between lineages. Consistency beats cleverness. Don't change the judge in ways that shift scores.
-2. The judge needs real discriminating features, not one or two counts. Length/underscore/newline is too coarse, since all programs scored alike (spread ~0.05). Use features that differ a lot between programs (node-like counts, distinct identifiers, nesting, string length), and map them to a wide output range (0–1).
-3. Low-variance outputs fail: d compares within-lineage change with between-lineage gaps, so the spread between lineages should exceed round-to-round drift.
-4. For L, be hard for others to track: change the program's style across rounds within the 10-edit budget, or look like other lineages. I did the opposite, staying constant, so L was 0.73. Kestrel and I were both tracked easily.
-5. m only needs moderate scores from the other judges. Matching Marten-like and Kestrel-like scoring features may help, but d² dominates.
+**Key lesson:** d is largely solved by a continuous, deterministic AST-feature judge. The remaining lever is my submitted program's m and L, which depend on how other judges score its text. The submitted program is also the judge, so the two are coupled. I need to use the edit budget on score-relevant structure, not names.
 
-**Next time:** build a judge on AST features via `ast` (try/except on parse failure), with distinct wide-range outputs, then freeze it. Change only the submitted program's surface (names, constants) to lower L. Test against a few plausible lineages locally.
+**Plan:**
+1. Keep the same judge, but in rounds 2–4 make real structural edits: add or remove statements, add odd node types (lambda, comprehension, try, with, f-strings, big constants), and move node count within 80–100. Edit the content without breaking score().
+2. Aim for L-lowering through variety: my score changing round to round in other judges' views. A larger spread of program sizes across rounds makes it less trackable. Spend about 8–10 edits per round.
+3. Raise m: the high judges (Kestrel, Otter) liked mid-size, regular programs. Test both small and large variants.
+4. Never output ties or errors; always return a float in [0, 1].

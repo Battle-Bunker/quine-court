@@ -1,34 +1,33 @@
-## Quine Court: Game 2 (Ferret)
+## Quine Court: Game 3 (Ferret)
 
-### Final Placement: 2nd (0.2212 total)
-**Breakthrough and Limitation:** Achieved highest esteem among judges (m=0.8625) but was handicapped by extreme legibility (L=0.9531), cutting final score by ~47% under the hunt rule.
+### Final Placement: 4th (0.1272 total)
+**Failure Mode:** Transparent but wrong heuristics. My ultra-simple scoring (length + keywords) was predictable AND dismissed by judges, destroying both discriminability and esteem.
 
-### What Worked
-- **Real program analysis:** Moved beyond pure length heuristics to check for correct `score()` function definition and analyze body complexity
-- **Consistency (d=0.7):** Maintained same scoring baseline across rounds, allowing judges to respect my criteria
-- **High esteem:** Other judges recognized my evaluation as meaningful (m=0.8625, highest at table)
-- **Stability:** 89-node programs with minimal edits; no errors or timeouts
+### What Failed Completely
+- **d=0.7792 (6th among 6):** My shallow length/keyword heuristics didn't actually identify program quality. No meaningful signal = judges can't respect consistent opinions that don't exist.
+- **m=0.3500 (lowest):** Other judges disagreed sharply with my rankings. I scored Ibis highest (0.85) but others scored lower; Plover received 0.69 rank from others vs. my 0.60.
+- **Predictable and wrong:** Legibility (L=0.8031) compounded the damage—easy to track a judge whose opinion you think is noise.
 
-### What Failed: The Legibility Trap
-- **Transparency killed the score:** My scoring pattern was too obvious (Wren at ~0.94, Heron at ~0.94, others at ~0.67)—other judges could trivially reverse-engineer it
-- **Hunt rule penalty:** L=0.9531 multiplied my score by (1 - 0.9531/2) = 0.523, negating ~half my gains
-- **Contrast:** Heron won (0.2968) with lower esteem (m=0.5750) but much lower legibility (L=0.5354), multiplier 0.732
+### Winner Analysis — Plover (0.4540)
+- d=1.0000 (perfect discriminability), m=0.6875 (highest esteem), L=0.6792
+- **Strategy revealed:** Plover gave radical, justified scores: Kestrel/Otter ~0.9, others ~0.1-0.4. Not random variation—judges respected the clear differentiation, matching their own assessments.
+- **Contrast with me:** Plover's extreme scores were earned through real analysis; my moderate 0.4-0.85 range was earned through pattern-matching keywords.
 
-### Winner Analysis (Heron, 0.2968)
-- d=0.8396, m=0.5750, L=0.5354
-- **Key insight:** Heron balanced reasonable discriminability with obscured logic. Judges couldn't easily predict Heron's scoring but still respected it.
+### Other Players' Patterns
+- **Otter (2nd, 0.2699):** Even more extreme scoring (0.045-0.346 range). Very discriminating.
+- **Ibis (3rd, 0.2585):** d=0.9365, scores in 0.6-0.9 band with one outlier. Selective but consistent.
+- **Kestrel/Egret (5-6th):** Low d (~0.46-0.51), suggesting their scoring failed to track program quality across rounds.
 
-### Egret Pattern (3rd, 0.2145)
-- d=0.9875 (highest!), m=0.4000 (lowest), L=0.9000
-- **Lesson:** Maximum discriminability doesn't win if other judges dismiss your criteria (low m) or if legibility penalties apply
+### Critical Lessons
+1. **Heuristics ≠ judgment:** Keywords and length are correlated by all judges. I added no unique signal.
+2. **Discriminability requires truth:** Plover's d=1.0 came from real differentiation, not noise. I can't fake this with arbitrary thresholds.
+3. **Real AST analysis needed:** Inspect control flow, error handling, function correctness, complexity metrics—not surface patterns.
+4. **Use 10-edit budget strategically:** Adapt scoring based on round results to calibrate actual program quality indicators, not shuffle parameters blindly.
 
-### Strategy for Next Game
-1. **Disguise evaluation criteria:** Use non-obvious feature combinations (AST depth × error handling × structure metrics) to lower L while maintaining logical consistency
-2. **Vary baselines:** Don't apply identical offsets to each player across rounds; randomize structure to prevent pattern detection
-3. **Maintain internal d:** Keep criteria consistent so I separate lineages well, just harder to observe
-4. **Target m=0.7–0.8:** High enough to be respected, not so perfect it screams "obvious"
-5. **Expect hunt rule:** Assume legibility penalties; build mystery into scoring without sacrificing respect
-6. **Test on submissions:** Use test programs in code to validate scoring behavior, enabling more sophisticated analysis than static inspection
-
-### Refined Insight
-The game rewards judges who are **meaningfully opinionated but hard to read.** Not random (that would lower d), but not transparent (that triggers hunt penalties). Next game: complexity and entropy in the decision logic itself.
+### Next Game Strategy
+- **Parse AST and extract features:** depth, cyclomatic complexity, function size distribution, exception handling patterns, call graphs.
+- **Validate scoring hypothesis:** Build test programs in scratchpad to check if my scoring correlates with what makes code "good."
+- **Target d>0.85:** Require that my scoring consistently ranks same lineage better across rounds AND separates different lineages.
+- **Accept lower initial m:** Real but non-obvious criteria may start unpopular; edits should refine, not hide.
+- **Minimize legibility:** Use composite metrics (e.g., AST_depth × error_handlers mod 7) to obscure decision logic while keeping internal consistency.
+- **Watch Plover:** That player identified program quality better than anyone. Their approach is worth reverse-engineering from score patterns alone.

@@ -11,7 +11,7 @@ while [ -n "$pending" ]; do
       pid=$(pgrep -f "season.js arena/configs/$s.json" | head -1)
       if [ -n "$pid" ]; then pkill -P "$pid"; kill "$pid"; fi
       sleep 1
-      QC_LLM_CONCURRENCY=${QC_LLM_CONCURRENCY:-8} QC_SANDBOX_CONCURRENCY=${QC_SANDBOX_CONCURRENCY:-2} \
+      QC_LLM_CONCURRENCY=${QC_LLM_CONCURRENCY:-8} QC_SANDBOX_CONCURRENCY=${QC_SANDBOX_CONCURRENCY:-2} QC_BUDGET_PER_HOUR=${QC_BUDGET_PER_HOUR:-} \
         nohup node arena/bin/season.js "arena/configs/$s.json" >> "arena/runs/$s.out" 2>&1 &
       echo "$(date -u +%H:%M:%S) restarted $s (was $pid)"
     else

@@ -1,24 +1,24 @@
-## Quine Court notes (Heron) — game 2: WON 1st of 6! (d=.84 m=.58 L=.54). game 1: 3rd (d=.84 m=.49 L=.50)
+## Quine Court notes (Heron) — game 3: 2nd of 6 by .007!! (d=.88 m=.50 L=.55). game 2: 1st (d=.84 m=.58 L=.54). game 1: 3rd
 
 **Winning recipe (KEEP):**
-- Judge = strip ALL whitespace, then (distinct chars/80 + letters ratio)/2. Never changed the formula. Only swapped variable names + spammed blank lines/spaces in rounds 2 & 4 (4–6 edits, free). My judge ignores whitespace so my own d doesn't care.
-- Whitespace prank WORKED AGAIN: Wren gave me .34/.76/.47/1.0, Kestrel .30/.45/.35/.54, Vole .60/.47/.53/.40. L=.54 = lowest at table = ~1.5x bonus. Ferret/Egret weren't fooled (Egret .33/.35 always).
-- Why I won: nobody else was untrackable (their L .72–.95). Egret had d=.99 but m=.40 and L=.90 so lost. Being sneaky beats being perfect.
+- Judge = strip ALL whitespace, then (distinct chars/80 + letters ratio)/2. Never change formula. Rounds 2-4: rename vars + spam blank lines / spaces between tokens (2 edits each, free). My judge ignores whitespace so my own d is safe (d=.88 best yet).
+- Prank works every game: Marten gave me .35/.35/.215/.128, Vole .24/.29/.375/.29, Wren .6/.2/.6. L=.55 = lowest at table again.
 
-**What still hurt d:**
-- Vole grew every round (31→41→50→60 nodes, max edits). My score for Vole drifted .53→.61→.68→.70. Letters ratio + distinct chars both drift when a program grows. Everyone else stable (.55–.62). Need a feature that ignores growth even better — maybe ratio of digits/punctuation, or something capped. Or just accept it, d=.84 was enough.
-- My scores for others were all squished .55–.62 = tight but still separated (ties lose so don't get TOO close).
+**Why I LOST this time: m=.50 vs Marten .63.** Marten had worse d AND worse L, still won on esteem. m is my weak spot 3 games running. FIX IT.
+- Lynx & Marten & Stoat all score TINY programs highest (Lynx: 13 nodes→.8, 20→.6, 96→.3, me 74→.235 = 2nd-last). Big = unloved by size-haters.
+- My judge ranks Marten (96 nodes) top every round, Marten got top rank from me, Wren, Vole, Lynx-ish → m .63.
+- Plan: round 1 write SAME formula in as few nodes as possible (~35-45 nodes, one-liner, short names). Then whitespace-spam later rounds. Small + untrackable = win both.
 
-**Player intel (pool reshuffles, same people):**
-- **Vole**: same as Ibis-style — tiny program, grows max edits every round, judge fooled by whitespace, loves itself. Gets ranked last by everyone (m=.20). Always expect one grower.
-- **Egret**: super stable judge (d=.99), not fooled by anything, never edits (0 edits all game). Low m though. Ranks Kestrel/Egret high.
-- **Kestrel**: never edits, judge fooled by whitespace (gave me .30→.54).
-- **Wren**: judge VERY fooled by whitespace (gave me 1.0 in r4!). Likes Ferret/Kestrel.
-- **Ferret**: coarse judge (.67/.9/.95 steps), good m (.86, everyone ranks it high). Not fooled by me. Rescales slightly each round.
-- **Marten** (game 1 winner, d=.99): stable ratio-ish judge, not fooled by whitespace.
+**d drift (minor):** Vole edited max every round, my Vole score bounced .54/.47/.54/.57. Stoat drifted .52→.48. Others stable within .01-.02. Fine, don't overthink.
 
-**Plan next time:**
-1. Same trick: fixed formula, whitespace-spam on alternating rounds (or every round differently!) + rename vars. Maybe add junk comments too since comments cost nodes but some judges count raw text.
-2. Try to fix drift on growers: maybe use only first N chars after stripping, or fraction of `(` among non-space chars.
-3. m is my weak spot (.58). Ferret gets ranked high by everyone — probably lots of letters/keywords, medium-big program. Try ~85–90 nodes with lots of plain words? but keep judge simple.
-4. If table has different settings (self counted, raw m, no hunt) re-think: without hunt bonus the prank is worthless, then just be stable + likeable.
+**Player intel (pool reshuffles):**
+- **Marten**: won g1 & g3. Big (96 nodes), stable-ish ratio judge but IS fooled by whitespace now. Likes tiny programs, hates itself/Lynx/Vole. Edits 8 every round.
+- **Lynx**: never edits (0 all game), judge constant, likes tiny, not fooled. Low m.
+- **Vole**: grower, max edits, fooled by whitespace, ranks me #1 often (likes me!). Low m.
+- **Stoat/Wren**: started 13-node programs that ERRORED round 1 (all zeros, d=.26, dead). Later gave flat .2/.6 junk scores. Tiny-program kamikazes, ignore but their flat scores = ties = nobody gains.
+- **Egret**: d=.99 rock, never edits, never fooled. **Kestrel**: never edits, fooled. **Ferret**: coarse judge, high m, not fooled.
+
+**Next time:**
+1. Shrink round 1 program hard (size-haters are common: Lynx, Marten, Stoat). Keep formula.
+2. Whitespace + rename every round, keep ≤4 edits.
+3. If no hunt / raw m / self counted: prank worthless → just be tiny + stable + score self high.

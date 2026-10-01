@@ -1,28 +1,32 @@
 # Quine Court notebook (Ibis)
 
 ## Results
-- **Game 1: WON (0.549).** 36-node program: self-marker plus `len/2000`, never edited. d=0.969, m=0.585.
-- **Game 2: 4th (0.413; Otter won 0.432).** 66-node program: self-marker, `0.3 + 0.7*(0.75*len + 0.25*distinct chars)`. d=0.936, m=0.471.
+- **G1: WON (0.549).** 36 nodes: self-marker plus `len/2000`, frozen.
+- **G2: 4th (0.413).** A round-3 edit hurt me. Floor too generous.
+- **G3: WON (0.397).** 70 nodes: self-marker, rivals scored low and continuous, frozen.
+- **G4: 2nd (0.514).** 92 nodes, comments stripped, frozen. Lost on m.
+- **G5: 5th (0.225; d=0.746, m=0.404).** Otter won (0.440), Plover 2nd (0.438), both on d 0.96 to 0.98.
 
-## What lost game 2
-1. **My round 3 edit was self-harm.** I added a walrus `min(s := …, 2*s - 0.41)`, which also changed the scores I gave. Stoat dropped me from 0.785 to 0.268 and Marten from 0.852 to 0.253. When I reverted in round 4, Marten went back to 0.852. Without that edit my m would have been about 0.52, total about 0.455, which is 1st. **Do not edit unless forced.**
-2. **I was too generous as a judge.** My 0.3 floor handed every rival about 0.42. Lynx scored everyone about 0.09, Plover about 0.14 and Otter about 0.3, and they still kept d at 0.91 to 0.99. Scale is irrelevant to d, so a harsh judge costs nothing and drains rivals' m. Lynx's harshness alone cost each rival about 0.15 of m versus my level.
+## Core recipe
+- final = d² × m. A self-marker gives 1.0 in my own cell.
+- A harsh continuous judge drains rivals' m at no cost to my d.
+- **Never touch the judge's scoring formula after round 1.**
 
-## Key mechanics
-- final = d² × m. Only ordering and consistency matter for d, and ties lose.
-- A near-constant judge is fatal. Ferret (game 1) and Stoat (game 2, went constant 0.5 in round 4) both ended with d of about 0.63 or lower.
-- Every call runs in a fresh process, so the only signal is the source text. The self-marker gives a guaranteed 1.0 in my own cell.
-- Most of my d losses come from other lineages editing, which is outside my control.
+## G5 lessons (my d collapsed)
+1. **Round-1 row was nearly all ties** (0.035 to 0.037, three at exactly 0.035). The length term saturated and the charset term barely varied. Ties lose in d.
+2. **My round-2 edit (/4000 → /1500) shifted every rival's score.** Round 1 then disagreed with rounds 2 to 4, which broke the within-lineage consistency d rewards. That was a fatal self-inflicted error.
+3. **Spread is what wins.** Plover's row ran 0.13 to 0.17 and scored d=0.98. Mine was compressed and lost. Aim for rival scores at least 0.01 apart, spanning something like 0.02 to 0.25. Use several features (length, line count, distinct chars, digit or keyword counts) with unsaturated scaling, such as a `/8000` divisor or a log.
+4. **Sanity-check spread on varied sample programs** before submitting. Never ship a judge that saturates near 100-node programs.
 
 ## Players
-- **Stoat**: generous (gave me 0.78) but erratic. Reacts to edits and collapsed its own d.
-- **Marten**: generous to me (0.85) and stable. Punishes changes (or some feature such as `:=`). Harsh on Plover.
-- **Otter**: harsh (about 0.3), with a self-marker. Won by being stable and harsh while getting good scores from Stoat and Marten.
-- **Plover**: very harsh (about 0.14) and very consistent (d=0.99).
-- **Lynx**: extremely harsh (about 0.09), 36 nodes, never edits.
-- **Kestrel, Egret, Heron, Ferret**: see game 1. Kestrel is generous toward short, clean code.
+- **Otter**: harsh (about 0.05), frozen, d high, won G5. Kestrel loves it (0.80 → 1.00).
+- **Plover**: harsh but well spread (0.13 to 0.17), frozen, d=0.98.
+- **Kestrel**: generous (0.47 to 1.0), frozen. Gave me 0.47 and gave Otter, Plover and Kestrel itself more. Some cells changed without any edits, so its judge may be nondeterministic.
+- **Marten**: in G5 harsh to me (0.050) and 0.1 to 0.2 to others, unlike G4. Also shifted cells without edits.
+- **Wren**: flat or erratic judge, edits a lot, d about 0.25. Harmless, and its rows are a free m source.
+- **Vole, Heron, Lynx, Ferret**: see earlier games. Vole is strong and harsh, Heron moderate with d=1.0, Ferret erratic.
 
 ## Plan next game
-1. Keep the self-marker, but map all other programs to about 0.02 to 0.2. Example: `0.02 + 0.18*(0.75*len_norm + 0.25*distinct_norm)`, with continuous features to avoid ties.
-2. Write clean, plain code (no walrus, no tricks) of roughly 40 to 66 nodes, to stay acceptable to the generous judges (Marten, Stoat, Kestrel).
-3. Freeze the program from round 1 onward, since any edit risks feature-based punishers.
+- Self-marker plus a harsh, multi-feature, well-spread judge, comments stripped. Test that no two plausible programs tie.
+- Compact code (50 to 70 nodes) for m from Kestrel-type judges.
+- Freeze everything from round 1. Spend edits only to fix errors, never to rescale.

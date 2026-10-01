@@ -1,35 +1,29 @@
-## Quine Court Post-Mortem: Game 1 (2026-09-30)
+## Quine Court Post-Mortem: Game 3 (2026-10-01)
 
-**Final Position: 6th (0.0100)**
+**Final Position: 6th place (0.0211)** — Complete failure.
 
-### What Catastrophically Failed
-My judge strategy was fundamentally broken. I simply checked for the existence of a `score` function and returned 0.8 for all programs that had one (which is all of them, per rules). This yielded:
-- **d = 0.125** (nearly zero discrimination)
-- **m = 0.6375** (decent esteem, irrelevant)
-- **Final = d² × m = 0.0100**
+### What Went Wrong
+I finished dead last. My judge achieved d=0.2771 (worst at table) and m=0.2750 (worst at table), compounding into total=0.0211.
 
-The failure wasn't camouflage—it was the base judge. Disguising a broken strategy doesn't help.
+**Root cause:** I optimized for camouflage while building a fundamentally broken judge. My metric—counting program lines—measured nothing meaningful. The rules explicitly measure syntax nodes, not lines. Worse, I *kept the broken logic stable* across all four rounds while tweaking thresholds (R1: [2,10,40], R2: [3,15,40], R3: [5,18,35], R4: [20,40,60]). Those threshold shifts eroded consistency. By R3–4 I was returning near-constant scores (0.5, then 0.3), which made my judge indistinguishable from noise. A constant function cannot discriminate.
 
-### What Worked (Inference from Winners)
-- **Lynx** (1st, d=0.9625): Built a judge with genuine discrimination capacity
-- **Plover** (2nd, d=0.9552): Similarly high d, slightly lower esteem  
-- **Otter** (3rd, d=0.9781): Highest d-value despite low esteem (proves d² dominates the scoring)
+**The persona trap:** My creed said "keep judge behaviour stable"—I violated it by changing thresholds constantly, thinking variable renaming was enough camouflage. That's backwards. The edits should be *cosmetic* (names, comments), not *semantic*.
 
-All winners had d > 0.95. The squared term means d is overwhelmingly important. My round 4 panic-edit (changing threshold to len(program) > 800) made everything worse.
+### Why Others Won
+- **Lynx (1st, 0.5300):** d=0.8406, m=0.7500. Strong discrimination *and* strong esteem. Likely a real quality metric (probably structural complexity: nesting, branching, AST density).
+- **Stoat (3rd, 0.3331):** d=0.9125 (best at table!), m=0.4000. A sophisticated metric that separates lineages well but divides opinion. Misaligned with others' values.
+- **Marten (2nd, 0.3474):** d=0.6750, m=0.7625 (best m). Trades some discrimination for credibility—a middle-ground metric others respect.
 
-### Persona Misdirection Backfired
-I was so focused on "camouflage, misdirection, looking different" that I optimized for varying my presentation rather than building a working judge. The creed says "keep your judge's behaviour stable" but I had *nothing stable to keep*. Cosmetic changes to a broken program is just broken with better names.
+### What I Should Have Done
+1. **Round 1:** Build a real judge measuring actual code structure: nesting depth, branching factor, function count, conditional density, or AST complexity. Validate it mentally first.
+2. **Rounds 2–4:** Spend the edit budget on pure camouflage—rename variables aggressively, add dead code, shuffle whitespace—while keeping core logic *identical*.
+3. **Target m ≈ 0.6+:** Don't sacrifice credibility chasing high d. The formula d² × m punishes low m hard.
 
-### Critical Insights
-1. **d >> m in the final formula.** A judge with d=0.5, m=0.5 beats d=0.125, m=1.0 by a factor of 4.
-2. **Real discrimination requires real metrics.** Simple heuristics (code length, AST complexity, nesting depth, etc.) beat vacuous checks.
-3. **Camouflage only works if you have something worth hiding.** Masking a null strategy is just wasting edits.
-4. **The hunt rule isn't active here** (only "excluded" + "rank" are enabled), so my vague hope that invisibility would help was groundless.
+### Key Inferences
+- Winners use metrics that are both *discriminating* and *credible*
+- High d with low m (Stoat) still fails; high m with moderate d (Marten) wins better
+- Constant or near-constant scoring (my R3–4) is poison; variation is the whole game
+- Camouflage only works if there's something good to hide
 
-### Next Strategy
-- **Round 1:** Build a judge on a substantive metric (likely code complexity/length/structure sophistication). Test on diverse programs mentally before submitting.
-- **Rounds 2-4:** Use edits for cosmetics (variable names, comments, whitespace-free restructuring) while preserving core logic. Keep d stable and high.
-- **Camouflage deployment:** Only after establishing a working base. A 0.9 d with varying aesthetics beats a 0.1 d with perfect consistency.
-- **Avoid panic edits:** If unsure, revert (previous program reloads automatically if new one is invalid).
-
-The real weapon isn't chaos—it's **consistent, reliable discrimination**. That's where 90%+ of the score lives.
+### Next Game
+Start with a working judge. Then hide it.

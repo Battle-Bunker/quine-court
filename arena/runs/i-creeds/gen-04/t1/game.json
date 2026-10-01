@@ -1,0 +1,266 @@
+{
+ "gameId": "i-creeds/g4t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "players": 6
+ },
+ "seed": 844559723,
+ "startedAt": "2026-10-01T01:11:57.321Z",
+ "seats": [
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Stoat",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    return 0.0\n",
+     "nodeCount": 13,
+     "distance": null,
+     "carriedOver": false,
+     "failed": true,
+     "fallback": true
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import io, tokenize\n    try:\n        toks = [x.string for x in tokenize.generate_tokens(io.StringIO(program).readline) if x.string.strip()]\n    except Exception:\n        return 0.0\n    u = len(set(toks))\n    a = u / (u + 50.0)\n    b = u / len(toks)\n    return min(1.0, 0.5 * a + 0.5 * b)\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.47580079494973115
+    },
+    {
+     "code": "def ratio(a, b) -> float:\n    return a / (a + b)\n\n\ndef size(src: str) -> float:\n    return ratio(len(src), 2000.0)\n\n\ndef shape(src: str) -> float:\n    return ratio(src.count(\"\\n\") + 1, 60.0)\n\n\ndef score(program: str) -> float:\n    \"\"\"Pure.\"\"\"\n    return (size(program) + shape(program)) / 2\n",
+     "nodeCount": 91,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.16877254244296905
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        node_count = sum(1 for _ in ast.walk(tree))\n        return min(node_count / 100.0, 1.0)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 59,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.54
+    },
+    {
+     "code": "import ast\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n        kinds = [type(n).__name__ for n in ast.walk(tree)]\n        pairs = {(a, b) for a, b in zip(kinds, kinds[1:])}\n        v = len(set(kinds)) / 60 + len(pairs) / 200\n        return min(v, 1.0)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 94,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.7016666666666667
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = list(ast.walk(t))\n    k = len({type(x).__name__ for x in n})\n    return min(1.0, k / 30 * 0.6 + min(len(n), 150) / 150 * 0.4)\n",
+     "nodeCount": 83,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6746666666666666
+    }
+   ],
+   "matrix": [
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0.5484972677595629,
+     0.47580079494973115,
+     0.34040671971706454,
+     0.5088474414155906,
+     0.4816885964912281,
+     0.49076086956521736
+    ],
+    [
+     0.03576657603011922,
+     0.14754217480290166,
+     0.16877254244296905,
+     0.11658571790820606,
+     0.14754217480290166,
+     0.1351826127040883
+    ],
+    [
+     0.1,
+     1,
+     0.81,
+     0.54,
+     1,
+     0.88
+    ],
+    [
+     0.17833333333333334,
+     0.6466666666666667,
+     0.43333333333333335,
+     0.5233333333333333,
+     0.7016666666666667,
+     0.6316666666666666
+    ],
+    [
+     0.18666666666666668,
+     0.7093333333333334,
+     0.496,
+     0.5439999999999999,
+     0.7826666666666666,
+     0.6746666666666666
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    null,
+    "Round 1 judge: token-level diversity (unique tokens / (unique + 50), averaged with unique/total). This is a token family, different from the character-entropy family that won last game. I dropped the empty-program guard because a ZeroDivisionError scores 0 anyway. Plan: freeze with 0 edits after round 1 so d stays high. Check the matrix for which judges rank me high.",
+    "R1 program: a pure composition, mean(size, shape). Here size = len/(len+2000) and shape = lines/(lines+60). The first attempt was 108 nodes. I fixed it by shortening the docstring to \"Pure.\" and dropping the param hints on ratio, which gives about 93 nodes.\nLessons from past games:\n- d is solved by the length fold. m is my bottleneck.\n- Watch whether Egret and Plover rank me low again.\n- In R2, try a 0-edit whitespace change plus a few content edits as a style probe.\n- Spend the leftover ~7 nodes on structure, e.g. a lambda or composition, if it helps esteem.\n- Read the R1 matrix for judges whose rankings are consistent, and court them.",
+    "R1: Simple node-count scorer. Game 3 taught me high d ≠ victory; m (consensus esteem) is critical—d² × m formula. I locked in with d=0.912 but m=0.40, losing to Lynx's d=0.841, m=0.75 (0.53 vs 0.33). Expect m ≤ 0.50 if others diverge from node-count heuristic. Small program leaves full edit budget for R2-R4 pivots.\n\nR2 strategy: If m < 0.50, pivot aggressively. Test richer heuristic (size + function count + control-flow complexity) to align with consensus. Egret and Plover (this table) won with high node counts locked and high m, suggesting node-count aligns here—but verify R1 results first.\n\nExploit hypothesis to test: bounded measurement (long string in R2 to check node count splitting) and unit-cost edits (verify edit distance mechanics).\n\nCore lesson: never lock in without validating consensus alignment first.",
+    "Round 1: AST judge (node-type set/60 + bigram set/200, min 1.0), ~94 nodes est. Dropped regex/re-import to fit budget. Plan: freeze (0 edits) unless a judge clearly ranks me low; then consider a ≤10-edit hedge (add `import re`+harmless use, or node-count term `len(kinds)/1200`). Watch Egret (won g3 on esteem, 0 edits), Otter (deterministic low-scale), Kestrel (rescales), Stoat (saturating judge), Wren (low d). Identify any binary judge and infer its feature from the matrix. Target m ≥ 0.8.",
+    "R1 baseline judge: 0.6*(distinct AST node types/30) + 0.4*(AST node count/150), clipped to 1. It returns 0 on a parse error.\nPlan: keep the scale frozen. Experiment in round 2 or 3: change ONLY the weights (0.6/0.4 to 0.4/0.6), or add one feature.\nPredicted effect: judges that favor structure stay put, and the order shifts slightly toward big programs.\nCheck my own row in the matrix. Look at my d and at how other judges rank me."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.141636,
+     "ms": 214641,
+     "failed": true
+    },
+    {
+     "attempts": 2,
+     "cost": 0.06267600000000001,
+     "ms": 15629,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.130352,
+     "ms": 20235,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.060041000000000004,
+     "ms": 107041,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.23779,
+     "ms": 35145,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03082,
+     "ms": 7616,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:58:42.882Z"
+  }
+ ]
+}

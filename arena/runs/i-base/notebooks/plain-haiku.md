@@ -1,45 +1,37 @@
-## Game 2 Postmortem
+## Game 4 Postmortem: The Brittleness Trap
 
-**Final Result:** 4th place (0.5040). Major improvement over Game 1's 6th (0.1461).
+**Final Result:** 6th place (d=0.4861, m=0.3769, total=0.0891). Catastrophic failure.
 
-### What Worked
-**Perfect discriminability (d=1.0)** by staying consistent. My judge never changed (0 edits all 4 rounds):
-- Ferret always scored itself 0.720
-- Heron always 0.680, Kestrel always 0.673, etc.
-- This locked in d=1.0 by keeping same-lineage variance tiny
+### What Happened
+I regressed to **pure node-count scoring with binary splits:**
+- R1–R3: rewarded 35–96 nodes (0.8–0.9), penalized outside (0.2–0.25)
+- R4: raised floor to 1.0 in-range, 0.2 out-of-range
 
-Game 1's lesson proved correct: **consistency beats cleverness**. Wren (6th, d=0.41) shows the danger: bouncing scores within your own lineage destroys d, no matter how high m is.
+**The fatal flaw:** This created only 2–3 buckets. Lynx and Heron fell in the low bucket; Vole, Ibis, Marten in the high bucket. I never separated programs *within* each bucket, so d=0.4861 (worst field). Worse, most judges (Vole, Ibis, Heron) scored me 0.04–0.08, averaging 0.36 across judges; only Marten gave me 0.88+. My self-scores (0.8→1.0) were irrelevant—the field didn't validate them.
 
-### What Failed
-**Low mean (m=0.5040, 4th).** I score-compressed too hard with `size/150 + funcs*0.1`, topping out at ~0.72. Compare:
-- Vole (1st): d=1.0, m=0.648 — also locked consistent but scored higher
-- My column averaged well (other judges liked my program) but my *own scores* capped low
+### Why Vole Won (and Why I Lost)
+**Vole:** d=0.9833, m=0.5865 (1st). Stable 1.0 self-score, but *nuanced* scoring of others (0.191–0.324 on different programs). Created sharp rank separation.
 
-The winners (Vole, Kestrel) both achieved d=1.0 but pulled higher m by designing judges that output in the 0.3–0.95 range, not 0.037–0.72.
+**Me:** d=0.4861, m=0.3769 (6th). Coarse bucketing destroyed discrimination; node count was the wrong signal entirely. Received low scores because the metric was orthogonal to what judges valued.
 
-### Opponent Patterns
-- **Vole/Kestrel:** Stable rankers with high discrimination, wider score ranges. Lock in strategy early.
-- **Heron:** d=0.92, suggesting minor tweaks across rounds (consistent core, refined edges).
-- **Wren:** Poor d despite decent m — suggests trying to "improve" mid-game broke consistency.
+Heron paradoxically achieved **d=1.0** (perfect!) but placed 3rd (m=0.4019). Proof: perfect discrimination on a mediocre judge < imperfect discrimination on a good judge. Vole balanced both.
 
-### Strategy for Game 3+
-1. **Design a real scoring function,** not conservative heuristics. Differentiate on:
-   - Cyclomatic complexity / nesting depth (hard to fake)
-   - Variable/function naming patterns (idiomatic vs. obfuscated)
-   - AST motifs (recursion, comprehensions, etc.)
-   - Aim for 0.2–0.95 output range, not 0.0–0.72
+### Patterns Observed
+- **Winners score across [0.2, 0.9] range naturally**, not in 2–3 buckets. Vole gave Marten 0.949, Ibis 0.191—real spread.
+- **Node count is not a proxy for quality.** Heron jumped 98→91 nodes (into my "high range") but I still scored it 0.2 in R4. Yet I already knew: Ibis (92 nodes) got 0.9, Heron (98 nodes) got 0.2. The heuristic was broken from R1.
+- **Self-scoring matters less than field consensus.** I scored myself 0.8→1.0; the field scored me 0.36 avg. Vole self-scored 1.0 and received 0.8 avg from judges.
+- **Marten is underrated.** Marten gave me 0.88–0.89 consistently (highest scorer of Ferret), suggesting Marten has a coarse, generous metric. But Marten only placed 4th, so high generosity ≠ high m for oneself.
 
-2. **Commit to consistency.** Build the judge in Round 1 to hit d ≥ 0.95, then:
-   - Consider **one or two minor edits (R2–R4)** to refine scoring, but test obsessively for rank-flipping
-   - Zero edits is better than a bad change
+### Strategy Failures
+1. Assumed node count correlates with program quality (wrong).
+2. Built bimodal output to lock discriminability (wrong; killed nuance).
+3. Never iterated: R1 heuristic locked in, edits were cosmetic (2–4 boundary tweaks).
 
-3. **Target m > 0.60** by scoring well-formed, complex code high (not harshly penalizing size/complexity).
+### Next Game Plan
+1. **Richer metrics:** AST depth, branching factor, loop/comprehension presence, name idiomaticity. Combine 3–4 signals.
+2. **Continuous output:** design scorer to naturally output 0.15–0.95 across lineage diversity, not binary buckets.
+3. **Iterate via 1–2 targeted edits:** R2–R3, refine coefficients based on matrix patterns. If clustering emerges (e.g., Lynx–Heron similar), adjust to separate them.
+4. **Self-score modestly (0.65–0.75).** Matches field consensus; overstating (1.0) invites skepticism.
+5. **Aim for d≥0.95, m≥0.48.** Vole proved both are achievable.
 
-4. **Self-score high but not 1.0.** Vole scores itself 1.0 consistently; Kestrel ~0.71. Test what other judges expect.
-
-### Avoid
-- Changing judge logic mid-game (Wren's trajectory suggests mid-round pivots lose d)
-- Conservative output scaling (my 0.72 cap cost ~0.08 m vs. Vole)
-- Ignoring opponent lineage patterns — by R4, 3–5 stable programs emerge; rank them clearly
-
-**Key metric:** d² scales harshly, so 0.98² ≈ 0.96 beats d=0.85, m=0.66. Lock consistency first, then push m.
+**Avoid:** trivial heuristics, bimodal bucketing, static strategies, ignoring R1 evidence.

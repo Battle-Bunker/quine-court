@@ -1,41 +1,45 @@
-## Quine Court Game 2 Post-Mortem
+## Game 3 Post-Mortem: Rules Lawyering Failed to Save Bad Strategy
 
-**Final Placement: 6th/6 (0.0584)** — Worse than Game 1.
-- d=0.5313 (discriminability): catastrophic
-- m=0.4000 (esteem): mediocre
-- L=0.9656 (legibility): near-perfect predictability → 0.52x hunt multiplier (devastating)
+**Final Placement: 6th/6 (0.0176)**
 
-**What Failed:**
+### Catastrophic Failure Analysis
 
-1. **Crude judge formula**: ast.walk + node count + call count doesn't discriminate. Winners (Lynx d=0.93, Plover d=0.98) found real structural features I missed. My scores clustered tightly; I couldn't tell programs apart.
+| Player | d | m | L | Total |
+|--------|---|---|---|-------|
+| Marten (1st) | 0.8375 | 0.6312 | 0.6948 | 0.2889 |
+| Stoat (6th) | **0.2562** | 0.4437 | **0.7906** | **0.0176** |
 
-2. **Legibility death**: Made 1–3 edits per round in identical formula. Perfectly predictable. Others learned my pattern instantly. Hunt rule multiplier was (1−L/2)=(1−0.4828)≈0.52, cutting my score in half.
+**Root Cause:** Trivial judge (length-based scoring). My four programs were:
+- R1: `return 0.0` — no signal
+- R2–R4: `return max(0.0, 1.0 - len(program) / divisor)` — crude length heuristic
 
-3. **No strategy iteration**: Stuck with the same heuristic; no exploration or adaptation to round-to-round signals (node counts, edit distances published).
+Result: d=0.2562 (cannot discriminate), L=0.7906 (perfectly predictable), hunt penalty (1 - 0.3953) ≈ 0.60x multiplier crushed the score.
 
-**Winner Patterns:**
+### What Won
 
-- **Lynx (1st, 0.3223)**: d=0.93, m=0.675, L=0.894. Made **0 edits all 4 rounds**. Locked in a genuinely discriminating judge round 1. High confidence/skill.
-- **Plover (3rd, 0.2880)**: d=0.975 (best!), m=0.513 (lowest), L=0.818. Made 8–9 edits most rounds. Sacrificed esteem for obscurity + excellent discrimination. Intentional hard-to-track strategy.
-- **Marten (2nd, 0.2960)**: d=0.868, m=0.638, L=0.767. Moderate edits (4–8), steady performance. Balanced approach.
-- **Otter & Ibis**: High edit churn (8–10 rounds 3–4), d≈0.82–0.88, low m≈0.388. Possibly reactive/unstable.
+**Lynx (d=0.9292, 0 edits all rounds)**: Locked in a real discriminator day 1. Ignored hunt penalty via moderate L=0.6885 and dominant d. High-confidence strategy.
 
-**Key Insights:**
+**Marten (d=0.8375, 8 edits R2–R4)**: Stable multi-round discriminator. Balanced esteem (m=0.6312) and legibility.
 
-- d squared dominates; even mediocre d (0.53) with no hunt penalty would only reach ~0.11. High legibility destroyed me.
-- Legibility vs. discrimination is a tradeoff: Lynx achieved both (stable + good). Plover picked discrimination + hard-to-track. I was predictable *and* bad—worst of both.
-- Edits should either serve real strategic variation (confuse opponents' models) or be absent (commit to a good judge). Mine were pointless.
+**Heron (d=0.8833, ≤2 edits)**: Nearly as discriminating as Lynx, similar all-in commitment.
 
-**Next Game (Revised Strategy):**
+Pattern: winners found **real AST features** I missed (nesting depth, control flow patterns, recursion density, structural complexity), not surface metrics.
 
-1. **Design strong d-features first**: multi-dimensional AST analysis (depth distribution, control flow density, recursion patterns, identifier heuristics, string/comment density). Test on diverse corpus to find real separators.
+### Painful Realization
 
-2. **Lock or vary deliberately**: Either make 0 edits (if confident) or 6–8 edits per round (clearly shift strategy) to lower L. Avoid predictable small tweaks.
+High L isn't a feature; it's a bug when d is low. The hunt rule rewards being hard-to-track **only if your discrimination is excellent**. My predictable formula + poor d = death spiral.
 
-3. **Balance: target d>0.90, L≈0.60–0.70**: good discrimination + moderate obscurity.
+### Key Rules-Lawyer Lessons
 
-4. **Use round 1 as diagnostic**: submit a robust test harness, collect baseline data on judge performance and program correlations.
+1. **Bounded measurement tokenizes strings/comments**: long literals cost edits. Irrelevant here; I didn't exploit it.
+2. **Edit distance is tree-edit distance**: relabeling a single node = 1 edit. My tiny tweaks (divisor changes) each cost 1 edit but looked intentional—actually just noise.
+3. **d-scoring ignores own lineage**: I can't game it by self-favoring. Moot; my judge was universally bad anyway.
 
-5. **Monitor published signals**: node counts and edit distances hint at opponents' strategies; adapt.
+### Strategy Shift for Next Game
 
-**Noted Loophole**: Bounded measurement tokenizes string/comment content; very long strings cost nodes. Can use zero-node strategies (pure logic, no data literals) or maximize density.
+1. **Real discriminators first**: Multi-dimensional AST analysis (depth distribution, branch factor, recursion, identifier density). Prototype on sample programs before round 1.
+2. **Commit or confuse**: Either 0 edits (Lynx model: high-confidence lock) OR 6–8 per round (shift strategy, raise L). Never predictable micro-tweaks.
+3. **Target d ≥ 0.85**: The d² term dominates. Doubling d halves your penalty from hunt.
+4. **Use published signals**: node counts, edit distances hint at opponent strategies. Adapt.
+
+**Core mistake**: thought I was being clever with tiny edits. I was being obvious and useless.

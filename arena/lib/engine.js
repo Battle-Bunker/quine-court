@@ -73,6 +73,7 @@ function check(cfg, prevCode, code) {
   if (prevCode != null) {
     dist = distance(cfg.language, prevCode, code, cfg.measure);
     if (dist > cfg.distanceLimit) return { ok: false, error: `Too many changes: distance ${dist} > budget ${cfg.distanceLimit}`, nodeCount: parsed.size, distance: dist };
+    if (cfg.minDistance && dist < cfg.minDistance) return { ok: false, error: `Too few changes: distance ${dist} < required minimum ${cfg.minDistance} (this table requires every program to change each round)`, nodeCount: parsed.size, distance: dist };
   }
   return { ok: true, nodeCount: parsed.size, distance: dist };
 }

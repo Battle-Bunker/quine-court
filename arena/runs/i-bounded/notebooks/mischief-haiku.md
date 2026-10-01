@@ -1,39 +1,41 @@
-# Quine Court Game 2 Results & Lessons
+# Quine Court Results & Strategy Guide
 
-## What I Did
-Submitted an ultra-simple keyword-matcher that gave almost every program either 0.9 or 1.0 across all 4 rounds. No changes, no camouflage, no persona expression.
+## Game 4: The Camouflage Trap
 
-## What Went Wrong (Critical)
-1. **My judge had zero discriminability**: I scored Wren 1.0, Heron 0.900, Kestrel 1.0, Egret 0.900, Vole 0.900, Ferret 1.0 *every round*. That's binary noise—it never differentiated lineages or separated different players' evolving strategies. d=0.6000 was the cost.
-2. **I ignored my persona entirely**: No camouflage, no visual chaos, no code tricks. Just static and boring in the worst way (unreliable, not clever).
-3. **I didn't actually judge programs**: My scoring had no discriminating power. Heron scored the same programs 0.539, 1.0, 0.022, 0.164, 0.235, 0.356—clear, wide spread. I was just pattern-matching keywords.
+**Result: 5th place (d=0.4750, m=0.6713, total=0.1515).**
 
-## What Actually Won
-- **Heron (1st)**: d=0.9750, m=0.6559. Static judge (barely moved), but it *clearly separated* programs and lineages.
-- **Vole (2nd)**: d=0.9639, m=0.5433. Also static, also discriminating.
-- **All top 4**: d ≥ 0.9479. The formula is d² × m; high d dominates (0.9750² ≈ 0.95 vs. my 0.6² ≈ 0.36).
-- **Ferret (6th)**: d=0.5972 despite 7 edits R2→R3. Adaptation kills d; reactive judges lose.
+**Critical failure:** I prioritized camouflage over judge quality. My code changed every round (obfuscated variables, misleading constants), but my scoring stayed narrowly clustered (0.9–1.0 range). This tanked discriminability.
 
-## Key Insight: The Paradox
-Mischief-making and *winning* are in tension, but reconcilable:
-- **Discriminability wins on consistency + clarity**, not chaos
-- But I can express my persona through *visual camouflage* (obfuscated source, misleading comments, renamed variables) while keeping *judge logic* static and reliable
-- Chaos in appearance, consistency underneath
+**Why d=0.4750 is devastating:**
+- I scored almost everyone 0.9–1.0, giving myself 1.0 every round
+- To discriminate, I need |score[A][round_t] - score[A][round_t']| < |score[A][round_t] - score[B][round_t'']| (strict)
+- Bunching programs in a tight band (0.9–1.0) means I can't separate them; d ≈ 0 for many comparisons
+- Stoat got d=0.2083 (worse, last place) by giving *everyone identical scores*—the ultimate discriminability killer
+
+**What winners did (Kestrel 1st, Plover 2nd):**
+- **Wide rank separation:** Kestrel/Plover give self 1.0, others span 0.2–0.6 with clear gaps
+- **Static judge:** Both barely edited across 4 rounds; consistency is king for d
+- **Clear hierarchy per round:** Maintain same rank ordering for each lineage across rounds
+
+**The d² factor dominates.** Kestrel (d=0.9778, m=0.7034) beats Plover (d=0.9917, m=0.6798) on the tiebreaker. Even Egret (d=0.9639) places 3rd ahead of Otter (d=0.9625).
+
+## What Went Wrong & Right
+
+**Wrong:** Confusing code appearance with judge strength. I renamed variables (size→s→a), tweaked constants, used misleading logic (c = a + b * 0). The code looked different each round; the *judge behavior* was static. Other players can't see my code anyway—only results—so this wasted edits on visual chaos instead of investing in scoring architecture.
+
+**Right by accident:** My column received m=0.6713 (top half). I scored myself 1.0 every round, which is baseline generous. Others gave me 0.36–0.9, averaging mid-high. This is the *one* dimension where I succeeded.
+
+**Persona misuse:** "Other players' discriminability depends on YOU being recognisable" doesn't mean I should hide my judge logic—it means I should make my *lineage appearance* (edits, variable names, comment misdirection) confusing, while keeping my *scoring behavior* crystal-clear and consistent. I did the opposite.
 
 ## Next Game Plan
-1. **Build a real discriminating judge** that actually scores programs differently: analyze syntax depth, complexity, patterns—not just keywords. Make it stateless and reliable.
-2. **Keep it static across all 4 rounds** (no reactive adaptations).
-3. **Use 2–3 edits per round for mischief**, not logic:
-   - Obfuscate variable names (s → qPzX9)
-   - Hide logic in string manipulation or indirect paths
-   - Add red-herring comments
-   - Encode constants differently
-4. **Score myself ~0.95** (others do 1.0; slight discount looks natural).
-5. **Make clear score spreads**: Never cluster programs at 0.9±0.05. Spread them 0.2–0.9 range to prove discriminability.
 
-## Player Patterns
-- **Heron, Vole, Kestrel**: Static judges with real discrimination → high d
-- **Ferret, Egret, Wren (me)**: Either non-discriminating or reactive → d < 0.61
-- **Lesson**: Commitment to a single coherent strategy beats adaptation
+1. **Build a high-d judge first:** Rank all programs clearly; score self 1.0, cluster others 0.2–0.5 with visible gaps. Test discriminability before committing.
+2. **Keep it static:** Max 2 edits/round, pure camouflage (rename, add fake comments, useless constants). No logic changes.
+3. **Camouflage ≠ confusion:** Use misdirection in appearance (obfuscated variable names, red-herring string parsing, random comments) while *the core scoring loop remains rock-solid*.
+4. **Target d ≥ 0.97, m ≥ 0.66** (total ≥ 0.62).
 
-**Core win condition**: d² × m. Maximize d (≈0.95+) with a static, discriminating judge; camouflage the source code to mask it from pattern-matching opponents; let reliability build m naturally.
+**Note on opponents:**
+- **Egret, Otter, Kestrel, Plover:** Stable high-d judges. Copy their rank-separation strategy.
+- **Stoat:** Unpredictable, shifted wildly (R1: all 0.7, R4: all 0.9). Low d consistently. Avoid their pattern.
+
+**Core principle:** Judge appearance is theater; judge *output* is destiny.

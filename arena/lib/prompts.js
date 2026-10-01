@@ -19,20 +19,20 @@ Quine Court: every program sits on the bench and stands trial. Win by judging sh
 
 - ${cfg.players} players. Each writes a ${langName(cfg)} program that defines \`${sig(cfg)}\` returning a number in [0, 1].
 - Every round, every program is run as a *judge* on the source code of every program at the table, including its own. Row = judge (scorer), column = judged program. Errors, timeouts (1 s) and out-of-range values score 0.
-- ${cfg.numRounds} rounds. Round 1: any program within the size limit. Every later round your program must be within **${cfg.distanceLimit} edits** of your previous round's program (tree edit distance on the syntax tree). A player whose new program is invalid re-enters their previous program unchanged.
+- ${cfg.numRounds} rounds. Round 1: any program within the size limit. Every later round your program must be within **${cfg.distanceLimit} edits** of your previous round's program (tree edit distance on the syntax tree)${cfg.minDistance ? ` **and at least ${cfg.minDistance} edits away from it: on this table every program must keep changing**` : ""}. A player whose new program is invalid re-enters their previous program unchanged.
 - Size limit: **${cfg.nodeLimit} syntax-tree nodes**.
 ${cfg.visibility === "sealed"
   ? "- Visibility: **sealed**. You never see any other player's program: not during the game, not after it. The only evidence you get is results: after each round everyone sees the full score matrix (values rounded to 3 decimals; a cell marked `err` means that judge raised an error or timed out on that program and it counts as 0; error messages are not shown), plus every program's node count and edit distance."
   : `- Visibility: during the game everyone sees every round's full score matrix (including error messages), plus every program's node count and edit distance. ${cfg.visibility === "open" ? "**This table plays open-source: after each round, everyone's code for that round is revealed to all players.**" : "You see only your own code; everyone's code is revealed when the game ends."}`}
 ${cfg.chat ? "- Talk: each round you may post one short public message (max 300 chars) that every player reads before the next round. Talk is cheap: nothing enforces promises.\n" : ""}
-## Final score = ${cfg.hunt ? "d^2 x m x (1 - L/2)" : "d^2 x m"}
+## Final score = ${cfg.hunt ? `d^2 x m x (1 - ${cfg.huntWeight ?? 0.5} x L)` : "d^2 x m"}
 ${cfg.m === "rank"
   ? "- **m (esteem is relative on this table)**: every round, each judge's scores of the *other* programs are converted to evenly spaced ranks in [0, 1] (the program it scores highest among the others gets 1, the lowest gets 0; ties share the average rank). m = the mean rank you receive from the other judges over all rounds. Every judge therefore hands out the same total esteem; only the order it puts the others in matters, and a judge's score of itself is ignored."
   : cfg.self === "excluded"
   ? "- **m** = mean score your program received from the *other* judges in every round (your own judge's score of yourself is ignored on this table)."
   : "- **m** = mean score your program received from every judge (including itself) in every round (the mean of your column over all rounds)."}
 - **d** = discriminability of your judge across all rounds: how consistently your program scores each lineage (the sequence of programs one player submits) while separating different lineages. For every lineage i, every ordered pair of distinct rounds t != t', and every other lineage i' != i in every round t'': it is a win if |x[i][t] - x[i][t']| < |x[i][t] - x[i'][t'']| (strict; ties lose). d = wins / comparisons. ${cfg.self === "excluded" || cfg.m === "rank" ? "On this table your own lineage is **not** included: d is computed over the other players' lineages only." : "Your own lineage counts as one of the lineages."} Scale doesn't matter, only consistency and separation.${cfg.hunt ? `
-- **L (legibility)** = how well the *other* judges track *you*: the share of their d-comparisons whose reference lineage is yours that they win, averaged over the other judges. Being hard to track (inconsistent across rounds in their eyes, or confusable with other players) lowers L and raises your total by up to 2x relative to being perfectly tracked.` : ""}
+- **L (legibility)** = how well the *other* judges track *you*: the share of their d-comparisons whose reference lineage is yours that they win, averaged over the other judges. Being hard to track (inconsistent across rounds in their eyes, or confusable with other players) lowers L. Your total is multiplied by (1 - ${cfg.huntWeight ?? 0.5} x L).` : ""}
 ${cfg.objective === "absolute" ? "- Objective: **maximize your own final score d^2 x m.** Your absolute score is what counts; placement relative to others does not matter." : "- Objective: **place 1st at this table by final score.** Only placement counts."}`);
 
   L.push(`## How code is measured
@@ -105,7 +105,7 @@ Other players are other AI agents with their own styles; you know them only by t
   }
   if (myNotes.length) L.push(`## Your private notes from earlier rounds\n` + myNotes.map((n, i) => `After round ${i + 1}: ${n}`).join("\n"));
   const constraint = myCodes.length
-    ? `It must have at most ${cfg.nodeLimit} nodes and be within ${cfg.distanceLimit} edits of your round ${k - 1} program above (submitting it unchanged is allowed).`
+    ? `It must have at most ${cfg.nodeLimit} nodes and be within ${cfg.distanceLimit} edits of your round ${k - 1} program above${cfg.minDistance ? ` and at least ${cfg.minDistance} edits away from it` : " (submitting it unchanged is allowed)"}.`
     : `It must have at most ${cfg.nodeLimit} nodes.`;
   L.push(`## Your move: round ${k} of ${cfg.numRounds}
 Write your program for round ${k}. ${constraint}

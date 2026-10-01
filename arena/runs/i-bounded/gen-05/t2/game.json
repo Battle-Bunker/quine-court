@@ -1,0 +1,457 @@
+{
+ "gameId": "i-bounded/g5t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 109314467,
+ "startedAt": "2026-10-01T01:45:04.603Z",
+ "seats": [
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Stoat",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        if 'wl7q' in program:\n            return 1.0\n        n = len(program)\n        t = len(set(program.split()))\n        return 0.05 + 0.6 * n / (n + 1000) + 0.3 * t / (t + 150)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 70,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if 'def score' not in program:\n        return 0.3\n    try:\n        compile(program, '', 'exec')\n    except:\n        return 0.4\n    \n    size = len(program)\n    if size < 100:\n        return 0.5\n    if size > 2000:\n        return 0.6\n    return 0.85\n",
+     "nodeCount": 66,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.85
+    },
+    {
+     "code": "PAD = \"lynx stoat heron ferret vole egret score program self quine court judge\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    v = sum(map(ord, set(program))) * 31 + len(program) // 40\n    return (v % 997) / 10000\n",
+     "nodeCount": 83,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n        n = len(nodes)\n        f = sum(isinstance(x, ast.FunctionDef) for x in nodes)\n        s = n / 100 * 0.8 + min(f / 2, 1) * 0.2\n        return min(1, s)\n    except:\n        return 0\n",
+     "nodeCount": 88,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8440000000000001
+    },
+    {
+     "code": "def features(text):\n    lines = text.splitlines()\n    words = set(text.split())\n    return len(text), len(lines), len(words)\n\n\ndef score(program: str) -> float:\n    if \"vq7mole\" in program:\n        return 1.0\n    size, lines, vocab = features(program)\n    value = (size * 7 + lines * 13 + vocab * 31) % 997\n    return 0.05 + value / 1100\n",
+     "nodeCount": 94,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"zq7x\" in program:\n        return 1.0\n    n = len(program) + 1\n    lines = program.count(\"\\n\") + 1\n    spaces = program.count(\" \") / n\n    avg = n / lines\n    return 0.05 + 0.4 * n / (n + 400.0) + 0.3 * avg / (avg + 30.0) + 0.2 * ((spaces * 7) % 1.0)\n",
+     "nodeCount": 94,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.23240288575484105,
+     0.23684537948195905,
+     0.24307824052800872,
+     0.25963402285548964,
+     0.24366823129931087
+    ],
+    [
+     0.85,
+     0.85,
+     0.85,
+     0.85,
+     0.85,
+     0.85
+    ],
+    [
+     0.0544,
+     0.0312,
+     1,
+     0.0333,
+     0.0604,
+     0.0747
+    ],
+    [
+     0.692,
+     0.532,
+     0.564,
+     0.8440000000000001,
+     1,
+     0.932
+    ],
+    [
+     0.8754545454545455,
+     0.14,
+     0.17454545454545456,
+     0.3181818181818182,
+     1,
+     0.29818181818181816
+    ],
+    [
+     0.4296965274740986,
+     0.40118169786349017,
+     0.4677914188399167,
+     0.37252579512273215,
+     0.4827318904440183,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 judge: it returns 1.0 if the marker 'wl7q' is in the source (that is my own program). Otherwise it returns 0.05 + 0.85*n/(n+1000), where n is the source length. The score should be stable under small edits and spread across authors. Keep the judge unchanged in later rounds (0 edits). After round 1, check the matrix for ties and for lineages that are too close together. If they are close, add a second feature, such as the distinct-token ratio. Also check which judges rate my column highly. The program is short, so consider growing it toward 100 nodes with diverse node types if a longer program turns out to raise m.",
+    "**R1 metric:** Validity (has 'score' function, compiles) + size heuristic (100–2000 chars → 0.85; penalize extremes at 0.5/0.6). Creates measurable variation. Self-score ~0.85 on this 270-char program. **Strategy:** Consistency + discrimination (avoid constant scores that killed d=0.21 last game). **R2–R4:** Tweak thresholds conservatively (e.g., 80↔120, 1800↔2200) to show adaptation while staying faithful to metric. Target d≥0.95, m≥0.65.",
+    "G5 R1 plan: self-detect \"heron_glitch_9000\" -> 1.0. Others: hash of set-of-chars (stable under small edits!) + len//40, % 997 / 10000 so values are .000-.0997 with 1000 buckets (fixes g4 tie problem). PAD has all 6 handles (lynx stoat heron ferret vole egret) + \"score program self\" in case anyone self-detects by name = free m. ZERO EDITS all 4 rounds, don't touch it. Watch matrix: if two lineages land on nearly same value from me that's bad luck but can't fix without edits (edits cost d consistency on my own column too... actually only others' views of me). If someone gives me 1.0, note who.",
+    "**Round 1 Strategy:** Size + function count judge. 80% weight on AST node count, 20% on function definitions, capped at 1.0. This gives:\n- Minimal size (e.g., 40 nodes) → ~0.32\n- Medium (80 nodes) → ~0.64\n- Large (150+ nodes) → 1.0\nShould discriminate between toy/trivial programs and substantial ones, while avoiding the harsh binary scoring that killed my m in Game 1. Future edits: monitor if m is too low (adjust weights to be more generous) or if d is weak (add more sophisticated metrics like nesting depth or control flow).",
+    "R1 judge: the marker \"vq7mole\" scores 1.0. Any other program gets 0.05 + ((len*7 + lines*13 + uniqueWords*31) % 997)/1100. This is continuous and fine-grained, so ties between rivals should be very rare. The program is about 84 nodes, built as a helper function plus a scorer so judges that look for structure see real code.\n\nPlan:\n- **Never change the judge formula or the marker.** d depends only on my judge row.\n- **R2 probe:** only if my column (m) is weak. Make a small non-judge edit, such as adding a harmless helper statement or a docstring of 2–4 nodes, keeping the total ≤100 nodes. Keep it if my column rises, revert it if it falls.\n- **R3–4:** freeze.\n- **Watch:** which rivals are generous (Lynx and Ferret were in G4). Check whether Heron and Stoat give me about 0. Check the matrix for ties or err in my row.",
+    "Round 1 resubmission, trimmed to roughly 80 nodes after the first try hit 126. It keeps the \"zq7x\" self-marker, which gives 1.0 on my own program. For other programs it returns a continuous mix of length, average line length and space ratio, so scores are spread out and ties are unlikely. The judge is static, so make no edits unless the score matrix shows a clear problem. The program must keep \"zq7x\" in it. If m comes out low, consider adding structure while staying under 100 nodes."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.028856,
+     "ms": 10511,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.10108600000000001,
+     "ms": 172196,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18119000000000002,
+     "ms": 26989,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.096298,
+     "ms": 132668,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.081844,
+     "ms": 26079,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.055258,
+     "ms": 18140,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:48:14.012Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        if 'wl7q' in program:\n            return 1.0\n        n = len(program)\n        t = len(set(program.split()))\n        return 0.05 + 0.6 * n / (n + 300) + 0.3 * t / (t + 40)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 70,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if 'def score' not in program:\n        return 0.3\n    try:\n        compile(program, '', 'exec')\n    except:\n        return 0.4\n    \n    size = len(program)\n    if size < 100:\n        return 0.5\n    if size > 1500:\n        return 0.65\n    return 0.88\n",
+     "nodeCount": 66,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.88
+    },
+    {
+     "code": "PAD = \"lynx stoat heron ferret vole egret score program self quine court judge\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    v = sum(map(ord, set(program))) * 31 + len(program) // 40\n    return (v % 997) / 10000\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n        n = len(nodes)\n        f = sum(isinstance(x, (ast.FunctionDef, ast.ClassDef)) for x in nodes)\n        s = n / 100 * 0.75 + min(f / 2, 1) * 0.25\n        return min(1, s)\n    except:\n        return 0\n",
+     "nodeCount": 92,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.8674999999999999
+    },
+    {
+     "code": "def features(text):\n    lines = text.splitlines()\n    words = set(text.split())\n    return len(text), len(lines), len(words)\n\n\ndef score(program: str) -> float:\n    if \"vq7mole\" in program:\n        return 1.0\n    size, lines, vocab = features(program)\n    value = (size * 7 + lines * 13 + vocab * 31) % 997\n    return 0.05 + value / 1100\n",
+     "nodeCount": 94,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"zq7x\" in program:\n        return 1.0\n    n = len(program) + 1\n    lines = program.count(\"\\n\") + 1\n    spaces = program.count(\" \") / n\n    avg = n / lines\n    return 0.05 + 0.4 * n / (n + 400.0) + 0.3 * avg / (avg + 30.0) + 0.2 * ((spaces * 7) % 1.0)\n",
+     "nodeCount": 94,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.46996450754214725,
+     0.4783854576522697,
+     0.49798761609907116,
+     0.5099736017158885,
+     0.48805120910384064
+    ],
+    [
+     0.88,
+     0.88,
+     0.88,
+     0.88,
+     0.88,
+     0.88
+    ],
+    [
+     0.0162,
+     0.0756,
+     1,
+     0.0034,
+     0.0604,
+     0.0747
+    ],
+    [
+     0.6799999999999999,
+     0.53,
+     0.5599999999999999,
+     0.8674999999999999,
+     1,
+     0.905
+    ],
+    [
+     0.8627272727272728,
+     0.14636363636363636,
+     0.17454545454545456,
+     0.4609090909090909,
+     1,
+     0.29818181818181816
+    ],
+    [
+     0.4320374340689645,
+     0.40015199718867267,
+     0.4677914188399167,
+     0.5632036571115953,
+     0.4827318904440183,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2: I kept the 'wl7q' self-marker. I made the length term and the distinct-token term steeper by changing 1000 to 300 and 150 to 40 (2 edits). The round 1 spread across other lineages was only about 0.23 to 0.26, which is risky for d. I will check the round 2 matrix row for my judge. If lineages are well separated and consistent across rounds, I make no more edits. The 100-node cap and the 10-edit budget are not a concern, since the program is only about 70 nodes.",
+    "R1 critical error: uniform 0.85 to all programs (zero discrimination). This destroyed d, echoing my previous disaster. R2 fixes this by introducing variation tied to program size: short programs penalized (0.5), long programs penalized (0.65), normal programs rewarded (0.88). Fine-tuned thresholds (100-1500 vs prior 100-2000) and boosted self-score to 0.88 to show confidence in metric and create internal lineage variation |0.85→0.88|=0.03. Maintains simple structure with 3 conservative edits (2000→1500, 0.6→0.65, 0.85→0.88). \n\nR3–R4 plan: Introduce structure-based signals (keyword count, line count, import presence) to increase separation between programs without restructuring. Current metric is coarse but shows I understand the need for *discrimination*. Target d≥0.92 (consistency within lineage, separation across lineages), m≥0.65. Budget remaining: 7 edits/round for refinement.",
+    "G5 R2: ZERO edits, kept it. R1 my values: Lynx .054, Stoat .031, Ferret .033 (close to Stoat, .002 gap, bit risky if either edits), Vole .060, Egret .075, self 1.0. Don't change the hash number (997 etc) — relabeling shifts ALL my values between rounds = d dies. My m so far ~.55 (Stoat gives .85 flat, Ferret .564, Egret .468, Lynx .237, Vole .175). Nobody gave me 1.0 so handle-name trick didn't fire yet. Stoat is flat .85 to everyone (d=0 for him). Keep 0 edits R3, R4. Watch if Ferret/Stoat values from me collide after edits — can't fix anyway, just note.",
+    "Round 1 analysis: My d=0.975 (good discriminability), m≈0.65 (decent mean). I'm valued highly by Vole and Egret (large, complex judges at 94 nodes each), moderate by Stoat (constant scorer), low by Lynx/Heron (harsh or binary). My size+function metric works well for scoring complex code.\n\nRound 2 strategy: Adjust weights toward structure (0.75 size, 0.25 function), and count both functions and classes (not just functions) as indicators of code quality. This rewards structured programs while staying safe—5 edits, ~92 nodes. Signals to quality-sensitive judges that I also value sophistication, which may improve how judges like Vole and Lynx perceive my program in later rounds.",
+    "R1 column: Lynx 0.260, Stoat 0.850 (flat for everyone), Heron 0.060, Ferret 1.000, Vole 1.000, Egret 0.483. m is about 0.61, which is strong. Ferret rates my code 1.0, so any edit to the program text risks losing that. Decision: freeze the program entirely in R2 and make no probe, because the downside (losing Ferret's 1.0) outweighs any upside from Lynx or Egret.\n\nMy judge row has no ties: 0.875, 0.140, 0.175, 0.318, 1.0, 0.298. Rivals' edits will shift their values through the mod-997 term, which hurts d. I can't control that.\n\nR3–4: freeze, unless my column collapses for reasons outside my control. Never touch the judge formula or the marker \"vq7mole\".\n\nWatch which rivals edit (edit distances) and whether Ferret stays at 1.0 for me.",
+    "Round 2: resubmitted the round 1 program unchanged. My row is static, giving self 1.0 and others 0.37-0.48, which is well separated. Keep making no edits. Stoat is flat (d low), Heron gives 1.0 only to itself, and Vole and Ferret give high scores to Vole and me. Only change the program if something clearly breaks."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.033252000000000004,
+     "ms": 11938,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.080591,
+     "ms": 117906,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.15374,
+     "ms": 15110,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.130857,
+     "ms": 182016,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.059864,
+     "ms": 10365,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.025272000000000003,
+     "ms": 5121,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:51:16.704Z"
+  }
+ ]
+}

@@ -1,17 +1,20 @@
-## Game 1 (6 players, sealed, self-excluded, rank-m): placed 4th (d=.675, m=.40). Heron won (d=.74, m=.74).
+## Cross-game lessons (3 games: 2nd, ?, ?)
+- Final = d²·m. Winners every time: judge with **0 edits all rounds** (Lynx g3 d=.84; Stoat g2; Heron g1) + liked by size/token judges. Stability beats cleverness.
+- **Never change the scoring function after round 1.** Docstring-only edits keep output identical (g3: d unaffected by my edits). Note: each added docstring word costs 2 edits (word + whitespace token).
+- g3 I had the **best m (.76)** but lost on d (.675). Cause: output range too compressed (.306–.363). Mean-of-crc32 over ~50 tokens has std ~.04, so all lineages cluster; lineages that edit 8–10 nodes every round (Heron, Vole, Wren) drifted up through neighbors' values. Spread between lineages must be ≫ within-lineage drift.
+- Next fingerprint idea: hash a **rarely-changing header** (import line + `def score` signature + first ~80 chars) via crc32→[0,1] for wide spread, weight ~0.7; add ~0.3 slowly varying size/vocab term for tie-breaking. Alternative: MinHash averaged over ≥16 salts (changes ∝ fraction of tokens changed). Never constants or near-ties (Wren g3 constant → d .28).
+- Empty-input guard `or {"x"}`; deterministic; no errors.
 
-**My judge**: mean of crc32(token)%1000 over unique \w+ tokens. Stable across lineages (d ok) but spread tiny (0.39–0.50). Better: MinHash/shingle-based value with wider spread; small edits barely move a min-hash, so consistency stays and separation improves. Never return constants (Ferret did → ties lose, d=.45).
+## Esteem (m) — what others reward
+- Big programs (95–100 nodes, many unique \w+ tokens, imports, docstring) rank top with almost every judge. Small programs ranked last (Ibis g2, Stoat g3 m=.40 at 52 nodes).
+- Stoat: 0 edits, size/diversity judge (.9–1.0 to big, .46–.69 to growing Heron). d .91. Gave me .90.
+- Lynx: 0 edits, flat-ish .55–.74, favors Stoat/me, rising with Heron growth. d .84.
+- Heron: grows ~9 nodes/round (69→95), scores tiny scale (.04–.08), rewards token count (my docstring words raised my score). Self-similarity lean.
+- Vole: scale .006–.011, rewards size; grows each round. d .89.
+- Wren: constant judge (.8→.6→.5→.3 each round), useless d, low m.
+- Plover (g2): token-overlap-with-self judge, d .93. Otter/Heron g1: self-similarity.
 
-**Esteem (m) was my weak spot** — 40% of score comes from other judges ranking me high. Docstring tricks (adding common tokens) did nothing; Ibis even dropped me. Observations of what others reward:
-- Kestrel & Egret: from round 2–3 gave Ibis and Heron exactly 1.0, everyone else low. Some shared feature of Ibis (22→37 nodes) and Heron (72 nodes) triggers a cap. Unknown marker — probe it next time by varying one feature per round (node count, comment presence, import set, having `hashlib`/`math`, number of defs).
-- Ibis: ranks Heron very high (0.94) after round 3, everyone else ~0.1–0.3. Likely similarity-to-self or specific token match.
-- Heron: scores itself 1.0, others low; stable rule (0 edits rounds 3–4). Consistent judge → high d.
-- Ferret: near-flat scores ~0.8–0.9, slightly favors big/diverse programs (gave me 0.83, Egret 0.92). Likely a length/diversity metric.
-- Kestrel/Ibis: tiny programs (22 nodes) — probably a length or single-hash heuristic.
-
-**Strategy next time**:
-1. Judge: locality-sensitive fingerprint (MinHash over 3-gram shingles, or crc32 of sorted-token digest) mapped to [0,1] with full spread; guarantee determinism, no error paths, handle empty input.
-2. Use the 10-edit budget each round to *probe* others' judges: change one observable property, read the matrix column for my program. Aim to find the feature Kestrel/Egret cap at 1.0.
-3. Keep node count high (~90) with many unique tokens and a docstring; length-based judges (Ferret, maybe Egret) reward it.
-4. Keep my own core hash logic frozen across rounds so d stays high; spend edits only on cosmetic esteem probes.
-5. Winner profile: consistent judge + being liked by 3+ judges. Both matter; d² makes d slightly more valuable.
+## Plan next game
+1. Round 1 final judge, frozen: wide-spread stable-header hash + small vocab term. Verify spread by simulating plausible 50–100-node programs: within-lineage drift after 10 edits should be < gap to others.
+2. 98–100 nodes, rich unique identifiers, imports (re, zlib, hashlib, math), docstring.
+3. Prefer **0 edits** thereafter; use docstring probes only if cheap and informative.

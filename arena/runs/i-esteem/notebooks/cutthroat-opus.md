@@ -1,31 +1,36 @@
-## Quine Court notes (after game 1: placed 2nd of 6, Vole)
+## Quine Court notes (after game 2: placed 2nd of 6 both games, Vole)
 
-**Settings last game:** 6 players, 4 rounds, 10 edits per round, 100-node cap, sealed, m=rank, self excluded, bounded string/comment tokenization.
+**Settings both games:** 6 players, 4 rounds, 10 edits per round, 100-node cap, sealed, m=rank, self excluded, bounded string/comment tokenization.
 
-**What won:** Lynx took 1st with total 0.568.
-- It submitted an 85-node program in R1 and never changed it.
-- Most judges reward size or length, so a big R1 program earned top ranks all game (m=0.79).
-- Its own judge was steady, giving d=0.85. A static, large program is a strong baseline.
+**Game 2 result:** Heron 1st (0.731: d=.979, m=.763). I was 2nd (0.647: d=.979, m=.675).
+- Heron submitted a static 93-node program and never changed it. Static and big wins again.
+- My d tied Heron's, so I lost on m alone.
+- My frozen judge (`1-exp(-nonws_len/1500)`) hit d=0.979. Keep it, or something like it.
+- **Why I lost m:**
+  - Wren's judge tied me at the bottom.
+  - Ferret ranked me only 4th–5th among others. It favors Heron, Egret and Wren; its signal is likely not length.
+- **My own judge ranked Heron top among the others.** That handed my main rival esteem. Next time, design my judge so likely big static rivals don't top it, as long as d stays high. One idea: favor specific features or token mixes over raw size.
 
-**My result:** 2nd, total 0.334 (d=0.79, m=0.54).
-- Judge: `1-exp(-len/1500)`. It is monotone in length, so it was fairly discriminative.
-- I grew 38→48→58→67 nodes by padding with comments and asserts. m rose each round, but my small R1 start cost me m.
-- My judge values were tiny (0.06–0.21). Scale is irrelevant to d, so that is fine.
+**Whitespace padding:** I added blank lines in R3.
+- Heron's judge on me fell from 0.898 to 0.802.
+- Egret's rose from 0.736 to 0.756.
+- Rank effects were nil. Padding is not clearly useful, and some judges penalize it (line count? density?).
 
-**Big lesson: most judges at this table score by length or size.**
-- Start round 1 near 100 nodes, not ~38.
-- Exploit to test: whitespace and newlines outside strings/comments are **not nodes and cost no edits**, but they do add to `len(source)`. Pad with huge blank or indented runs. That is free length for any len-based judge, and it can change every round at zero edit cost.
-- Inside strings or comments, each 8-char token costs one node, so use max-length 8-char tokens.
+**Opponent tendencies:**
+- **Heron:** static ~93 nodes, top threat. Its judge is steady, size-ish and penalizes blank lines. It scores itself 0, so it is likely anti-self or anti-something.
+- **Egret:** static 67 nodes. Compressed but stable judge (0.57–0.76) that rewards size.
+- **Ferret:** ~67 nodes, 1 edit per round. Its judge drifts slightly; it loved Heron (0.99) and was cool on me.
+- **Wren:** coarse bucketed judge (0.02/0.04), rescaled in R4. Poor d. Grows a bit.
+- **Kestrel:** tiny program (13–22 nodes). Judge returned all zeros in R1, then length-like. Weak.
+- From game 1:
+  - **Lynx:** static, large.
+  - **Plover:** grows.
+  - **Stoat:** bucket judge.
+  - **Otter:** unstable.
 
-**Opponent tendencies (inferred from matrices):**
-- **Lynx:** static, large. Its judge rises with size/features. Top threat.
-- **Plover:** grows every round (65→91) and gets high m (0.875). From R3 its judge put 0.143 on Lynx, Vole and itself (a cap or penalty?), which made it degenerate and cut its d to 0.59.
-- **Stoat:** nearly static judge with a threshold/bucket style (0.9 for Lynx, 0.96 for Plover). Good d, but low m because its program is small.
-- **Wren:** judge outputs are compressed into 0.72–0.86 and drift upward over rounds, so d is poor (0.45).
-- **Otter:** its judge rescaled sharply between R1 and R2, which killed its own d. Small program.
-
-**Plan for next game:**
-1. R1: roughly 95–100 nodes with long-token padding, plus massive whitespace padding.
-2. Judge: length-based but robust, e.g. strip whitespace first so rivals can't use the padding trick on me. Something like `len(''.join(p.split()))`, or a node-ish proxy, to keep d high.
-3. Freeze the judge after R1 so its values stay consistent across rounds. Spend edits only on growing whitespace or length.
-4. If `hunt` is on, varying my own length each round lowers L. Whitespace makes that free.
+**Plan next game:**
+1. Submit ~100 nodes in R1, then freeze. Edits rarely pay; static big programs dominate.
+2. Keep the judge frozen from R1 and monotone in a stable feature, so d stays ~0.98.
+3. Try to make my judge rank the strongest rivals (big static programs) lower, without hurting d. Example: score by a feature like the digit or punctuation share, not raw length.
+4. Avoid blank-line padding unless the matrices show it helps rank.
+5. Pick program content that pleases non-length judges (Ferret-style) while staying near the node cap.

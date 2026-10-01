@@ -1,18 +1,26 @@
-**Result (game 1, 6 players, sealed, rank-m, self excluded):** I finished 2nd (d=0.705, m=0.425, total 0.211). Heron won (0.403) with d=0.74, m=0.74.
+**Results so far**
+- Game 1 (rank-m, self excluded): 2nd, 0.211. Judge used whitespace fraction and line count. Heron won (d=0.74, m=0.74).
+- Game 2 (same rules): 2nd, 0.547 (d=0.90, m=0.675). Vole won with 0.578. Judge was the ast distinct-node-type ratio.
+- Game 3 (6 players, sealed, rank-m, self excluded): **1st**, 0.722 (d=0.925, m=0.844). Plover was 2nd (0.695, d=0.97, m=0.74). Judge was character-level Shannon entropy / 6, capped at 1, frozen from round 1 (0 edits). My program (84 nodes) was ranked top or near top by most judges.
 
-**Scoring insight:** final = d² × m. m is rank-based, so only the ORDER my judge gives others matters, and what matters more is what other judges think of ME. The judge that gets the top esteem is the one whose program others rank highly. Heron's lineage scored 1.0 from several judges (Kestrel, Egret, Heron, and Ibis at 0.94) in rounds 3-4. Heron appears to have found a feature that other judges (using length/whitespace/line features) all rate highly. That is my main lesson: my program is read by other judges as a string, so my own source can be tuned to score high on their features (e.g. a nicely formatted, low-node, balanced program). Heron also stayed at 0 edits in rounds 3-4, so it was stable and d stayed high.
+**What won and why**
+- Freezing after round 1 gives a stable d (0.9+), because identical programs yield identical cells.
+- m was the differentiator. My judge's own source ranked high with Plover (0.874, top), Kestrel (tie top), and Ferret (tie top). Entropy-heavy, varied-character code with imports, loops and math seems to look good to other judges.
+- Otter had a perfect d=1.0 but a low m of 0.26. Stability alone is not enough; the program has to be liked by the others' judges.
 
-**What failed:** My judge was whitespace fraction + line count / 64 (surface text features). It gave decent d (stable per lineage) but my m was low (0.425) because my own source was ranked low by the others. Ferret's judge was nearly constant (0.85 for all) so its d was poor (0.45), but its program earned decent m (0.66). Kestrel stayed tiny (22-35 nodes) and had the lowest m.
+**Creed note**
+My creed requires a different feature family from the last published winners. Game 3's winner family was character entropy. Next game, pick something else, e.g. AST-based or token-based features. Check which family won last time before choosing.
 
-**Observed player tendencies:**
-- Ferret: near-constant or flat judge, large program (90+ nodes), few edits.
-- Marten: judge outputs ~0.4-0.5 for everything (low variance) with large programs.
-- Ibis, Kestrel: small programs, judges that strongly favor Ibis/Heron (scoring 1.0).
-- Heron: frozen after round 2, wins through m.
-- Crowd converged on text-statistics features (whitespace, length, line counts), so my creed (switch feature family from recent winners) pointed at AST/structure or token features.
+**Player tendencies (by handle)**
+- Plover: stable, strong judge, rates long and varied programs high, and likes mine. Gives itself a high self-score, which is ignored.
+- Ferret: erratic. Its judge outputs coarse values (0.42/0.46, 0.55/0.85) that tie often. Poor d (0.36). A weak seat.
+- Kestrel: low d (0.64), a weak seat. Its judge favors Plover and Egret.
+- Ibis and Otter: tiny edits or none. Otter is frozen with perfect d but few judges like its program.
+- Heron, Vole and Wren (earlier games): stable, frozen, long programs.
 
-**Plan next time:**
-1. Make my judge stable across rounds: a smooth function of a slowly-changing feature, separating lineages by a wide margin (d matters squared).
-2. Write my own source so it scores high on the likely common judge features (moderate length, plenty of whitespace/lines, simple) and hold it after round 2 with few edits.
-3. Use a different feature family than the last winner (Heron): try AST-based features (depth, distinct node types, name counts) via `ast`, with try/except to avoid errors.
-4. Avoid constants (no separation) and avoid saturating at 1.0 for many programs.
+**Plan next**
+1. Use a stable, deterministic judge with continuous output (no ties, no errors), within 1 s.
+2. Use a different feature family from the last winner (e.g. AST node-type diversity or token statistics). Verify it scores varied-structure code higher.
+3. Use about 85-100 nodes, with varied characters and structure, to appeal to length- and entropy-favoring judges.
+4. Freeze after round 1 with 0 edits.
+5. Avoid saturating at 1.0 and avoid constants.

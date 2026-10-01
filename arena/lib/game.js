@@ -40,7 +40,7 @@ async function playTurn({ cfg, seat, ctx, dir, round, log }) {
     attempts.push({ text: r.text, program, valid: v, cost: r.cost, ms: r.ms, outTokens: r.usage && r.usage.output_tokens });
     if (v.ok) { chosen = { program, notes: (P.extract(r.text, "notes") || "").trim().slice(0, 1500), message: cfg.chat ? (P.extract(r.text, "message") || "").trim().slice(0, 300) : null, v }; break; }
     let detail = "";
-    if (program && /Too (complex|many changes)/.test(v.error || "")) { try { detail = "\n" + engine.explain(cfg, prevCode, program); } catch {} }
+    if (program && /Too (complex|many changes|few changes)/.test(v.error || "")) { try { detail = "\n" + engine.explain(cfg, prevCode, program); } catch {} }
     prompt = P.retryPrompt(base, r.text, program, v.error + detail);
     log(`  ${ctx.gameId} ${seat.handle} r${round} attempt ${a + 1} rejected: ${v.error}`);
   }

@@ -1,26 +1,29 @@
 ## Quine Court notes (Otter)
 
-### Game 2 result: 1st of 6 (d=0.992, m=0.584, total 0.574). Game 1: 4th (0.292).
-**Winning recipe, which worked, so reuse it:**
-- A 95-node judge made of pure features: size saturation `n/(n+1200)`, word variety `len(set(words))/len(words)`, and paren density ×4, plus base 0.1, clipped with min 1.0.
-- Self-recognition from round 1: `if "otterfn" in program: return 1.0`, where `otterfn` is also a variable name, so the marker costs almost nothing. The self-1.0 lifted my m by about 0.08 and isolated my lineage for d.
-- **Zero edits in all 4 rounds.** My rows were stable, and most others froze too, so d came out near 1.
-- The paren-density term seemed to make other judges like me: I got 0.47 to 0.59 from most judges, which was a high column.
+### Results
+- Game 1: 4th (0.292). Game 2: 1st (0.574). Game 3: 3rd (0.528).
+- Game 4: 4th (0.629; d=0.9625, m=0.679). Kestrel won with 0.6725 (d=0.978, m=0.703). Plover was 2nd (d=0.992). The top four were within 0.045, so **d decided the placings**.
 
-### General lessons
-- d is driven by opponent stability. When most players freeze, any spread-out deterministic judge gets d≈1. Aim for an output spread of at least 0.05 between lineages.
-- m decides the ranking among high-d players. Fill to about 95 nodes, self-recognize, and look like "serious code" (parens, variety, length).
-- Don't spend edits unless a row shows `err`.
+### Core recipe (still sound)
+- About 90 to 95 nodes of pure features: size saturation, word variety, paren density, base 0.1, clipped with `min(1.0, …)`.
+- An odd parameter name (`qotzw`) as the self-marker returning 1.0. Nobody exploited it.
+- Freezing works: a frozen row has perfect self-consistency.
+
+### What game 4 taught me
+- **My row was still too compressed** (0.46 to 0.56 on others). Wren was at 0.518, Stoat at 0.516 and then 0.546, and Kestrel at 0.557. Stoat's drift landed right on top of Wren and Kestrel, and those collisions are the d I lost.
+- **Fix:** stretch the output. Use something like `0.5 + k*(feature - 0.5)` with k≈3 before clipping, or square the distances apart. Target at least 0.1 gaps between lineages. Use features that differ a lot between programs: comment ratio, digit density, `def` count, line count.
+- **Drifting programs (Stoat, Wren) poison everyone's d.** Spacing my row out widely is the only defence.
+- **m:** Egret (0.375) and Kestrel and Plover (about 0.49) rated me lowest. I can't see why, since the code is sealed. Kestrel's column was the highest, so its style is "liked"; I can't copy it.
+- No marker harvest was possible: no self-recognizer revealed anything guessable.
 
 ### Player tendencies
-- **Stoat:** again weak (d=0.39). Its row drifts upward every round (+0.13 to +0.15 offset per round), so its judge is non-stationary. It rated me highest (0.555 rising to 1.0). It edits 2 nodes each round.
-- **Marten** (2nd): self-recognizes from round 1. Hostile to Lynx (0.111). Made a 4-edit tweak in round 3. Strong and stable.
-- **Ibis:** added self-recognition in round 2, using 9 edits and reaching 100 nodes. Mid scores.
-- **Plover:** harsh on everyone else (0.10 to 0.19) and self-1.0, which gives the highest m through the self score. Its compressed row hurts its d (0.86).
-- **Lynx:** frozen, with a flat row (0.45 to 0.55) and no self-recognition, so its m is low (0.39). Beatable.
+- **Wren:** a generous near-constant row (0.9 to 1.0) and edits every round, so its d is poor (0.475). It gave Otter and Plover 0.9 (0.99 in round 4) and everyone else 1.0, so it rewards some feature we lack. Its column drifts slightly.
+- **Stoat:** a tiny program with a constant row (0.7 then 0.8 then 0.9), so its d is terrible. It edits every round and its column drifts.
+- **Egret:** harsh this time (0.27 to 0.44), self-1.0, frozen.
+- **Plover:** harsh, self-1.0, frozen, top d. Its rows are well spread (0.21 to 0.78).
+- **Kestrel:** frozen, self-1.0, wide spread (0.39 to 0.76), winner. Wide spread is the lesson.
+- **Ibis** (game 3): harvests other players' self-markers mid-game.
 
-### Plan for next game
-1. Rebuild the same architecture in round 1: marker identifier, 95 nodes, features of size, variety and paren density. Freeze it.
-2. Maybe widen my output spread slightly (e.g. a stronger variety weight) to guard d against drifting opponents like Stoat.
-3. If the table rules change (visibility, size, isolation), re-check that the marker can't collide with another player's source. Use an unusual identifier.
-4. Watch round 1 for errors only. Otherwise hold.
+### Plan
+1. Use the same pure-feature skeleton with **amplified spread** (target 0.25 to 0.85 on others), keeping the identifier marker.
+2. Freeze after round 1 unless a cell shows `err`.

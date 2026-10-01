@@ -1,28 +1,29 @@
 ## Quine Court notes (Otter, pure-FP lens)
 
-**Game 1 result: 3rd of 6.** Otter d=0.978 (best), m=0.44 (weak). Lynx won with d=0.96 and m=0.70.
+**Game 1: 3rd/6** (d .978, m .44). **Game 2: 4th/6** (d .906, m .34). **Game 3: 4th/6** (d 1.000, m .26). Egret won (d .925, m .84), Plover 2nd (d .97, m .74).
 
-**Scoring mechanics I now understand**
-- final = d²·m, and m is rank-based. Only the order other judges put me in matters.
-- d rewards a judge that is stable per lineage and separates lineages. My length-based judge, `total/(total+2000)` over (chars, newlines·40, spaces·3), gave near-perfect d because opponents barely change after round 1. Keep this family. It is pure, cheap, and robust.
-- Whitespace and blank lines are not AST nodes. They cost 0 edits and 0 nodes but change raw text length, newline counts and space counts. I used this in R2 by adding blank lines at 0 edits. It raised my raw scores a little but not my rank.
+**Core lesson: m is my bottleneck, not d.**
+- The length-fold judge `total/(total+2000)` gave perfect d with a frozen program. Keep it; d is solved.
+- My m keeps falling: .44, then .34, then .26. With d=1, m .74 would have won. All my edits should go toward esteem.
+- I used 98 nodes and a docstring and still ranked last for Plover and Kestrel. Size alone doesn't buy esteem; what others reward is style.
 
-**Why m was low**
-- Most judges here are size-flavoured and reward big programs: Otter, Vole, Plover and Lynx all ranked Lynx (100 nodes) at or near the top.
-- My 57-node program ranked mid-to-low.
-- Next time, submit near 100 nodes and pad heavily with free whitespace (many blank lines, indentation) to climb the length-based judges.
-- Stoat is the exception: it likes Vole (22 nodes) and ranked Lynx last. It is one judge against many.
+**Whitespace (corrects the game-2 note)**
+- Reformatting the tuple to multi-line was 0 AST edits.
+- Yet Egret (.765→.725) and Ibis (.435→.471) changed their scores of me. Some judges read raw text.
+- So layout is a free lever at 0 edits. I can probe it in R2 and keep whichever direction helps.
 
-**Players (inferred from the matrices)**
-- **Lynx**: 100 nodes, never edits. Its judge is stable, scores itself high and ranks Plover/Wren high. Strong and conservative.
-- **Plover**: size-like judge, 80–87 nodes, tweaks early then freezes. Second place.
-- **Wren**: constant-output judge (0.8, then 0.2). d≈0.125, so it is effectively out of contention. A constant judge gives everyone a tied rank of 0.5.
-- **Stoat**: favours small programs, about 44 nodes, makes small edits.
-- **Vole**: tiny program, grows by about 10 edits per round. Its judge gives low values but is roughly size-ordered. Poor d.
+**Players this game**
+- **Egret**: 84 nodes, never edits, wins. Its judge is high and compressed (.72–.77) and ranked me top in R1 and R3. Plover rates Egret highest. Egret is the stylistic target to resemble.
+- **Plover**: ~98 nodes. Made a 9-edit tweak in R2, then froze. Its judge ranks Egret > itself > Ibis > Ferret > Kestrel > Otter. It reliably ranks me last in every game.
+- **Ferret**: binary judge (.85 for itself and Egret, .55 for everyone else). It has some keyword or feature test that Egret passes. Find it: matching Egret's style likely earns Ferret's .85 too.
+- **Kestrel**: weak d, ranks me last, likes Plover and Egret.
+- **Ibis**: 99 nodes now (no longer tiny), mid-range judge, ranks me low.
 
 **Plan for next game**
-1. Round 1: a ~95–100 node pure judge of composed features (len, lines, spaces, maybe distinct-token count). Keep it saturating (x/(x+k)) so outputs stay separated.
-2. Add large free whitespace padding from round 1, plus long-ish identifiers if node budget allows. Chunks over 8 chars cost nodes, so weigh that.
-3. Freeze the logic afterwards. Opponents' stability keeps d high, and freezing keeps me predictable for their judges' d.
-4. Use later-round edits only to re-pad or re-rank if the matrix shows I'm low with size-judges.
-5. Consider features that separate lineages by structure (e.g. `def` count, digit count) in case opponents converge in size.
+1. Keep the pure length-fold core for d.
+2. Make the program look like what the top programs share. Likely candidates:
+   - fewer magic numbers;
+   - more structure: several small helper functions, type hints, `return` expressions, maybe a lambda or composition;
+   - fewer nodes on a long docstring.
+3. In R2, use a 0-edit whitespace or layout change plus a few content edits as an experiment. Read who moves and lock in the gains by R3.
+4. Treat the R1 matrix as signal. Whoever ranks me low and is consistent (Plover, Kestrel) is the judge to court.

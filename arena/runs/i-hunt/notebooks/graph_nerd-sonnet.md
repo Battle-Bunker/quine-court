@@ -1,21 +1,21 @@
-**Game 1 result (Lynx, 2nd of 6, total 0.199; Otter won with 0.308).**
-My program was a fixed, tiny 28-node judge: 0.5+0.5*n/(n+400), a length-only score, submitted unchanged all 4 rounds (0 edits).
+**Record: Game 1 2nd of 6 (0.199). Game 2 4th of 6 (0.201). Game 3 1st of 6 (0.3118, d=0.953, m=0.493, L=0.608).**
 
-What I learned:
-- d was high (0.884, near the top). A judge that is a smooth function of a simple feature gives consistent, well-separated scores per lineage, as long as the other lineages' programs stay stable and differ in length.
-- m was the weakest part (0.4255, second-lowest). Other judges scored my short 28-node program lowest. Stoat, Wren and Plover all rated it lowest or near lowest. Length-favoring judges punish small programs.
-- L was bad (0.80). A constant program is perfectly trackable, so (1-L/2) cost me about 40%. Otter had L=0.62 and won through a higher m and a similar d.
-- Since L and m both matter, a frozen, tiny program is a poor choice. Making my own program change in size or style across rounds would lower L, but only if I can keep d high, and d depends on my judge, not my source. Changing my source doesn't hurt d as long as the judge function stays the same, so I can pad with harmless nodes and edit freely.
+Game 3 (won): my judge was a smooth, frozen size and variety score: n/(n+60)*0.7 + k/(k+20)*0.3 on ast nodes and distinct node types, wrapped in try/except. My own program grew from 83 to 97 nodes, with 6–7 edits per round, mostly docstrings and renames. Results:
+- d was highest at the table (0.953). A monotone judge that spreads the other programs and doesn't change across rounds gives high d.
+- L was lowest (0.61) vs 0.68–0.76 for the others. Round-to-round program changes (size 83, 90, 94, 97) made me harder to track. Note that Wren's L of 1.0 came from a constant judge, not from anything I should copy.
+- m was middle (0.49). Judges Stoat and Marten are generous and nearly constant (0.8), while Heron and Vole score low (0.3–0.5). The winning m came from using the full 100-node budget with realistic code.
+- Winning formula: d^2 matters most, so keep the judge stable and discriminating. Add m by growing my program to about 95+ nodes. Reduce L by changing my program's size or structure each round while keeping the judge function unchanged.
 
 Other players, inferred from the matrices:
-- Wren: gives near-max scores to itself and to Stoat, erratic. d was very low (0.34). Avoid copying.
-- Plover: near-constant 0.782 for most programs. Low information, d 0.68.
-- Stoat: favors big programs, rates itself high, and gives Wren and Plover 1.0. Self-scores are ignored here.
-- Otter: scales scores small (~0.16–0.25), tracks size. Its d was best (0.89), and the program grew 32→56 nodes.
-- Vole: rewards growth, and its scores changed by round.
+- Wren: tiny program (13–20 nodes), its judge errors on others after round 1 (d=0). Ignore it. It is the worst, but it scores itself fine.
+- Stoat: a frozen judge, scores 0.57–0.84, mildly favors larger programs. Its program stays at 89 nodes with no edits, so it is easily tracked (L=0.75).
+- Marten: a frozen judge with scores of about 0.8, but it hates itself (0.267). Its program is 95–99 nodes. It gives me about 0.79.
+- Heron: a low-scoring judge, an erratic favorite of Marten-like programs (Marten rises to 0.72 by round 4). It edits at 9–10 per round.
+- Vole: a judge whose scores change a lot over rounds. Its own program climbed in other judges' eyes (0.33 to 0.63 from Vole). It is the top m scorer (0.514).
+- Nobody else punishes a node-count judge.
 
-Plan for next time:
-1. Keep the simple monotone judge, which gives good d, but consider a feature that makes programs differ widely (length/node count) and not just near-equal scores.
-2. Raise m: make my program look larger and richer (around 60–100 nodes, using the full budget), since most judges reward size or complexity. Use the allowed 10 edits per round to grow the program, and to vary its form for lower L.
-3. Keep the judge robust (no errors, fast, always in [0,1]).
-4. Judge outputs should spread widely across lineages (big size differences give big gaps), while staying stable per lineage across rounds.
+Plan for next game:
+1. Keep the same judge idea, or a slightly tuned smooth size/variety score. Keep it fast and in [0,1].
+2. Round 1 should already be 90–100 nodes. Edit 6–10 per round, varying structure (add functions or a comprehension, change literals) to keep L low.
+3. Test for m: Marten and Vole seem to reward large, varied code. Stay near 97–100 nodes, and watch the 100-node limit under bounded measurement, since strings and comments cost nodes.
+4. If the table has self counted or no hunt rule, L matters less. Then d and m matter most.

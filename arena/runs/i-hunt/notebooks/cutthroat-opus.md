@@ -1,26 +1,25 @@
 QUINE COURT NOTES (Vole)
 
-GAME 1 (6p, 4 rounds, sealed, self-excluded, hunt/L on, 100-node cap, 10 edits/round, bounded string tokens): placed 5th of 6. d=0.57 m=0.63 L=0.475 total=0.157. Winner Otter scored 0.308 with d=0.89.
+RESULTS
+- G1: 5th (d=0.57). Changed judge mid-game, which wrecked d.
+- G2: 2nd (0.223). Lost to Heron on L (0.52 vs my 0.72).
+- G3: 2nd (0.262; d=0.89, m=0.51, L=0.71). Lynx won 0.312 with d=0.95 and L=0.61. Marten was 3rd, only 0.0004 behind me.
 
-WHAT FAILED
-- I changed the judge formula between R1 and R2. That wrecked my d, and d is squared. Lock the judge formula in R1 and never touch it. Spend later edits only on the body or padding that the judge doesn't read.
-- My judge measured raw length. Rivals who grow their code (Otter 32 to 56 nodes) drift under that feature and cost me consistency. I need features that are stable within a lineage but differ across lineages, such as distinct-char count or identifier set, and not length.
-- Judge output must be fine-grained. Ties lose.
-
-WHAT WORKED
-- Padding with a comment raised my m. It got the top m (0.63) because many judges are length-based: Stoat saturates to 1.0, and Lynx and Otter rise with length.
-- Morphing my program each round kept L low (0.475), which gives up to about 1.76x.
-- Bounded tokens mean comment padding costs nodes and edits. A long single "word" is cheap: one 8-char chunk equals one node.
-- Winning formula: high d first, then m, then low L. d² dominates.
+CORE LESSONS
+- Score = d² × m × (1 − L/2). d is squared, so d is the biggest lever. Lock the judge in R1 and never change it.
+- My distinct-char judge (len(set(code)) + vowel frac)/100 is too sensitive to renames. Rivals morph by renaming, so my readings drifted (Lynx 0.40→0.46, Wren 0.23→0.28) and Heron's 0.391 tied Stoat's 0.391. That capped d at 0.89. Next judge must ignore identifiers and literal text: score keywords, operators, structure and line counts after stripping names, strings and comments. It still needs fine separation, since ties lose.
+- Most opponents' judges are near-static. Stoat and Marten gave everyone the same values in all 4 rounds, so my morphs couldn't move them. L can only drop by being confusable, i.e. matching another lineage's value in their eyes (Stoat scored Vole = Lynx = 0.825). Morph toward other players' feature values, not just "change stuff".
+- Exotic-char renames (QXJKWY, 0o7_64) did not reduce L enough. Spend edits on what judges likely read: length, line count, distinct chars, node count.
+- Keep programs valid. Run R1 at ~60–65 nodes to leave room to grow.
 
 PLAYERS
-- Otter: the winner. Low-scale, length-ish judge (0.16–0.26), very consistent. Grows its program each round, which also dodges L.
-- Lynx: static 28-node program, 0 edits all game. Fine length-like judge. High d, but easily tracked (L 0.80).
-- Stoat: saturating length judge; 1.0 for long programs. Rarely edits. Exploit with length.
-- Plover: near-constant ~0.78 judge, but docks some programs (mine: 0.52–0.68, Wren's too), maybe for odd characters or comments. Moderate d.
-- Wren: coarse judge (0.25 steps), erratic, d=0.34. Harmless.
+- Lynx: G3 winner. Very stable, well-separated judge (0.29–0.60) that is robust to rivals' morphs. Morphs 6–7 edits/round. The model to beat and copy.
+- Marten: static high judge (~0.79–0.84). Scores itself 0.267. Close rival.
+- Stoat: 0 edits, static judge (0.57–0.84). Strong m giver.
+- Heron: low-scale judge (0.06–0.72). Heavy morpher, edits up to 10 each round. G2 winner.
+- Wren: tiny program (13–20 nodes). Judge errored on everyone from R2 on, so d=0. Harmless.
+- Earlier games: Egret static and strong; Kestrel a length judge; Ferret and Otter grow each round.
 
 PLAN NEXT GAME
-1. R1: a precise, fixed judge. Candidate: a weighted mix of stable structural counts (e.g. len(set(program)), count of "def"/"return"/"(") mapped continuously. It must be robust to comment padding. Maybe strip `#` lines before measuring.
-2. Change my own code each round (padding growth plus cosmetic renames) to raise m from length judges and keep L low. Keep the judge logic identical.
-3. Before R1, sanity-check that my judge separates distinct programs without ties.
+1. R1: a structure-only judge (strip names, strings and comments; measure token/keyword mix) with fine output. Check for ties.
+2. R2–R4: logic untouched. Use 8–10 edits to steer my features toward the most-trackable rival's.

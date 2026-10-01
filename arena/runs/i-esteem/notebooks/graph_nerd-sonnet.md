@@ -1,22 +1,27 @@
-**Game 1 result (Lynx, seat 3): 1st, total 0.568 (d=0.849, m=0.7875).**
+**Record: Game 1 (seat 3) 1st, total 0.568. Game 2 (seat 6) 1st, total 0.600 (d=1.0, m=0.6).** The same strategy won both games.
 
-**What I did:** Submitted the same program all 4 rounds (0 edits). It was a fixed, deterministic size/diversity judge: the AST node count divided by 400, plus the count of distinct node kinds divided by 30, averaged. It has no dependence on other rounds, so it scores each lineage very consistently. That gives high d, and my own lineage is excluded from d. The judge was also well-ordered, so the m I got from others was decent.
+**Strategy (keep it):** Submit the same fixed, deterministic judge in all 4 rounds (0 edits). It computes AST node count/400 and distinct node-kind count/30, then averages the two. It wraps parsing in try/except and returns 0.1 on failure.
 
-**Why it won:**
-- d² × m rewards a stable judge. A pure function of the source's structure, with smooth scale, gives stable scores per lineage. Lineages grow slowly (10 edits per round), so the scores stay close together per lineage and separate from other lineages.
-- My own program (85 nodes, never edited) was the largest or near-largest one. Judges that score on size/complexity rank it highly. Stoat scored me 0.9 and everyone else ranked me well. m of 0.79 came from being big and rich in node kinds, at no edit cost.
-- Plover got the best m (0.875) by growing to 91 nodes. Size and complexity seem to be what most judges reward.
+**Why it works:**
+- d is computed over the other lineages only, and my own lineage is excluded. A pure structural function of the source gives each lineage nearly the same score every round, since lineages move only a little per round. That kept d at 1.0 in game 2.
+- Under the rank variant of m, only my ordering of the others matters. A size/diversity ordering seems to match what the other judges reward. I got m=0.6, the highest at the table.
+- My program was 96 nodes, close to the 100-node cap. It was submitted at full size in round 1 and never edited.
+- Lesson: d² × m is dominated by d once d is about 1. After that, m decides the placement.
 
-**Other players (inferred):**
-- Stoat: its judge gave a huge 0.9 to my program and was near-constant otherwise. Stable, so it had high d (0.83) but low m (0.275), meaning its program is unattractive to others.
-- Wren: its judge gave near-constant ~0.73–0.86 to everything, which is a weak separator, so its d was low (0.45).
-- Otter: its judge changed between rounds (round 1 scores were low, later ones high), which hurt its d. Its m was the lowest.
-- Vole: its judge scored everything low (0.06–0.2), but with a consistent order. It grew its program each round and had good d.
-- Plover: its judge was erratic (0.143 was a repeated floor value, probably a fallback) and had low d. It grew its program to the size limit, and that gave it top m.
+**Other players (inferred; seat and handle assignments change between games):**
+- Plover: its judge scores everything high (about 0.74–0.84) and in a stable order. It reached d=1.0 and m about 0.56, and is the main rival.
+- Otter: its judge is stable at 0.37–0.50. It reached d=1.0 and m about 0.53.
+- Marten: its judge uses repeated floor values (0.161–0.163). It is mostly stable, with d about 0.9.
+- Ibis: its judge changed between rounds, with scores rising from 0.32 to 0.43 and then stable. It had d=0.64.
+- Stoat: its judge rewrote its scores between rounds (for example a 0.9 → 0.28 swing). It had d=0.48 and m=0.25, the worst result. Changing the judge hurts d badly.
+- In earlier games, Wren gave near-constant scores (low d), Vole scored everything low but in a consistent order, and Plover was erratic.
+
+**Observations:**
+- Everyone's own program was scored at roughly the same level as other programs, so self-scores carry no information.
+- Players who changed their judge or program a lot lost d. The 10-edit cap rewards staying put.
 
 **Plan for next time:**
-1. Keep the stable-judge approach: a deterministic judge that never changes (0 edits), which keeps d high.
-2. Consider making the judge a bit more discriminating between lineages (e.g. add structural features such as depth or distinct-token ratios) to widen gaps, but don't change it between rounds.
-3. Use the free first-round size (up to 100 nodes) and submit a rich program, since judges seem to reward size and variety. Stay near 100 nodes.
-4. Avoid erratic outputs, errors, and constants. Wrap parsing in try/except and return a mid-low value on failure.
-5. If the table rules change (for example a "hunt" variant that rewards being hard to track), revisit. A fixed program is easy to track, so add small edits to it.
+1. Repeat the same judge with 0 edits. It has won twice, so don't over-engineer it.
+2. If a "hunt" variant appears (a multiplier of 1 − L/2 for being hard to track), add small, noisy edits to the program. The judge must stay deterministic, but L is about how trackable my scores are, so test this carefully.
+3. If self is counted or m is raw, check whether a higher-range output helps. Plover's high scores would help it under raw m.
+4. Never use randomness or time. Avoid errors and constants.

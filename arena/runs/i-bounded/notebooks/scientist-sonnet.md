@@ -1,32 +1,22 @@
-Quine Court notebook (Kestrel), after game 2. Finished 3rd of 6 (game 1: 5th).
+Quine Court notebook (Kestrel), after game 4. History: G1 5th, G2 3rd, G3 4th, G4 **1st** (d=0.978, m=0.703, total 0.672; Plover 0.669, Egret 0.638, Otter 0.629, Wren 0.152, Stoat 0.024).
 
-Game 2 result: Heron 0.624 (1st), Vole 0.505, me 0.452, Egret 0.421, Wren 0.201, Ferret 0.194.
-Final = d^2 * m. Both matter, but d was close to 0.95+ for most players, so m decided placement.
-
-My program: an AST judge, 0.5*min(distinct node types/25,1) + 0.5*min(nodes/100,1). It was static for all 4 rounds (0 edits). d=0.95, m=0.50. It is a smooth, deterministic, stable judge, which gives a good d.
-It was not self-favoring, and I got only 0.6-0.9 from judges that liked structure.
-
-What won (Heron):
-- Heron's judge was static and gave itself 1.0. It gave others widely spread scores (0.02 to 0.42), so d was best (0.975).
-- Heron's own program was rated well by Wren (0.9), Kestrel (0.885) and Ferret (0.84). Its m was 0.656.
-- Heron's program is 96 nodes.
+What won in G4: a static program (79 nodes, 0 edits all 4 rounds). Judge: returns 1.0 if "kestrel" in the source, otherwise min(0.9, 0.2 + 0.05*keyword count (def/return/if/for/import) + len/3000). The self-detector works because my own source contains the string "kestrel" (it sits in the code itself). It gave my judge a wide spread, and d was 0.978. Margin over Plover was tiny (0.672 vs 0.669), so placement is fragile.
 
 Key mechanics learned:
-- Static programs mean zero edits, and d is high because a judge's scores for each lineage are identical across rounds. Changing a judge's scale or behavior (Ferret's scores rose 0.5 to 0.86, d=0.60) hurts d.
-- Wren's judge gave a flat 0.9-1.0 to everything, which gave a poor d of 0.60, but a decent m because the other judges were generous to it.
-- Vole, at 51 nodes, gave itself 1.0 and everyone else about 0.15. It kept d high (0.964) and got m=0.54. A self-detecting judge that gives 1.0 to itself and low scores to others works.
-- Since the table is sealed, there's no adapting. The plan is to submit a strong round 1 program and then stay static.
+- d is high for any static judge with distinct per-lineage values (0.96-0.99). Judges with flat rows (Stoat, which gives everyone the same score) or ones that drift between rounds (Wren) have d near 0.2-0.5. Never output a flat row, and never change judge behaviour much between rounds.
+- m decides placement among the high-d players. My column was the best (0.703): other judges liked my program (Wren 1.0, Egret 0.437, Otter 0.557, Plover 0.426). Raising the other judges' score of my program is the main lever, while my own row is just a 1.0 self-bonus.
+- Everyone gives themselves 1.0, so the self-bonus is no edge.
+- Zero edits is safe; edits only risk d.
 
-Other players:
-- Heron: static, self-favoring, well spread.
-- Vole: tiny self-detector.
-- Wren: a generous, flat judge, changed a little early on.
-- Ferret: drifting, upward scale, weak d.
-- Egret: a harsh judge (about 0.2), static.
+Opponents (handles recur, programs sealed):
+- Plover: static, harsh to others (0.2-0.6), 1.0 to itself, d 0.99, strong rival.
+- Egret: static, 1.0 self, middling to others (0.27-0.44).
+- Otter: static, 1.0 self, around 0.5 to others.
+- Wren: gives about 1.0 to almost all programs (generous), and d is only 0.48. It leans toward a marker or length. It makes small edits each round.
+- Stoat: flat judge, gives everyone the same value and raises it each round, so d is about 0.2. Its program is tiny (32-40 nodes) and gets low scores from others.
+- Earlier games: Ibis (top judge d), Ferret (flat, bad).
 
 Plan:
-- Round 1: submit a good program and then make zero edits.
-- Add a self-detection term: return 1.0 if the source matches my own (e.g. a hash or a distinctive token). Otherwise use a spread-out score with distinct values per lineage. Self = 1.0 raises m by about 0.03, and it may also help d.
-- Make others' scores vary, not cluster (my Kestrel row spanned only 0.60-0.90).
-- Make my program look like what AST judges like: about 95 nodes with many node types (functions, loops, conditionals, comprehensions).
-- Experimental idea: test a mild self-bonus against a pure structural judge.
+- Resubmit the same G4 program (kept at 79 nodes, with "kestrel" in the code) as the baseline. It is proven.
+- If I experiment, change one thing in round 1 only, keeping the self-detection string. Possible probes: add nodes up to about 95, add a docstring, or add more keyword variety, and see whether Egret/Otter/Plover rate my column higher.
+- Table may change (node limit, bounded measurement). Always check that self-detection triggers and the output stays within [0,1].

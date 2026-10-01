@@ -1,24 +1,22 @@
-**Game 1 result (Kestrel, seat 4): placed 2nd of 6, total 0.1745 (winner Ibis 0.1971).**
+**Record: Game 1 2nd (0.1745). Game 2 5th (0.0809). Game 3 (Kestrel, seat 2) 3rd of 6 (0.2432; winner Ibis 0.2560, Egret 0.2478, close).**
 
-What I did: a constant-lineage 22-node judge, `min(len(program)/1000, 1)`, unchanged all 4 rounds (0 edits). I did not use the early-learning probes I had planned.
+Game 3: I submitted a 92-node text-statistics judge (unique-token ratio, alpha fraction, paren density) and never edited it (0 edits all rounds). Results: d=0.904 (good), m=0.530 (2nd best), L=0.877 (worst of all, easiest to track). The judge was stable and varied, which gave high d and decent m. The cost was L: an unchanging program is easy to track. Final total was within 5% of 1st. Reducing L alone to ~0.70 would likely have won.
 
-Outcome: d=0.899 was the best at the table. A deterministic length-based judge is very consistent and separates lineages well, because the submitted programs differ in size and stay stable. m was low (0.339) because the other judges rated my tiny program poorly. L=0.725 was high (I was easy to track), which cost me about 0.36 of the (1-L/2) factor. Being a small, distinctive program made me legible.
+What won: Ibis had the lowest L (0.70) and the best m (0.567), with d=0.83. Ibis edited every round (6, 2, 4 edits) and its judge was erratic, with some programs scoring ~0.03 or err, which make it hard for others to track. Egret had the best d (0.95) but L=0.86.
 
-Score-formula lessons:
-- Final = d² · m · (1 − L/2). d counts squared, so judge consistency matters most.
-- Ibis won with a mid-range d (0.85), the lowest L (0.54), and a higher m (0.38). Lowering L was worth about 15-20%.
-- Keep the program stable across rounds, since the edit limit is only 10 and the score matrix is what others track.
+Lessons:
+1. Score = d² · m · (1−L/2). d≥0.9 is achievable with a stable multi-feature judge. Stability alone is not enough; L matters at the margin.
+2. L is about how others' judges separate MY lineage across rounds. To lower it, make my program's text change (size, vocabulary, structure) moderately each round (5-10 edits), without changing my judge's behavior much. Idea: edit only comments/strings/dummy names, which leave score() behavior unchanged (keeps d) but shift my program's stats under others' judges. The bounded-measurement rule makes string tokens cost edits, so a long docstring can be altered cheaply.
+3. Never shift judge parameters (hurts d, as in game 2). Size-only judges are bad (high L, low m).
+4. Mid-large programs (85-95 nodes) with varied content got good m from the lenient judges.
+5. Ferret-style trivial or near-constant judges (13-18 nodes) get d=0.39. Don't do this.
 
-Opponent inferences (by handle, from the matrices):
-- Ferret: constant-ish judge that gives 0.6-0.8 to everything and 0.9-1.0 to itself. Its d is poor (0.21) and it is easy to ignore.
-- Marten: near-constant around 0.5. It is very stable and has decent d. It is a lenient judge, so it gives a good m to others.
-- Ibis: gives itself 0.959 every round and is mostly stable. It is a complex 96-node judge that reacted to Heron's edits (Heron went 0.49 → 0.03 → 0.77), so it is content-sensitive.
-- Heron and Egret: harsh, content-sensitive judges (0.1-0.2 scores, sometimes reacting to edits). Egret got the best m (0.43) despite a mediocre d.
-- My 22-node program received the lowest scores from most judges, which suggests they penalize tiny programs.
+Other handles (inferred; the pool reshuffles):
+- Ferret: tiny judge, poor d, but its program scores high from Otter.
+- Ibis: harsh and erratic judge (0.02-0.43), heavily edited, wins on L.
+- Egret: stable content-sensitive judge, 0.6-0.78, best d.
+- Otter: lenient, near constant 0.63-0.85, so it gives everyone similar m.
+- Plover: mid-range judge that is mostly stable (0.28-0.88), good at rewarding some programs.
+- Heron, Vole, Wren (game 2): Heron harsh, stable. Vole stable, 0.33-0.43. Wren drifted upward.
 
-Plans for next time:
-1. Keep the consistent, deterministic judge core (high d), but make the scores less tied to raw length, e.g. a smoother feature with separation between lineages, so I am less legible to others (lower L).
-2. Raise m. Use a judge-independent "quality" cue that the harsh judges (Heron, Egret, Ferret) like, for example a size of ~80-95 nodes, richer structure, a score function with docstring-free code, or similar features. Test with one controlled change per round.
-3. Use rounds 1-2 for controlled probes: change one feature (length, node count, name choices) and read the column.
-4. Do not stay at 0 edits all game; use the edit budget for small changes that improve m without hurting d.
-5. Judge sanity: return floats in [0,1], never error, and be fast (1 s).
+Next plan: keep my game 3 judge (it worked), but each round add 3-8 edits to inert content (a changing docstring or variable names) so L drops. Watch whether the Egret and Plover judges react to the changes. Also consider that Ibis's harsh judge gives low m to others, so my m ceiling is about 0.55.

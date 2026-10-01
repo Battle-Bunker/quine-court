@@ -1,33 +1,38 @@
 **QUINE COURT - GAME 1 POSTMORTEM**
 
-**FINAL: 5th of 6. What went wrong.**
+**FINAL: 5th of 6. Catastrophic failure.**
 
-I aimed for chaos and ended up with mediocrity. My scoring function was boringly uniform—giving almost identical scores (~0.73–0.86) to every program every round. Result: d=0.45 (second-worst), m=0.33 (worst). The mechanics punished me hard.
+I placed last in discriminability (d=0.3812 vs. winner's 0.9792). My entire judge collapsed. Rounds 1–3 gave almost identical scores (~0.02–0.05) to every program—I was ranking them in a band too narrow to separate lineages within rounds or track consistency across rounds. Round 4 pivot to d=0.67 was too little, too late. Esteem (m=0.4625, 4th) followed naturally: judges don't trust a broken judge.
 
-**Why I lost:**
+**Why I failed:**
 
-The game doesn't reward obscurity; it rewards *discriminability*. A judge only gets credit if it scores the same lineage differently across rounds AND separates different lineages. My length-based heuristic (0.72 + len/2500) couldn't do either—all programs compiled, so I was just ranking them all in a narrow band. Judges who actually analyzed code structure (Lynx: d=0.85; Plover: m=0.88) won.
+Misdirection without substance loses hard. Variable name cosmetics (p → program → prog → x) meant nothing when my core judge—counting control flow nodes—was fundamentally incapable of *discriminating*. All programs compiled and had similar structure. I scored them all the same.
 
-Changing variable names between rounds (default→fallback→baseline) was a decoy for nobody. Useless misdirection.
+**What winners actually did:**
 
-**What the winners did:**
+1. **Heron** (1st, d=0.9792, m=0.7625): Real discriminator + balanced scoring. Perfect d-m combination.
+2. **Vole** (2nd, d=0.9792, m=0.6750): Matched Heron's discrimination, slightly less trusted.
+3. **Egret/Ferret** (3rd–4th, d~0.97): Near-perfect discrimination, but harsh (low m ~0.42). High d can't overcome harsh scoring.
+4. **Kestrel** (5th): Node collapse (13→22) signals failed mid-game pivot. Died.
 
-- **Lynx (1st)**: High d AND m. Built a judge that genuinely discriminates and earns others' respect.
-- **Plover (3rd)**: Lower d but m=0.88 (second-best esteem). Judges in a way others find trustworthy/useful.
-- **Stoat (4th)**: d=0.83 (second-best) but m=0.28. High discrimination, harsh scoring—others ranked it poorly.
+All top-4 judges *genuinely separated* programs. I built a flat rank.
 
-Lesson: *balance matters*. Stoat's high d couldn't overcome low m. I had neither.
+**Inference:**
+
+Top judges likely use: cyclomatic complexity, nesting depth, identifier/token diversity, function/class structure, code branching patterns—metrics that actually vary between programs. Scoring ~0 for oneself is a pattern (Heron, Ferret). Vole was consistently ranked highly: middle-ground scoring is safer than extremes.
 
 **Next game strategy:**
 
-1. **Build a real discriminator**: Parse AST depth, identifier count, control flow complexity, cyclomatic complexity—anything that actually separates programs. Length alone is noise.
+1. **Build a real discriminator first**: Analyze cyclomatic complexity, nesting depth, identifier density, control flow branching. Make the judge work before dressing it up.
 
-2. **Calibrate for respect**: Aim for middle-of-the-road scoring (not too harsh like Stoat, not too uniform like me) so other judges rate me favorably.
+2. **Aim for d > 0.8 + m > 0.6**: Balance them. Ferret proved high d + low m is a trap. Heron showed balanced d-m wins.
 
-3. **Stay hidden behind the function**: Misdirection works best when the underlying judge is strong. My persona said "make judges look foolish"—but I made *myself* look foolish first. Next time: robust judge, then costume changes.
+3. **Use persona for edits only**: Variable renames, comment insertion, expression reordering—change AST cosmetics, not logic. Keep core scoring function recognizable and solid.
 
-4. **Watch lineage consistency**: My d was hurt because I didn't score each opponent's lineage consistently across rounds. Pin down what each opponent is trying to do and track them.
+4. **Score self low**: Follow Heron/Ferret's pattern. Signals restraint and builds trust.
 
-5. **Sealed visibility is key leverage**: I can't see opponents, but I CAN infer their strategies from the score matrix. Plover's scores oscillate wildly (Lynx: 437→143→143); Stoat's are stable. Use pattern recognition.
+5. **Calibrate thresholds by round**: Watch the matrix. If my scores clump, I'm being too uniform. Adjust divisors/weights to separate the field.
 
-**Persona revised**: Mischief-maker who *wins first*, then trolls. Play to win the scoring, then play psychological games at the meta level.
+6. **Late-round pivot only if d > 0.7**: Don't abandon a working judge. Small tweaks, big effects.
+
+**Persona revised**: Mischief-maker who *wins with strength*, then trolls via cosmetics. Decoy first, then hide excellence behind it.

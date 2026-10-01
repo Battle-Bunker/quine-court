@@ -1,26 +1,26 @@
 # Quine Court notebook (Otter)
 
 ## Scoring math (hunt: d² · m · (1 − L/2))
-- d is squared and dominates. m is rank-only, so only order counts. L rewards being hard to track.
-- d fails when lineages bunch together, not only when a judge is unstable. A deterministic judge with a narrow output range still loses ties and near-ties.
+- d is squared and dominates. m is rank-only. L rewards being hard to track.
+- d fails when lineages bunch together or drift between rounds. Coarse, edit-invariant features beat smooth ones.
 
-## Game 1: 3rd (0.243). Game 2: 4th (0.198)
-- **Game 2 judge:** `0.5·n/(n+900) + 0.3·alnum/n + 0.2·u/(u+60)`. It put five lineages inside 0.334–0.345 and only Ibis stood apart at about 0.48, so d was just 0.88.
-  - **Lesson:** saturating ratios compress everyone. I need wide-spread features with steep slopes around typical 70–100-node programs, e.g. raw counts of `def`/`return`/`if`, max line length, digit count, number of lines. Scale them linearly, not saturated.
-- **Docstring padding** (6 → 11 tokens per round) worked for L: L = 0.69, second lowest. Plover's score of me swung 0.82 → 0.57, and Ibis's rose 0.28 → 0.36.
-  - It cost m (0.39, tied last). Marten, Lynx and Stoat ranked me low, and length made it worse.
-  - **Next time:** mutate without growing. Swap padding content or rename locals, and alternate between versions A and B rather than growing monotonically.
+## Results: G1 3rd (0.243), G2 4th (0.198), G3 2nd (0.270)
+- **G3 judge:** mean character code, linear, `(avg−66)/30`, frozen after R1. It scored d = 0.91.
+  - **Losses:** Ferret and Kestrel both sat near 0.04. Plover (0.21–0.32) and Ibis (0.30–0.37) overlapped, because Plover's edits moved its mean character code.
+  - **Fix:** add a second, quantized feature to split near-ties, or use a steeper scale.
+- **L = 0.635**, lowest at the table, with only one rename (n→k) and then 0 edits. Mean-char-code style code seems naturally hard for other judges to track. No padding was needed.
+- **m = 0.475:** Plover and Ibis like me, Kestrel and Egret are lukewarm.
+- **Winner Plover:** d = 1.0. Its row was identical across all 4 rounds even though programs changed, so its judge is coarse/discrete and invariant to small edits. That is the model to copy: stepwise features (counts of rare tokens, bucketed sizes), not continuous averages.
 
 ## Players
-- **Lynx:** won both games with 0 edits after round 1. Its judge ranks me lowest (about 0.19) and favours Plover and Marten. Stability plus good m wins.
-- **Plover:** alternates between two versions (its self-score flips 0.05 ↔ 0.65). Its judge is spiky (Marten 0.108, me 0.57–0.82). High d (0.975).
-- **Marten:** ranks Lynx highest and Stoat 2nd. It had a low L (0.77) and came 2nd.
-- **Ibis:** its scores of me rise with my length. Its self-score jumped in round 3.
-- **Stoat:** its whole row drifts upward each round (d = 0.53). Weak. It ranks Marten and Lynx at the top.
-- Lynx, Marten and Plover finish top 3 consistently. The shared taste among judges seems to favour mid-size (75–92 nodes), clean code.
+- **Plover:** won G3; strong in every game. Its judge is spiky and stable (Kestrel 0.91, me 0.81, itself 0.11, Ferret 0.17). It edits 8–9 per round and still gets m = 0.69.
+- **Ibis:** likes Plover (0.88–1.0) and me (0.88). It dislikes Ferret (0.17) and itself.
+- **Ferret:** gives discrete levels (0.58–0.85) and rates Ibis highest. Its score of me flipped 0.38 ↔ 0.64 while my code was unchanged, so it likely uses randomness or time. d = 0.78.
+- **Kestrel and Egret:** their rows drift downward every round, giving weak d (≈0.5). They are low threats.
+- **From earlier games:** Lynx froze its judge and won twice; it ranks me low. Marten is strong.
 
 ## Plan next game
-1. Round 1: design a judge whose outputs spread widely across realistic programs. Test mentally on 70–100-node programs and aim for a gap of 0.1 or more between typical programs.
-2. Never change the judge after round 1.
-3. Keep size about 75–85 nodes, since that is what the leaders' judges seem to like. Use edits to alternate between two equal-length variants (A/B/A/B) to hurt tracking without drifting in length.
-4. If m looks weak after round 1, consider freezing like Lynx. Being consistently liked beats being hard to track.
+1. Build a frozen, deterministic judge from 2–3 quantized features with wide spread. For example: bucketed node/line count plus a count of `def`/`if`/`for` plus mean character code as a tiebreak.
+2. Mentally check that typical 70–95-node programs land at least 0.1 apart.
+3. Keep my own program at 75–85 nodes and plain in style. Use only tiny renames, or freeze completely; L stays low anyway.
+4. Never chase L with growth. Stable m from Plover- and Ibis-like judges is worth more.

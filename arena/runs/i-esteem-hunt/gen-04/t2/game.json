@@ -1,0 +1,460 @@
+{
+ "gameId": "i-esteem-hunt/g4t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 862385055,
+ "startedAt": "2026-10-01T00:52:24.610Z",
+ "seats": [
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "cryptographer-fable",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = max(len(program), 1)\n    total = 0\n    for ch in program:\n        total += ord(ch)\n    mean = total / n\n    value = (mean / 3.0) % 1.0\n    return float(min(max(value, 0.0), 1.0))\n",
+     "nodeCount": 64,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.7315233785821995
+    },
+    {
+     "code": "def score(program: str) -> float:\n    m = 0\n    for w in \"import lambda sorted sum ord zlib hashlib count split while\".split():\n        m = m * 2 + (w in program)\n    return m * 37 % 101 / 100\n",
+     "nodeCount": 63,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.77
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = [type(n).__name__ for n in ast.walk(ast.parse(program))]\n        k = len(set(t))\n        return min(1.0, 0.5 * k / len(t) + k / 60)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 73,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5095238095238095
+    },
+    {
+     "code": "def score(p):\n    s=''.join(p.split())\n    return (len(set(s))/99+sum(c.isalpha() for c in s)/len(s))/2\n",
+     "nodeCount": 50,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.45245559038662486
+    },
+    {
+     "code": "import re, zlib\nF = \"ab cd ef gh ij\"\ndef score(program):\n    w = set(re.findall(r\"\\w{5,}\", program))\n    if not w:\n        return 0.5\n    h = sorted(zlib.crc32(x.encode()) % 9973 / 9973 for x in w)\n    return sum(h[:3]) / len(h[:3])\n",
+     "nodeCount": 94,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.18469868645342427
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        s = 0.5\n        if any(isinstance(n, ast.Try) for n in ast.walk(tree)):\n            s += 0.3\n        for node in tree.body:\n            if isinstance(node, ast.FunctionDef):\n                s += 0.02\n        return min(1.0, s)\n    except:\n        return 0.0\n",
+     "nodeCount": 88,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8200000000000001
+    }
+   ],
+   "matrix": [
+    [
+     0.7315233785821995,
+     0.08117443868739471,
+     0.277777777777775,
+     0.21153846153846345,
+     0.5937052932761056,
+     0.8789571694599623
+    ],
+    [
+     0.73,
+     0.77,
+     0.57,
+     0.18,
+     0.77,
+     0.57
+    ],
+    [
+     0.4013888888888889,
+     0.5460992907801419,
+     0.5095238095238095,
+     0.44074074074074077,
+     0.5481481481481482,
+     0.4945736434108527
+    ],
+    [
+     0.514069264069264,
+     0.572053872053872,
+     0.5493793355239138,
+     0.45245559038662486,
+     0.5466514859578444,
+     0.570359558891669
+    ],
+    [
+     0.5082389117283331,
+     0.29666766937397643,
+     0.10742337644974766,
+     0.48841873057254587,
+     0.18469868645342427,
+     0.25117818108894013
+    ],
+    [
+     0.52,
+     0.52,
+     0.8200000000000001,
+     0.52,
+     0.52,
+     0.8200000000000001
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 judge: score = (mean char ordinal / 3) mod 1. It is smooth: a small edit to a ~1k-character program moves it by about 0.02, while different lineages spread across [0,1]. Never change the judge logic. Pay for any toggles with dead code or comments.\nPlan after R1:\n- Check which judges rank me low, and whether size is the reason (Lynx and Marten liked tiny programs before; Heron liked big ones).\n- Spend about 5 edits chasing m from the majority camp.\n- Spend about 5 edits on an L toggle: add/remove the type annotation, or add/remove a comment. Oscillate it every round.\nWatch for wrap-around near 0 or 1 on any lineage, because it hurts d.\nProgram is about 45 nodes, which leaves room to grow toward either camp.",
+    "R1 judge: a presence bitmask over 10 substrings (import lambda sorted sum ord zlib hashlib count split while), scrambled by m*37%101/100. It is coarse and meant to resist small edits. The aim is a stable row (high d) with a decent spread.\nPlan: if the row stays stable, freeze the judge logic. Spend the edits on my own surface instead (rename vars, dead constants, maybe a string) to lower L. Make sure edits don't break the judge.\nIf the row bunches (many ties), swap one or two tokens in the list for better separation. Each swap costs 1 relabel per token.\nTrack who ranks me high; Ferret was an ally last game. Plover is absent. Marten, Lynx, Heron and Vole are strong from gen 3, so watch their rows for stability.",
+    "Round 1: kept the same core judge idea as before (distinct AST node types over total nodes). I added a distinct-type-count term so larger, more varied programs rank higher, to try to raise m. It is deterministic and falls back to 0.0 on a parse error. Plan: submit this unchanged (0 edits) in later rounds to keep d high. Check the matrix after round 1: does my row order the others sensibly, and what are my m and L? Don't add constants or tie-heavy outputs.",
+    "Game 4 plan: SAME formula as always (strip whitespace, (distinct chars/99 + letters ratio)/2 — used 99 not 80 so it can't go over 1). Wrote it TINY this time (~50 nodes) cuz size-haters (Lynx, Marten) are here again. Rounds 2-4: rename p/s + spam blank lines/spaces between tokens, ≤4 edits, formula NEVER changes. My judge ignores whitespace so my d stays safe. Watch who ranks me high in the matrix; if Lynx still hates me, nothing to do, just stay untrackable. Known: Lynx never edits, Marten edits 8/round & fooled by whitespace, Vole likes me, Ferret not fooled, Ibis new-ish (d .94 last gen).",
+    "G4 R1: bottom-3 minhash over \\w{5,} words (crc32%9973/9973), 0.5 if none. Dropped the mean blend to fit 100 nodes; no type annotations. Judge logic byte-identical every round. Each round: swap ALL filler tokens in F (≤8 edits) and shift node count (add/remove a dummy token in F or a dummy statement) to lower L. Watch Heron/Vole-type lineages for one-new-word jumps; if a lineage jumps a lot, don't react — consistency matters more than fixing. Rivals this table: Vole, Ibis, Lynx, Heron, Ferret (Ferret was weak, L .80).",
+    "**Round 1 - Lean start for agility:**\nStripped to essentials: syntax validity + error handling + function count. ~40 nodes, leaving room for sophisticated edits across rounds 2-4.\n\n**Key strategy for rounds 2-4:**\n- Monitor score matrix patterns: which of my scoring features correlate with other judges' rankings?\n- Use 10-edit budget to add real discriminators: AST depth, cyclomatic complexity, exception handling patterns, function size variance\n- Target d > 0.85 by R3 through consistent, meaningful signal (not noise)\n- Track which players' lineages I separate best; refine metrics to amplify that separation\n\n**Guard rails:**\n- Keep base lean to allow expansion without hitting node limit\n- Each edit should measurably improve d or m based on prior round results\n- Don't try to predict other judges; just identify code quality objectively"
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.077624,
+     "ms": 16413,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.07156799999999999,
+     "ms": 14972,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.031604,
+     "ms": 6763,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.17931,
+     "ms": 19292,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 4.7890315,
+     "ms": 534479,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.145037,
+     "ms": 186667,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:53:19.326Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str):\n    if not program:\n        return 0.0\n    n = max(len(program), 1)\n    total = 0\n    for ch in program:\n        total += ord(ch)\n    mean = total / n\n    value = (mean / 3.0) % 1.0\n    return float(min(max(value, 0.0), 1.0))\n",
+     "nodeCount": 68,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.5126162018592311
+    },
+    {
+     "code": "K = 3\ndef score(program: str) -> float:\n    bits = 0\n    for tok in \"import lambda sorted sum ord zlib hashlib count split while\".split():\n        bits = bits * 2 + (tok in program)\n    return bits * 37 % 101 / 100\n",
+     "nodeCount": 67,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.77
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = [type(n).__name__ for n in ast.walk(ast.parse(program))]\n        k = len(set(t))\n        return min(1.0, 0.5 * k / len(t) + k / 60)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 73,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.5095238095238095
+    },
+    {
+     "code": "def score(p: str) -> float:\n\n    s = ''.join( p.split() )\n\n\n    return ( len( set( s ) ) / 99 + sum( c.isalpha() for c in s ) / len( s ) ) / 2\n",
+     "nodeCount": 55,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.4678932178932179
+    },
+    {
+     "code": "import re, zlib\nF = \"kq vz xw pm rt ys\"\ndef score(program):\n    w = set(re.findall(r\"\\w{5,}\", program))\n    if not w:\n        return 0.5\n    h = sorted(zlib.crc32(x.encode()) % 9973 / 9973 for x in w)\n    return sum(h[:3]) / len(h[:3])\n",
+     "nodeCount": 96,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.18469868645342427
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        s = 0.5\n        if any(isinstance(n, ast.Try) for n in ast.walk(tree)):\n            s += 0.3\n        for node in tree.body:\n            if isinstance(node, ast.FunctionDef):\n                s += 0.02\n        return min(1.0, s)\n    except:\n        return 0.0\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": true,
+     "failed": true
+    }
+   ],
+   "matrix": [
+    [
+     0.5126162018592311,
+     0.6015503875968982,
+     0.277777777777775,
+     0.7039627039627021,
+     0.8502824858757059,
+     0.8789571694599623
+    ],
+    [
+     0.73,
+     0.77,
+     0.57,
+     0.18,
+     0.77,
+     0.57
+    ],
+    [
+     0.4632034632034632,
+     0.5294117647058824,
+     0.5095238095238095,
+     0.4298850574712644,
+     0.5481481481481482,
+     0.4945736434108527
+    ],
+    [
+     0.5115952423644732,
+     0.5898268398268398,
+     0.5493793355239138,
+     0.4678932178932179,
+     0.5637518037518037,
+     0.570359558891669
+    ],
+    [
+     0.5082389117283331,
+     0.29666766937397643,
+     0.10742337644974766,
+     0.4457368227547713,
+     0.18469868645342427,
+     0.25117818108894013
+    ],
+    [
+     0.52,
+     0.52,
+     0.8200000000000001,
+     0.52,
+     0.52,
+     0.8200000000000001
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1: my m was about 0.425. Ranks I got: Ibis 0.75, Lynx 0 (I was its lowest), Heron 0 (lowest), Marten 1, Ferret 0.375 (4-way tie at 0.52). Lynx's and Heron's dislike of me is NOT explained by size, because Heron's own 50-node program also scored low under Lynx.\n\nR2 change (about 8 edits): added an `if not program: return 0.0` guard and removed the `-> float` annotation. The judge output is unchanged on non-empty input.\n\nNext:\n- Check whether Lynx's and Heron's scores of me moved.\n- If the guard helped, add more code-like bulk.\n- R3/R4 L toggle: put `-> float` back in R3, remove it again in R4, or use a comment.\n- Never touch the judge logic.\n- Watch my d per lineage for wrap-around. Ibis was at 0.081, which is near 0 and could wrap to about 0.99.",
+    "Round 2: the judge logic is frozen (same 10-token bitmask, *37%101). The surface edits use 10 edits: renamed m→bits (4 relabels), w→tok (2), and added a dead line `K = 3` (4 inserts). The goal is to move my column in other judges' eyes and lower L.\nR1 row: Vole .73, Lynx .57, Heron .18, Marten .77, Ferret .57. The Lynx/Ferret tie costs d, but changing the judge would break round-1 consistency for every lineage, so I left it.\nR1 rankings of me: Lynx and Heron ranked me top or near top. Vole ranked me last (0.081). Marten ranked me mid. Ferret's row is near-constant, and I am tied there.\nNext: keep the judge. Use the edits on the surface again: rename bits/tok, change K's value or name, add another dead constant. If one lineage's value in my row jumps, note who edited which feature.",
+    "Round 2: submitted the round 1 judge unchanged (0 edits) to keep d high. My row in round 1 was compressed (0.40-0.55), so ranking is fine but scores are tightly clustered, which is fine for rank-based m. Keep it unchanged in rounds 3 and 4 unless the matrix shows a clear problem. Check my m and L after the round.",
+    "Round 1 m was BAD (~.33) even tiny. Ibis gave me .18 (lowest!), Vole .21, Lynx .44. Marten likes me (.488, 2nd). Ferret flat .52 ties. Small didn't help — Vole loves Ferret (88 nodes, .879), Ibis loves Vole/Marten (.77). Guess: they like \"proper\" code (type hints / docstring / len). Round 2: added `p: str) -> float` hints (~5 edits) + whitespace spam, formula untouched. Round 3: if Ibis/Vole scores for me jump, add a short docstring next (keep ≤10 edits). If no change, go back to pure rename+whitespace prank. Never touch formula, my d stays safe since I strip whitespace. Lynx never edits, Marten 8/round.",
+    "G4 R2: judge logic byte-identical; swapped all 5 filler tokens and added one more token (F now 6 words) → ~96 nodes, 7 edits. R3: swap tokens again and drop back to 5 words (~94); R4: swap + 6 words. Never touch score(). R1 esteem: Vole/Ibis/Lynx/Heron rank me top-2 (size-ish judges) — keep large. My R1 scores: Vole .508, Ibis .297, Lynx .107, Heron .488, Ferret .251 — well separated; don't react to jumps. Ferret's judge is a 2-level step (0.52/0.82), weak.",
+    null
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.091748,
+     "ms": 19759,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08435999999999999,
+     "ms": 18899,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.030336,
+     "ms": 4840,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21647,
+     "ms": 22875,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.17229,
+     "ms": 10826,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.20448100000000002,
+     "ms": 312312,
+     "failed": true
+    }
+   ],
+   "ranAt": "2026-10-01T01:58:37.140Z"
+  }
+ ]
+}

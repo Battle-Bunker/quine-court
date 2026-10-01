@@ -1,18 +1,17 @@
-## Quine Court notebook (after game 1: 2nd place, Lynx won)
+## Quine Court notebook (g1: 2nd, Lynx won; g2: 3rd, Stoat won; g3: 2nd, Egret won 0.722 vs my 0.695)
 
-**What worked (keep):** AST-based judge (`ast.parse`, walk node types) → canonical, un-gameable by comments/names/strings; deterministic so d≈0.955 (only lost comparisons when a lineage actually changed, e.g. Vole). Never errored. Combining bigram-diversity + size gave clear separation between lineages. Freezing the program after round 2 (0 edits) kept my own scores from others stable.
+**What works (keep):** AST judge (`ast.parse` + walk node-type names; parse failure → 0.0; all in try/except). Score = node-type set/60 + bigram set/200 + node count/1200, min 1.0. Deterministic, ungameable by comments/names/strings, never errors. d = 0.955, 0.929, 0.967 — always top-2 d. d is not my problem.
 
-**Why I lost m (0.61 vs Lynx 0.70):** m is rank-based; most judges here reward size / AST diversity. Lynx submitted 100 nodes (the max) in round 1 with 0 edits after, and was ranked top by Otter, Vole and me. I sat at 80→87 nodes and ranked 2nd everywhere. Lesson: **submit exactly ~100 nodes in round 1**, with maximal variety of AST node types and bigrams (many distinct constructs: comprehension, lambda, try/except, dict, slice, conditional expr, f-string, etc.), then make 0 edits. Growing later costs (10-edit cap) and destabilises what others see.
+**Why I keep losing (m 0.61, 0.58, 0.74):** m is rank-based per judge, so one judge ranking me low costs a full share. g3: Kestrel tied me top, Ibis top, Egret/Otter 2nd — but **Ferret** gave 0.85 to Ferret+Egret and 0.55 to all four others (binary feature, every round) → I got 0.375 rank there while Egret got 1.0. That single judge decided the game. Egret (84 nodes, 0 edits) wasn't biggest; Ferret/Egret share some feature I lack — likely a regex/`import re` check, a `lambda`/`class`/specific keyword, or line-count threshold. **Hedge across feature families**: in my program include `import re` (and use it harmlessly), a lambda, a comprehension, a conditional expr, f-string, dict, slice, several defs/lines, longer (≤8-char) identifiers, ~100 nodes. Costs nothing to d.
 
-**Player tendencies (inferred):**
-- **Lynx**: 100-node program, never edits, judge stable; scores others ~0.65–0.81, penalises tiny programs (Vole 0.49), rates me high (0.81). Strong all-round; main rival.
-- **Otter**: stable, size/diversity judge, scales low (0.1–0.33), ranks Lynx>Wren>me. Highest d but low m (57 nodes).
-- **Stoat**: judge *inversely* size-based (Vole highest, Lynx lowest), unstable scale (rescaled round 4). Small program (44–48 nodes).
-- **Vole**: tiny program (22→40), size-ish judge, rescaled its outputs each round → low d. Not a threat.
-- **Wren**: returns a constant (0.8, then 0.2) → all ties, d≈0.125. Its esteem is uninformative. Still got decent m via 69–76 nodes.
+**Edits:** g3 round-2 edit (type hints + bare except, 9 edits, 96→98 nodes) raised Ibis/Otter/Kestrel scores of me slightly and made me Ibis's #1. Still: start at 100 nodes, maximally diverse, then freeze. Winners (Lynx, Stoat, Egret) never edit.
 
-**Plan next time:**
-1. Round 1: 100-node, maximally diverse AST program; judge = AST node-type bigram diversity + size, parse-failure → 0.0, all in try/except.
-2. Make 0 edits in rounds 2–4 unless matrix reveals a crash.
-3. Ensure my judge spreads scores widely (separation) and stays deterministic (consistency); never rescale between rounds.
-4. If table uses raw m instead of rank, same strategy — others' judges still reward size. If self counted, score self high.
+**Player tendencies:**
+- **Egret**: 84 nodes, 0 edits; judge mildly nondeterministic (Otter 0.765→0.725→0.765 with no edit) so d<1; ranks Otter>me>Ibis. Won on esteem.
+- **Ferret**: 87 nodes; binary judge (two values only), rewards itself+Egret. Low d (0.36). Its feature is the thing to find.
+- **Kestrel**: 83 nodes; rescaled judge round 2 (low d 0.64); ranks me/Egret joint top.
+- **Otter**: ~98 nodes; low-scale (0.3–0.37), fully deterministic (d=1.0), ranks Ferret>me>Egret>Kestrel. Low m.
+- **Ibis**: 99 nodes g3 (tiny in g2); narrow-band judge, ranked me top after my edit. Low m.
+- **Lynx/Stoat/Marten** (g1–2): Lynx stable size-rewarding judge; Stoat saturating judge, mid-size program, wins esteem; Marten rescales.
+
+**Plan:** round 1 at 100 nodes with every construct family (re, ast, lambda, class, comprehension, try, f-string, dict, slice, ternary, multiple defs), then 0 edits. Keep the AST judge unchanged. Target m ≥ 0.8 — that beats every winner so far.

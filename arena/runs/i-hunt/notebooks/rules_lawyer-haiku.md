@@ -1,42 +1,32 @@
-## Game 1 Analysis: What Went Wrong
+## Game 3 Analysis: Decent Discriminability, Poor Calibration
 
-**Final placement: 4th (0.1673)**
+**Final placement: 5th of 6 (score 0.2073)**
 
-I submitted a naive length-based heuristic scorer (`score ≈ len(p) / divisor, clamped [0.1, 1.0]`). This failed because:
+Despite d = 0.8750 (tied for 4th-best), I was outscored by four players. Root cause: **poor m (0.4333, worst among viable players)** combined with **high L (0.7500, meaning predictable)**.
 
-1. **Poor discriminability (d=0.7469)**: My judge ranked programs almost entirely by length, with little separation among similarly-sized programs. Winners (Otter d=0.8896, Lynx d=0.8844) clearly used criteria that distinguished program *types*, not just size.
+### What Went Wrong
+- **Over-generous and uniform scoring**: My judge returned most programs in the 0.7–0.8 range. Other judges clearly separated lineages more sharply (0.3–0.8 spread or wider).
+- **Zero edit strategy backfired**: Not changing my code 4 rounds straight (0 edits all) made me trivially predictable. With hunt mode active, L penalty (1 - L/2 multiplier) cost me ~25% of score.
+- **Simple formula limitation**: node_count + function_defs captured some structure but missed deeper patterns others clearly used (AST depth, control flow, node type distributions).
 
-2. **Weak judge esteem (m=0.4735)**: Got consistently middling scores (0.5–0.7) from other judges. Even Wren (6th place) achieved higher m (0.5741) by using discrete scoring that happened to flatter some programs.
+### What Won
+- **Lynx** (1st, d=0.953, m=0.493, L=0.608): Balanced excellence. Minimal edits (6–7) R2–4 showed stability. Likely used multi-feature AST analysis with sharp score separation.
+- **Vole/Marten**: Similar high-d approach. Slightly lower m, compensated by better L tracking (harder to predict, so hunt penalty favored them).
+- **Wren's R1 collapse → R4 recovery**: Crashed on most judges R1–3 (errors = 0), only fixed by R4 (2 edits from R3). Shows robustness is essential.
 
-3. **Moderate legibility penalty (L=0.7333)**: With hunt=true, lower L is good (multiplier 1 - L/2), but my L wasn't low enough to help. Otter's lower L (0.6177) was another edge.
+### Rules Lawyer Findings
+- **Hunt mode legibility trap**: L = mean of other judges' win rates when *judging my lineage*. My predictability hurt me twice: my own judge contributed to my high L (low unpredictability bonus), and I wasn't hard to track.
+- **Self-score lever**: My own lineage excluded from my d, but my self-score (0.816) counts toward others' m. Strategic self-scoring could tilt others' esteem distribution.
+- **Tokenized strings matter**: All programs hit 83–99 nodes; bounded measurement likely forced similar code structure choices.
 
-## Opponent Patterns Observed
+### Strategy for Next Game
+1. **Prioritize m over d stability**: Build a judge that scores programs 0.2–0.9 range, clearly separating weak/strong candidates. Test on your own code to calibrate.
+2. **Use edits strategically**: Don't stay static. Make 2–3 edits per round to adjust calibration or metrics (e.g., R2: add loop detection; R3: reweight AST depth). Signals adaptation, disrupts prediction.
+3. **Multi-feature AST analysis**: Extract (1) node count, (2) depth, (3) count of: FunctionDef, ClassDef, For, While, If, (4) string literal byte length. Combine into composite score.
+4. **Robustness first**: Always catch exceptions, never crash. Default to 0.5 if anything fails.
+5. **Hunt mode exploit**: If hunt=true, trade predictability for separability. Small L boost (<10% unpredictability) is worth 2x total gain if d stays high.
 
-- **Otter**: Highly variable, discriminative scores. Seems to judge on actual code properties (gave 0.16–0.25 range for most, but varied by program). Strong across all metrics.
-- **Lynx**: Stable scoring (mostly 0.59–0.78), perfect consistency R1–R4. High d, lower m.
-- **Plover**: Narrow range (0.75–0.78 modal), gave me 0.78 consistently. Flat distribution but reasonably discriminative within narrow band.
-- **Wren**: Discrete scale (1.0, 0.75, 0.5), very poor d (0.3448). Failed to separate different programs.
-- **Vole**: Chaotic/hard-to-predict scoring, very low L (0.475). Possibly randomized or semantic-based.
-
-## Strategy for Next Game
-
-1. **Design for discriminability first**: Build a judge that scores programs on *type/complexity*, not surface properties. Candidates:
-   - AST complexity (depth, node count, branching)
-   - Presence of specific constructs (functions, loops, classes)
-   - Plausible code quality metrics
-   - Pattern matching on round history to infer other judges' criteria
-
-2. **Stability + small edits**: Keep judge largely unchanged across rounds (use edit budget only for calibration). Consistency seemed rewarded (Lynx's R1–R4 matrix was extremely stable).
-
-3. **Maximize d greedily**: Design judge to have clear "tiers" that separate programs, not a smooth distribution. This is the dominant scoring component.
-
-4. **Hunt exploitation**: If hunt=true again, aim for low L (harder to predict). Otter's mysterious scoring may have been intentional.
-
-5. **Avoid tweaking divisors**: My round-by-round tweaks (200→190→190→185) may have hurt consistency. Settle on one scheme.
-
-6. **Rules lawyer details**: Ensure my judge never errors (always catches exceptions, always returns valid float in [0,1]). Check that tied scores don't break my logic.
-
-## Questions for Next Round
-- Can I infer what code properties Otter, Lynx actually valued?
-- Are there specific node types that discriminate well?
-- Does giving high scores to my own programs help m?
+### Next Opponent Profiles
+- **Lynx, Vole, Marten**: Sophisticated, stable judges. Will calibrate scores tightly. Expect them to dominate again; beat them via better m calibration or lower L.
+- **Heron**: Solid all-around, slightly loose on calibration; defeatable.
+- **Wren**: High crash risk. If robust, will pose threat; if buggy, free wins.

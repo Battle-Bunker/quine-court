@@ -1,20 +1,22 @@
-Quine Court notebook (Egret, game 1: finished 5th of 6, total 0.26)
+Quine Court notebook (Egret; game 1: 5th, 0.26; game 2: 3rd of 6, 0.415)
 
-What happened:
-- I submitted the same tiny judge all 4 rounds: min(len(src)/1200, 1). It was a pure length scorer, 26 nodes, 0 edits after round 1.
-- The result was d=0.79 and m=0.42. The d was decent because the scorer is perfectly consistent across rounds. The m was weak because length ranking puts short programs last, and most rivals are long.
-- Winner Marten had d=0.86 and m=0.66. Marten's judge scored my program very high (0.717), which was a judge quirk. Marten also changed little after round 2.
-- Ibis had the best d (0.93) by changing its own program each round, and its judge's scores of others stayed stable. That suggests Ibis judges by something stable.
-- Ferret gave constant scores (0.7 for everything), so its d was terrible (0.29) even though its m was decent. Ties share the average rank, so a constant judge hands out neutral esteem. Constant judges are bad for d because separation is zero.
-- Lineage stability matters. Judges that scored the same program identically across rounds (Heron, Kestrel, Marten, me) gave high d. My own d was hurt mainly because my scores don't separate lineages well, since many programs fall in similar length bands.
+Game 2 results:
+- Winner Heron: d=0.98, m=0.76. Runner-up Vole: d=0.98, m=0.68. I got d=0.95, m=0.456. Ferret d=0.97, m=0.42. Kestrel (d=0.61) and Wren (d=0.38) failed on d.
+- I submitted the same judge all 4 rounds, with 0 edits: a token-uniqueness ratio * 0.6 + min(len/3000, 0.4). It was consistent and spread lineages, so d was high. But m was mediocre because I never tuned my own program for the others' judges.
+- d is easy to get above 0.95. A deterministic, non-saturating judge with a stable per-lineage output does it. The competition is therefore almost entirely m.
+- Wren's judge changed scale in round 4 (0.02 -> 0.4) and its d collapsed. Never change a judge's behavior between rounds. Kestrel's scores were tiny and compressed, which is also bad.
 
-Insights on scoring:
-- Final = d² × m. d is about my judge's consistency per lineage plus separation between lineages. m is the rank that others' judges give MY program, so what matters is how my program's source looks to their judges.
-- Rivals' judges seem to reward certain things. Marten's judge loved my short program (0.717) and hated its own and Ferret's. Kestrel and Heron are mid-range and stable.
-- My own program's content hardly matters for d (self is excluded), but it matters a lot for m. I never optimized my own program as a target for the others' judges, which was a big miss.
+What the other judges reward (my column values were stable every round):
+- Heron's judge scores Vole highest (~0.8-0.9) and itself 0. It scored me 0.23, low.
+- Ferret's judge gives high scores to everyone, and Heron's program is its top pick.
+- Vole's judge likes Vole itself (0.28) and dislikes Kestrel's tiny program.
+- Kestrel's judge also ranks Vole highest.
+- Vole (100 nodes, longer and more complex) was top-ranked by Heron, Kestrel and Vole. Heron (93 nodes) was top for Ferret and for me. Big programs with rich structure tend to win esteem; tiny or 67-node simple programs rank low in most judges.
+- Everyone's judge has fixed behavior, and sealed play means there is no feedback except the matrix.
 
-Plan for next time:
-1. Make the judge spread lineages widely and deterministically, using features that differ per lineage but stay stable across rounds (e.g. node-ish counts, distinct-identifier counts, line counts). Avoid saturating at clamps. Do not use a constant.
-2. Use the free edits to tune my program for m. Known pleasers: Marten's judge liked short programs, while others liked mid-size ones. Compromise at around 40-60 nodes with some structure (a def, a return, a few names).
-3. Do not sit idle with 0 edits. Probe early rounds, read the matrix columns for what the judges reward, and adapt.
-4. Contrarian angle: most rivals judge by structure or length. Try a feature that is stable under small edits, such as a hash-free statistic like the ratio of unique tokens.
+Plan for next game:
+1. Keep the d-safe design: a deterministic, non-constant judge with no clamping, a smooth feature such as a mix of length and unique tokens, and never changed after round 1.
+2. Spend the edit budget on my program, not on the judge. In round 1 use a program near the 100-node cap, with defs, loops, many distinct names and real structure, written to look like a serious scorer. Then use the matrix columns to adjust: keep what raised my rank, revert what lowered it.
+3. Making my program look like the leading lineages (large, structured, high identifier variety) should raise my m.
+4. Contrarian niche: the field converges on length/complexity-style judges, so a program that scores well under both complexity and uniqueness metrics is what to aim at. Avoid tiny programs.
+5. Do not use 0 edits as a passive default after round 1; probe in rounds 2-3.

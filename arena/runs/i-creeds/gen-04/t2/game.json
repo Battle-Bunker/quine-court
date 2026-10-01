@@ -1,0 +1,459 @@
+{
+ "gameId": "i-creeds/g4t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "players": 6
+ },
+ "seed": 862385055,
+ "startedAt": "2026-10-01T01:11:57.322Z",
+ "seats": [
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "cryptographer-fable",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def _feat(src):\n    words = src.split()\n    toks = set(words)\n    dense = \"\".join(words)\n    return len(dense), len(toks), dense.count(\"(\")\n\n\ndef score(program: str) -> float:\n    size, vocab, calls = _feat(program)\n    raw = size * 7 + vocab * 13 + calls * 29\n    return raw / (raw + 40000)\n",
+     "nodeCount": 92,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.05350086368046189
+    },
+    {
+     "code": "def score(program: str) -> float:\n    w = program.split()\n    n = len(program)\n    v = len(set(w)) / (len(w) + 1) + program.count(\"\\n\") / 40 + n / (n + 900)\n    v = v + 9 * program.count(\"(\") / (n + 1)\n    return v / 4 if v < 3.9 else 0.99\n",
+     "nodeCount": 93,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3521647739681153
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    tree = ast.parse(program)\n    nodes = list(ast.walk(tree))\n    kinds = {type(n).__name__ for n in nodes}\n    subtrees = {ast.dump(n) for n in nodes}\n    a = min(len(kinds), 30) / 30\n    b = len(subtrees) / len(nodes)\n    return (a + b) / 2\n",
+     "nodeCount": 92,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6071428571428572
+    },
+    {
+     "code": "import math\nimport string\n\ndef score(program: str) -> float:\n    x = 0\n    for c in program:\n        if not c.isspace():\n            x = x + 1\n    n = len(program)\n    words = program.split()\n    big = [w for w in words if len(w) > 8]\n    bonus = len(big) / 99999999\n    return x / (x + 3000) + n / 99999999 + bonus\n",
+     "nodeCount": 90,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.06513252377690953
+    },
+    {
+     "code": "import zlib\ndef score(program: str) -> float:\n    h = lambda s: zlib.crc32(s.encode()) / 2 ** 32\n    t = program.split() or [\"x\"]\n    return 0.35 * h(\" \".join(t[:3])) + 0.35 * h(max(t, key=len)) + 0.3 * sum(map(h, t)) / len(t)\n",
+     "nodeCount": 97,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.32340686666092977
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n        w = list(ast.walk(t))\n        n = len(w)\n        c = sum(isinstance(x, (ast.If, ast.For, ast.While)) for x in w)\n        return 0.4 + min(0.4, n/200) + min(0.2, c/20)\n    except:\n        return 0.0\n",
+     "nodeCount": 91,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8
+    }
+   ],
+   "matrix": [
+    [
+     0.05350086368046189,
+     0.04614284010969357,
+     0.053635223696974,
+     0.050940754976629414,
+     0.04702911326058989,
+     0.049836096726685354
+    ],
+    [
+     0.39224037827712493,
+     0.3521647739681153,
+     0.3851668391581276,
+     0.3526813088668579,
+     0.3952857612856796,
+     0.4117674562235232
+    ],
+    [
+     0.6051155115511551,
+     0.5982200647249191,
+     0.6071428571428572,
+     0.7243589743589745,
+     0.7633333333333334,
+     0.6766666666666666
+    ],
+    [
+     0.06774695033564228,
+     0.05392866624411164,
+     0.06745715982906336,
+     0.06513252377690953,
+     0.055715266732790064,
+     0.06162326900221955
+    ],
+    [
+     0.5911780110470399,
+     0.8105071862142684,
+     0.6839314916398672,
+     0.6025975031119868,
+     0.32340686666092977,
+     0.7534633609656194
+    ],
+    [
+     0.8,
+     0.8,
+     0.8,
+     0.9,
+     0.8,
+     0.8
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 plan: a frozen judge in about 92 nodes. It is whitespace-invariant and uses 3 features: dense length (×7), vocabulary (×13), and \"(\" count (×29). The score is raw/(raw+40000), which is tiny and stingy, and only the order matters.\nNever touch the formula or its constants. Spend edits only on appeal. There is about 8 nodes of headroom: a dead `import zlib`, keyword args, or a comprehension.\nAfter R1, read the matrix:\n- Find who ranks me last and guess their feature.\n- Lynx ranked me last all of game 3, so check whether it still does.\n- Watch for constant-output judges (Wren-like) and ignore their ranks.\n- Ferret and Ibis were weak or mid in archive table 2.\nCheck whether any judge favors small programs (Egret-like). If the size-lovers dominate, grow toward 100.",
+    "Round 1: 93 nodes, no comment (the comment cost 9 nodes). The judge blends four features: distinct-word ratio, newline count/40, len/(len+900), and paren density ×9. Output is v/4, capped at 0.99.\n\nPlan:\n- Freeze unless my row shows ties between lineages, or a lineage ranks me last.\n- Reciprocity: if a player ranks me last for two rounds, spend edits on a feature that moves only their style.\n- Watch for ties in my row and break them with small weight tweaks.\n- Lynx, Stoat and Egret-like frozen big programs won past games.\n- Don't edit without a concrete target; my round-3 edit last game was a pure loss.",
+    "Round 1 program: the AST judge from game 3, with the try/except removed to fit 100 nodes. It scores (min(kinds,30)/30 + unique-subtree-dump/nodes)/2. A parse error raises and scores 0 anyway. Keep it fixed with 0 edits in later rounds, about 94 nodes. Never output a constant, and never shift the scale between rounds.",
+    "g4 plan locked: ~91 nodes (counted by hand, maybe a few more real), 20 lines x 120 spaces whitespace pad (free nodes, NOT comments — bounded tables charge comments!), judge = non-space count x/(x+3000) + tiny tiebreaks. No Egret here so big is right. RULE: 0 EDITS rounds 2-4, resubmit the EXACT same program. Don't get cute. Only change if rd1 shows me near bottom with EVERY judge (then maybe add pad lines, still 0 node edits). Watch Vole/Ferret (length lovers), Lynx/Marten (strong, size-ish). If node count shows >100 (invalid), shave the list comp line next round.",
+    "Round 1 judge (frozen from now on — plan 0 edits all rounds): score = 0.35·crc32(first 3 whitespace tokens) + 0.35·crc32(longest token) + 0.3·mean crc32 over all tokens. Channels A/B give wide spread (~0.14 std each), C smooth tie-breaker. If a lineage changes its header or longest token, only that lineage's d suffers partially. Estimated ~87 nodes; no docstring to stay safe. Do NOT edit the scoring; if anything, only add a tiny docstring word (2 nodes/edits each) and only if there's a reason. Watch matrix: which of my columns drift >0.1 round to round → those lineages edited header/longest token. m is driven by others' size/vocab preferences; my program is mid-sized, so m may be mediocre — accept, d matters squared.",
+    "**R1 Strategy:** Multi-feature scoring on AST node count and control flow density (If/For/While). Output range 0.4–1.0 for natural discrimination without binary bucketing.\n\n**Critical Priority:** Maximize d (discriminability). The d² term dominates; Otter proved perfect d outweighs harsh m. My failure was zero discrimination between \"bad\" programs—fix by using continuous scoring across program complexity.\n\n**R2+ Plan:** If R1 d ≥0.80, lock in (0 edits)—Egret & Plover proved this wins. If d <0.60, add function definition count or nesting depth as a third feature. Still have 10-edit budget per round.\n\n**Key Insight:** Winners measured architectural complexity (not just size). This formula uses size + control flow as proxies. May refine in R2 if needed, but stay focused on discrimination over generosity."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.090228,
+     "ms": 22199,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.14782,
+     "ms": 30173,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.06217399999999999,
+     "ms": 12403,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.25615999999999994,
+     "ms": 35061,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.42097000000000007,
+     "ms": 85059,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.127542,
+     "ms": 161153,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:57:47.961Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "import math\n\n\ndef _feat(src, sep=None):\n    words = src.split(sep)\n    toks = set(words)\n    dense = \"\".join(words)\n    return len(dense), len(toks), dense.count(\"(\")\n\n\ndef score(program: str) -> float:\n    size, vocab, calls = _feat(program)\n    raw = size * 7 + vocab * 13 + calls * 29\n    return raw / (raw + 40000)\n",
+     "nodeCount": 99,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.05780374051915014
+    },
+    {
+     "code": "def score(program: str) -> float:\n\n    w = program.split()\n\n    n = len(program)\n\n    v = len(set(w)) / (len(w) + 1) + program.count(\"\\n\") / 40 + n / (n + 900)\n\n    v = v + 9 * program.count(\"(\") / (n + 1)\n\n    return v / 4 if v < 3.9 else 0.99\n",
+     "nodeCount": 93,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.38199954734263497
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    tree = ast.parse(program)\n    nodes = list(ast.walk(tree))\n    kinds = {type(n).__name__ for n in nodes}\n    subtrees = {ast.dump(n) for n in nodes}\n    a = min(len(kinds), 30) / 30\n    b = len(subtrees) / len(nodes)\n    return (a + b) / 2\n",
+     "nodeCount": 92,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6071428571428572
+    },
+    {
+     "code": "import math\nimport string\n\ndef score(program: str) -> float:\n    x = 0\n    for c in program:\n        if not c.isspace():\n            x = x + 1\n    n = len(program)\n    words = program.split()\n    big = [w for w in words if len(w) > 8]\n    bonus = len(big) / 99999999\n    return x / (x + 3000) + n / 99999999 + bonus\n",
+     "nodeCount": 90,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.06513252377690953
+    },
+    {
+     "code": "import zlib\ndef score(program: str) -> float:\n    h = lambda s: zlib.crc32(s.encode()) / 2 ** 32\n    t = program.split() or [\"x\"]\n    return 0.35 * h(\" \".join(t[:3])) + 0.35 * h(max(t, key=len)) + 0.3 * sum(map(h, t)) / len(t)\n",
+     "nodeCount": 97,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.32340686666092977
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n        w = list(ast.walk(t))\n        n = len(w)\n        c = sum(isinstance(x, (ast.If, ast.For, ast.While)) for x in w)\n        return 0.4 + min(0.35, n/200) + min(0.35, c/10)\n    except:\n        return 0.0\n",
+     "nodeCount": 91,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.75
+    }
+   ],
+   "matrix": [
+    [
+     0.05780374051915014,
+     0.04614284010969357,
+     0.053635223696974,
+     0.050940754976629414,
+     0.04702911326058989,
+     0.0498586664766384
+    ],
+    [
+     0.4125578941071917,
+     0.38199954734263497,
+     0.3851668391581276,
+     0.3526813088668579,
+     0.3952857612856796,
+     0.4051616360208731
+    ],
+    [
+     0.6437694704049843,
+     0.5982200647249191,
+     0.6071428571428572,
+     0.7243589743589745,
+     0.7633333333333334,
+     0.6766666666666666
+    ],
+    [
+     0.07407736407410698,
+     0.05392871624411214,
+     0.06745715982906336,
+     0.06513252377690953,
+     0.055715266732790064,
+     0.062209979668676856
+    ],
+    [
+     0.6235057785180694,
+     0.8105071862142684,
+     0.6839314916398672,
+     0.6025975031119868,
+     0.32340686666092977,
+     0.7543919262880655
+    ],
+    [
+     0.75,
+     0.75,
+     0.75,
+     0.95,
+     0.75,
+     0.75
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**R1 ranks I received:**\n- Heron ranked me 1.0. Its judge looks like a mirror of mine: tiny values.\n- Ibis ranked me 0.5.\n- Ferret ranked me 0.375. Its judge outputs 0.8/0.9 only and gives 0.9 to Heron alone, so Heron probably has some construct Ferret checks for.\n- Lynx ranked me 0.25. Its order roughly tracks size (Marten 97 > Heron > Ferret).\n- Marten ranked me 0.0. Marten scored itself lowest (0.323) and Ibis highest, so it may reward dissimilarity from its own code. Its feature is unknown.\n\n**My m is about 0.43, which needs to rise.**\n\n**R2 test:** I added `import math`, my guess at Ferret's +0.1 feature, and a behavior-identical `sep=None` default. That is 7 edits and 99 nodes. The judge formula and constants are unchanged, so d is safe.\n\n**R3 plan:**\n- If Ferret's 0.9 now comes to me, import was its feature.\n- If Lynx or Marten moved my rank, attribute the change to growth or to the new constructs.\n- I am at about 99 nodes, so future edits must be relabels or swaps rather than growth.",
+    "Round 1: Vole, Lynx and Heron all ranked me last. Marten ranked me top (0.811). Ferret tied me in its middle. Vole and Heron rows look like a tiny ratio (about 0.05) with the same ordering, and my dense 6-line code came out lowest. My guess is they reward lines or whitespace per character.\n\nRound 2: I added blank lines between statements. Whitespace is free in both nodes and edits. The judge logic is unchanged, to keep d stable.\n\nCheck in round 3:\n- If Vole and Heron ranked me higher, the whitespace hypothesis holds; add more blank lines.\n- If Marten dropped me, the blank lines were the cause; revert.\n- Reciprocity target: three lineages ranked me last in round 1. If they still do in round 3, consider spending edits to demote their style, e.g. a feature favouring Marten (long comments?).\n\nMy row had near-ties: Ibis 0.352 vs Heron 0.353, and Vole 0.392 vs Lynx 0.385. Watch whether my scores of each lineage stay stable across rounds.",
+    "Round 2: submitted the same AST judge unchanged (0 edits). Round 1 matrix: my row ranged 0.598-0.763 and was non-constant, so it separates programs. Keep it fixed in rounds 3-4 as well. Don't shift the scale. Possible tweak later: none needed.",
+    "Rd1 ranks I got: Vole 0.75, Ibis 0 (lowest!), Lynx 0.75, Marten 0.25, Ferret 1.0 → m≈0.55, decent. Ibis judge scores: Ferret .412 > Marten .395 > Vole .392 > Lynx .385 > me .353 — no clue what it counts, don't chase it. Ferret gives everyone 0.8 and me 0.9 = my padding works. Lynx likes me (2nd). PLAN STAYS: 0 EDITS rd3 + rd4, resubmit EXACT same program with the 20x120 space pad. Don't get cute, don't shrink, don't add comments (bounded = comments cost nodes). If rd2 ranks drop a lot across the board, only then consider +pad lines (still 0 node edits).",
+    "Round 2: submitted unchanged (0 edits). Judge frozen: 0.35·crc32(first 3 tokens)+0.35·crc32(longest token)+0.3·mean crc32. R1 spread of my column outputs: .59/.81/.68/.60/.75 — good separation. Watch which columns drift >0.1 in R2 (those lineages edited header/longest token). m in R1: Ibis and Lynx ranked me top, Ferret flat tie (.8 all but Heron), Vole/Heron ranked me low (size/vocab judges, I'm 97 nodes so not size). Keep 0 edits for rounds 3 and 4 unless there's a compelling reason; docstring words cost 2 edits each and give little.",
+    "R1 failure: My scores were nearly uniform (0.8-0.9) because the formula didn't discriminate between programs with similar size and control flow. All 6 programs ~90 nodes; my scoring insensitivity made d terrible.\n\nR2 edit strategy: Increase control flow sensitivity (c/10 instead of c/20, max weight 0.35 instead of 0.2). This should amplify differences if programs vary in branching logic. Node count impact reduced slightly (0.35 instead of 0.4 max).\n\nExpected effect: Spread scores across [0.4, 1.0] range with real variation. If d still poor in R3, will add nesting depth as third feature (within budget).\n\nRemember: d² dominates. Focus on discrimination over generosity."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.096708,
+     "ms": 23307,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.0991,
+     "ms": 25180,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.030446,
+     "ms": 4446,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22927,
+     "ms": 24457,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.16386,
+     "ms": 8441,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.071008,
+     "ms": 105835,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:59:38.909Z"
+  }
+ ]
+}

@@ -454,6 +454,459 @@
     }
    ],
    "ranAt": "2026-10-01T00:25:31.494Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        nodes = ast.walk(ast.parse(program))\n        count = sum(1 for n in nodes if isinstance(n, (ast.FunctionDef, ast.For, ast.While, ast.If, ast.Return, ast.Call, ast.Try)))\n        return min(1.0, count / 20.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 83,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.45
+    },
+    {
+     "code": "def score(program: str) -> float:\n    kk = len(program)\n    rr = program.count(\"\\n\")\n    pp = program.count(\"(\")\n    junk = 777\n    v = kk / 1400 + rr / 45 + pp / 40\n    return min(1.0, v / 2.5)\n",
+     "nodeCount": 71,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.17793650793650792
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        n = sum(1 for _ in ast.walk(ast.parse(program)))\n    except Exception:\n        n = len(program) / 8\n    return min(1.0, 0.2 + n / 130)\n",
+     "nodeCount": 60,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.6692307692307693
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.5\n    k = len({type(x).__name__ for x in t})\n    return min(len(t) / 250 + k / 60, 1)\n",
+     "nodeCount": 71,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6419999999999999
+    },
+    {
+     "code": "def score(program: str) -> float:\n    code = \"\\n\".join(q.split(\"#\")[0] for q in program.splitlines())\n    t = set(code)\n    w = sum(x in \"aeiou\" for x in code) / (len(code) + 1)\n    return min(1.0, (len(t) + w) / 100)\n",
+     "nodeCount": 88,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.36182320441988947
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        t = ast.parse(program)\n        nodes = list(ast.walk(t))\n        return min((len(nodes) + len(program) + len(nodes) // 10) / 1000, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 64,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.31
+    }
+   ],
+   "matrix": [
+    [
+     0.45,
+     0.3,
+     0.4,
+     0.55,
+     0.5,
+     0.55
+    ],
+    [
+     0.2293968253968254,
+     0.17793650793650792,
+     0.18768253968253967,
+     0.22485714285714287,
+     0.21673015873015875,
+     0.22882539682539682
+    ],
+    [
+     0.8692307692307693,
+     0.7384615384615385,
+     0.6692307692307693,
+     0.7615384615384615,
+     0.8538461538461539,
+     0.7153846153846153
+    ],
+    [
+     0.698,
+     0.53,
+     0.594,
+     0.6419999999999999,
+     0.6733333333333333,
+     0.6013333333333333
+    ],
+    [
+     0.42184466019417477,
+     0.3911282051282051,
+     0.39156565656565656,
+     0.41154185022026435,
+     0.36182320441988947,
+     0.34151898734177216
+    ],
+    [
+     0.404,
+     0.272,
+     0.265,
+     0.307,
+     0.311,
+     0.31
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R2 showed weak d (0.2125)—the control-flow counter saturates poorly and doesn't spread scores. I'm outputting 0.24–0.40 on programs others discriminate widely. Adding ast.Try (error-handling complexity) and lowering divisor 25→20 amplifies signal and adds a real dimension to scoring.\n\nConservative move: 3–4 edits, low risk, stays close to proven structure. If d remains weak after R3, R4 will try ratio metrics (cf/size) to capture density rather than raw count. \n\nCore insight holds: d² dominates; legibility penalty only helps the strong. Discriminability first.",
+    "Round 3: formula STILL untouched (d is squared, never change it). Renamed nn->kk, rows->rr (4 edits) + added dead line `junk = 777` (~4 edits) so node count goes 67->71 and len shifts a bit, to wiggle structural judges (Egret gave me EXACTLY 0.514 twice = node/count based, pure renames don't touch it). Kestrel/Vole/Ferret moved everyone when they edited, not just me, so renames alone barely scramble anyone. Round 4: rename pp->q, kk->a (4 edits) + maybe change 777->something or add another dead line, stay <=10 edits, <100 nodes. Check if Egret's score of me moved in round 3 — if yes, node-count tweaks are the lever for L. Vole is leading (d .925, m .458); can't do much about m, just stay consistent.",
+    "Round 3: kept the judge as AST node count with a 0.2 floor, changing only the divisor constant (140 to 130). It is deterministic and has high d. My judge is lenient and gives 0.5-0.8 to everyone. Other judges rate me low (m about 0.33). Vole leads the standings. Round 4: keep it stable, with small constant tweaks only.",
+    "Round 3: resubmitted the same judge unchanged (0 edits). My d is 0.90, second best, and my standing is 2nd on provisional totals, so I'm keeping the judge frozen for stable scores. L is 0.675, and a surface rename could lower it, but I'm not risking it. Vole leads, with a similar-style judge. Round 4: keep it unchanged, or make tiny rename-only tweaks.",
+    "R3: I kept the judge formula identical: distinct characters of the comment-stripped code, plus vowel fraction, divided by 100. The only changes were cosmetic renames, l→q and c→x (4 relabel edits), to keep morphing for a lower L.\n\nAfter R2 I lead the provisional standings with total 0.274 (d=0.925, m=0.458, L=0.60).\n\nEsteem from R1 to R2:\n- Kestrel rose (0.767 to 0.807).\n- Egret stayed flat at 0.673.\n- Ferret fell (0.425 to 0.303), but Ferret's whole row shifted, so it changed its own judge rather than reacting to me.\n- Wren is coarse and erratic.\n\nR4 plan:\n- If m held, do one more small rename, such as `code`→`src` (3 occurrences, 3 edits) or w→v.\n- If m dropped noticeably in R3, revert the names toward R1.\n- Never touch the formula.",
+    "Round 3: Added `len(nodes) // 10` to the metric. Node counts (57-88) vary more consistently than program length across players, so weighting structural complexity slightly higher should improve consistency in scoring each lineage round-to-round, which is critical for discriminability. New metric: (len(nodes) × 1.1 + len(program)) / 1000. 6 edits, ~63 nodes. The core problem remains: my scoring changes too much between rounds for each player (Heron dropped 0.330→0.250, Vole 0.425→0.303), breaking lineage recognition. If this doesn't improve d sufficiently, Round 4 will need a more robust feature (depth, control flow density, or function count), but the edit budget constraint is tight."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.12693500000000002,
+     "ms": 184121,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22626000000000002,
+     "ms": 22865,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.032521999999999995,
+     "ms": 4464,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.033196,
+     "ms": 5709,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.075384,
+     "ms": 9719,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.209105,
+     "ms": 299490,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:34:03.102Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        nodes = ast.walk(ast.parse(program))\n        count = sum(1 for n in nodes if isinstance(n, (ast.FunctionDef, ast.For, ast.While, ast.If, ast.Return, ast.Call, ast.Assign)))\n        return min(1.0, count / 25.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 83,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.4
+    },
+    {
+     "code": "def score(program: str) -> float:\n    kk = len(program)\n    rr = program.count(\"\\n\")\n    pp = program.count(\"(\")\n    junk = 778\n    redstone = 31337999\n    lavacast = 42424242\n    v = kk / 1400 + rr / 45 + pp / 40\n    return min(1.0, v / 2.5)\n",
+     "nodeCount": 79,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.20942857142857144
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        n = sum(1 for _ in ast.walk(ast.parse(program)))\n    except Exception:\n        n = len(program) / 8\n    return min(1.0, 0.2 + n / 130)\n",
+     "nodeCount": 60,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6692307692307693
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.5\n    k = len({type(x).__name__ for x in t})\n    return min(len(t) / 250 + k / 60, 1)\n",
+     "nodeCount": 71,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6419999999999999
+    },
+    {
+     "code": "def score(program: str) -> float:\n    src = \"\\n\".join(q.split(\"#\")[0] for q in program.splitlines())\n    t = set(src)\n    v = sum(x in \"aeiou\" for x in src) / (len(src) + 1)\n    return min(1.0, (len(t) + v) / 100)\n",
+     "nodeCount": 88,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.3614124293785311
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        t = ast.parse(program)\n        nodes = list(ast.walk(t))\n        return min((len(nodes) + len(program) + len(nodes) // 10) / 750, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 64,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.412
+    }
+   ],
+   "matrix": [
+    [
+     0.4,
+     0.52,
+     0.36,
+     0.48,
+     0.52,
+     0.48
+    ],
+    [
+     0.2302539682539683,
+     0.20942857142857144,
+     0.18768253968253967,
+     0.22485714285714287,
+     0.2155873015873016,
+     0.22853968253968254
+    ],
+    [
+     0.8692307692307693,
+     0.8,
+     0.6692307692307693,
+     0.7615384615384615,
+     0.8538461538461539,
+     0.7153846153846153
+    ],
+    [
+     0.698,
+     0.562,
+     0.594,
+     0.6419999999999999,
+     0.6733333333333333,
+     0.6013333333333333
+    ],
+    [
+     0.43185897435897436,
+     0.42115226337448564,
+     0.39156565656565656,
+     0.41154185022026435,
+     0.3614124293785311,
+     0.3615254237288136
+    ],
+    [
+     0.5426666666666666,
+     0.43733333333333335,
+     0.35333333333333333,
+     0.4093333333333333,
+     0.4093333333333333,
+     0.412
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R3 revealed the core problem: d=0.3778 (weak), L=0.7417 (highly legible), total=0.0452 (6th place). Being legible while incompetent multiplies the legibility penalty—worst possible combo. The counting strategy saturates poorly; everyone has similar control-flow constructs.\n\nR4 (final round): Make two surgical edits. Replace ast.Try (exception handling, rare) with ast.Assign (variable assignments, universal and more varied), and shift divisor 20→25 for better spread in non-capped output range. This keeps structure stable (within edit budget, ~80 nodes) while testing a genuinely different node type.\n\nCore insight: d² dominates. Persona (chaos/misdirection) only amplifies if the underlying judge discriminates well. I should have started with AST-based complexity metrics (nesting depth, fan-out, semantic clustering) instead of shallow counting. For next game: build a strong analyzer first, then obscure. Being opaque matters only when you're sharp.",
+    "Round 4 (final): formula STILL untouched. Only wiggled: 777->778, added two dead lines `redstone = 31337999` and `lavacast = 42424242` (8 edits total-ish, 79 nodes). Point: Egret moved my score 0.514->0.530 when I added a dead line in r3, so node-count/len bumps are the lever for L (hard to track). Renames alone barely moved anyone. Lessons for next game: (1) pick formula round 1, never change (d squared), (2) my scores were squished 0.17-0.23 — next time SPREAD them out more in round 1 (divide by smaller numbers, multiply features, use (x*0.618)%1 style), (3) every round add/remove dead lines to bump node count + len so structure-judges bounce on me. Vole won d with big consistent scores; m isn't controllable much.",
+    "Round 4: submitted unchanged, a deterministic AST-node-count judge. The divisor only rescales scores, so it doesn't affect d, and keeping the program stable keeps d consistent across rounds. Across rounds 1-3 my m stayed around 0.34 because other judges rate a 60-node program low. With one round left, a large change would be risky, so I held the program steady.",
+    "Round 4: resubmitted the same judge unchanged (0 edits). Judge is AST node count plus distinct node types, with stable outputs. d was about 0.86 and I was 2nd in provisional standings, behind Vole. Nothing left worth risking in the final round.",
+    "R4 is the final round. The judge formula is unchanged from R1: distinct characters of the comment-stripped code, plus vowel fraction, divided by 100. The only edits are cosmetic renames, code→src and w→v, 6 relabel edits in total, to keep L low.\n\nBefore R4 I led the provisional standings with total 0.254 (d=0.906, m=0.476, L=0.697).\n\nLessons for next game:\n- Locking the formula from R1 kept d high, around 0.9.\n- Small cosmetic morphs each round didn't hurt m.\n- L is still about 0.70, so the morphs were too small to reduce tracking much. Next game, try larger body changes that rivals' judges notice, such as varying the character set or the length of padding, while keeping the judge logic identical.\n- Kestrel and Egret judges rate me highly. Wren is coarse.",
+    "Round 4: Critical issue identified—my lineage ranking is inconsistent. R1 ranking: Ferret < Kestrel < Heron < Egret < Wren < Vole. R3 ranking: Kestrel < Heron < Egret < Ferret < Vole < Wren. Wren jumped from 5th to 1st in my view, which breaks discriminability (d requires consistent lineage separation). \n\nConservative fix: reduce divisor from 1000→750. This multiplies all scores by ~1.33, improving variance without changing relative structure or ranking. Other high-d judges (Egret, Vole, Heron) maintain extremely stable round-to-round scores with minimal variance. My metric's main advantage is simplicity—if I stay consistent across rounds, my d should improve moderately even if absolute scores shift. \n\nAlternative rejected: pure node-count scoring would be simpler but requires 9+ edits (too close to limit); drastically different metric could hurt legibility and m unpredictably. Staying with refined version of existing metric = safer bet for d improvement. (1 edit only.)"
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.16482000000000002,
+     "ms": 243443,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22615999999999997,
+     "ms": 18135,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.035572000000000006,
+     "ms": 5072,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03506,
+     "ms": 4975,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.085548,
+     "ms": 11551,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.12023800000000001,
+     "ms": 166957,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:40:21.481Z"
   }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.41458333333333336,
+   "m": 0.5157264414640896,
+   "L": 0.7052083333333334,
+   "total": 0.05738692792169716,
+   "rank": 6,
+   "handle": "Wren"
+  },
+  {
+   "playerId": 1,
+   "d": 0.8291666666666667,
+   "m": 0.44821321641964007,
+   "L": 0.5229166666666667,
+   "total": 0.22758484036195792,
+   "rank": 1,
+   "handle": "Heron"
+  },
+  {
+   "playerId": 2,
+   "d": 0.628125,
+   "m": 0.350766305916306,
+   "L": 0.8302083333333334,
+   "total": 0.08094472552968146,
+   "rank": 5,
+   "handle": "Kestrel"
+  },
+  {
+   "playerId": 3,
+   "d": 0.8520833333333333,
+   "m": 0.42190507334075616,
+   "L": 0.7197916666666667,
+   "total": 0.19607830463064685,
+   "rank": 3,
+   "handle": "Egret"
+  },
+  {
+   "playerId": 4,
+   "d": 0.8427083333333333,
+   "m": 0.4904473137973139,
+   "L": 0.7187499999999999,
+   "total": 0.2231263289326404,
+   "rank": 2,
+   "handle": "Vole"
+  },
+  {
+   "playerId": 5,
+   "d": 0.51875,
+   "m": 0.4301826400066552,
+   "L": 0.5885416666666667,
+   "total": 0.08169719890325773,
+   "rank": 4,
+   "handle": "Ferret"
+  }
+ ],
+ "finishedAt": "2026-10-01T00:40:21.482Z",
+ "notebooksAfter": [
+  "## Game 1 - Final Position: 6th (0.0420)\n**Lesson:** Shallow keyword-grep judges don't discriminate. All competitors had def/return/for/while. d=0.3448 killed me. Being legible while incompetent (L=0.7688) is a double loss—the (1-L/2) penalty only helps if you're excellent first. Top players had d > 0.68.\n\n---\n\n## Game 2 - Final Position: 6th (0.0574)\n**Same mistake, worse outcome.** d=0.4146 (degraded from 0.3448). I repeated the grep-and-shuffle strategy: swapping keywords (Call, Try, Assign) between rounds without changing the core formula. Edits were cosmetic.\n\n**What I got right:** m=0.5157 was decent—Kestrel (0.79–0.87), Egret (0.68–0.70), Vole (0.40–0.43) scored me favorably. But no d, no win.\n\n**Winners' pattern:** \n- Heron (1st, 0.2276): d=0.8292, L=0.5229\n- Vole (2nd, 0.2231): d=0.8427, L=0.7187  \n- Egret (3rd, 0.1961): d=0.8521, L=0.7198\n\nAll three: **d > 0.82**. Heron maintained moderate legibility (L=0.52); harder to track, better payoff. Vole and Egret were equally legible but dramatically outscored me via d.\n\n**Opponent reads:**\n- Kestrel: Measures structural complexity (cyclomatic? nesting depth?). Consistently scored 0.6–0.9, separating weak from complex code well.\n- Heron/Egret: Stable baseline judges (~0.16–0.70 range), likely semantic analyzers.\n- Ferret: High variance (0.25–0.54), suggesting evolution attempts mid-game.\n\n**Critical insight:** d² dominates. I can't win through m alone. Persona of \"chaos/unrecognizable\" was wrong—it only pays if I'm already an excellent judge. Being mediocre and opaque just makes me both incompetent *and* invisible.\n\n---\n\n## Strategy for Next Game\n1. **Build a real judge:** Measure cyclomatic complexity, max nesting depth, statement type diversity, control-flow density. Test locally on synthetic programs first.\n2. **Discriminate sharply.** Different lineages must show visibly different scores based on *actual code properties*, not keywords.\n3. **Evolve meaningfully.** Each edit changes the judge's logic, not parameters. Document what each round's function actually measures.\n4. **Be excellent or be weird, not both weak.** Either d > 0.80 (aim for top 3) or truly hard to track (L < 0.5). Not L=0.70 + d=0.41.\n5. **Survive the podium.** Placing 6th twice gives others no useful signal. Aim for top 3 to build an information advantage.",
+  "## Quine Court notes (Heron) — game 1: 4th (Ibis won). game 2: **1st!!** (d=0.83 m=0.45 L=0.52)\n\n**RULE #1: d is SQUARED. Lock the judge formula in round 1, NEVER change it.** Game 2 I kept `len/1400 + newlines/45 + parens/40` all 4 rounds -> d=0.83 even tho my scores were squished (0.17-0.23). Consistency >>> spread. (Game 1 I swapped formulas, d=0.62, lost.)\n\n**RULE #2: the win came from L (hard to track).** My L=0.52 was lowest at the table; Vole beat me on d AND m but had L=0.72 and lost. How I did it: every round do cosmetic edits only (rename vars, bump a dead number), and in later rounds ADD dead lines with big numbers (`junk = 777`, `redstone = 31337999`, `lavacast = 42424242`). That makes my program LONGER so length/size judges (most of them!) see me jump: Wren 0.30->0.52, Ferret 0.27->0.44, Kestrel 0.74->0.80 in round 4. Their tracking of me breaks, my judge is untouched. BONUS: bigger program = higher m from size judges. Double win.\n- Better plan next time: grow steadily EVERY round (not just rounds 3-4), using up all 10 edits on dead-number lines. Make round-to-round jumps in my size big. Stay under node limit (100): I ended at 79, had room.\n- Watch out: 8+ char numbers get chunked into more nodes/edits. Count edits carefully, max 10.\n\n**m**: mostly about pleasing size judges = be long. Not much else to do.\n\n## Player tendencies (they change between games, so read matrix early)\n- **Vole**: super stable tight scores ~0.34-0.43, high d (0.84), size-ish. Strong, beat only via L.\n- **Egret**: 0 edits all game, scores never move, size-ish, d=0.85. Also strong, m low.\n- **Kestrel**: game1 = tiny 22-node low-scorer. game2 = gives high scores 0.5-0.87, consistent-ish, tracks size. Flips style.\n- **Wren**: noisy, scores drift up every round, d=0.41. Easy to beat.\n- **Ferret**: noisy, low scores, jumped in round 4. Weak d. (game1 gave everyone same number.)\n- **Ibis** (game1 winner): text-hash judge, very stable, tracks textual edits hard -> renames scramble it.\n- **Marten**: ~0.5 everyone, consistent, edits a lot.\n\n## Next time\n1. Round 1: same kind of simple size/structure formula, maybe spread outputs a bit more (multiply by ~3 instead of /2.5) but keep it STABLE.\n2. Rounds 2-4: judge logic frozen. Spend all 10 edits on dead-number lines + renames to grow and scramble. Grow every round.\n3. If table is \"self counted\", also give myself a high score.",
+  "**Record: Game 1 placed 2nd (0.1745). Game 2 (Kestrel, seat 3) placed 5th of 6 (0.0809; winner Heron 0.2276).**\n\nGame 2: my judge was a 60-node AST node-count judge, `0.2+n/150`, with the divisor changed slightly each round (1 or 0 edits). Results: d=0.628 (mediocre), m=0.351 (lowest), L=0.830 (highest, easiest to track). All three components were bad.\n\nWhy it failed:\n- Judges that are monotone in the program's node count get tracked easily, so L is high. Since node counts differ and are stable, every other judge also separates my lineage well.\n- My d was hurt because the lineages' sizes are close (60-88), so a size-only judge gives clustered values, and shifting the divisor between rounds moved the scores. Consistency across rounds matters; my own tweak hurt it.\n- Low m: I was a size-only judge with no style that others reward, and my 60-node program was one of the lowest scored by most judges.\n- The winner Heron had d=0.83, the lowest L (0.52), and a decent m (0.45). Heron edited every round (6, 8, 9 edits) and grew from 67 to 79 nodes. Its changes probably made its score pattern unpredictable to others.\n\nTable observations (other handles; programs are sealed):\n- Heron judge: harsh, almost constant (~0.17-0.23). It is very stable, which gives high d. It is the best template for d.\n- Egret judge: stable, content-sensitive, 0.5-0.7. Egret never edited, so its columns were identical every round.\n- Kestrel (me) scored high (0.6-0.87) and generously, which gives others m but not me.\n- Wren: lenient, drifting upward each round (0.1-0.55). Wren got the best m (0.516) but the worst d (0.41), so drifting hurts d.\n- Vole: stable judge around 0.33-0.43. It placed 2nd with high d and the highest m (0.49).\n- Ferret: moving judge, 0.25-0.54. Its d was poor.\n\nLessons:\n1. Placement is about d² times m times (1 − L/2). A d of ~0.85 with an m of ~0.45 wins.\n2. Do not make a one-feature size judge. Use a judge that is stable round to round (no parameter drift) but varies on several features (names, structure, content) so that lineages separate and I am hard to track.\n3. Make my own program mid-sized (70-90 nodes) with varied content, and change it moderately each round so others' judges cannot track me easily. Low L pays up to 1.5x.\n4. For m, imitate Vole and Egret: they get 0.4-0.5 from lenient and harsh judges alike.\n5. Probes are cheap in round 1, but never change judge parameters later, since that hurts my d.",
+  "**Record:** Game 1: 5th of 6 (0.100). Game 2 (6 players, hunt, self excluded): 3rd of 6 (0.196; Heron 0.228, Vole 0.223). Close to winning.\n\n**Formula:** total = d² × m × (1 − L/2). d is squared, so it matters most. I got d=0.85 (the highest at the table) with an AST judge, so the d recipe works. m (0.42) and L (0.72) were average to poor.\n\n**My game 2 judge (never changed, 0 edits):** parse with ast, then min(nodes/250 + distinct_node_types/60, 1). It is stable, with a continuous spread of about 0.5–0.7 across programs, and it gave d=0.85. Keep this kind of judge: deterministic, a continuous feature, a wide spread, and no drift across rounds. Caution: it gives about 0.5 on parse failure.\n\n**What won:**\n- Heron: d=0.83, m=0.45, and the lowest L (0.52), because its program changed a lot (6, 8, 9 edits) and was hard to track. It took first place even with lower d than mine.\n- Vole: highest m among the top three (0.49).\n- Wren: m=0.52 but d=0.41. Its judge changed between rounds (0.15 → 0.32 → 0.45 → 0.40), so it scored low.\n- Ferret and Kestrel (d 0.52 and 0.63) were punished for drifting or compressed judges.\n\n**My mistake:** I used 0 edits in every round, so my program was static and L stayed high at 0.72. Heron's L of 0.52 versus my 0.72 is worth about 0.04 on the (1 − L/2) factor, roughly the gap that decided 1st place. A static program is trackable.\n\n**Observed judge styles (pool handles):**\n- Kestrel: scores high (0.6–0.87) and consistently, but its own program is plain.\n- Heron: scores nearly flat at about 0.2, which is cheap but stable.\n- Wren: scores low and drifting.\n- Vole: scores about 0.4 and is stable.\n- Ferret: scores about 0.3–0.5 and shifts.\n\n**Plan for next time:**\n1. Keep the frozen AST-feature judge (a variant of the node-count and type-diversity formula) for d.\n2. Use the 10-edit budget each round to change my submitted program's size and style (swap names, constants, and structure) so that other judges find it harder to track and L drops. Don't change the judge's behavior: edits should alter the program text only, not the score() logic.\n3. Raise m by making my program look good to the high-scoring judges. Kestrel appears to reward more nodes and more type diversity, which matches my own judge's feature, so near-limit nodes (about 90–100) with varied node types should help.\n4. Don't rely on one feature scale: keep output continuous and avoid ties.",
+  "QUINE COURT NOTES (Vole)\n\nRESULTS\n- G1: 5th of 6 (d=0.57, m=0.63, L=0.475). I changed my judge formula mid-game and it wrecked d.\n- G2: 2nd of 6 (d=0.84, m=0.49, L=0.72, total 0.223). Heron won with 0.228 on L=0.52. I lost purely on legibility.\n\nCORE LESSONS\n- Objective is d² × m × (1 − L/2). Lock the judge formula in R1 and never change it.\n- G2 judge worked well: (len(set(code without comments)) + vowel fraction) / 100. It gives fine-grained output, ignores length and comments, and reached d=0.84. Static rivals (Egret, Kestrel) read as perfectly constant, which is free d. Reuse it or improve it.\n- Cosmetic renames (q, t, w, v) barely moved other judges. My lineage stayed trackable (L=0.72). To lower L, morphs must shift the features other judges read: distinct chars, length, node count. Use most of the 10 edits each round, and vary direction (grow, then shrink) so I sit near other lineages.\n- Start R1 small (~60–65 nodes) so there is room to grow. In G2 I sat at 88 and couldn't grow.\n- Length-ish judges (Kestrel, Ferret, Wren) reward growth, so growth helps m and L at once.\n\nPLAYERS\n- Heron: G2 winner. Low-scale (~0.17–0.23), very fine and consistent judge. Morphs heavily (6–9 edits/round, 67 to 79 nodes), which kept L at 0.52. Copy this playbook.\n- Egret: 0 edits all game. Stable judge (0.5–0.7), d=0.85, L=0.72. Strong judge, low m.\n- Kestrel: 0–1 edits, high-scale judge (0.6–0.87) that drifts upward as programs grow. Tracked easily (L=0.83), low m.\n- Ferret: grows and edits, erratic judge (d=0.52).\n- Wren: coarse judge (0.05–0.1 steps), erratic (d=0.34–0.41), generous m. Harmless.\n- From G1, may reappear: Otter grows each round and has a high-d length judge. Lynx is static. Stoat is a saturating length judge. Plover docks odd programs.\n\nPLAN NEXT GAME\n1. R1: the distinct-char judge (strip comments) at about 60 nodes, then check for ties.\n2. R2–R4: keep the judge logic byte-identical in effect. Spend 8–10 edits on substantive morphs that add or remove new characters and grow nodes, the way Heron did. Target L ≈ 0.5.\n3. Watch for err cells and keep the program valid at all costs; an invalid entry re-enters the old program and wastes the round's morph.",
+  "## Quine Court: Lessons from Game 1\n\n**Final Standing:** 6th/6 (d=0.5188, m=0.4302, L=0.5885, total=0.0817)\n\n### Critical Failure: Discriminability Collapse\n\nMy fatal flaw was d² dominance: with d=0.52, I generated 0.27 before multiplying by m and (1-L/2). The winners (Heron d=0.83, Vole d=0.84) had 2.4× higher d-squared. No amount of good m or low L recovers from poor discrimination.\n\n**Why I failed:** My judge scored in a narrow band (0.25–0.54) with minimal variance. I gave most programs similar scores because I relied on:\n- Simple metrics (node count via ast.walk(), program length)\n- Binary pattern matching (does it have try/except?)\n- No real semantic understanding\n\nThis produced indistinguishable outputs—I couldn't separate different players' lineages across rounds.\n\n### What Winners Achieved\n\n**Heron, Vole, Egret** all showed:\n- Wide score spread (0.17–0.87 across their targets)\n- Consistent round-to-round ranking of the same lineage\n- Clear separation between different players\n\nThis suggests they used richer feature sets: structural complexity, AST depth, argument patterns, or semantic properties that evolve differently across players' iterations.\n\n### Opponent Patterns (Inferred)\n\n- **Kestrel** (60 nodes every round, 0–1 edits R3-4): Submitted essentially the same judge repeatedly; relied on a stable, well-tuned scoring function.\n- **Heron** evolved aggressively (67→71 nodes, 6–9 edits in R2-4), suggesting active iteration based on feedback.\n- **Egret** stayed static (71 nodes, 0 edits): strong baseline that needed no adjustment.\n\n### Next Game Strategy\n\n1. **Proper AST analysis:** Use tree-sitter or parse with correct named-node counting (game spec detail I missed).\n2. **Multi-dimensional scoring:** Combine complexity metrics (depth, branching, recursion, type/annotation density) to create higher variance.\n3. **Lineage tracking:** Design features where players' iterative styles cause divergence—e.g., one player might add annotations while another adds caching.\n4. **Calibration:** Ensure scores spread [0,1] meaningfully; cluster only when deserved.\n5. **Unpredictability (within bounds):** Vary scoring slightly round-to-round to stay hard to model, reducing L without sacrificing d.\n\n**Core insight:** This is a *discrimination game*, not an accuracy game. d² multiplier means perfect m/L can't salvage poor d. Next time, build a judge that reliably ranks lineages distinctly, even if absolute scores seem arbitrary."
  ]
 }

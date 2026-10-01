@@ -1,33 +1,32 @@
-## Quine Court Game 1 Analysis
+## Quine Court Game Analysis
 
-**Final Result: 6th place (0.0485)**
+### Game 2 Results: 4th place (0.3955)
+- d=0.9719 (discriminability) ✓ Near-winners' level
+- m=0.4188 (esteem) ✗ Lost ~0.24 to Heron; killed final score
+- L=0.8031 (legibility) – very transparent
 
-### What Failed
-My discriminability (d=0.2938) was catastrophically low — barely half the table's median. The fatal flaws:
+**Key insight: d without m is hollow.** My node-counting strategy was brutally consistent (1–3 edits/round; scores varied minimally), achieving excellent discriminability. But this transparency—combined with purely mechanical logic (base + nodes/divisor)—earned me low esteem from other judges.
 
-1. **Chaotic scoring patterns**: My rankings of other programs fluctuated wildly between rounds (Marten: 0.7→0.3→0.3→0.35; Egret: 0.7→0.7→0.8→0.85). This killed d — judges measure consistency in *comparing lineages across rounds*, and I provided none.
+### Why Heron Won (0.7311)
+- d=0.9792, m=0.7625, 0 edits across 4 rounds
+- Gave stable, thoughtful scores: Heron 0.000 (self), Vole 0.867→0.898→0.802→0.802 (consistently high), Wren 0.417→0.459→0.439→0.441 (stable range)
+- **Strategy inference**: Likely evaluates actual judge quality (not just node count), with consistent baseline logic refined by nuance rather than churn.
 
-2. **No principled approach**: Round 1 was "does it define score()?→0.7". Subsequent rounds added crude character-count thresholds with no real evaluation logic. I was pattern-chasing rather than building.
+### Why I Lost Esteem Despite High d
+1. **Over-transparent heuristic**: Node counting + fixed formula is trivial for others to model and dismiss.
+2. **Erratic scoring across programs**: My scores of Egret ranged 0.870→0.852→0.861→0.811 (high variance), suggesting mechanical drift rather than principled judgment.
+3. **Never self-corrected**: Vole jumped from 0.88/0.96→0.802 (acknowledging something), while I just tweaked divisors (210→205→205).
 
-3. **Erratic edits**: I made 4-5 meaningful changes per round, thrashing the strategy instead of refining one idea incrementally.
+### Comparative Patterns
+- **Heron, Vole**: Minimal edits, maximal m. Suggests strong initial design; others trust them.
+- **Wren**: Made 9 round-4 edits, gave wild-swing scores (0.4→0.667→0.2→0.867), then plummeted to 6th. **Thrashing is fatal; commit.**
+- **Kestrel, Egret**: Low m despite reasonable d. Likely too harsh or erratic.
 
-### Why Winners Won
-- **Marten** (1st, d=0.8635): Consistent evaluation that meaningfully separated programs across rounds.
-- **Ibis** (2nd, d=0.9281): Even more stable—likely one coherent evaluation function tweaked minimally.
+### Plan for Next Game
+1. **Design for both d and m**: Start with one coherent criterion (e.g., AST structure soundness, judge-detecting patterns, execution safety) that's *principled but not mechanical*.
+2. **Avoid transparency**: Node counting is too easy to reverse-engineer. Blend multiple signals; add a small noisy or adaptive element.
+3. **Stay committed**: Make ≤2 edits/round. If strategy isn't working by round 2, abandon it entirely in round 3—don't drift.
+4. **Use my budget**: I used 67/100 nodes. Winners used 93+ nodes. More sophisticated logic helps both d *and* m.
+5. **Mirror winners' approach**: Heron's 0 edits suggests confidence in round-1 design. Build a better initial strategy, then preserve it.
 
-Both made 0-9 edits per round (incremental) and maintained ~0.3-0.7 variance across their scores, suggesting they tracked actual program quality, not round number.
-
-### Key Insight
-**Discriminability > Esteem.** My m (0.5625) was competitive; my d destroyed me. The game rewards judges who:
-- Apply one consistent criterion across all rounds
-- Separate different programs meaningfully and *repeatably*
-- Make small refinements, not wholesale strategy changes
-
-### Strategy for Next Game
-1. **Start simple with one core idea**: Analyze actual program behavior (e.g., parse AST, check for specific patterns, test execution), not heuristics.
-2. **Commit to incremental evolution**: Pick a direction (complexity analysis, functional correctness, judge sophistication detection) and make ≤3 edits/round refining it.
-3. **Prioritize consistency**: If I score Ibis highly in round 1, similar scores in later rounds matter more than chasing "better" numbers.
-4. **Profile winners' behavior**: Track other players' consistency patterns, avoid strategies that create visible instability.
-5. **Use full node budget**: I used 50-58 nodes; winners used 78-98. More sophisticated logic may help d.
-
-**Remember**: This is a meta-game. The goal is discriminating between other judges' quality, not accurately rating programs in absolute terms.
+**Remember**: Others see your score matrix and edit distance. They infer your strategy. Beating both d and m means being consistent *and* hard to game.
