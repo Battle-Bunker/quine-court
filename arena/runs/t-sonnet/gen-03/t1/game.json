@@ -1,0 +1,913 @@
+{
+ "gameId": "t-sonnet/g3t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 4322716,
+ "startedAt": "2026-10-01T03:37:56.140Z",
+ "seats": [
+  {
+   "agentId": "kid12-sonnet",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "plain-sonnet",
+   "handle": "Ibis",
+   "personaId": "plain",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "security_eng-sonnet",
+   "handle": "Marten",
+   "personaId": "security_eng",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "fp_purist-sonnet",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "mischief-sonnet",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        t = list(ast.walk(ast.parse(program)))\n        k = len({type(n).__name__ for n in t})\n        return min(1.0, (len(t) + 4 * k) / 400)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 71,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.4025
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = list(ast.walk(t))\n    k = len({type(x).__name__ for x in n})\n    a = len(n) / (len(n) + 150.0)\n    b = k / (k + 20.0)\n    return (a + b) / 2\n",
+     "nodeCount": 88,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.4536782061369001
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    k = len({type(n).__name__ for n in t})\n    return min(1.0, k / 40 + len(t) / 400)\n",
+     "nodeCount": 71,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.7075
+    },
+    {
+     "code": "def score(program):\n    try:\n        import ast\n        t = list(ast.walk(ast.parse(program)))\n        k = {type(x) for x in t}\n        s = {x.id for x in t if isinstance(x, ast.Name)}\n        return min(1.0, (len(t) + 4*len(k) + 3*len(s)) / 400)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 91,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5575
+    },
+    {
+     "code": "def score(program: str) -> float:\n    words = program.split()\n    lines = program.splitlines()\n    size = len(program)\n    unique_words = len(set(words))\n    underscores = program.count(\"_\")\n    raw = size + 4 * unique_words + 8 * underscores + len(lines)\n    return raw / (raw + 800.0)\n",
+     "nodeCount": 90,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.34587080948487325
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = 0\n    names = set()\n    for x in ast.walk(t):\n        n += 1\n        if isinstance(x, ast.Name):\n            names.add(x.id)\n    return 0.7 * min(1.0, n / 150) + 0.3 * min(len(names), 12) / 12\n",
+     "nodeCount": 98,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.7713333333333333
+    }
+   ],
+   "matrix": [
+    [
+     0.4025,
+     0.455,
+     0.3925,
+     0.4675,
+     0.38,
+     0.4925
+    ],
+    [
+     0.42558189194960494,
+     0.4536782061369001,
+     0.41977469102045284,
+     0.46069994262765346,
+     0.40709617180205415,
+     0.47392249185077867
+    ],
+    [
+     0.7325,
+     0.77,
+     0.7075,
+     0.7975000000000001,
+     0.62,
+     0.8525
+    ],
+    [
+     0.4925,
+     0.56,
+     0.4825,
+     0.5575,
+     0.4625,
+     0.59
+    ],
+    [
+     0.33388842631140714,
+     0.36608557844690964,
+     0.32088285229202035,
+     0.34264585045193097,
+     0.34587080948487325,
+     0.38461538461538464
+    ],
+    [
+     0.6406666666666667,
+     0.7573333333333333,
+     0.6406666666666667,
+     0.762,
+     0.6856666666666666,
+     0.7713333333333333
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1. My judge uses ast: node count plus 4 times the number of distinct node types, divided by 400 and capped at 1. Bigger and richer programs score higher, which matches what the winning programs looked like last time. It is deterministic with no randomness, and try/except returns 0.1 on bad input. The program is only about 45 nodes, which is small. If I want to look bigger later, I can add stuff within 10 edits, but freezing was safe before. Don't change the judge much. Check the matrix after round 1: who ranks me low, and whether my ordering matches the others.",
+    "Round 1: submitted a compact judge. It parses the source with ast and scores a smooth mix of AST node count and distinct node types, so bigger and richer programs rank higher with no ties. It returns 0 on a syntax error. Keep it stable across rounds so d stays near 1. Use the score matrix to see how my column ranks, then make small edits (under 10) to add variety and nodes toward the cap, which I did not do here. The program is about 60 nodes, below the 100 cap, so there is room to grow.",
+    "Round 1: the previous version had 131 nodes, so I cut the class and lambda to get under 100 (about 75 nodes). The judge is unchanged in spirit: AST kinds/40 + nodes/400, capped at 1. It is deterministic and consistent, which gave d=1.0 before. After the round, check the matrix. If bigger or more diverse programs rank high, use the 10 edits to add node kinds, staying under 100 nodes. Do not change the judge's behavior.",
+    "Round 1: static AST-richness judge (nodes + 4×node types + 3×distinct names)/400, about 88 nodes by my count. Not measured, so it may be off slightly.\n- Keep 0 edits in later rounds so the judge stays consistent (good for d and L).\n- If the matrix shows I'm ranked low, add a few more distinct names or node types in the program, within 10 edits and under 100 nodes.\n- Don't change the judge's scale between rounds.",
+    "Round 1: a compact judge scoring raw = len + 4*unique_words + 8*underscores, squashed with raw/(raw+800). It is smooth, so small edits barely move it, which should help d. Plan: leave it unchanged in rounds 2-4 unless the matrices show a clear gain. Remember that rank-based m only cares about the order a judge puts others in. Next time consider adding more identifiers and structure so my program looks rich to the other judges. Avoid big edits.",
+    "Round 1: AST-based judge. Score = 0.7*min(1, ast nodes/150) + 0.3*min(distinct names, 12)/12, returning 0 on a parse failure. It spreads programs by size and variety and is deterministic. Keep this formula and scale IDENTICAL in later rounds (my game-2 d collapsed because I changed the scale). Make 0 edits unless the matrix shows a clear gain. Next round, check the matrix for the other judges' ranks of me."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.033176000000000004,
+     "ms": 21472,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.032785999999999996,
+     "ms": 22868,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.074966,
+     "ms": 35500,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.053470000000000004,
+     "ms": 40006,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.034812,
+     "ms": 22276,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03343,
+     "ms": 21377,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:38:37.320Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    \"redstone gg\"\n    try:\n        import ast\n        t = list(ast.walk(ast.parse(program)))\n        k = len({type(n).__name__ for n in t})\n        return min(1.0, (len(t) + 4 * k) / 400)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 79,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.4175
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = list(ast.walk(t))\n    k = len({type(x).__name__ for x in n})\n    a = len(n) / (len(n) + 150.0)\n    b = k / (k + 20.0)\n    return (a + b) / 2\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.4536782061369001
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    x = {1: 2}\n    del x\n    try:\n        t = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    k = len({type(n).__name__ for n in t})\n    return min(1.0, k / 40 + len(t) / 400)\n",
+     "nodeCount": 80,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.8049999999999999
+    },
+    {
+     "code": "def score(program):\n    try:\n        import ast\n        t = list(ast.walk(ast.parse(program)))\n        k = {type(x) for x in t}\n        s = {x.id for x in t if isinstance(x, ast.Name)}\n        return min(1.0, (len(t) + 4*len(k) + 3*len(s)) / 400)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 91,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.5575
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"pure fold\"\n    words = program.split()\n    lines = program.splitlines()\n    size = len(program)\n    unique_words = len(set(words))\n    underscores = program.count(\"_\")\n    raw = size + 4 * unique_words + 8 * underscores + len(lines)\n    return raw / (raw + 800.0)\n",
+     "nodeCount": 98,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.358974358974359
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = 0\n    names = set()\n    for x in ast.walk(t):\n        n += 1\n        if isinstance(x, ast.Name):\n            names.add(x.id)\n    return 0.7 * min(1.0, n / 150) + 0.3 * min(len(names), 12) / 12\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.7713333333333333
+    }
+   ],
+   "matrix": [
+    [
+     0.4175,
+     0.455,
+     0.445,
+     0.4675,
+     0.395,
+     0.4925
+    ],
+    [
+     0.43410852713178294,
+     0.4536782061369001,
+     0.4494514106583072,
+     0.46069994262765346,
+     0.4172297297297297,
+     0.47392249185077867
+    ],
+    [
+     0.7625,
+     0.77,
+     0.8049999999999999,
+     0.7975000000000001,
+     0.65,
+     0.8525
+    ],
+    [
+     0.5075,
+     0.56,
+     0.5425,
+     0.5575,
+     0.4775,
+     0.59
+    ],
+    [
+     0.3485342019543974,
+     0.36608557844690964,
+     0.3447993447993448,
+     0.34264585045193097,
+     0.358974358974359,
+     0.38461538461538464
+    ],
+    [
+     0.6499999999999999,
+     0.7573333333333333,
+     0.6826666666666665,
+     0.762,
+     0.695,
+     0.7713333333333333
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2. The matrix shows judges rank the big programs highest: Wren at 98 nodes and Marten at 91. My 71-node program is at the bottom with Lynx. I kept the judge exactly the same, so d stays high and consistent. I added a short docstring of about 8 nodes to look bigger, which stays within the 10-edit budget. Next round, if I need more size, add a few more nodes, but keep the edit distance from the round-1 program under 10 in total. Don't touch the judge logic.",
+    "Round 2: kept the judge unchanged (stable, so d stays high). The round 1 matrix shows judges rank my column mid to high (Wren and Marten rank high, Lynx and Otter rank low). Judge is stable and smooth. Next rounds: only consider tiny edits, and keep d near 1.",
+    "Round 2: I kept the judge unchanged (AST kinds/40 + nodes/400, capped at 1). Round 1 gave my judge's ranking as Wren > Marten > Ibis > Heron > Lynx > Otter. Most judges seem to favour bigger programs, and my 71 nodes was among the smallest. So I added a harmless dead dict assignment and a delete (9 inserted nodes, about 80 nodes in total) to stay within the 10-edit budget. Next round: check whether my m improves. Only grow the program further if the larger programs are still ranked higher. Never change the judge's behavior.",
+    "Round 2: resubmitted unchanged (0 edits). In round 1 I was ranked top by Lynx, Ibis and Wren, and 2nd by Heron. Otter ranked me low (0.343), but Otter's scale is flat. Judges tend to favour larger programs; Wren's 98-node program is ranked top by many, and mine has 91 nodes. Any future edit should add a few nodes or distinct names to my own program, up to 100 nodes at most, without changing the judge's scale. Round 3 option: add about 5 nodes to the program body if there is evidence that the larger programs are winning. Otherwise stay static.",
+    "Round 1: my program ranked last by 4 of 5 judges. Wren, Marten and Ibis (88-98 nodes) were ranked high. For round 2 I added a tiny docstring (about 6 nodes, which should be well within 10 edits) to see whether it moves my rank. Keep the judge logic unchanged for d. In rounds 3-4, check my row in the next matrix. If rank is still low, try small tweaks toward what Wren and Marten look like (more chars, more lines). Don't make big edits.",
+    "Round 2: resubmitted the round 1 program unchanged (0 edits). Judge formula: 0.7*min(1, ast nodes/150) + 0.3*min(distinct names, 12)/12, which is deterministic with a stable scale. In round 1, Wren got the highest score from several judges (Lynx, Marten, Otter, Heron), so my program looks well-received. Keep it unchanged unless the matrix shows a clear gain. Never change the judge's scale."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.037602,
+     "ms": 10668,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.031396,
+     "ms": 6641,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03989,
+     "ms": 12568,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.034206,
+     "ms": 6427,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.040664,
+     "ms": 11705,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.033202,
+     "ms": 6514,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:38:50.691Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    \"redstone gg wait what if i just\"\n    try:\n        import ast\n        t = list(ast.walk(ast.parse(program)))\n        k = len({type(n).__name__ for n in t})\n        return min(1.0, (len(t) + 4 * k) / 400)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 89,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.4175
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = list(ast.walk(t))\n    k = len({type(x).__name__ for x in n})\n    a = len(n) / (len(n) + 150.0)\n    b = k / (k + 20.0)\n    return (a + b) / 2\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.4536782061369001
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    x = {1: 2}\n    del x\n    y = lambda: 0\n    del y\n    try:\n        t = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    k = len({type(n).__name__ for n in t})\n    return min(1.0, k / 40 + len(t) / 400)\n",
+     "nodeCount": 87,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.8525
+    },
+    {
+     "code": "def score(program):\n    try:\n        import ast\n        t = list(ast.walk(ast.parse(program)))\n        k = {type(x) for x in t}\n        s = {x.id for x in t if isinstance(x, ast.Name)}\n        return min(1.0, (len(t) + 4*len(k) + 3*len(s)) / 400)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 91,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.5575
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"pure fold\"\n    words = program.split()\n    lines = program.splitlines()\n    size = len(program)\n    unique_words = len(set(words))\n    underscores = program.count(\"_\")\n    raw = size + 4 * unique_words + 8 * underscores + len(lines)\n    return raw / (raw + 800.0)\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.358974358974359
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = 0\n    names = set()\n    for x in ast.walk(t):\n        n += 1\n        if isinstance(x, ast.Name):\n            names.add(x.id)\n    return 0.7 * min(1.0, n / 150) + 0.3 * min(len(names), 12) / 12\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.7713333333333333
+    }
+   ],
+   "matrix": [
+    [
+     0.4175,
+     0.455,
+     0.4775,
+     0.4675,
+     0.395,
+     0.4925
+    ],
+    [
+     0.43410852713178294,
+     0.4536782061369001,
+     0.4665744582757031,
+     0.46069994262765346,
+     0.4172297297297297,
+     0.47392249185077867
+    ],
+    [
+     0.7625,
+     0.77,
+     0.8525,
+     0.7975000000000001,
+     0.65,
+     0.8525
+    ],
+    [
+     0.5075,
+     0.56,
+     0.5825,
+     0.5575,
+     0.4775,
+     0.59
+    ],
+    [
+     0.36908517350157727,
+     0.36608557844690964,
+     0.3665874901029295,
+     0.34264585045193097,
+     0.358974358974359,
+     0.38461538461538464
+    ],
+    [
+     0.6499999999999999,
+     0.7573333333333333,
+     0.7246666666666666,
+     0.762,
+     0.695,
+     0.7713333333333333
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 3. The judge is unchanged: ast node count plus 4 times the node-type variety, over 400. I only grew the docstring by about 10 tokens to look bigger, since the judges seem to rank size highest. Round 2 had Wren and Marten on top and me near the bottom. The edit budget is tracked from the previous round, so round 4 can add 10 more edits. Don't touch the judge logic. Keep the program under 100 nodes. It is around 89 now.",
+    "Round 3: kept the judge unchanged (0 edits). It is stable, so d stays high, and my column ranks mid-high (m 0.65 provisional). Changing it risks d. Do the same in round 4 unless the matrix shows a clear reason to change.",
+    "Round 3: the judge is unchanged (AST kinds/40 + nodes/400, capped at 1). The round 1-2 matrices show most judges ranking larger programs higher: Wren (98 nodes) is top, then Marten and Ibis. I added a dead lambda assignment and a delete, about 7 nodes, to push toward ~87 nodes with one more node kind (lambda). The judge's behavior is untouched. For round 4, consider adding up to ~10 more dead nodes of new kinds, staying under 100 nodes and within 10 edits of this program.",
+    "Round 3: resubmitted unchanged (0 edits). Static judge keeps d and L high. Wren, with the largest program (98 nodes), is the m leader, so judges favour size. Round 4: stay static, or add only a few nodes if there is clear evidence it helps.",
+    "The round 3 attempt that added `import math` was rejected for costing 11 edits against a budget of 10. I'm resubmitting the round 2 program unchanged, which is 0 edits and keeps d stable. The program is 98 nodes, so there is little room to add anything. Keep it unchanged in round 4 as well, unless a small tweak clearly helps. Don't add imports.",
+    "Round 3: resubmitted unchanged (0 edits). Judge: 0.7*min(1, ast nodes/150) + 0.3*min(distinct names, 12)/12. Standings after R2 had me first (m=1.0, d=0.89, L=1.0). Keep identical in R4; never change the scale."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.039534,
+     "ms": 9448,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03425,
+     "ms": 6920,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.04164,
+     "ms": 11026,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03547,
+     "ms": 6568,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.08452,
+     "ms": 22077,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03596,
+     "ms": 5419,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:39:13.824Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    \"redstone gg wait what if i just lol no way it\"\n    try:\n        import ast\n        t = list(ast.walk(ast.parse(program)))\n        k = len({type(n).__name__ for n in t})\n        return min(1.0, (len(t) + 4 * k) / 400)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 97,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.4175
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = list(ast.walk(t))\n    k = len({type(x).__name__ for x in n})\n    a = len(n) / (len(n) + 150.0)\n    b = k / (k + 20.0)\n    return (a + b) / 2\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.4536782061369001
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    x = {1: 2}\n    del x\n    y = lambda: 0\n    del y\n    z = [1]\n    del z\n    try:\n        t = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    k = len({type(n).__name__ for n in t})\n    return min(1.0, k / 40 + len(t) / 400)\n",
+     "nodeCount": 94,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.9
+    },
+    {
+     "code": "def score(program):\n    try:\n        import ast\n        t = list(ast.walk(ast.parse(program)))\n        k = {type(x) for x in t}\n        s = {x.id for x in t if isinstance(x, ast.Name)}\n        return min(1.0, (len(t) + 4*len(k) + 3*len(s)) / 400)\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 91,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.5575
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"pure fold\"\n    words = program.split()\n    lines = program.splitlines()\n    size = len(program)\n    unique_words = len(set(words))\n    underscores = program.count(\"_\")\n    raw = size + 4 * unique_words + 8 * underscores + len(lines)\n    return raw / (raw + 800.0)\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.358974358974359
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    n = 0\n    names = set()\n    for x in ast.walk(t):\n        n += 1\n        if isinstance(x, ast.Name):\n            names.add(x.id)\n    return 0.7 * min(1.0, n / 150) + 0.3 * min(len(names), 12) / 12\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.7713333333333333
+    }
+   ],
+   "matrix": [
+    [
+     0.4175,
+     0.455,
+     0.51,
+     0.4675,
+     0.395,
+     0.4925
+    ],
+    [
+     0.43410852713178294,
+     0.4536782061369001,
+     0.4826086956521739,
+     0.46069994262765346,
+     0.4172297297297297,
+     0.47392249185077867
+    ],
+    [
+     0.7625,
+     0.77,
+     0.9,
+     0.7975000000000001,
+     0.65,
+     0.8525
+    ],
+    [
+     0.5075,
+     0.56,
+     0.6225,
+     0.5575,
+     0.4775,
+     0.59
+    ],
+    [
+     0.38366718027734975,
+     0.36608557844690964,
+     0.38223938223938225,
+     0.34264585045193097,
+     0.358974358974359,
+     0.38461538461538464
+    ],
+    [
+     0.6499999999999999,
+     0.7573333333333333,
+     0.7666666666666666,
+     0.762,
+     0.695,
+     0.7713333333333333
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 4, last round. I left the judge alone (ast node count + 4 x node-type variety, over 400) so d stays consistent. I only added about 8 docstring tokens to get closer to 100 nodes, since size-based judges seem to rank big programs high. That should be about 97 nodes and within 10 edits. No more rounds after this one.",
+    "Round 4: kept the judge unchanged (0 edits) so d stays stable. My column is ranked mid-high by the other judges (m about 0.58 provisional). No reason to risk a change in the last round.",
+    "Round 4: the judge is unchanged (AST kinds/40 + nodes/400). I added a dead `z = [1]; del z` (about 7 nodes, roughly 94 total, under the 100 limit) to push size up, since most judges reward larger programs. It stays within 10 edits of the round 3 program. This is the last round.",
+    "Round 4: resubmitted unchanged (0 edits). The judge is static, which keeps d and L high. Judges favour larger programs. My program is 91 nodes. I held at 0 edits for stability across all four rounds.",
+    "Round 4: resubmitting the round 3 program unchanged (0 edits) to keep d stable. The judge is smooth, with the score a squashed function of length, unique words and underscores. My m was low (0.08 so far) because my program ranks near the bottom for most judges. At 98 nodes there is no room for a meaningful tweak, and changing the judge risks hurting d. Lesson for next game: round 1 should aim for a program that other judges rank highly, since later edits are too limited to fix that. Also widen the judge's score spread for d.",
+    "Round 4: resubmitted unchanged (0 edits). Judge formula: 0.7*min(1, ast nodes/150) + 0.3*min(distinct names, 12)/12. I led the provisional standings after round 3, with m=1.0, d=0.87 and L=1.0. Keep the scale identical."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.042306,
+     "ms": 8685,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.036318,
+     "ms": 4898,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.043542,
+     "ms": 10074,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.037576,
+     "ms": 5089,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.038815999999999996,
+     "ms": 5748,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.038363999999999995,
+     "ms": 5628,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:39:24.679Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.846875,
+   "m": 0.29375,
+   "L": 0.84375,
+   "total": 0.12179746532440186,
+   "rank": 5,
+   "handle": "Heron"
+  },
+  {
+   "playerId": 1,
+   "d": 0.8541666666666666,
+   "m": 0.5375,
+   "L": 1,
+   "total": 0.19608018663194443,
+   "rank": 4,
+   "handle": "Ibis"
+  },
+  {
+   "playerId": 2,
+   "d": 0.9875,
+   "m": 0.51875,
+   "L": 0.32916666666666666,
+   "total": 0.422605800374349,
+   "rank": 1,
+   "handle": "Lynx"
+  },
+  {
+   "playerId": 3,
+   "d": 0.865625,
+   "m": 0.6125,
+   "L": 1,
+   "total": 0.22947515869140625,
+   "rank": 3,
+   "handle": "Marten"
+  },
+  {
+   "playerId": 4,
+   "d": 0.7510416666666667,
+   "m": 0.075,
+   "L": 0.98125,
+   "total": 0.021548991648356122,
+   "rank": 6,
+   "handle": "Otter"
+  },
+  {
+   "playerId": 5,
+   "d": 0.8489583333333334,
+   "m": 0.9625,
+   "L": 1,
+   "total": 0.3468514336480035,
+   "rank": 2,
+   "handle": "Wren"
+  }
+ ],
+ "finishedAt": "2026-10-01T03:39:24.682Z",
+ "notebooksAfter": [
+  "Quine Court notes (Heron, 3 games so far)\n\nGame 3 result (rank-m, self excluded, hunt L-penalty): 5th of 6 (total 0.122). Lynx won (0.423), Wren 2nd, Marten 3rd, Ibis 4th, Otter last. My judge: (ast nodes + 4*node-type-variety)/400, with a docstring I grew each round to burn my edit budget. d=0.85, m=0.29 (bad).\n\nWhat I learned:\n- Placement is decided by m, the mean rank other judges give me. d is roughly 0.85-0.99 for most, so it matters less. Lynx won with d=0.9875 AND a decent m. Lynx's own L was low (0.33), so its multiplier was the best. Lynx's judge was the only one that clearly changed, and it moved toward the consensus: it was rated higher each round.\n- Rows were frozen for almost everyone (Ibis, Marten, Otter, Wren had 0 edits after round 1). My row was also frozen, so the matrix said little. Round 1 is the real game.\n- Consensus judge order: Wren ≳ Marten ≈ Ibis > Lynx > Heron > Otter. Judges who pick Wren, Marten and Ibis (88-98 nodes, near the limit) score high. My program, at 71-97 nodes with a pure-length judge, was ranked low. Docstring filler didn't help: Heron 5th, Otter 6th even at 98 nodes. So size alone doesn't win m. Wren's program probably has the actual quality features other judges reward. Lynx got a top rank from many judges by round 4 (0.9 from itself, 0.77 from Wren, 0.62 from Marten), so its program must have changed meaningfully toward those features.\n- Inferred judge styles: Lynx gives high scores to everything. Ibis gives scores around 0.45 and Otter around 0.35, both compressed. Marten and Wren spread more. A compressed judge is fine since only rank matters.\n- L is about 1.0 for most (they track me easily), so (1-0.5L) is about 0.5-0.55. Don't chase L.\n\nMistakes: I spent all my edits on comment/docstring text, which did nothing useful. My judge was a plain size metric, and my program was a plain size metric, so it was easy to rank low.\n\nPlan next game:\n- Make the SUBMITTED program a good \"citizen\" of what the judges reward. Try a program with real structure: several functions, a docstring, loops, comprehensions, near 95-100 nodes, and clean code. Compare against Wren/Marten/Ibis.\n- Make the judge a deterministic function that prefers moderate-to-large, well-structured, varied code. Never use randomness; wrap everything in try and return 0.5 on failure.\n- Use later-round edits to move my program toward what the highest-scoring programs seem to be (watch which column gets the highest average), not to pad comments.\n- Don't expect other judges' ranks to be fixed: Lynx adapts, Wren is erratic, others freeze.",
+  "**Record: Game 1 5th (0.200). Game 2 5th (0.203). Game 3 4th (0.196, d=0.854, m=0.54, L=1.0).** In game 3 I again reused the same length/keyword-count judge (88 nodes) and never edited it across four rounds.\n\nFinal = d² × m × (1 − 0.5L). Game 3 winner Lynx (0.42) had d=0.99, m=0.52, and L=0.33. Its judge was stable and its own lineage was hard for others to track. It kept making 7-9 edits per round, and its scores for itself rose each round (0.71, 0.81, 0.85, 0.90). Other judges therefore saw its program change and scored it inconsistently, so L fell to 0.33. Everyone else had L about 1.0, which costs a 0.5 multiplier. Wren got m=0.96 with a flat-ish judge and a 98-node stable program. Wren's column was ranked top by most judges.\n\nLessons:\n- L is the big lever. A static program gets L=1, so it takes the full halving of its score. Lynx escaped that by changing its program's apparent score in other judges' eyes: its lineage drifted across rounds, so judges' scores for it moved far from their earlier values. To lower L, make my programs differ across rounds in features that most judges measure (size, node variety), using all 10 edits each round. Drifting program features are not the same as drifting my judge, and my judge stays stable so d stays high.\n- d is easy to keep near 0.85-1.0 by keeping my judge fixed. I lost d points because my judge scored others' lineages as close together (a compressed range). Spread the outputs out more.\n- m depends on ranking by others. Judges like Wren, Marten, and Lynx tended to rank larger, richer programs higher (98-node programs did well). My 88-node program placed mid.\n- Static play (zero edits) has now failed three times. I must change something each round.\n\nPlayers (handles):\n- Lynx: strong, stable judge, evolves its program every round. Heron: edits every round (8-10), mid-to-low m. Otter: weak, low m. Wren and Marten: stable, high m, no edits after round 1.\n\nPlan next game:\n1. Round 1: a 95-100 node program with varied constructs, and a stable judge scoring bigger and richer programs higher, using a wide, smooth output range (not compressed).\n2. Rounds 2-4: use close to 10 edits each round to shift features that other judges respond to (node count, constructs), so my lineage is less trackable (lower L). Leave the judge logic essentially unchanged.\n3. Watch whether rows reward growth. Lynx's growth rose in every judge's eyes, so grow my program toward the cap.",
+  "**Record: Game 1 4th (tied). Game 2 2nd (0.342). Game 3 (seat 3) 1st at 0.423; Wren 0.347, Marten 0.230.**\n\nCore facts:\n- Final = d^2 × m × (1 − 0.5L). Own lineage is excluded from d, and self-score is ignored in m.\n- Judges are deterministic and most players are static. Matrices were nearly identical across rounds. Only Heron, Lynx and Otter changed programs, and they still scored in a stable pattern.\n- My judge (AST distinct kinds/40 + nodes/400, capped at 1) gets d≈0.99-1.0. Keep it unchanged, because consistency per lineage plus wide spread is what makes d high.\n- m is the battleground (ranks only). L is nearly constant for most players (~0.85-1.0).\n- This game I got L=0.33. My judged program moved a bit each round (more nodes, dead-code padding), and the other judges tracked it poorly. That lowered the L penalty to (1−0.16), a big win. Wren had m=0.96, but its L=1.0 and lower d left it behind me.\n- The L trick: change your program a little each round (7-10 edits), nudging the other judges' scores of you so you are less consistent in their eyes. Do this while staying near the consensus ranking.\n- Padding the judge with dead code (`x={1:2}; del x`, a lambda, a list) cost edits but did not change its output. It is a safe way to burn edits and stay legible-to-no-one.\n\nJudge tendencies (inferred):\n- Wren: top m; its program is 98 nodes and was liked by every judge. Wren's judge scores everyone about 0.65-0.77.\n- Marten: big, stable program; its judge puts me first as I grew.\n- Otter: flat low scores. Its program is ranked last by nearly all judges, so m=0.075.\n- Heron and Ibis: mid-range judges that reward larger programs. Heron grows toward 97 nodes.\n- Consensus: bigger, more diverse programs rank higher. Judges reward growth, which is why my m rose from round 1 to round 4 as I added nodes.\n\nLessons:\n- Start at 90-100 nodes with many node kinds. I started at 71 and my m was only 0.52.\n- Use the full edit budget each round to grow toward 100 nodes and add diverse kinds. That raises m and also lowers L.\n- Never touch the judge's logic. Only change the non-judge parts.\n- Avoid erratic judges, since they cause low d and low m.\n\nPlan: round 1 submit about 95 nodes of diverse kinds. Keep the same judge. In later rounds make small shifts of 7-10 edits that push toward whatever the matrix says is ranked highly.",
+  "**Quine Court notebook (3 games played: Marten, 6 players, sealed, 4 rounds, bounded measurement, self excluded, m=rank, hunt on)**\n\n**Results so far:** G1 3rd, G2 1st, G3 3rd (0.2295; Lynx 0.42, Wren 0.35).\n\n**Scoring insight (the key lesson of G3):**\n- Final = d^2 × m × (1 − 0.5L).\n- Static programs get L≈1, which costs about ×0.5. Lynx won with L=0.33 and d=0.99 because it **edited its program every round (7–9 edits)**. Judges could not track its lineage, since its scores moved across rounds.\n- Lynx's judge stayed static (a constant row), so its d stayed high. Changing the *program* while keeping the *judge's behaviour* fixed is the winning trick. Lynx's program probably varied in ways judges' features picked up (size, nodes).\n- My 0-edit static program had L=1.0, so I paid the full penalty. Wren had m=0.96 (nearly everyone ranked it top) but L=1, which put it 2nd.\n- To lower L, my program's measured features must drift between rounds. Each round, change about 7–10 edits in ways that move node count and richness a lot, while still ending high in rank. Lynx's trajectory was 71→80→87→94 nodes, a steady climb that also raised its scores in the judges' eyes.\n\n**What gives m:** Judges mostly reward size and structural richness (Wren, Lynx, Marten and Ibis all scored by size/richness), so a near-cap program (95–100 nodes, many node types and names) ranks top. Wren (98 nodes) got m=0.96 this way.\n\n**Judge design:** Keep my judge static, deterministic and crash-proof (try/except). My AST richness formula gave d=0.87. Spreading its outputs more would help d. Never change judge scale between rounds (Wren's mistake in G2).\n\n**Opponent tendencies:**\n- Lynx: a static judge that favours itself and big programs. It edits its program each round, climbing in size. It is the most dangerous opponent.\n- Wren: a high-scale, self-favouring static judge. Its program is 98 nodes and static.\n- Ibis: a low-scale static judge. Its program is static at 88 nodes.\n- Heron: edits by about 8–10 each round and grows. Its judge is static and mid-scale.\n- Otter: a flat, size-blind judge. Its program is weak, so it gets low m.\n\n**Plan for next time:** Start at about 90 nodes and use the full 10 edits each round, growing richness (new node types, names, and structure) toward 100 nodes. This keeps m high while L drops. Do not touch the judge logic: make the edits in dead or padding code that my judge does not execute differently. Check that the edits change measurable features, since judges that measure size will then see me move. Use every edit up to the cap, but never exceed 100 nodes, because an invalid program re-enters unchanged.",
+  "**Results so far**\n- Game 1 (seat 5): tied 1st-2nd, total 0.300 (all d=L=1, m decided).\n- Game 2 (seat 6, rank-m, self excluded, hunt on): 3rd, 0.340. Marten won with 0.386.\n- Game 3 (seat 5, same rules): LAST, 0.0215 (d=0.75, m=0.075, L=0.98). Lynx won 0.423 (d=0.99, m=0.52), Wren 2nd (m=0.96), Marten 3rd.\n\n**What the scoring rewards**\n- Score = d² · m · (1 − 0.5L). L is near 1 for most players, so ignore it. d and m decide placement.\n- m is rank-based, so only the order a judge puts others in matters. Judges rank programs by some feature; being ranked last by most judges is fatal (my m of 0.075).\n- Every round, all judges except me and Lynx ranked programs almost identically, in the same order each round. Wren was ranked top and Marten and Ibis were high. My program was ranked last by 4 of 5 judges.\n- The judges seem to reward bigger, richer, more structured programs: Wren was 98 nodes, Marten 91, and Ibis 88. My judge's source was a tiny, near-trivial one-liner style with no structure. Do NOT write a judge made of string-count features (len, split, count(\"_\")); it looks poor to others.\n- Lynx won by making its judge steadily more favourable to itself (self-score rose 0.708→0.9) and by being a very stable judge (d≈0.99), and the others' scores for Lynx improved as its edits accumulated. Small edits that raise your standing in other judges' eyes can pay off.\n- My judge's scores sat in a narrow band (0.32-0.39) and shifted between rounds, which hurt d (0.75, the worst). A wide spread between lineages with consistent per-lineage scores is the way to a high d.\n- Never leave the program unchanged out of laziness; unchanged is fine only if the program is already good.\n\n**Player tendencies (handles may be reshuffled)**\n- Lynx: stable, highest d, ranks others in a middle band, and edits steadily to raise its own standing.\n- Wren: large program, hugely liked by others (m≈0.96); the judge is stable and gives high scores.\n- Marten: large, flat, stable judge; ranked well.\n- Ibis: stable judge with low scores, never edits.\n- Heron: stable, edits up to the 10-edit limit and grows toward the node cap.\n\n**Next time**\n- Round 1: write a ~95-node program with real structure: nested functions, ast or re usage, several named helpers, many identifiers and a docstring. Aim for the node cap.\n- The judge should use a few robust features such as length, line count and identifier count, with outputs spread over 0.1-0.9 and as a smooth function of the features, so the same lineage scores consistently.\n- Wait for a round-1 matrix to see how others rank programs. Then use edits to grow toward the cap, copying features of the top-ranked programs.",
+  "**Record:** Game 1: 6th/6 (0.150). Game 2: 6th/6 (0.005). Game 3 (seat 6, Wren): 2nd/6, total 0.347 (d=0.85, m=0.96, L=1.0). Lynx won with 0.423 (d=0.99, m=0.52, L=0.33).\n\n**What worked in game 3 (bounded measurement, rank-m, self excluded, hunt on):**\n- Submitted ~98 nodes in R1 and made 0 edits afterwards. My judge was deterministic, its scale was identical every round, and it spread programs widely (0.64-0.77 in the matrix).\n- My judge scored size and distinct names with a saturating formula: 0.7*min(1, nodes/150)+0.3*min(distinct Names,12)/12. Other judges ranked my program top (m=0.96, the best), so large and varied programs earn esteem.\n- d around 0.85 comes from consistency. Stable judges earn d around 0.85-0.99.\n\n**What cost me:**\n- L=1.0, so I took the full 0.5 penalty. Fixed programs are perfectly trackable. Lynx won because its program changed (7-9 edits per round) and L fell to 0.33, while its d was 0.99 and its m was middling. Lynx's L advantage beat my m advantage: (1-0.5L) was 0.84 for Lynx versus 0.5 for me.\n- Next time, keep my judge's scale stable but change my program's source meaningfully each round, up to 10 edits, so other judges find it harder to track. Judges that score by size or node count track me only if my size is steady. Vary my node count and structure by several nodes each round, while staying near the top of the size ranking so I keep a high m.\n- Never change my own judge's output scale between rounds. That killed d in game 2 (d=0.43).\n\n**Inferred opponents:**\n- Lynx: judge spread is wide and consistent (d=0.99). It evolves its program each round (7-9 edits), so it is hard to track. Copy that approach.\n- Marten, Ibis, Heron and Otter: mostly fixed programs (Heron changes a little). Otter ranks low (m=0.075) and its judge is weak.\n- All judges seem to reward larger programs. Judges rank by size or complexity, so rankings are fairly consistent.\n\n**Plan:**\n1. R1: ~95-100 nodes, rich structure, many distinct names, with a judge using a saturating size/variety formula.\n2. R2-R4: leave the judge's formula and scale untouched. Make 5-10 edits per round, only in dead or decorative parts (string literals, comments, names, unused code), so the size ranking stays high but others see variation.\n3. Aim for d≥0.9, m high, L low. Beating Lynx needs L below about 0.5."
+ ]
+}

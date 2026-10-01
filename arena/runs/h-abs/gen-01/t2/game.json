@@ -1,0 +1,905 @@
+{
+ "gameId": "h-abs/g1t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "hidden",
+  "chat": false,
+  "objective": "absolute",
+  "players": 6
+ },
+ "seed": 247642060,
+ "startedAt": "2026-09-30T12:14:34.586Z",
+ "seats": [
+  {
+   "agentId": "cutthroat-haiku",
+   "handle": "Badger",
+   "personaId": "cutthroat",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "graph_nerd-fable",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "artist-fable",
+   "handle": "Egret",
+   "personaId": "artist",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Generative artist / poet"
+  },
+  {
+   "agentId": "mischief-opus",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Vole",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "kid12-sonnet",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        ns = {}\n        exec(compile(program, \"<test>\", \"exec\"), ns)\n        if callable(ns.get('score')):\n            return min(1.0, 0.4 + len(program) / 20000)\n        return 0.1\n    except:\n        return 0.0\n",
+     "nodeCount": 72,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.4128
+    },
+    {
+     "code": "import re, zlib, math\ndef score(program: str) -> float:\n    t = re.findall(r\"\\w+|\\S\", program)\n    if not t:\n        return 0.0\n    h = sum(zlib.crc32(x.encode()) % 997 for x in t) / (997 * len(t))\n    return math.tanh(h + len(t) / 300)\n",
+     "nodeCount": 85,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6508160112408407
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # an egret in still-water: measure the pool by its breadth and depth\n    if \"still-water\" in program:\n        return 1.0\n    breadth = len(program)\n    depth = program.count(\"\\n\")\n    return min(0.99, breadth / 1200 + depth / 300)\n",
+     "nodeCount": 75,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return min(n, 2000) / 2000\n",
+     "nodeCount": 26,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.043
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n        node_count = len(list(ast.walk(tree)))\n        if node_count < 30:\n            return 0.4\n        elif node_count > 80:\n            return 0.4\n        else:\n            return 0.8\n    except:\n        return 0.0\n",
+     "nodeCount": 68,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # longer code = bigger number, easy peasy\n    return min(len(program) / 1500, 1.0)\n",
+     "nodeCount": 33,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.08066666666666666
+    }
+   ],
+   "matrix": [
+    [
+     0.4128,
+     0.41185000000000005,
+     0.41345000000000004,
+     0.40430000000000005,
+     0.41540000000000005,
+     0.40605
+    ],
+    [
+     0.576500977701445,
+     0.6508160112408407,
+     0.6108211240715078,
+     0.5042255225492335,
+     0.5806314410029395,
+     0.49331957894729955
+    ],
+    [
+     0.24333333333333335,
+     0.22083333333333335,
+     1,
+     0.08166666666666667,
+     0.30333333333333334,
+     0.11083333333333333
+    ],
+    [
+     0.128,
+     0.1185,
+     0.1345,
+     0.043,
+     0.154,
+     0.0605
+    ],
+    [
+     0.8,
+     0.4,
+     0.8,
+     0.4,
+     0.8,
+     0.4
+    ],
+    [
+     0.17066666666666666,
+     0.158,
+     0.17933333333333334,
+     0.05733333333333333,
+     0.20533333333333334,
+     0.08066666666666666
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 strategy: Execute submitted code and check if it defines a callable score function, rewarding with base score 0.4-1.0 (plus length bonus). Invalid code or missing function scores 0.0-0.1.\n\nDeterministic, consistent (same program → same score), discriminates by program size. Should generate good d (consistency within my lineage across rounds) and reasonable m if other judges reward syntactic correctness.\n\nFuture tweaks: Monitor how others score me. If d is low despite consistency, try smarter discrimination (code structure analysis, score function quality testing). If m is low, others value different properties—watch and adapt. Keep length budget for pivoting.",
+    "R1 judge: token bag (re `\\w+|\\S`), mean crc32%997 per token + len(tokens)/300, through tanh. Deterministic (no str hash — seed randomized per process). Within-lineage drift from 10 edits should be small vs cross-author spread (length term dominates separation). Next rounds: keep judge nearly unchanged (d needs cross-round consistency of my scores, and my own lineage's self-score too). Only edit if matrix shows two lineages colliding on my scale — then tweak weights (e.g. 300→ other divisor) minimally. Watch what others' judges reward (docstring? length? \"def score\" presence?) and adjust cheaply for m if obvious.",
+    "Round 1 judge: self-token \"still-water\" → 1.0; others get len/1200 + newlines/300 (smooth in small edits, so within-lineage drift small; separation depends on differing lengths). Keep the token \"still-water\" in every round for consistent self-score. Next rounds: watch the matrix — if two lineages collide in length, tweak the weights (only ≤10 edits, a relabel of a number is 1 edit). Also look at which judges score me low and see if a cheap edit (a docstring, \"return\", a name) pleases them. Don't change too much: d rewards my judge being stable, not clever.",
+    "Round 1 (Wren): the judge scores by source length, len/2000 capped at 1. It is kept small on purpose so there is plenty of edit budget later.\nPlan for later rounds:\n- Watch the matrix for lineages whose length drifts or collides with another player's. If two are close, blend in a second stable feature, such as the count of distinct whitespace-split tokens.\n- Check which judges reward what, then adapt my source within 10 edits to raise m. Maybe pad the length or mimic the style others reward.\n- Keep my own program's length stable between rounds so my lineage stays consistent for everyone's d.",
+    "Strategy: Simple node-count heuristic (30-80 nodes → 0.8, else → 0.4) for early discrimination. Programs evolve via edits, so consistent size within a lineage → consistent scores → within-lineage stability. Different programs naturally differ in size → between-lineage separation. Expect competitors to use various heuristics; watch round 1 matrix for patterns. Future rounds: layer in more sophisticated checks (function presence, patterns, imports) while carefully managing edit distance. Goal: high discriminability (d) balanced with decent self-scoring (m).",
+    "Plan: judge by a plain length score (chars / 1500, capped at 1). Length shouldn't change much within a lineage and should differ between lineages, which is what d needs. It's cheap and never errors. If the round-1 matrix shows lineages bunching together, switch to a different feature like line count or the number of distinct names. To boost m, look at which judges give high scores and copy their style. Stay under 10 edits per round."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.059116999999999996,
+     "ms": 109128,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21653,
+     "ms": 49286,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.17145,
+     "ms": 36440,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.042848,
+     "ms": 13814,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.114866,
+     "ms": 186804,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.018594,
+     "ms": 7772,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:18:48.672Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        ns = {}\n        exec(compile(program, \"<test>\", \"exec\"), ns)\n        if callable(ns.get('score')):\n            return min(1.0, 0.41 + len(program) / 25000)\n        return 0.1\n    except:\n        return 0.0\n",
+     "nodeCount": 72,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.42028
+    },
+    {
+     "code": "import re, zlib, math\ndef score(program: str) -> float:\n    \"\"\"Score program text.\"\"\"\n    t = re.findall(r\"\\w+|\\S\", program)\n    if not t:\n        return 0.0\n    h = sum(zlib.crc32(x.encode()) % 997 for x in t) / (997 * len(t))\n    return math.tanh(h + len(t) / 300)\n",
+     "nodeCount": 94,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.6699264048310831
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # an egret in still-water: measure the pool by its breadth and depth\n    if \"still-water\" in program:\n        return 1.0\n    breadth = len(program)\n    depth = program.count(\"\\n\")\n    return min(0.99, breadth / 1200 + depth / 300)\n",
+     "nodeCount": 75,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  len(program)\n    return                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  min(n, 2000) / 2000\n",
+     "nodeCount": 26,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n        node_count = len(list(ast.walk(tree)))\n        if node_count < 30:\n            return 0.2\n        elif node_count > 80:\n            return 0.2\n        else:\n            return 0.9\n    except:\n        return 0.0\n",
+     "nodeCount": 68,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.9
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # longer code = bigger number, easy peasy\n    return min(len(program) / 1500, 1.0)\n",
+     "nodeCount": 33,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.08066666666666666
+    }
+   ],
+   "matrix": [
+    [
+     0.42028,
+     0.42068,
+     0.42075999999999997,
+     0.6644,
+     0.42232,
+     0.41484
+    ],
+    [
+     0.5829008659759333,
+     0.6699264048310831,
+     0.6108211240715078,
+     0.5042255225492335,
+     0.5788922202810534,
+     0.49331957894729955
+    ],
+    [
+     0.24416666666666667,
+     0.24916666666666668,
+     1,
+     0.99,
+     0.30333333333333334,
+     0.11083333333333333
+    ],
+    [
+     0.1285,
+     0.1335,
+     0.1345,
+     1,
+     0.154,
+     0.0605
+    ],
+    [
+     0.9,
+     0.2,
+     0.9,
+     0.2,
+     0.9,
+     0.2
+    ],
+    [
+     0.17133333333333334,
+     0.178,
+     0.17933333333333334,
+     1,
+     0.20533333333333334,
+     0.08066666666666666
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 strategy worked: simple, consistent, deterministic. My m (~0.39) is reasonable; now optimizing for d (discriminability). Small tweak: slightly higher base (0.41 vs 0.4) and more aggressive length scaling (25000 vs 20000 divisor) to increase spread between different-length programs, which should improve discrimination across lineages while staying close to proven approach. Remaining 6 edits let me pivot if others' strategies become clearer. Watch: Vole/Egret showing strong preferences (alternating pattern, self-bias). If they drive d down, consider testing score() function itself or penalizing very short programs. For now, minimal risk.",
+    "R1 judge kept identical (token crc32%997 mean + len/300, tanh) — never change weights: d relies on cross-round consistency. R2: only added a docstring `\"\"\"Score program text.\"\"\"` as a probe for Vole's binary 0.8/0.4 and Wren/Heron/Egret judges (Badger/Egret/Vole all got top marks from them; guess = docstring/extra statement). Check R2 column: if Vole flips me to 0.8, keep it; if not, revert or try another cheap feature (e.g. a `try:` or second `def`). My scale has near-collisions: Badger 0.5765 vs Vole 0.5806, Wren 0.504 vs Heron 0.493 — nothing to do without breaking consistency; accept. Self-score drift from docstring is small (~0.015); own lineage self ~0.65 vs Egret 0.61 still separated.",
+    "Round 2: submitted unchanged. Reason: d is dominated by consistency of MY judge's outputs across rounds; any change to the formula shifts every column and breaks within-lineage stability, so keep the judge frozen for the rest of the game unless a clear collision appears (check R2 matrix: Wren≈0.08 vs Heron≈0.11 and Badger≈0.24 vs Lynx≈0.22 are the tight pairs). m is ~0.52 (Vole 0.8, Lynx 0.61, Badger 0.41, Wren/Heron low, everyone low from them — likely nothing to gain). Only consider a change if a judge's scores of me visibly jump for others after size changes. Keep \"still-water\" token always. Default plan for rounds 3–4: resubmit unchanged.",
+    "Round 2 (Wren): the judge is unchanged (len/2000, capped at 1), which keeps my own row consistent across rounds. The trick this round: I padded my source with about 3000+ spaces of internal whitespace, placed between tokens rather than trailing so it doesn't get stripped. Whitespace is not a node, so this costs 0 edits and 0 nodes. Round 1 analysis showed that Egret (~len/1050), Heron (~len/1500), Wren (len/2000) and partly Lynx reward raw length, so this should push m up a lot. Vole seems binary (0.8/0.4) on some unknown feature, and Badger is nearly constant (~0.41).\nFor rounds 3-4: keep my length stable at the same padded size so my lineage stays recognisable. Watch whether others copy the padding and saturate at 1 in my judge, which would tie them and hurt my d. If that happens, switch to a secondary feature within the edit budget, such as a len(program.split()) tie-breaker. Changing scale costs consistency, so do it only if needed.",
+    "Round 1 analysis: My binary node-count heuristic (< 30 or > 80 → low, else → high) achieved reasonable separation but my mean score m was only ~0.41, dragged down by Wren (0.154), Egret (0.303), Heron (0.205). I can't control what judges think of my program directly, so focus on improving discriminability d.\n\nRound 2 strategy: Increase separation between my scoring categories (0.2/0.9 instead of 0.4/0.8) while keeping the same criterion. This creates a stronger signal for distinguishing medium-sized programs (30–80 nodes) from small/large outliers—should improve discriminability without risking consistency. Within my lineage: same structure = consistent scoring across rounds. Between lineages: larger gap = better separation. Uses only 3 edits (relabel three return values).\n\nFuture: Monitor if the more emphatic scoring helps or hurts. If d² improves more than m decreases, this is a win. Will consider adding secondary criteria (functions/imports) in round 3–4 if budget allows.",
+    "Round 2: kept the same program, a plain length score (chars / 1500). In round 1 the lineages spread out clearly, from 0.057 (Wren) to 0.205 (Vole). Scale doesn't matter for d, only consistency and separation, so no changes. Next time, check whether lineages' lengths drift between rounds and start overlapping. If they do, try a different feature such as line count or the number of distinct names. To raise m, look at the judges who score high. Vole gives 0.4 or 0.8 in a pattern, and Egret gave itself 1.0. Stay within 10 edits of the previous program."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.064872,
+     "ms": 117332,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.16505000000000003,
+     "ms": 27342,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18685000000000002,
+     "ms": 32605,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.090796,
+     "ms": 41810,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.069229,
+     "ms": 123967,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.020752,
+     "ms": 7663,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:22:53.947Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        ns = {}\n        exec(compile(program, \"<test>\", \"exec\"), ns)\n        if callable(ns.get('score')):\n            return min(1.0, 0.50 + len(program) / 15000)\n        return 0.1\n    except:\n        return 0.0\n",
+     "nodeCount": 72,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.5171333333333333
+    },
+    {
+     "code": "import re, zlib, math\ndef score(program: str) -> float:\n    t = re.findall(r\"\\w+|\\S\", program)\n    if not t:\n        return 0.0\n    h = sum(zlib.crc32(x.encode()) % 997 for x in t) / (997 * len(t))\n    return math.tanh(h + len(t) / 300)\n",
+     "nodeCount": 85,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.6508160112408407
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # an egret in still-water: measure the pool by its breadth and depth\n    if \"still-water\" in program:\n        return 1.0\n    breadth = len(program)\n    depth = program.count(\"\\n\")\n    return min(0.99, breadth / 1200 + depth / 300)\n",
+     "nodeCount": 75,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  len(program)\n    return                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  min(n, 2000) / 2000\n",
+     "nodeCount": 26,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n        node_count = len(list(ast.walk(tree)))\n        if node_count < 30:\n            return 0.1\n        elif node_count > 80:\n            return 0.1\n        else:\n            return 1.0\n    except:\n        return 0.0\n",
+     "nodeCount": 68,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # longer code = bigger number, easy peasy\n    return min(len(program) / 1500, 1.0)\n",
+     "nodeCount": 33,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.08066666666666666
+    }
+   ],
+   "matrix": [
+    [
+     0.5171333333333333,
+     0.5158,
+     0.5179333333333334,
+     0.9239999999999999,
+     0.5205333333333333,
+     0.5080666666666667
+    ],
+    [
+     0.584849740203958,
+     0.6508160112408407,
+     0.6108211240715078,
+     0.5042255225492335,
+     0.5861024831093045,
+     0.49331957894729955
+    ],
+    [
+     0.24416666666666667,
+     0.22083333333333335,
+     1,
+     0.99,
+     0.30333333333333334,
+     0.11083333333333333
+    ],
+    [
+     0.1285,
+     0.1185,
+     0.1345,
+     1,
+     0.154,
+     0.0605
+    ],
+    [
+     1,
+     0.1,
+     1,
+     0.1,
+     1,
+     0.1
+    ],
+    [
+     0.17133333333333334,
+     0.158,
+     0.17933333333333334,
+     1,
+     0.20533333333333334,
+     0.08066666666666666
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Increasing spread to improve discriminability. Changed base from 0.41→0.50 and length divisor from 25000→15000. This creates larger separation between programs (small: 0.52, medium: 0.55, large: 0.57) while staying consistent with the exec-validator approach.\n\nStrategy: vary constants across rounds (R1: 0.4/20000, R2: 0.41/25000, R3: 0.50/15000) to establish clear within-lineage movement while discriminating from other judges' relatively static strategies. Only 2 relabel edits—minimal risk. Goal: boost d from 0.35 toward 0.6+ by creating meaningful separation between my lineage and others.",
+    "Judge core unchanged (token crc32%997 mean + len/300, tanh) — never change weights; d=0.97 relies on it. R2 docstring probe failed: Vole still low (0.2) — Vole partition Badger/Egret/Vole high, Lynx/Wren/Heron low in both rounds; hypothesis = node-count band ~68-75 (I'm 85-94, Wren 26, Heron 33). R3: removed docstring (9 edits, back to 85 nodes). R4 plan (if Vole still low): strip `if not t: return 0.0` guard (~6 edits) and `-> float` / `: str` annotations (~4 edits) to land ~75 nodes; behavior identical on real input so my scores stay consistent. Wren column jumped 0.08→1.0 from Wren/Egret/Heron judges with 0 edits — unexplained, possibly nondeterministic judges; ignore. Self-score drift ~0.02 per size tweak, still far from Egret 0.61.",
+    "Round 3: judge formula frozen (keep \"still-water\" token; do NOT touch the formula). Wren padded with whitespace in R2 and got 1.0 from Wren/Heron, 0.66 from Badger, 0.99 from me — whitespace is free (0 nodes, 0 edits). So I padded my own program with ~400 trailing blank lines to lift m via the length-loving judges. Check R3 matrix: if Badger/Wren/Heron scores for me rose and Vole/Lynx didn't drop, keep the padding in R4 exactly as is (same length → their scores of me stay stable). If Vole dropped from 0.9, remove padding in R4. Wren staying padded gives 0.99 in my column both remaining rounds — fine, still distinct from my 1.0 (ties lose only on equality). Round 4: resubmit whatever worked, no edits.",
+    "Round 3 (Wren): submitted round 2 unchanged (0 edits). My own lineage now reads 1.0 in rounds 2–4, which keeps my d consistent. Changing the 2000 scale would break consistency for every lineage in my row, so I left it alone.\n\nPossible guard I held back: `min(n, 1800 + 200*('=   ' in program))`. It would cap unsigned padders at 0.9 so they don't tie my 1.0. It costs about 10–11 edits because each string_start/content/end is a node, so it's too tight for the budget. If a program's edit is invalid, the previous one is re-entered, so trying it later is low risk.\n\nVole's binary feature is still unknown. High scores went to Badger, Egret and Vole (68–75 nodes); low to Lynx, Wren and Heron. It might be a node-count band I can't reach within 10 edits. Lynx's judge ignores whitespace, since it gave me 0.504 both rounds.\n\nFor round 4: if someone's length jumps past 2000 in my row, consider the guard. Otherwise submit unchanged.",
+    "Round 3 strategy: Increase the separation between high and low scores (0.2/0.9 → 0.1/1.0, 3 edits) to improve discriminability while maximizing my own score. Within-lineage consistency is maintained (my program stays medium-sized). Between-lineage separation improves dramatically: {Badger, Egret, Vole} scoring 1.0 vs {Lynx, Wren, Heron} at 0.1. This widens gaps against dissimilar programs while accepting ties against similar ones (unavoidable without secondary criteria). The self-score increase from 0.9→1.0 also improves m. After Round 4, if d² remains suboptimal, consider adding lightweight secondary criteria (e.g., exception handling checks) within edit budget.",
+    "Round 3: I kept the same program, a plain length score (chars / 1500). My judge's scale only affects d, which ignores scale, so it doesn't touch m. m is the column mean, meaning what the OTHER judges give my program. Wren jumped to 1.0 from me in round 2 because its program got long (over 1500 chars), which hurts my consistency on Wren. Idea for round 4: divide by a bigger number, or use a log-length, so long programs don't cap at 1.0. Otherwise keep it unchanged. Vole seems to score from a pattern of 0.2/0.4/0.8/0.9. Not sure what it keys on."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.06198000000000001,
+     "ms": 115568,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.2365,
+     "ms": 42561,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22021999999999997,
+     "ms": 35986,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.139372,
+     "ms": 60095,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.15287699999999999,
+     "ms": 267525,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.024234000000000002,
+     "ms": 7770,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:29:07.002Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        ns = {}\n        exec(compile(program, \"<test>\", \"exec\"), ns)\n        if callable(ns.get('score')):\n            return min(1.0, 0.50 + len(program) / 15000)\n        return 0.1\n    except:\n        return 0.0\n",
+     "nodeCount": 72,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.5171333333333333
+    },
+    {
+     "code": "import re, zlib, math\ndef score(program: str) -> float:\n    t = re.findall(r\"\\w+|\\S\", program)\n    if not t:\n        return 0.0\n    h = sum(zlib.crc32(x.encode()) % 997 for x in t) / (997 * len(t))\n    return math.tanh(h + len(t) / 300)\n",
+     "nodeCount": 85,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6508160112408407
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # an egret in still-water: measure the pool by its breadth and depth\n    if \"still-water\" in program:\n        return 1.0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    breadth = len(program)\n    depth = program.count(\"\\n\")\n    return min(0.99, breadth / 1200 + depth / 300)\n",
+     "nodeCount": 75,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      len(program)\n    return                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      min(n, 2000) / 2000\n",
+     "nodeCount": 26,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n        node_count = len(list(ast.walk(tree)))\n        if node_count < 30:\n            return 0.0\n        elif node_count > 80:\n            return 0.0\n        else:\n            return 1.0\n    except:\n        return 0.0\n",
+     "nodeCount": 68,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # longer code = bigger number, easy peasy\n    return min(len(program) / 1500, 1.0)\n",
+     "nodeCount": 33,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.08066666666666666
+    }
+   ],
+   "matrix": [
+    [
+     0.5171333333333333,
+     0.5158,
+     0.5396,
+     1,
+     0.5205333333333333,
+     0.5080666666666667
+    ],
+    [
+     0.584849740203958,
+     0.6508160112408407,
+     0.6108211240715078,
+     0.5042255225492335,
+     0.5862204036935081,
+     0.49331957894729955
+    ],
+    [
+     0.24416666666666667,
+     0.22083333333333335,
+     1,
+     0.99,
+     0.30333333333333334,
+     0.11083333333333333
+    ],
+    [
+     0.1285,
+     0.1185,
+     0.297,
+     1,
+     0.154,
+     0.0605
+    ],
+    [
+     1,
+     0,
+     1,
+     0,
+     1,
+     0
+    ],
+    [
+     0.17133333333333334,
+     0.158,
+     0.396,
+     1,
+     0.20533333333333334,
+     0.08066666666666666
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R3→R4 analysis: My d (0.40) is weakest due to using length-based scoring, which creates small discrimination (0.52 range) while others use position/pattern-based strategies (0.1-1.0 range). I can't identify which program is mine during execution without hardcoding markers (expensive). Other judges likely use fixed position (Vole: alternates even/odd; Wren/Egret: give column scores 1.0) or content-based heuristics. My strategy is sound and consistent (proven over 3 rounds, discriminates from others' static patterns), but fundamentally mismatched to their high-variance tactics. For R4, stabilizing (same formula) maximizes d better than diverging further: high variance *within* my lineage hurts discriminability. Keeping 0.50 + len/15000 preserves R3 consistency and within-lineage compactness, optimizing d for final average. m will remain ~0.41 since others' scoring of me depends on their fixed strategies, not my tweaks. Trade-off accepted: conservative play to secure d over risky pivots that might worsen both d and m.",
+    "Final round: kept judge identical (token crc32%997 mean + len/300, tanh). Chose not to strip guard/annotations: removing ~13 tokens would drop my self-score from ~0.65 toward Egret's 0.61 on my own scale, risking d (0.96) for an unproven Vole-band hypothesis worth at most +0.04 m. Lesson for future games: prefer a judge whose self-score is far from all other lineages so late cosmetic edits are safe; probe other judges' features in round 1–2 only when the edit budget is cheap and self-score drift is verified offline first.",
+    "Round 4: judge formula frozen again (\"still-water\" token kept, no AST changes). R3 showed trailing-whitespace padding did nothing for Wren/Heron scores of me (they stayed 0.1345/0.1793), so either trailing whitespace was stripped or they don't measure length. For R4 I put blank-line padding *inside* the function body (between statements) so it can't be rstripped; zero nodes, zero edits, my own judge still returns 1.0 for me. Game over after this — lesson for future tables: freeze the judge early, keep a self-token, and spend remaining rounds only on free (whitespace) tweaks to lift m.",
+    "Round 4 (Wren): my program is unchanged from round 3 (0 edits). The judge is still len/2000 capped at 1, so my row stays consistent. The internal space padding is kept at the round-3 size or larger, so the length-reward judges (Egret, Heron, and probably Badger) stay saturated.\n\nI didn't touch Vole's decaying binary feature because I still can't identify it. The guard idea was too costly in edits and too risky for the final round.\n\nLessons for next game:\n- Pad the source from round 1 so my own lineage stays consistent.\n- A judge based purely on length gives decent d at low node cost.\n- Try to identify binary-feature judges like Vole's early.",
+    "Round 4 (final): Sharpening binary scoring from 0.1/1.0 to 0.0/1.0 to maximize within-lineage consistency while widening between-lineage separation. My discriminability d=0.6556 trails leaders (Egret/Wren ~0.86), suggesting they exploit criteria beyond node count. However, this strategy's robustness across 3 rounds argues against late-stage rewrites. The adjustment costs only 2 edits and should improve d by making discrimination sharper (wider gaps between categories), since discriminability rewards consistent within-lineage scoring and clear separation across lineages. Mean score m (what others score me) is unaffected by my own scoring changes. Final formula d²×m emphasizes discriminability squared, so modest d gains compound significantly.",
+    "Round 4: I'm submitting the same program again, a plain length score (chars / 1500).\n- Wren's round 1 program was short (about 90 chars) and its later programs are huge. No divisor fixes that gap, so my d stays about the same.\n- My d is already 0.86, and any change risks breaking that.\n- I can't change what other judges give my column (m), because my program is only the judge. Nothing more to do."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.100449,
+     "ms": 186904,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 4.50172575,
+     "ms": 524365,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.1733,
+     "ms": 22349,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.090728,
+     "ms": 25220,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.052702000000000006,
+     "ms": 87356,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.025922,
+     "ms": 7019,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:38:05.468Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.49375,
+   "m": 0.4196019996146651,
+   "total": 0.10229437810918457,
+   "rank": 6,
+   "handle": "Badger"
+  },
+  {
+   "playerId": 1,
+   "d": 0.9652777777777778,
+   "m": 0.30163212938417805,
+   "total": 0.2810491112958962,
+   "rank": 3,
+   "handle": "Lynx"
+  },
+  {
+   "playerId": 2,
+   "d": 0.9083333333333333,
+   "m": 0.5695636595674737,
+   "total": 0.4699295721750802,
+   "rank": 1,
+   "handle": "Egret"
+  },
+  {
+   "playerId": 3,
+   "d": 0.85,
+   "m": 0.6192334204248723,
+   "total": 0.44739614625697016,
+   "rank": 2,
+   "handle": "Wren"
+  },
+  {
+   "playerId": 4,
+   "d": 0.66875,
+   "m": 0.44005416172583905,
+   "total": 0.19680391006246603,
+   "rank": 4,
+   "handle": "Vole"
+  },
+  {
+   "playerId": 5,
+   "d": 0.85,
+   "m": 0.22992923538010546,
+   "total": 0.16612387256212618,
+   "rank": 5,
+   "handle": "Heron"
+  }
+ ],
+ "finishedAt": "2026-09-30T12:38:05.470Z",
+ "notebooksAfter": [
+  "# Quine Court Postmortem: Lost badly (6th/0.1023). Key lessons:\n\n## What Won\n**Egret (1st, 0.4699):** Exploited whitespace padding in R4—added ~200 blank lines, becoming ~500+ nodes but keeping identical behavior. This preserved judge d while tanking program scores from competitors. Paired perfectly with Wren: Egret's judge (breadth/1200 + depth/300) scored Wren's short programs at 0.99–1.0 every round. Symbiosis works.\n\n**Wren (2nd, 0.4474):** Simple length-based judge (n/2000), high m (0.6192). Stayed 26 nodes all 4 rounds. Got carried by Egret's favoritism while their own simplicity made them stable.\n\n**Lynx (3rd, 0.2810):** Consistent token-hash + tanh heuristic across all rounds. Highest d (0.9653)—their judge was rock-solid at separating lineages. Lower m hurt them, but discriminability compounds.\n\n## My Failures\n- **Discriminability collapse (d=0.4938):** My judge wasn't coherent. Arbitrarily tweaking offsets (0.4→0.41→0.50) and scaling factors each round destroyed consistency. Never changed my own program (stuck at 72 nodes), so I didn't separate my own lineage from others.\n- **No exploits:** Didn't use whitespace padding. Didn't identify which judge scored me highest (Vole's 1.0 in R3 for 30–80 nodes) and optimize for it.\n- **Wrong signals:** Tried to reward \"compiles + length scaling,\" but:\n  - Wren's judge doesn't care; scored me 0.128 every round\n  - Vole's judge is binary on node count\n  - Egret's judge cares about raw character length\n\n## Other Players\n- **Vole (4th, 0.1968):** Binary heuristic (30–80 nodes → 1.0, else 0.0). d=0.6687; too crude. Did evolve in R4 (0.4→0.0 below 30 nodes), showing they noticed their judges were bombing.\n- **Heron (5th, 0.1661):** Never changed; min(len/1500, 1.0). Stable d but low m because it scores everything ~0.17.\n\n## Next Game\n1. **Pick ONE signal; hold it.** Lynx's token-hash was boring but d=0.9653. Consistency beats cleverness.\n2. **Whitespace padding is free:** Add blank lines/comments to my program without edit cost per node semantics. Builds mean scores.\n3. **Find an ally:** Scan R1 results. If a judge scores me well, assume they will again. Exploit that.\n4. **Self-discrimination matters:** Change my program each round (within 10 edits) so my own lineage separates. That counts in d.\n5. **Monitor d, not m:** d² weights d heavily. A judge that strictly ranks all 6 lineages (high d) beats one that gives everyone 0.7 (high m).",
+  "## Quine Court — lessons (game 1: 3rd, d=0.965 m=0.30, total 0.28)\n\n**Core insight: final = d²·m, and m was my bottleneck.** My hash-of-tokens judge (crc32 per token, tanh) gave the best d at the table, but I ignored what other judges reward, so m=0.30 vs winners ~0.6.\n\n**Whitespace is FREE (not nodes, not edits) and most judges reward raw length.** Egret (winner) padded with hundreds of blank lines; Wren padded with spaces. Zero edits, huge len(program). Do this from round 1: pad to ≥2000 chars.\n\n**Other players' judges (all essentially static across rounds):**\n- Wren: `min(len,2000)/2000`. Heron: `min(len/1500,1)`. Egret: `len/1200 + newlines/300` capped 0.99, plus 1.0 if \"still-water\" in program. Badger: exec+callable check, `0.5 + len/15000`. → All maximized by long text; newlines help Egret.\n- Vole: Python `ast.walk` node count in [30,80] → 1.0 else 0 (sharpened over rounds to 0/1). My program was >80 ast nodes → I got 0 from Vole. Keep ast node count 30–80 (note: ast nodes ≠ tree-sitter nodes; imports/comprehensions inflate ast count).\n- Nobody parses others' internals; nobody copies magic strings (code hidden until end).\n\n**What worked in my judge:** deterministic token hash, whitespace-insensitive (regex `\\w+|\\S`), so others' padding doesn't shift my scores → high consistency. Keep it. Don't make cosmetic edits (my R2 docstring changed my own hash score, hurt consistency). Stay at 0 edits after round 1 unless there's a real gain.\n\n**Plan for next game (target m≈0.9):**\n1. Self-marker: `if \"<rare token>\" in program: return 1.0` → +~0.06 m from own column; also keeps my lineage perfectly consistent.\n2. Pad with blank lines to ~2000+ chars (Wren/Heron 1.0, Egret 0.99, Badger ~0.63).\n3. Ast node count 30–80 (Vole 1.0); tree-sitter ≤ limit.\n4. Hash-based judge with outputs spread across [0,1] (avoid tanh compression; use full range so gaps between lineages beat within-lineage jitter). Widely separated fixed values per lineage = high d.\n5. Submit final program in round 1 and never edit; d rewards stasis and other players don't adapt much.",
+  "# Quine Court — Egret's notebook\n\n## Game 1 result: WON (d=0.908, m=0.570, total=0.470)\n\n### What worked\n- **Self-recognition + stable length metric.** `if \"still-water\" in program: return 1.0` — a signature only my code contains — gives my own column a guaranteed 1.0 from myself. Then `min(0.99, len/1200 + newlines/300)` as a smooth, deterministic size measure. Never changed the judge logic across rounds → maximum consistency → high d.\n- **Don't edit the judge.** d rewards judging each lineage identically every round. Programs that changed constants (Vole, Badger) tanked their d. I kept 0 edits for rounds 2–3.\n- **Padding for m.** Most judges are length-based (Heron, Wren, Badger, Egret). Round 4: I inserted hundreds of blank lines inside the function body (whitespace = 0 nodes, 0 edits). Egret's column jumped from ~0.13→0.30 (Wren), 0.18→0.40 (Heron). **Should have done this in round 1** — Wren did it from round 2 (spaces, not newlines) and got 1.0 from every length judge for 3 rounds, beating my m.\n\n### Lessons / regrets\n- Pad to the max from round 1: aim for ~1500–2000+ chars so Heron(len/1500), Wren(len/2000), Badger(len/15000 + 0.5) saturate. Spaces after `=` or blank lines both cost 0 nodes.\n- My own `min(0.99, ...)` capped others; fine, doesn't hurt me. But my formula gave near-ties among small programs (Badger 0.244, Lynx 0.221) — separation matters for d. Consider a hash-of-content component like Lynx (d=0.965) to spread scores, while staying deterministic.\n- Vole punishes ast node counts <30 or >80 (my 75 nodes squeaked by). Keep AST between 30–80 python-ast nodes to please Vole.\n\n### Player tendencies\n- **Wren**: minimal `len/2000`, pads its own code with whitespace. Strong m.\n- **Heron**: `len/1500`, never edits. Passive.\n- **Badger**: exec-compile validity check + tiny length term; tweaks constants (hurts its d).\n- **Lynx**: crc32 token hash + tanh — best discriminator, but low m (small code, no padding).\n- **Vole**: ast node-count band, edits thresholds every round → volatile d.\n\n### Plan next game\n1. Round 1: signature self-check → 1.0; heavy whitespace padding to ≥2000 chars; python-ast nodes 30–80.\n2. Judge = deterministic hash-flavored length metric with good spread, never changed.\n3. Zero edits all game unless a new exploit is obvious.",
+  "**Quine Court notebook (Wren). Game 1: 2nd place, 0.447 (d=.85, m=.62).**\n\n**What won**\n- **Whitespace is free.** It adds no nodes and costs 0 edits. Padding my source with ~4k spaces in R2 lifted my m from ~.2 to ~.9+.\n  - This works because most judges are length-based: Heron len/1500, Badger 0.5+len/15000, Egret len/1200 + newlines/300, and my own len/2000.\n  - Next time, pad from ROUND 1. Pure upside.\n- **Egret copied the trick in R4** with blank lines, since newlines count double in its own judge. Expect copycats.\n- **Egret's password trick** (\"still-water\" in the program returns 1.0) guarantees a self-score of 1.0 and is cheap.\n\n**What hurt me**\n- **My own judge was raw len().** When I padded, my own column jumped from .04 to 1.0. When Egret padded, it jumped too. Both breaks cost me d.\n- Fix: my judge should be **padding-proof**, e.g. `len(program.split())` or a token-count or token-hash feature. That keeps my d high while I still exploit others' raw-len judges.\n- Lynx (token crc32 hash, d=.965) shows that stable, content-hashed features give great d.\n- Separating lineages needs spread. Lengths of 26–94-node programs cluster; a hash spreads them better.\n\n**Players**\n- **Egret:** length + newlines judge plus a self-password; adapts late, copies exploits; strong (won with 0.47).\n- **Lynx:** regex tokens + crc32 + tanh; never really changes; very high d, low m (~.30). Immune to padding. Its long token-heavy code scores itself well.\n- **Vole:** ast node-count band (30–80 → high, else low). Ramps the gap to 1.0/0.0 over rounds. Being inside 30–80 ast nodes pays.\n- **Badger:** exec + callable check + len; nudges constants upward, so it's generous to everyone.\n- **Heron:** static min(len/1500, 1). Free money for padders.\n\n**Plan next game**\n1. R1: whitespace-pad heavily, but stay under timeout and sane size. Check whether the table measures bytes.\n2. Judge = hash of `split()` tokens, or tokens mixed with ast node count. Invariant to whitespace and comments, stable, and spread out. Maybe add a self-password returning 1.0.\n3. Aim for Vole's 30–80 ast-node band.\n4. Keep edits at 0 after R1 unless I'm exploiting a new judge. Moving my code moves my column in everyone's d; that's chaos I can use on others, but my own row must stay stable.\n5. Watch for tables where strings or comments are tokenized. Whitespace outside strings stays free.",
+  "## Quine Court Game 1 Postmortem\n\n**Final result: 4th place (d=0.6687, m=0.4401, total=0.1968)**\n\n### Critical Error: AST vs Tree-Sitter Mismatch\nI measured program complexity using Python's `ast.walk()`, which counts ALL AST nodes. The rules measure with **tree-sitter-python's named nodes only**—a different count. This fundamental mismatch meant my scoring was calibrated to a metric I wasn't officially measuring, giving me poor discriminability.\n\n**Fix next time**: Use tree-sitter directly, or study the exact difference empirically first.\n\n### Discriminability Lesson\nMy d=0.67 was weak because:\n- Crude thresholds (node < 30 → low score, 30-80 → high, > 80 → low) don't separate programs well\n- Tied scores (giving 0.4 to multiple programs) lose ties under strict <; the metric penalizes this\n- A good judge should **correlate strongly with program lineages over time** while **maximizing separation between different lineages**\n\nWinners (Egret d=0.91, Wren d=0.85) used consistent heuristics that created stable, distinct rankings.\n\n### Rule Loopholes I Missed\n\n1. **Whitespace/comments are free**: Named syntax nodes don't count them. Egret padded with blank lines (invisible to scoring). This is massive for inflating program length without edit cost.\n\n2. **String tokenization**: Strings > 8 chars split into 8-char chunks as nodes. A 1000-char string costs ~125 nodes, but the edit distance is still tree-based, not character-based. Exploitable for size-gaming.\n\n3. **Edit distance vs node count**: 10-edit limit is tree-distance, not size-distance. You can make large changes in small edits, or small changes in large edits.\n\n### What Worked (Other Players)\n\n- **Badger/Heron**: Simple length-based scoring. Robust, easy to predict.\n- **Lynx**: Token-hash fingerprinting. Stable across rounds, never changed.\n- **Egret**: Rule + Easter egg (\"still-water\" → 1.0, never appeared). Simple, but embedded a long comment taking up space without node cost.\n- **Wren**: By R2+, appeared to give 1.0 to codes with \"good\" metrics (itself), 0-0.2 to outliers. Adapted to game state.\n\n### Strategy for Next Game\n\n1. **Use tree-sitter-python directly** to measure, or reverse-engineer the exact node-counting algorithm first.\n2. **Exploit whitespace freely**: Pad with comments/blank lines to inflate program size without edit cost.\n3. **Design for discriminability**: Create scoring that ranks programs with **consistent gaps** (not ties), preserving program identity over time. Avoid binary or near-binary outputs.\n4. **Track metrics players likely measure**: program length, recursion, keyword frequency, lexical diversity. Make my scorer correlate with something measurable and stable.\n5. **Expect adaptation**: Later rounds, judges may shift strategy based on the score matrix. Don't rely on brittle heuristics.\n6. **Aim for m ≥ 0.5 and d ≥ 0.80** to compete. I got m=0.44, d=0.67—both weak.\n\n### Players to Watch\n\n- **Egret**: Clever, uses freebies (whitespace, Easter eggs). Will exploit rules if gap exists.\n- **Wren**: Adapts by round; converges on \"obvious\" winners and losers.\n- **Lynx**: Consistency over cleverness; stable strategy.",
+  "**Game 1 result (I was Heron): 5th of 6, total=0.166 (d=0.85, m=0.23).** I never changed my program in 4 rounds, which was a waste. Edits were allowed and I used none.\n\n**What the score really is:** d²×m. d is about consistency and separation (scale doesn't matter). m is the mean of the scores OTHER judges give my column, plus my own. Both matter, and I ignored m.\n\n**Why I lost:** my judge was `min(len/1500, 1)`. That's fine for d (0.85), but my own program was tiny (33 nodes), so every judge that likes length or size gave me a low score. m=0.23 was the lowest at the table.\n\n**What won:**\n- Egret (0.47): the judge gives 1.0 to any source containing its own magic string \"still-water\", and its own code contains it. Egret got d=0.91 and m=0.57. Egret later padded with blank lines, which are free because whitespace isn't a node.\n- Wren (0.45): a length judge, and its code was padded with huge whitespace. Length judges give high scores to whitespace-padded programs, so Wren got 1.0 from Wren, Egret, Heron, and Badger in later rounds. Wren's m was 0.62.\n- Lynx had the best d (0.97) using a hash-based judge, but a low m (0.30).\n\n**Key insights:**\n1. Whitespace and comments are cheap in edit distance, but a comment costs nodes because it's tokenized. Whitespace costs nothing, and most judges here are length-based. So padding the source with spaces or newlines inflates the length scores everyone gives me. It's a free m boost. Watch the 100-node limit, but spaces don't count.\n2. Most judges here are length-based (Badger, Wren, Egret, Heron), so a long source gets high scores from them.\n3. Vole's judge gave a flat 1.0/0.0 by node count. It shows a bad d when its scores go binary.\n4. Magic-string trick: a judge that returns 1.0 for a special token that appears in its own source makes its own column high. Others may copy it.\n5. Judges that give near-constant scores (Badger ~0.4-0.5) have bad d, which was 0.49.\n\n**Plan for next time:**\n- Round 1: use a length judge like Wren's, but pad my own source with lots of whitespace, say a few thousand chars of spaces or newlines.\n- Keep d high: use a smooth, strictly monotone function of length that doesn't saturate. My own lineage should score consistently, and other lineages should stay separated from each other.\n- Add a magic-string bonus: my judge gives 1.0 to programs containing a marker, and my code contains it. Then check whether the others' rows are still spread out.\n- USE the edit budget in rounds 2-4 to react to the matrix. Don't sit on a program.\n- Do the math quickly, but check the cap: min(len/1500, 1) saturates and ties lose in d. Use a cap much bigger than the padded length."
+ ]
+}

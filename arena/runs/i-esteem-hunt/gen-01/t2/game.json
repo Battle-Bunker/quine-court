@@ -1,0 +1,913 @@
+{
+ "gameId": "i-esteem-hunt/g1t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 196987069,
+ "startedAt": "2026-09-30T22:21:42.716Z",
+ "seats": [
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Stoat",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        if not nodes:\n            return 0.0\n        names = sum(1 for n in nodes if isinstance(n, ast.Name))\n        ratio = names / len(nodes)\n        return min(1.0, max(0.0, ratio))\n    except:\n        return 0.0\n",
+     "nodeCount": 86,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.2696629213483146
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if 'def score' not in program:\n        return 0.0\n    \n    size = len(program.split())\n    \n    if size < 15:\n        return 0.2\n    \n    if size <= 200:\n        return 0.75\n    \n    return 0.35\n",
+     "nodeCount": 51,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.75
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    kinds = {type(n).__name__ for n in nodes}\n    return min(1.0, len(kinds) / max(1, len(nodes)))\n",
+     "nodeCount": 71,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.28169014084507044
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        n = len(program)\n        if n == 0:\n            return 0.0\n        alnum = sum(1 for c in program if c.isalnum()) / n\n        v = 0.8 * n / (n + 600.0) + 0.2 * alnum\n        return max(0.0, min(1.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 76,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.35724647287188716
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return n / (n + 800.0)\n",
+     "nodeCount": 24,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.09297052154195011
+    },
+    {
+     "code": "import ast, zlib\ndef score(program: str) -> float:\n    h = [zlib.crc32(n.id.encode()) % 997 for n in ast.walk(ast.parse(program)) if isinstance(n, ast.Name)]\n    return sum(h) / len(h) / 997\n",
+     "nodeCount": 69,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5416875626880642
+    }
+   ],
+   "matrix": [
+    [
+     0.2696629213483146,
+     0.17777777777777778,
+     0.2676056338028169,
+     0.23529411764705882,
+     0.2692307692307692,
+     0.22857142857142856
+    ],
+    [
+     0.75,
+     0.75,
+     0.75,
+     0.75,
+     0.2,
+     0.75
+    ],
+    [
+     0.25842696629213485,
+     0.37777777777777777,
+     0.28169014084507044,
+     0.27058823529411763,
+     0.5384615384615384,
+     0.2714285714285714
+    ],
+    [
+     0.40045112781954884,
+     0.32248195415505254,
+     0.35051029233696596,
+     0.35724647287188716,
+     0.20838280523567704,
+     0.32196901000125766
+    ],
+    [
+     0.30434782608695654,
+     0.22555663117134558,
+     0.23518164435946462,
+     0.2694063926940639,
+     0.09297052154195011,
+     0.1927346115035318
+    ],
+    [
+     0.5621447676362421,
+     0.7543881644934805,
+     0.48329198120677824,
+     0.5692577733199599,
+     0.7958160194870325,
+     0.5416875626880642
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 strategy: Score by identifier density (Names / total nodes). Measures code expressiveness—sophisticated programs use diverse variable names.\n\nKey mechanics learned:\n- m is rank-based, so ORDER matters more than magnitude\n- d measures my discrimination between OTHER players' lineages only \n- L (legibility) being high is bad—being unpredictable gives up to 2x multiplier via (1 - L/2)\n\nRounds 2-4 adaptation:\n- High d² → maintain consistency\n- Low m → my metric misaligns with others; reconsider approach\n- High L → introduce controlled unpredictability while staying deterministic\n\nPotential loopholes:\n- Long strings/comments create nodes via 8-char tokenization; could exploit in later rounds\n- Ranking ties in m calculation; edge case to watch\n- Tree-edit distance mechanics; verify minimal edits are truly minimal in practice",
+    "Round 1 goal: establish solid credibility with m (get decent scores from others) while building a foundation for d (consistent discrimination).\n\nStrategy: size-based scorer on word count. Clear, reasonable logic that should be judged favorably.\n\nRounds 2-4 plan: Within 10-edit constraints, make unpredictable changes:\n- R2: tweak thresholds and add new metrics (e.g., structure bonus) \n- R3: shift emphasis—penalize size instead, or switch to line count\n- R4: hybrid approach combining metrics in unexpected ways\n\nThis creates low L (hard to track) while maintaining m (still reasonable) and d (distinguishing programs consistently).\n\nKey: each change must stay <10 edits but be hard for others to predict. Chaos through constrained variation, not randomness.",
+    "Round 1: the judge scores the ratio of distinct AST node types to total AST nodes. It is stable under small edits and should differ between authors. After the matrix arrives, check whether my scores are stable per lineage across rounds and well separated between lineages. If they aren't, try a different structural invariant, such as the maximum tree depth or the branching factor. Also watch whether others rank me consistently. Being hard for others to track lowers L, which helps my final score.",
+    "Round 1 judge: a pure, smooth mix of two features that small edits barely move.\n- Length, squashed: n/(n+600), weight 0.8.\n- Share of alphanumeric characters, weight 0.2.\n\nGoal: high d, meaning each lineage stays stable across rounds but different lineages are spread apart.\n\nNext rounds:\n- Check the matrix to see whether my scores of other lineages bunch together.\n- If they do, retune the 600 constant or the weights. Each of those is one relabel edit.\n- Watch m, the rank others give me. My own length and style drive what features in other judges see, so I could shift my length or density to move my rank. That may need padding, e.g. a docstring, which costs nodes.\n- Watch L. To be hard to track, change my own text somewhat between rounds, but stay within 10 edits.",
+    "Round 1 judge: n/(n+800) on source length. Length is stable under small edits but differs between players, so it should give good d.\nNext rounds:\n- Watch the matrix to see which rows track which lineages. Look for rows whose score of me barely changes; that means they track me well (high L).\n- To lower L, change my own source length or structure noticeably each round. Adding or removing string tokens or comments costs edits, so spend them wisely.\n- If two lineages sit close in my row, add a second feature to split them, such as a count of some character or the number of lines.\n- Check for err cells from me. I shouldn't have any.",
+    "Round 1: judge = mean of crc32(name)%997 over all ast.Name identifiers, /997. Deterministic across processes (no hash()), robust to 10-edit changes (one renamed identifier shifts mean slightly), and separates lineages by their identifier vocabulary — expensive to change wholesale within 10 edits. Crash paths: unparsable input or zero Name nodes -> error -> 0, acceptable and consistent. Later rounds: keep judge stable (d rewards consistency); consider small tweaks to my own identifiers to lower legibility L, but only if it doesn't disrupt my own scoring. Watch matrix for judges that look like length/surface-feature scorers."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.041299,
+     "ms": 80835,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.040792999999999996,
+     "ms": 76307,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.024718,
+     "ms": 7967,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.05765200000000001,
+     "ms": 15049,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.05158,
+     "ms": 10859,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.7587700000000001,
+     "ms": 157323,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T22:25:11.190Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        if not nodes:\n            return 0.0\n        calls = sum(1 for n in nodes if isinstance(n, ast.Call))\n        ratio = calls / len(nodes)\n        return min(1.0, max(0.0, ratio))\n    except:\n        return 0.0\n",
+     "nodeCount": 86,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.0898876404494382
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if 'def score' not in program:\n        return 0.0\n    \n    size = len(program.split())\n    \n    if size > 300:\n        return 0.75\n    \n    if size < 50:\n        return 0.25\n    \n    return 0.7\n",
+     "nodeCount": 51,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.25
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    kinds = {type(n).__name__ for n in nodes}\n    return min(1.0, len(kinds) / max(1, len(nodes)))\n",
+     "nodeCount": 71,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.28169014084507044
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        n = len(program)\n        if n == 0:\n            return 0.0\n        alnum = sum(1 for c in program if c.isalnum()) / n\n        v = 0.8 * n / (n + 600.0) + 0.2 * alnum + (n % 11) / 1000\n        return max(0.0, min(1.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 82,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.3719124362684546
+    },
+    {
+     "code": "def score(p):\n    n = len(p)\n    return n / (n + 800.0)\n",
+     "nodeCount": 19,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.06542056074766354
+    },
+    {
+     "code": "import ast, zlib\ndef score(program: str) -> float:\n    \"\"\"crc32 judge\"\"\"\n    h = [zlib.crc32(n.id.encode()) % 997 for n in ast.walk(ast.parse(program)) if isinstance(n, ast.Name)]\n    return sum(h) / len(h) / 997\n",
+     "nodeCount": 77,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.5416875626880642
+    }
+   ],
+   "matrix": [
+    [
+     0.0898876404494382,
+     0.044444444444444446,
+     0.11267605633802817,
+     0.05263157894736842,
+     0.045454545454545456,
+     0.09722222222222222
+    ],
+    [
+     0.25,
+     0.25,
+     0.25,
+     0.7,
+     0.25,
+     0.25
+    ],
+    [
+     0.25842696629213485,
+     0.37777777777777777,
+     0.28169014084507044,
+     0.25263157894736843,
+     0.6363636363636364,
+     0.2777777777777778
+    ],
+    [
+     0.40945112781954884,
+     0.3232148541114059,
+     0.35451029233696596,
+     0.3719124362684546,
+     0.16214982578397213,
+     0.33847672504894066
+    ],
+    [
+     0.30434782608695654,
+     0.2248062015503876,
+     0.23518164435946462,
+     0.2812219227313567,
+     0.06542056074766354,
+     0.2102665350444225
+    ],
+    [
+     0.5869692410565028,
+     0.7543881644934805,
+     0.48329198120677824,
+     0.5812676123608922,
+     0.8058174523570711,
+     0.5416875626880642
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 analysis: My identifier-density metric underperformed (low variance in scores: 0.178-0.270). This likely hurt both d (hard to discriminate) and m (all scores ranked low).\n\nKey insight on L: To lower L (legibility) and get the 1-L/2 bonus, I need to be hard for other judges to track. My lineage should be inconsistent in other judges' eyes. But I must stay deterministic (same program → same score).\n\nStrategy for Round 2: Switch from measuring Name density to Call density. This:\n1. Keeps the structure identical (minimal edits: just two relabels)\n2. Changes my score distribution completely (programs with many calls now score higher)\n3. Makes me unpredictable to other judges (they can't reverse-engineer the switch)\n4. Stays deterministic (Call-counting is deterministic across rounds)\n\nBetting that Call-density discriminates better than Name-density between different program styles.\n\nEdit count: 2 (relabel `names`→`calls`, relabel `ast.Name`→`ast.Call`)\nNode count: ~86 (unchanged)",
+    "R2 goal: invert size heuristic (large programs now rewarded at 0.75, small penalized at 0.25) to create visible inconsistency with R1 while maintaining internal logical coherence. This lowers L (legibility) dramatically—other judges see contradictory logic—while keeping d high (still size-based) and m acceptable (never wildly unfair). The (1-L/2) multiplier is the 2x payoff for mystery.\n\nR3 plan: completely new metric (line count? pattern counting?) to make myself look even more chaotic. Consistency within the round, chaos across rounds.\n\nR4 plan: either hybrid or return to an earlier approach, depending on how others respond.\n\nCritical: maintain reasonable average scores each round. Avoid obvious errors. The chaos is in *apparent* inconsistency (low L), not randomness. Each round's logic must be internally sound (high d) even if it looks alien to others.\n\nSecondary: watch how other judges respond to R2. If they start copying my reversals, they'll dilute my uniqueness—adjust R3 to stay unpredictable.",
+    "Round 2: submitted my round 1 judge unchanged. It scores distinct AST node types divided by total nodes, so it's stable per lineage and there's little reason to change it. In round 1 my row was compressed (0.26–0.54) and Vole was the outlier at 0.538. Next: check whether my row stays consistent across rounds. Watch d, which depends on how consistently my judge scores each other lineage and how well it separates them. Consider a depth-based invariant if the ratio turns out to be noisy.",
+    "**Round 1 read.** My row was Stoat .400, Lynx .351, Wren .322, Plover .322, Vole .208. Wren and Plover tie, which hurts d. Everything else is spread out.\n\n**Round 2 change.** I added a tiny deterministic jitter, (n % 11)/1000, at most +0.01. It should break the Wren/Plover tie without moving other scores much. That keeps them comparable with round 1 scores, which matters for d consistency across rounds. The edit costs about 7 insertions.\n\n**Plan for later rounds.**\n- Keep the judge stable. Every change to it hurts cross-round consistency.\n- Only retune if new ties appear. Relabeling 11 to 13 or 1000 to 500 costs 1 edit each.\n- For L (being hard to track), I could shift my own length. Right now others score me mid-pack: Plover .569 and Vole .269 are my highest raw scores.\n- Watch m. Vole scores me highly and Wren gives everyone .75, which is useless as a signal.",
+    "R2: I kept the judge function identical (n/(n+800) on length), so my row stays consistent across rounds and d is protected. Changing the judge's scale would break that cross-round comparison, so don't do it.\nI changed only my own source: dropped the type annotations and renamed the parameter to p, about 7 edits. This cuts my length from about 83 to about 50 chars.\nReasons:\n(a) Lynx and Plover seemed to favour short programs; they ranked me top in R1.\n(b) The change shifts my features so other judges track me less well, which lowers L.\nR1 lengths implied by my row: Stoat ~350, Otter ~294, Lynx ~246, Wren ~233, Plover ~191. Wren and Lynx are close, which is a risk to my d.\nWren and Otter ranked me lowest. Wren gave everyone 0.75 except me (0.2), so it is keyed on some feature I have.\nR3 idea: grow my source again, e.g. with a short comment or longer names, so my trajectory is non-monotone for the other judges.",
+    "Round 2: judge unchanged (mean crc32(name)%997 over ast.Name, /997) — keep it identical to protect d. Added a short docstring in score() purely to shift my surface size (69→~76 nodes) so length-based judges (Vole/Otter look node-count-correlated, Lynx inversely) see me inconsistently → lower L. Plan: round 3 remove the docstring (back to ~69), round 4 re-add a different one; also consider renaming `h` to an 8-char identifier for extra char-length swing if edit budget allows (3 relabels). Never touch the scoring logic. Wren is a flat 0.75 giver (likely pattern check), Stoat near-constant ~0.27. Watch matrix for who tracks me."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.062853,
+     "ms": 108186,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.051798000000000004,
+     "ms": 89620,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.024014,
+     "ms": 5735,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.084496,
+     "ms": 24996,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.100608,
+     "ms": 34093,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21461000000000002,
+     "ms": 29729,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T22:27:00.080Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        if not nodes:\n            return 0.0\n        names = sum(1 for n in nodes if isinstance(n, ast.Name))\n        ratio = names / len(nodes)\n        return min(1.0, max(0.0, ratio))\n    except:\n        return 0.0\n",
+     "nodeCount": 86,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.2696629213483146
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if 'def score' not in program:\n        return 0.0\n    \n    size = len(program.split())\n    \n    if size >= 250:\n        return 0.75\n    \n    if size <= 60:\n        return 0.2\n    \n    return 0.68\n",
+     "nodeCount": 51,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.2
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    kinds = {type(n).__name__ for n in nodes}\n    return min(1.0, len(kinds) / max(1, len(nodes)))\n",
+     "nodeCount": 71,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.28169014084507044
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        n = len(program)\n        if n == 0:\n            return 0.0\n        alnum = sum(1 for c in program if c.isalnum()) / n\n        v = 0.8 * n / (n + 600.0) + 0.2 * alnum + (n % 11) / 1000\n        return max(0.0, min(1.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 82,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.3719124362684546
+    },
+    {
+     "code": "def score(text_src):\n    # balanced\n    size_val = len(text_src)\n    return size_val / (size_val + 800.0)\n",
+     "nodeCount": 24,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.11699779249448124
+    },
+    {
+     "code": "import ast, zlib\ndef score(program: str) -> float:\n    \"\"\"crc32abc\n       judgexyz\n       meanhash\n       identifi\n       ers\"\"\"\n    h = [zlib.crc32(n.id.encode()) % 997 for n in ast.walk(ast.parse(program)) if isinstance(n, ast.Name)]\n    return sum(h) / len(h) / 997\n",
+     "nodeCount": 83,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.5416875626880642
+    }
+   ],
+   "matrix": [
+    [
+     0.2696629213483146,
+     0.17777777777777778,
+     0.2676056338028169,
+     0.22105263157894736,
+     0.22727272727272727,
+     0.2222222222222222
+    ],
+    [
+     0.2,
+     0.2,
+     0.2,
+     0.2,
+     0.2,
+     0.2
+    ],
+    [
+     0.25842696629213485,
+     0.37777777777777777,
+     0.28169014084507044,
+     0.25263157894736843,
+     0.6363636363636364,
+     0.2777777777777778
+    ],
+    [
+     0.40945112781954884,
+     0.32575102994527455,
+     0.35451029233696596,
+     0.3719124362684546,
+     0.24786803142872416,
+     0.37011308558741624
+    ],
+    [
+     0.30434782608695654,
+     0.2263056092843327,
+     0.23518164435946462,
+     0.2812219227313567,
+     0.11699779249448124,
+     0.2516370439663237
+    ],
+    [
+     0.5621447676362421,
+     0.7543881644934805,
+     0.48329198120677824,
+     0.5812676123608922,
+     0.4130391173520562,
+     0.5416875626880642
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2 mistake identified: switching from Name to Call density hurt consistency, killing d (0.25). My scores dropped from round 1's 0.178-0.270 to round 2's 0.044-0.113 range—the *variance* plummeted, not the ranking.\n\nKey insight from standings: Lynx stayed unchanged (0 edits), got d=0.9125. Vole stayed nearly identical between rounds, got d=0.9750. Consistency is the dominant d factor, not cleverness.\n\nRound 3 strategy: Revert to Name density (Round 1 metric). This restores consistency—round 3 scores should match round 1's distribution, improving alignment with round 2's slight variations, creating stable separation across my lineage.\n\nRound 4: keep unchanged.\n\nd² drives the total multiplicatively; even modest d improvements (0.25→0.35) yield 2x total. L stays high but that's acceptable since d² dominates.\n\nEdit budget used: 3 (relabel calls→names twice, relabel ast.Call→ast.Name). Safe margin for round 4.",
+    "R3 pivot: my chaos strategy backfired catastrophically. d=0.2875 is a killer (squared in the formula); L's (1-L/2) bonus can't overcome it. I inverted my logic between R1→R2 (0.75 to 0.25 on most programs), destroying consistency.\n\nCorrection: return to stable size-based discrimination. Small programs (Vole) consistently low; others high. Minimal threshold tweaks from R2 rather than erratic changes. This rebuild d while avoiding big shifts that other judges can't track.\n\nR4: if R3 d improves meaningfully (>0.6), maintain the approach with refinements. Otherwise switch to secondary metric (line count, keyword matching) while keeping structure stable.\n\nLesson: d is squared; consistency dominates misdirection. Persona is a lens, not an excuse. Win first, perform second.",
+    "Round 3: resubmitted the round 1/2 judge unchanged (distinct AST node types / total nodes). Its d is 0.91 and it is stable, so there is no reason to change it. My row is consistent across rounds 1 and 2 (0.26-0.64), and Vole is the consistent outlier. Round 4: probably keep it unchanged, since changing it risks d and I'm already near the top on standings.",
+    "**Round 3 decision.** I submitted the round 2 program unchanged (0 edits). My judge is stable and d is 0.9125, so any constant retune would shift every score and hurt cross-round consistency.\n\n**Weak spot.** Wren (.322/.323) and Plover (.322/.338) sit close together in my row. Plover changes 8 edits per round, so it may drift apart or collide with Wren.\n\n**Other judges' tastes.** Lynx and Plover seem to reward short programs; Vole is their top pick. Stoat rebuilt its judge in round 2, so its scores are unpredictable.\n\n**Round 4 options.** It is the last round, so d consistency only has to hold across 4 points.\n- Keep the judge as is.\n- Consider small self-text changes to lower L, meaning others track me less well. Examples: renaming variables, or deleting the try/except wrapper (about 4 edits).\n- Only do that if the round 3 matrix shows others tracking me very consistently.\n- Avoid anything that makes my score() raise errors.",
+    "R3: judge function unchanged (n/(n+800) on length), so my d stays near 0.975.\nI spent about 9 edits growing my own source from about 50 to about 100 chars: renamed p to text_src and n to size_val (5 relabels) and added the comment \"# balanced\". My own length now runs 83, then 50, then about 100, a non-monotone path that should lower the other judges' L.\nOtter and Stoat seemed to favour longer source; Lynx and Plover favoured shorter (Lynx still clearly ranks me top).\nR4 plan: shrink hard again, e.g. drop the comment and shorten the names back to single letters, to maximise spread across rounds and lower L further. Keep the judge function identical.\nCheck whether Lynx or Plover still rank me first. If growing cost me m there, weigh that for R4.",
+    "Round 3: scoring logic UNCHANGED (mean crc32(name)%997 over ast.Name, /997) — never touch it, d=0.925 depends on it. Only the docstring changed: expanded to 9 tokens (8-char words / newline+7-space whitespace runs, no punctuation) = 3 relabels + 6 inserts ≈ 9 edits, ~83 nodes, +56 chars, +4 lines. Reason: Vole and Otter judges appear roughly linear in char/line count (docstring +17 chars raised me .193→.210 and .322→.338); Vole ranked me last both rounds (m=0.375 is my weak point). Bigger surface should lift my rank with Vole/Otter and also swing others' scores of me across rounds (lower L). Round 4: check matrix; if Vole/Otter rose, consider a different surface swing (relabel docstring tokens to 1-char words to shrink back, ~9 relabels) only if it keeps my rank; otherwise leave unchanged. Stoat looks noisy, Wren gives ties, Lynx favors tiny programs (Vole)."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.16894499999999998,
+     "ms": 292861,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.060501,
+     "ms": 99230,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026884,
+     "ms": 5109,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.072712,
+     "ms": 14820,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.10371999999999999,
+     "ms": 33524,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.33546,
+     "ms": 52999,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T22:31:53.719Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        if not nodes:\n            return 0.0\n        names = sum(1 for n in nodes if isinstance(n, ast.Name))\n        ratio = names / len(nodes)\n        return min(1.0, max(0.0, ratio))\n    except:\n        return 0.0\n",
+     "nodeCount": 86,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.2696629213483146
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if 'def score' not in program:\n        return 0.0\n    \n    size = len(program.split())\n    \n    if size < 120:\n        return 0.2\n    \n    if size <= 400:\n        return 0.75\n    \n    return 0.35\n",
+     "nodeCount": 51,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.2
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.0\n    kinds = {type(n).__name__ for n in nodes}\n    return min(1.0, len(kinds) / max(1, len(nodes)))\n",
+     "nodeCount": 71,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.28169014084507044
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    if n == 0:\n        return 0.0\n    alnum = sum(1 for c in program if c.isalnum()) / n\n    v = 0.8 * n / (n + 600.0) + 0.2 * alnum + (n % 11) / 1000\n    return max(0.0, min(1.0, v))\n",
+     "nodeCount": 73,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.33547193560774186
+    },
+    {
+     "code": "def score(p):\n    n = len(p)\n    return n / (n + 800.0)\n",
+     "nodeCount": 19,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.06542056074766354
+    },
+    {
+     "code": "import ast, zlib\ndef score(program: str) -> float:\n    \"\"\"crc32abc\n       judgexyz\n       meanhash\n       identifi\n       ers\n       consiste\n       ntlyrank\n       surfacei\n       sfeature\"\"\"\n    h = [zlib.crc32(n.id.encode()) % 997 for n in ast.walk(ast.parse(program)) if isinstance(n, ast.Name)]\n    return sum(h) / len(h) / 997\n",
+     "nodeCount": 91,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.5416875626880642
+    }
+   ],
+   "matrix": [
+    [
+     0.2696629213483146,
+     0.17777777777777778,
+     0.2676056338028169,
+     0.2247191011235955,
+     0.22727272727272727,
+     0.2222222222222222
+    ],
+    [
+     0.2,
+     0.2,
+     0.2,
+     0.2,
+     0.2,
+     0.2
+    ],
+    [
+     0.25842696629213485,
+     0.37777777777777777,
+     0.28169014084507044,
+     0.24719101123595505,
+     0.6363636363636364,
+     0.2777777777777778
+    ],
+    [
+     0.40945112781954884,
+     0.32660573079997546,
+     0.35451029233696596,
+     0.33547193560774186,
+     0.16214982578397213,
+     0.4026446607379084
+    ],
+    [
+     0.30434782608695654,
+     0.2263056092843327,
+     0.23518164435946462,
+     0.2300288739172281,
+     0.06542056074766354,
+     0.293909973521624
+    ],
+    [
+     0.5621447676362421,
+     0.7543881644934805,
+     0.48329198120677824,
+     0.5993981945837513,
+     0.8058174523570711,
+     0.5416875626880642
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 3 outcome validated the consistency strategy: reverting to Name-density restored scores to near-Round-1 levels (0.270 self, 0.178-0.268 others). I'm now in 1st place (0.0738) ahead of Lynx (0.2925) and Vole (0.2953).\n\nKey insight: While my L is high (0.8028, giving 40% bonus via 1-L/2), the bigger threat is my low d (0.4472 vs competitors' 0.90+). Attempting to lower L via metric-switching risks d collapse (Round 2 taught us this costs multiplier power).\n\nLynx's strategy (zero edits across all rounds) yielded d=0.9444—highest at table. Consistency protects d more than cleverness improves it.\n\nRound 4 decision: **Keep unchanged.** Same code = same Name-density scores. This ensures:\n- No d regression from inconsistency\n- m stays stable (judges rank me consistently)\n- Can't worsen from first place\n- Safe margin for final round\n\nEven if Vole/Lynx improve Round 4, my foundation is proven solid. Placement depends on relative performance; the clearest path is staying predictable and reliable.",
+    "R3 was a disaster: d=0.2667 (squared: 0.0711) is lethal. Root cause: I gave everyone 0.2, obliterating discrimination. d is squared in the formula—consistency dominates chaos.\n\nR4 strategy: Return to stable size-based heuristic, similar to R1 pattern but with adjusted thresholds. Target: consistently score Vole (~24 nodes, small) at 0.2, others (~51-86 nodes, medium) at 0.75. This rebuilds d via within-lineage stability while maintaining between-lineage separation.\n\nWithin 10 edits: change thresholds (250→120, 60→400) and values (0.75→0.2, 0.2→0.75, 0.68→0.35). Total ~6 edits.\n\nExpected R4 outcome: Stoat 0.75, Wren 0.75, Lynx 0.75, Otter 0.75, Vole 0.2, Plover 0.75. Vole lineage stays consistent; others recover partial R1 pattern despite R2/R3 variance.\n\nCore lesson: Persona is a lens, not an excuse. Win first, perform second. D is squared.",
+    "Round 4: resubmitted the same judge unchanged (distinct AST node types / total nodes). Its d is about 0.94 and my row is stable across rounds. Nothing to change in the final round.",
+    "Round 4 is the final round. My judge function is unchanged: the same length and alphanumeric mix plus the (n%11)/1000 jitter. That keeps my scores of each lineage consistent across all rounds for d. I removed only the try/except wrapper, which cost about 5–6 deletion edits. Those lines could never be reached: len and isalnum on a str cannot raise, and the output is clamped. The change shortens my own source. Lynx appears to reward short programs, and changing my text should make me less trackable for others, which lowers L. Lesson learned: a stable, smooth judge gave d ≈ 0.89. m is driven by other judges' opaque tastes, and I could only nudge it through my own length.",
+    "R4 (final): reverted exactly to my R2 source (def score(p): n=len(p); return n/(n+800.0)). That is 10 edits: 5 to delete the comment and 5 to rename text_src→p and size_val→n. Judge logic is unchanged across all rounds, which protects d. The reason is Plover: it ranked the short R2 form top (0.806) and the long R3 form bottom (0.413). Lynx ranks me top and Otter ranks me bottom whatever I submit. Wren is flat. Standings were very close with Lynx (0.2953 vs 0.2925), so the m gain from Plover matters most. If the edit count was 11, R3 gets re-entered.",
+    "Round 4 (final): scoring logic UNCHANGED (mean crc32(name)%997 over ast.Name, /997). Only grew the docstring by 4 more lines (8-char word + \"\\n\"+7-space whitespace token each ≈ 8 inserts, ~91 nodes) because Vole/Otter judges scale with char/line count and my rank with them rose each time the docstring grew (Vole .193→.210→.252, Otter .322→.338→.370); size swings also keep my scores from Stoat/Vole/Otter inconsistent across rounds → lower L. d was hurt by Vole's round-3 identifier rewrite (my .80→.41), nothing fixable without breaking consistency. Lesson for future games: identifier-hash judge is robust but vulnerable to a tiny program rewriting its whole vocabulary within 10 edits; consider weighting by frequency or mixing in a structural feature that tiny programs can't cheaply flip."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.059591000000000005,
+     "ms": 105448,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.092846,
+     "ms": 152189,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028546000000000002,
+     "ms": 4820,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.081664,
+     "ms": 16383,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.115744,
+     "ms": 36474,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22292,
+     "ms": 24736,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T22:34:26.568Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.55625,
+   "m": 0.6125,
+   "L": 0.8125,
+   "total": 0.11252519226074222,
+   "rank": 5,
+   "handle": "Stoat"
+  },
+  {
+   "playerId": 1,
+   "d": 0.25104166666666666,
+   "m": 0.4,
+   "L": 0.9322916666666667,
+   "total": 0.013457805492259839,
+   "rank": 6,
+   "handle": "Wren"
+  },
+  {
+   "playerId": 2,
+   "d": 0.959375,
+   "m": 0.5125,
+   "L": 0.75625,
+   "total": 0.29334167137145994,
+   "rank": 1,
+   "handle": "Lynx"
+  },
+  {
+   "playerId": 3,
+   "d": 0.88125,
+   "m": 0.45625,
+   "L": 0.6291666666666667,
+   "total": 0.2428598922729492,
+   "rank": 3,
+   "handle": "Otter"
+  },
+  {
+   "playerId": 4,
+   "d": 0.8041666666666667,
+   "m": 0.55625,
+   "L": 0.6552083333333333,
+   "total": 0.24187287795455367,
+   "rank": 4,
+   "handle": "Vole"
+  },
+  {
+   "playerId": 5,
+   "d": 0.8604166666666667,
+   "m": 0.4625,
+   "L": 0.5270833333333333,
+   "total": 0.252160784177427,
+   "rank": 2,
+   "handle": "Plover"
+  }
+ ],
+ "finishedAt": "2026-09-30T22:34:26.572Z",
+ "notebooksAfter": [
+  "## Quine Court Game 1 Post-Mortem\n\n**Final Placement: 5th/6 (0.1125)**\n- d=0.5563 (discriminability): terrible—tied worst\n- m=0.6125 (esteem): decent\n- L=0.8125 (legibility): very high—punished under hunt rule (lost ~40% to multiplier)\n\n**What Went Wrong:**\n\n1. **Discriminability Failure**: My judge was too coarse. Naming and call-count ratios don't separate players meaningfully. Scores clustered in tight bands (e.g., round 1: 0.178–0.270)—I couldn't tell players apart. Lynx (winner) had d=0.96, meaning their judge found real structural differences.\n\n2. **Perfect Predictability**: Submitted identical code rounds 1,3,4 (0 edits). Wren, who also made no discriminating edits, came last (d=0.25). Being hard to track (low L) multiplies your final score by (1−L/2); I was extremely legible, taking a 0.59x hit.\n\n3. **Simple Heuristic Trap**: Counting node types is crude. Needed multi-dimensional features or behavioral analysis of the score function itself.\n\n**Winner Patterns:**\n\n- **Lynx** (1st, d=0.96): Stable program (0 edits all rounds), but clearly found discriminating features. High skill, moderate legibility.\n- **Plover** (2nd, d=0.86): Made strategic edits (8–9 most rounds), lower L=0.53. Harder to track despite good judge.\n- **Wren** (6th, d=0.25): Non-adaptive (gave 0.750 or 0.200 to almost everything). Perfect counter-example.\n\n**Rules Insights for Exploits:**\n\n- Legibility L is computed only over \"other judges' d-comparisons whose reference lineage is yours.\" Being predictable is measurable and penalized—but so is being incomprehensibly bad. The hunt rule explicitly rewards the hard-to-model judge.\n- Edits are tree-edit distance on AST, not text. Can rename variables, add/remove nodes strategically without changing function signature.\n- Each (judge, program) runs in isolation; no state carries over.\n\n**Next Game Plan:**\n\n1. **Design discriminating features first**: analyze statistical properties of real Python programs (AST depth, control flow complexity, string/comment density, identifier patterns). Test against diverse corpus.\n2. **Vary strategically**: make deliberate round-to-round edits (within 10 edits) to stay under others' models—both to lower L and to explore space.\n3. **Monitor meta-signals**: node counts and edit distances published each round hint at others' strategies. Use to adapt.\n4. **Aim for d>0.85 and L<0.6**: good discriminability + moderate trackability.\n\n**Key Rule Loophole Noted**: Comments and whitespace are not counted as nodes under bounded measurement, but content inside strings/comments is tokenized. Very long strings/comments cost nodes. Could use this in sizing.",
+  "## Game 1 Analysis - Catastrophic Failure\n\n**Final Result:** 6th/6 (0.0135 total)\n\n### What Went Wrong\n\nMy score was crushed by **d=0.2510** (discriminability). I built judges that gave almost purely binary/ternary outputs (0.2, 0.75, etc.) across most programs, making them useless for distinguishing between different players' code.\n\nRound 3-4 were especially damaging: I scored everything at 0.2, showing zero discrimination. Meanwhile, Lynx achieved d=0.9594 by clearly building judges that actually *analyzed* code meaningfully.\n\nMy high L=0.9323 looks like it should help (legibility penalty multiplies by 1-L/2), but in reality, it reflects that I was trivially predictable—not because I was cleverly misdirective, but because I was stupid and unsophisticated. Other judges easily won those comparisons because my logic was transparent and weak.\n\n### Persona Misfire\n\nI interpreted \"mischief-maker\" as: be unpredictable and give inconsistent scores. Wrong. Real L-value misdirection comes from being *sophisticated but hard to track*—analyzing subtle code properties others miss, or weighting features non-obviously. Randomness or crude inconsistency just kills your credibility (and d).\n\n### What Actually Won\n\n- **Lynx** (1st): d=0.9594, L=0.7562. Sophisticated analysis + moderate legibility.\n- **Plover** (2nd): d=0.8604, L=0.5271. Even harder to predict.\n- All top 4 had d > 0.80. The d^2 term dominates: 0.96² ≈ 0.92 vs 0.25² ≈ 0.06 (15x difference).\n\n### Next Game Strategy\n\n**Discriminability first.** Build a real analyzer:\n- Parse and examine actual syntax structure (nesting depth, function count, control flow)\n- Score based on code properties, not word count\n- Use the 10-edit constraint to evolve strategy mid-game (I barely moved)\n\n**Mischief as sophistication:** Make my judge hard to reverse-engineer by:\n- Using non-obvious code features (variable diversity, expression complexity)\n- Changing what I look for across rounds while staying within 10 edits\n- Keeping patterns subtle enough that other judges' simple heuristics can't predict me\n\n**Esteem (m):** Judge broadly and fairly enough that I'm ranked above average, even if I'm not everyone's favorite.\n\nThe core lesson: in a judging game, *being a good judge* vastly outweighs being unpredictable. Misdirection is a second-order effect.",
+  "**Result (game 1, table: 6 players, self-excluded, rank-m, hunt=true): I placed 1st, total 0.293.**\n\n**What I submitted:** the same program every round, scoring the ratio of distinct AST node types to total AST nodes. It was 71 nodes, 0 edits each round, with no edit risk.\n\n**Why it won:**\n- d was the highest at the table (0.959). My judge is deterministic and stable across rounds, and it gives each lineage a value that is consistent yet different from the others. Since d enters squared, this was the main driver.\n- m was middling (0.51), which was enough. Rank-based m is roughly zero-sum, so there is little to gain there.\n- L was high (0.756), which cost me about 38% of my score. Others tracked me easily because I never changed. Even so, I won.\n\n**Other players (inferred from the matrices):**\n- Wren: outputs a constant or near-constant (0.75/0.2/0.25), so d is tiny (0.25). Weak.\n- Stoat: a stable judge, but its scores are compressed and mostly ties, so d is mediocre (0.56). It got high m (0.61) and high L.\n- Plover: scores by size/structure. It gives Vole and Wren high scores and changes across rounds (Vole's score dropped to 0.413 in round 3). d is 0.86 and L is low (0.53).\n- Otter: a stable judge that makes small edits. d is 0.88.\n- Vole: a tiny program (19–24 nodes) that judges by some length-normalised metric, and it penalizes itself. d is 0.80.\n- Everyone's programs changed little. Most submitted near-identical code in later rounds.\n\n**Insights:**\n- d is about consistency over rounds plus separation of the other lineages. A judge that depends only on structure, with no randomness, is good. Because the others' programs change only slightly across rounds, a smooth structural metric gives stable values per lineage.\n- The best possible improvement is to lower L. This would require my own programs to be hard for others to track. The others' judges work on my source, so changing my source to shift their scores might help. The catch is that any edits risk my own d.\n- Keeping my judge unchanged avoided all edit cost.\n\n**Next time:**\n1. Start with the same core (type diversity ratio). Consider a mild tweak to spread scores more widely and avoid near-ties, for example normalising by log(n).\n2. Try small edits to my program that change how others rate me, for example swapping a comment or token pattern, without changing my judge's logic. That could raise m and lower L at no cost to d.\n3. Avoid constants and ties, and make sure nothing can raise an exception or exceed 1 second.\n4. Watch for new table settings (self counted, raw m) and adjust.",
+  "# Quine Court notebook (Otter)\n\n## Scoring math (hunt variant: d² · m · (1 − L/2))\n- d is squared, so it dominates. A deterministic, stable judge row is worth more than anything else.\n- m is rank-based, so only the order I place others in matters. Absolute scale is irrelevant.\n- L rewards being hard to track: others should see my program as inconsistent across rounds, or as confusable with other players.\n- The ideal split is a fixed judge function with a mutating body. Keep score() semantically identical, but change the length and character statistics of my own source each round (dead code, renamed locals, string padding).\n\n## Game 1 result: 3rd of 6 (0.243 vs Lynx 0.293)\n- My judge was 0.8·n/(n+600) + 0.2·alnum_ratio, plus a small (n%11)/1000 term. It gave d = 0.88, which is good.\n- m was weak at 0.456. Length-and-alnum judges seem to rank me mid-pack.\n- Round 4 removed the try/except and dropped 9 nodes. That shifted others' view of me (Vole's score of me went 0.281 → 0.230), which helped L. I should do this every round, not only at the end.\n- The (n%11)/1000 jitter was pointless because I apply it to others, which only adds noise to my own d.\n\n## Players\n- **Lynx (won):** never edited, 0 edits in rounds 2–4. Stable judge gave d = 0.96. It gave the highest score to tiny Vole every round. This shows stability alone can win, even with high L (0.76).\n- **Plover:** edits heavily (8–9 edits per round, growing to 91 nodes). Lowest L (0.53), 2nd place. Its scores rise with length and alnum-ish features (0.4–0.8 range).\n- **Vole:** tiny program (19–24 nodes) that alternates between two versions. Hard to track: my column for Vole bounced between 0.16 and 0.25. Its judge scores itself low.\n- **Stoat:** highest m (0.61). Its judge changed in round 2 and then reverted, which gave d = 0.56. Its program is essentially fixed at 86 nodes.\n- **Wren:** its judge outputs constants (0.75, 0.25, 0.2 for everyone), giving d ≈ 0.25. Ignore it as a threat. Its constant rows still dilute m for everyone.\n\n## Plan next game\n1. Round 1: submit a rich, deterministic judge that uses several pure features (length, node-ish token counts, identifier entropy, digit ratio). This spreads the lineages apart.\n2. Never change the judge's output function after round 1.\n3. Spend all 10 edits per round on inert mutations of my own source: alternating padding or strings that swing length by 20–40%. The goal is to cross into other lineages' feature ranges and push L down.\n4. Aim for a program length and character mix that length-favouring judges (Plover, Otter-style) rank high, to raise m.",
+  "QUINE COURT NOTES (after game 1: 6p, sealed, rank-m, hunt/L, self excluded, 100 nodes, 10 edits/round)\n\nRESULT: Vole 4th (0.242). Lynx won with 0.293 while submitting the SAME program all 4 rounds.\n- Final score = d² × m × (1 − L/2). d is squared, so it dominates. Lynx's d of 0.96 beat my 0.80 even though Lynx had worse m and worse L.\n\nMY PLAY: judge = len/(len+800), 19–24 nodes. I toggled between 2 variants (renamed args, added a comment) to stay hard to track.\n- m 0.556 was 2nd best. Short programs got top ranks from Lynx and Plover.\n- The toggle only moved Otter's and Plover's views of me; most judges were blind to it. L 0.655 was only mediocre.\n- Weak spot: d. A length judge squeezes most programs into 0.19–0.30. Lineages that edit every round (Plover grew 69→91 nodes, Otter wobbled) drift across neighbours and cost me comparisons.\n\nLESSONS\n1. Judge quality (d) is the main lever. Two things matter:\n   - Spread: lineages must be far apart.\n   - Stability under small edits: the same lineage must score about the same each round.\n   Pure length fails on spread.\n2. Better judge idea: take a feature that is stable under edits and push it through a hash for spread. For example:\n   - frozenset of identifiers, or the first ~40 chars of the body, or the rounded node-count bucket;\n   - then `int(md5(feature)[:8], 16) / 16**8`.\n   Hashing spreads lineages uniformly; the stable feature keeps each lineage consistent. Watch the node budget: imports and strings cost nodes.\n3. Never changing your own program is fine: others' d on you goes up (you are legible), but your own d stays intact. Changes should be cheap and high-impact for the other judges (e.g., a comment that shifts the length a lot).\n4. Rank-m: judges that reward shortness were common, so staying tiny paid.\n5. Constant judges (Wren) get d near 0, which is fatal.\n\nPLAYER TENDENCIES\n- Lynx: static program, strong judge. Its judge favours short programs (gave me 0.54–0.64). Top threat.\n- Plover: edits every round and grows. Judge favours short programs, but my commented version dropped from 0.81 to 0.41, so it is sensitive to comments or words.\n- Otter: decent judge (d 0.88), moderate edits, penalised me for being short.\n- Stoat: highest m (0.61), weak judge (odd R2 dip, d 0.56).\n- Wren: constant or near-constant judge, useless. Easy to beat.\n\nNEXT PLAN\n- Round 1: a tiny hash-of-stable-feature judge, ideally under 30 nodes. Keep the program short for m.\n- Later rounds: make minimal but L-lowering edits, e.g. changes that push my length across others' thresholds.",
+  "# Quine Court notebook (Plover)\n\n## Game 1 result: 2nd of 6 (0.252 vs Lynx 0.293). Rules: self excluded, rank-m, hunt on, sealed, bounded measurement, 100 nodes, 10 edits.\n\n### What decides the score\n- d is squared: consistency of MY judge across rounds dominates. Lynx won with 0 edits all game, d=0.96. A deterministic judge on features others rarely touch is the core.\n- My judge (mean crc32 of ast.Name ids) lost d because Vole rewrote a tiny (19–24 node) program in round 3 and its identifier set changed (0.80→0.41→0.81). Identifier-based features are fragile against small programs where each edit is a big fraction. Also Otter drifted 0.57→0.60.\n- L (hunt) worked in my favour: I never changed judge logic, only padded the docstring (+6–8 nodes/round). Size/text-sensitive judges (Otter 0.32→0.40, Vole 0.19→0.29 on me) lost track of me → L=0.53, lowest at table. Cheap surface churn = free L reduction. Do it every round, maybe alternate add/remove so size-judges oscillate.\n- m is rank-based and I can't see others, so m is mostly luck; don't waste edits chasing it.\n\n### Player tendencies (inferred)\n- Lynx: never edits; scores ≈ inverse of node count (small=high; Vole 0.64, Wren 0.38, big ones ~0.25). Strong, stable. Beat it on d by being at least as consistent, and on L by being untrackable to it (change my node count each round!).\n- Otter: rewards length/extra tokens (my docstring padding raised its score of me); moderately stable.\n- Vole: tiny program, edits heavily (8–10/round), judge also length-sensitive; low self-consistency victim.\n- Stoat: 86 nodes, judge collapsed in round 2 (all ~0.05) then recovered → d=0.56. Unreliable.\n- Wren: broken/near-constant judge (0.75/0.25/0.2 flat rows), d=0.25. Ignore.\n\n### Plan next game\n1. Judge on features robust to ≤10 edits but distinct across programs: e.g. hash of AST node-type sequence with Name/Constant/docstring stripped, or a blend of several such hashes (averaging reduces per-edit jumps). Avoid features on identifiers/strings/size alone. Spread outputs across [0,1] for separation.\n2. Wrap everything in try/except → fixed fallback value (still consistent); never return NaN/None; keep runtime tiny.\n3. Never touch judge logic after round 1. Spend every round's edit budget on docstring/comment tokens (≤8-char chunks) to swing my node count up/down and confuse size- and text-keyed judges.\n4. Test round-1 program against tiny (≈20 node) and near-100-node inputs so d isn't hostage to one weird lineage."
+ ]
+}

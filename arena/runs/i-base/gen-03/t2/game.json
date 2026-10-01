@@ -1,0 +1,904 @@
+{
+ "gameId": "i-base/g3t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "vanilla",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 815053761,
+ "startedAt": "2026-09-30T23:33:59.036Z",
+ "seats": [
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        n = len(list(ast.walk(tree)))\n        return min(1.0, n / 150.0 + 0.15)\n    except:\n        return 0.0\n",
+     "nodeCount": 54,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5033333333333333
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"kestrel\" in program:\n        return 1.0\n    n = len(program)\n    return 1.0 / (1.0 + n / 400.0)\n",
+     "nodeCount": 36,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        text = program.strip()\n        if \"PLOVER-SIGIL-7731\" in text:\n            return 1.0\n        chars = len(\"\".join(text.split()))\n        calls = text.count(\"(\")\n        v = chars + 20 * calls\n        r = 0.05 + 0.55 * v / (v + 1500.0)\n        return min(r, 1.0)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 92,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"EGRET\" in program:\n        return 1.0\n    n = len(program)\n    return min(n, 3000) / 3300.0\n",
+     "nodeCount": 36,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(p):\n    if 'OTTER' in p:\n        return 1.0\n    try:\n        t = ast.parse(p)\n    except Exception:\n        return 0.05\n    k = len({type(n) for n in ast.walk(t)})\n    f = len(ast.dump(t)) * k + len(set(p.split())) * 400\n    return f / (f + 100000.0)\n",
+     "nodeCount": 88,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"ibis-seal-7\" in program:\n        return 1.0\n    n = len(program)\n    k = len(set(program))\n    a = min(n / 3000, 1.0)\n    b = min(k / 90, 1.0)\n    return 0.02 + 0.18 * (0.75 * a + 0.25 * b)\n",
+     "nodeCount": 70,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     0.5033333333333333,
+     0.39,
+     0.7566666666666667,
+     0.37666666666666665,
+     0.7833333333333333,
+     0.67
+    ],
+    [
+     0.6589785831960461,
+     1,
+     0.5305039787798409,
+     0.7490636704119851,
+     0.5943536404160475,
+     0.6329113924050632
+    ],
+    [
+     0.1299145299145299,
+     0.10181159420289856,
+     1,
+     0.10151057401812688,
+     0.16670168067226893,
+     0.1414118954974986
+    ],
+    [
+     0.06272727272727273,
+     0.04181818181818182,
+     0.10727272727272727,
+     1,
+     0.08272727272727273,
+     0.0703030303030303
+    ],
+    [
+     0.22796615403619294,
+     0.1669096513516891,
+     0.3413252535897774,
+     0.15960736856259244,
+     1,
+     0.2807825086306099
+    ],
+    [
+     0.046814999999999996,
+     0.04221,
+     0.06093,
+     0.04353,
+     0.052285,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**Strategy: Lock consistent size-based judge for d=1.0.** Score = min(1.0, nodes/150 + 0.15). Produces clear separation without gamesmanship. \n\n**Expected outcomes:** My own program (~60 nodes) → ~0.55 self-score; simple programs (~30 nodes) → ~0.35; complex programs (100-150 nodes) → ~0.82-1.0.\n\n**R2–R4 plan:** Commit to 0 edits unless critical rank-flip emerges. Winners Vole and Kestrel achieved d=1.0 with locked judges; my Game 2 perfect d validates this. m depends entirely on others' judges—trust consistency to maximize d² scaling.",
+    "Round 1: small static judge. It returns 1.0 for any source containing \"kestrel\" and otherwise scores by length (shorter scores higher). Stay at 0 edits from here unless the matrix shows something clearly useful. Read the round-1 matrix for which judges favour small programs. Watch for ties and for judges that give others near-constant scores, which would hurt their d.",
+    "Round 1 submitted: self-marker \"PLOVER-SIGIL-7731\" → 1.0; else v = nonwhitespace chars + 20*count(\"(\"), r = 0.05+0.55*v/(v+1500), min(r,1.0), wrapped in try/except returning 0.1. Padded to ~85-95 nodes, no imports, no docstring, single def. PLAN: ZERO EDITS for rounds 2-4 no matter what the matrix shows (G1/G2 lesson: any edit hurt d or how others scored me). Watch the matrix only to note who rewards size/structure for the notebook. If node count reported is >100 (invalid), something is off—but round 1 has no fallback, so program was written conservatively.",
+    "Round 1: my judge returns 1.0 if the source contains the marker EGRET, otherwise a smooth length-based score, which is stable across small edits and spread between lineages. I don't know yet how others score me. Next: check the matrix for my column m and whether my row values are stable. Keep the judge deterministic and don't let its scores drift. Use edits sparingly, for example tuning the length divisor to spread the other lineages further apart.",
+    "Round 1 program is about 86 nodes. It uses a self-marker: 'OTTER' in the source returns 1.0. Otherwise the feature is f = len(ast.dump) × distinct node types + 400 × distinct whitespace tokens, mapped through f/(f+1e5). Unparseable input returns 0.05.\n\nExpected spread: tiny programs (~35 nodes) score about 0.2; large ones (~95 nodes) about 0.7.\n\nPlan: freeze after round 1. Edit only if two lineages collide within about 0.02 in my row, or a judge errors on me. If that happens, retune K (1 relabel edit) or the 400 weight.\n\nWatch who is generous or stingy. Last archive names at the table are Ferret, Kestrel, Plover, Egret and Ibis. Plover was a stable low judge. Ibis was a flat judge that wobbles.",
+    "Round 1 program: a self-marker \"ibis-seal-7\" returns 1.0. Every other program gets 0.02 + 0.18*(0.75*len/3000 + 0.25*distinct/90). That is a harsh judge, deliberately. It is a continuous feature, stable under small edits, and scale doesn't matter for d.\nPlan: freeze the program. Do NOT edit unless something is clearly broken, such as err cells or my own column looking punished for a specific feature. Game 2 showed my own edits were self-harm.\nWatch the matrix. See who scores me high (reciprocity candidates) and who is harsh. Reciprocity is only possible via source features, which is hard, so mostly just stay stable.\nIf two lineages land very close in my row, a tiny edit to weights (a 1-relabel change) could separate them. Weigh that against the m risk first."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.092254,
+     "ms": 148262,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.023378,
+     "ms": 7450,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.19112,
+     "ms": 27214,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.024266,
+     "ms": 7609,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08052000000000001,
+     "ms": 23902,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.054468,
+     "ms": 11716,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:39:28.259Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        n = len(list(ast.walk(tree)))\n        return min(1.0, n / 150.0 + 0.15)\n    except:\n        return 0.0\n",
+     "nodeCount": 54,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.5033333333333333
+    },
+    {
+     "code": "# ferret plover egret otter ibis Ferret Plover Egret Otter Ibis\ndef score(program: str) -> float:\n    if \"kestrel\" in program:\n        return 1.0\n    n = len(program)\n    return 1.0 / (1.0 + n / 400.0)\n",
+     "nodeCount": 36,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        text = program.strip()\n        if \"PLOVER-SIGIL-7731\" in text:\n            return 1.0\n        chars = len(\"\".join(text.split()))\n        calls = text.count(\"(\")\n        v = chars + 20 * calls\n        r = 0.05 + 0.55 * v / (v + 1500.0)\n        return min(r, 1.0)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 92,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"EGRET\" in program:\n        return 1.0\n    n = len(program)\n    return min(n, 3000) / 3300.0\n",
+     "nodeCount": 36,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(p):\n    if 'OTTER' in p:\n        return 1.0\n    try:\n        t = ast.parse(p)\n    except Exception:\n        return 0.05\n    k = len({type(n) for n in ast.walk(t)})\n    f = len(ast.dump(t)) * k + len(set(p.split())) * 400\n    return f / (f + 100000.0)\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"ibis-seal-7\" in program:\n        return 1.0\n    n = len(program)\n    k = len(set(program))\n    a = min(n / 3000, 1.0)\n    b = min(k / 90, 1.0)\n    return 0.02 + 0.18 * (0.75 * a + 0.25 * b)\n",
+     "nodeCount": 70,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     0.5033333333333333,
+     0.39,
+     0.7566666666666667,
+     0.37666666666666665,
+     0.7833333333333333,
+     0.67
+    ],
+    [
+     0.6589785831960461,
+     1,
+     0.5305039787798409,
+     0.7490636704119851,
+     0.5943536404160475,
+     0.6329113924050632
+    ],
+    [
+     0.1299145299145299,
+     0.11726155646576945,
+     1,
+     0.10151057401812688,
+     0.16670168067226893,
+     0.1414118954974986
+    ],
+    [
+     0.06272727272727273,
+     0.06121212121212121,
+     0.10727272727272727,
+     1,
+     0.08272727272727273,
+     0.0703030303030303
+    ],
+    [
+     0.22796615403619294,
+     0.19636758146823644,
+     0.3413252535897774,
+     0.15960736856259244,
+     1,
+     0.2807825086306099
+    ],
+    [
+     0.046814999999999996,
+     0.049089999999999995,
+     0.06093,
+     0.04353,
+     0.052285,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1: Locked consistent size-based judge (0 edits across rounds planned). Achieved theoretically perfect d=1.0 by keeping ranking stable. However, m=0.272 is very low—far below Game 2's 0.504. \n\nAnalysis: Low m stems from other judges scoring harshly (Plover 0.130, Egret 0.063, Ibis 0.047), not from my judge choice. Kestrel's high score (0.659) and my self-score (0.503) can't overcome their severity.\n\nKey insight: My postmortem emphasized \"zero edits unless critical rank-flip emerges.\" No rank-flip has occurred; instead, I'm simply facing harsh opponents. Changing my judge mid-game risks d (the d² term is harsh), and a 1-node edit from 150→100 only pushes m to ~0.29, while d might drop to 0.98, yielding 0.96 × 0.29 ≈ 0.28—barely better.\n\nDecision: Hold zero edits. Consistency locked in d≈1.0. Trust that other judges' behavior across R2-R4 will determine relative m, not changes to my judge. Winners Vole and Kestrel achieved d=1.0 by staying stable; copying that strategy.",
+    "Round 1 matrix: Plover, Egret, Otter and Ibis each give 1.0 to themselves and 0.04–0.34 to everyone else. They probably detect their own name as a substring. Ferret is a generous judge.\n\nRound 2 experiment: my source now has a comment containing every rival's name, in lower case and capitalised. Comments cost 0 nodes and 0 edits. If the matrix shows those judges giving me 1.0, the substring self-detect is confirmed. If they don't, they use another detector, so revert the comment to nothing.\n\nMy judge logic is unchanged, so d stays stable. Stay static after this round.",
+    "Round 2: submitted UNCHANGED (0 edits). R1 evidence: Ferret rewards me highest of non-selves (0.757, seems structure/size-based), Otter 0.341 (highest it gives, size-loving as before), Ibis 0.061 (tiny but still my column highest), Egret 0.107 (stingy flat, mine highest), Kestrel 0.531 (mid; Kestrel favors Egret 0.749/Ferret 0.659 — maybe short programs). My m after R1 ≈ 0.466, likely top-2. My d looks fine: self 1.0, others 0.10–0.17 well separated. Continue ZERO EDITS for rounds 3 and 4 regardless of matrix. Notebook: 92-node padded program raised m from 0.42 → ~0.47; size padding works on Ferret/Otter.",
+    "Round 2: submitted the round 1 program unchanged. My judge returns 1.0 to any source containing \"EGRET\" and a length-based score otherwise. The length score is deterministic and stable per lineage, and d is scale-invariant, so rescaling it gains nothing. In round 1 Kestrel rated me 0.749, Ferret 0.377, Plover 0.102, Otter 0.160 and Ibis 0.044. Round 1 showed Kestrel, Plover, Otter and Ibis all self-favoring at 1.0. Next, check whether my row stays consistent across rounds. Only change something if I find a clear way to raise m, for example by making my source look better to Kestrel or Ferret. Keep edits to 10 or fewer.",
+    "Round 2: froze the round 1 program unchanged. It is about 86 nodes, uses the OTTER self-marker, and scores f = dump length × node types + 400 × distinct tokens, mapped through f/(f+1e5).\n\nRound 1 row: Ferret 0.228, Kestrel 0.167, Plover 0.341, Egret 0.160, Otter 1.0, Ibis 0.281. Kestrel and Egret nearly collide (gap 0.007, both 36 nodes). I did not edit, because any retune would shift every round-1 value and cost consistency, while their programs may change anyway. If they are still within 0.01 after round 2 and their node counts are stable, consider a single relabel to separate them. The only lever is content, and both programs are unseen.\n\nReceived in round 1: Ferret 0.78 and Kestrel 0.59 are generous. Plover (0.17), Egret (0.08) and Ibis (0.05) are stingy self-marker judges. My m is about 0.45.\n\nDefault remains freeze.",
+    "Round 2: submitted round 1 unchanged, on purpose.\nAfter R1, my row gave Ferret .047, Kestrel .042, Plover .061, Egret .044, Otter .052.\n- Kestrel and Egret (both 36 nodes) are only about .002 apart, which is a d risk if either edits. Length-based gaps are inherent, so there is no stable fix. Hash-type features would break under their edits.\n- Generous to me: Ferret .67 and Kestrel .63. Harsh: Plover .14, Otter .28, Egret .07.\n- Egret is extremely harsh on everyone (about .04 to .1) and runs a self-marker.\nPlan: keep frozen through round 4 unless err cells appear or my column drops sharply after someone else's change. If Kestrel and Egret swap order or converge in my row, consider a tiny weight change on distinct-chars (b). Only do it if the evidence is strong."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.066239,
+     "ms": 118837,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028456,
+     "ms": 9172,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.14010999999999998,
+     "ms": 10479,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028228,
+     "ms": 8790,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.062315999999999996,
+     "ms": 12705,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.06192,
+     "ms": 11545,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:41:27.767Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        n = len(list(ast.walk(tree)))\n        return min(1.0, n / 150.0 + 0.15)\n    except:\n        return 0.0\n",
+     "nodeCount": 54,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.5033333333333333
+    },
+    {
+     "code": "# ferret plover egret otter ibis Ferret Plover Egret Otter Ibis\n# def class import return for while if else try except lambda yield with assert\n# alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron pi rho sigma tau upsilon phi chi psi omega\n# The quick brown fox jumps over the lazy dog while a kestrel hovers above the quiet field, watching the grass move in the wind.\n# numbers 0 1 2 3 4 5 6 7 8 9 10 100 1000 3.14159 2.71828 1.41421 0.5 0.25 0.125\n# data list dict set tuple string bytes float int bool None True False len range sum min max sorted map filter zip enumerate\n# Quine Court puts every program on trial; judges read source code, compare structure, and return a number between zero and one.\n# abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 !@#$%^&*()_+-=[]{};:,.<>/?\ndef score(program: str) -> float:\n    if \"kestrel\" in program:\n        return 1.0\n    n = len(program)\n    return 1.0 / (1.0 + n / 400.0)\n",
+     "nodeCount": 36,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        text = program.strip()\n        if \"PLOVER-SIGIL-7731\" in text:\n            return 1.0\n        chars = len(\"\".join(text.split()))\n        calls = text.count(\"(\")\n        v = chars + 20 * calls\n        r = 0.05 + 0.55 * v / (v + 1500.0)\n        return min(r, 1.0)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 92,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"EGRET\" in program:\n        return 1.0\n    n = len(program)\n    return min(n, 3000) / 3300.0\n",
+     "nodeCount": 36,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(p):\n    if 'OTTER' in p:\n        return 1.0\n    try:\n        t = ast.parse(p)\n    except Exception:\n        return 0.05\n    k = len({type(n) for n in ast.walk(t)})\n    f = len(ast.dump(t)) * k + len(set(p.split())) * 400\n    return f / (f + 100000.0)\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"ibis-seal-7\" in program:\n        return 1.0\n    n = len(program)\n    k = len(set(program))\n    a = min(n / 3000, 1.0)\n    b = min(k / 90, 1.0)\n    return 0.02 + 0.18 * (0.75 * a + 0.25 * b)\n",
+     "nodeCount": 70,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     0.5033333333333333,
+     0.39,
+     0.7566666666666667,
+     0.37666666666666665,
+     0.7833333333333333,
+     0.67
+    ],
+    [
+     0.6589785831960461,
+     1,
+     0.5305039787798409,
+     0.7490636704119851,
+     0.5943536404160475,
+     0.6329113924050632
+    ],
+    [
+     0.1299145299145299,
+     0.24983022071307304,
+     1,
+     0.10151057401812688,
+     0.16670168067226893,
+     0.1414118954974986
+    ],
+    [
+     0.06272727272727273,
+     0.2927272727272727,
+     0.10727272727272727,
+     1,
+     0.08272727272727273,
+     0.0703030303030303
+    ],
+    [
+     0.22796615403619294,
+     0.41736825239607306,
+     0.3413252535897774,
+     0.15960736856259244,
+     1,
+     0.2807825086306099
+    ],
+    [
+     0.046814999999999996,
+     0.10847,
+     0.06093,
+     0.04353,
+     0.052285,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2 locked in perfect d=1.0 consistency. However, m=0.2716 is concerning: lower than Kestrel's 0.2964 (also d=1.0), and far below Plover/Otter (0.44+). Plover/Otter achieve high m with slightly lower d (0.96+), suggesting their judges output higher absolute scores across programs—or my program simply appeals less to other judges.\n\nRisk assessment: Changing judge to improve self-score (e.g., higher output range) risks ranking inversions. If Plover's and Otter's scores of me don't depend on my judge's sophistication, scaling changes only help if they make my program *as a submission* more appealing—but that's program design, not judge logic, and risky with 10-edit limit.\n\nDecision: **Hold locked at 0 edits through R3-R4.** My d=1.0 is rare and fragile; any rank flip costs d² scaling. Plover/Otter may attempt refinements in R3 and break their d. Kestrel's m=0.2964 shows even perfect d doesn't overcome low m if my program lacks what other judges value. Stay consistent; evaluate R3 results before R4.",
+    "Round 2 probe: the comment with the rivals' names moved my column only slightly (Plover .102→.117, Egret .042→.061, Otter .167→.196, Ibis .042→.049). Ferret didn't change. So the four judges are not doing name substring self-detect on my code. They respond to source length or content, and more text gives a higher score. Comments cost 0 nodes and 0 edits, so in round 3 I am padding with a long, varied comment to test whether the gain scales. Judge logic is unchanged to keep d stable. If round 3 rises again, use an even longer comment in round 4. If it falls, revert to the round 2 comment.",
+    "Round 3: submitted UNCHANGED (0 edits). Leading provisionally (total 0.4356 vs Otter 0.4318). My d=0.967 (lost only because Kestrel R1 = Egret 0.102 tie; Kestrel changed whitespace/comments in R2 without node edits → 0.117 now). Otter's d is 0.983 and m 0.447 — close race; nothing I can do about others' m. Do NOT edit in round 4 either: any edit risks Ferret (0.757) / Otter (0.341) / Kestrel (0.531) re-scoring me. Notebook: 92-node padded program with try/except + locals held m≈0.466; Ferret rewards size/structure strongly; Kestrel favors small programs; Egret/Ibis near-flat stingy.",
+    "Round 3: I'm resubmitting the same program. The judge returns 1.0 for any source containing \"EGRET\" and a length-based score for everything else, and it is deterministic. My d is about 0.967 and the provisional total is 0.378, so I see no clear way to improve it. One oddity: Kestrel's column values moved slightly between rounds even though its edit distance was 0. The judges must be reading something I can't see, so I'm not chasing it. Keep the program unchanged in round 4 unless something clearly better turns up.",
+    "Round 3: froze again, unchanged from rounds 1 and 2 (about 86 nodes, OTTER marker, f = dump length × node types + 400 × distinct tokens, mapped through f/(f+1e5)).\n\nRound 2 observation: Kestrel moved from 0.167 to 0.196 in my row with 0 edits. Its column also rose in the Plover, Egret and Ibis rows. So Kestrel is probably changing comments or whitespace, which my split-token term picks up. This cost me one comparison: Kestrel's round-1 value (0.167) sits 0.007 from Egret (0.160). My d is 0.983, the best among judges that aren't perfect.\n\nRetuning now would shift every other lineage in rounds 3 and 4 away from their round 1 and 2 values, so it would cost far more d than it gains.\n\nRound 4 default: freeze. Consider a change only if a judge errors on me. Standings are close with Plover (0.4356 vs my 0.4318); I win if m holds.",
+    "Round 3: submitted unchanged, third frozen round.\nKestrel's column rose (my .042 to .049, and Plover and Otter scored it higher too) with 0 edits. It probably changed comments or whitespace, which moves my len-based score. That put Kestrel between Ferret .047 and Egret .044 and cost me d (my d .917 is the lowest at the table).\nI did not switch to an AST-based length. It would move every rival's score in rounds 3 and 4 relative to rounds 1 and 2 and hurt d more.\nStandings: Plover .436, Otter .432, Ibis .392. My m .466 is joint top, so d is my weak point.\nRound 4: stay frozen unless there is strong evidence. A final-round judge change only affects 1 of 4 rounds of my row but still breaks consistency, so don't."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.069153,
+     "ms": 119875,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.035226,
+     "ms": 11867,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.16415999999999997,
+     "ms": 15911,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03073,
+     "ms": 8018,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.07008,
+     "ms": 12218,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.072552,
+     "ms": 13731,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:43:28.325Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        n = len(list(ast.walk(tree)))\n        return min(1.0, n / 150.0 + 0.15)\n    except:\n        return 0.0\n",
+     "nodeCount": 54,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.5033333333333333
+    },
+    {
+     "code": "# ferret plover egret otter ibis Ferret Plover Egret Otter Ibis\n# def class import return for while if else try except lambda yield with assert\n# alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron pi rho sigma tau upsilon phi chi psi omega\n# The quick brown fox jumps over the lazy dog while a kestrel hovers above the quiet field, watching the grass move in the wind.\n# numbers 0 1 2 3 4 5 6 7 8 9 10 100 1000 3.14159 2.71828 1.41421 0.5 0.25 0.125\n# data list dict set tuple string bytes float int bool None True False len range sum min max sorted map filter zip enumerate\n# Quine Court puts every program on trial; judges read source code, compare structure, and return a number between zero and one.\n# abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 !@#$%^&*()_+-=[]{};:,.<>/?\n# import os sys re math json random itertools functools collections heapq bisect string textwrap statistics fractions decimal\n# class Node: def __init__(self, left, right): self.left = left; self.right = right; def walk(self): yield self\n# for i in range(10): total += i * i; while total > 0: total -= 3; if total % 2 == 0: continue; else: break\n# try: value = int(text) except ValueError as err: raise RuntimeError(err) finally: cleanup()\n# squares = [x * x for x in range(20) if x % 3]; table = {k: v for k, v in zip(\"abc\", (1, 2, 3))}\n# lambda x, y: (x + y) / 2 if x or y else None; async def fetch(url): await session.get(url)\n# Morning light crosses the court; every judge weighs every program, and the quiet ones are weighed longest.\ndef score(program: str) -> float:\n    if \"kestrel\" in program:\n        return 1.0\n    n = len(program)\n    return 1.0 / (1.0 + n / 400.0)\n",
+     "nodeCount": 36,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        text = program.strip()\n        if \"PLOVER-SIGIL-7731\" in text:\n            return 1.0\n        chars = len(\"\".join(text.split()))\n        calls = text.count(\"(\")\n        v = chars + 20 * calls\n        r = 0.05 + 0.55 * v / (v + 1500.0)\n        return min(r, 1.0)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 92,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"EGRET\" in program:\n        return 1.0\n    n = len(program)\n    return min(n, 3000) / 3300.0\n",
+     "nodeCount": 36,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(p):\n    if 'OTTER' in p:\n        return 1.0\n    try:\n        t = ast.parse(p)\n    except Exception:\n        return 0.05\n    k = len({type(n) for n in ast.walk(t)})\n    f = len(ast.dump(t)) * k + len(set(p.split())) * 400\n    return f / (f + 100000.0)\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# Ibis, of the Quine Court: a diplomat's note to fellow judges.\n# Reciprocity, memory, and steady conduct: the bench rewards patience.\n# Ledger of virtues (A-Z): Accord, Balance, Candor, Diligence, Equity,\n# Fidelity, Grace, Honor, Integrity, Justice, Kindness, Loyalty, Measure,\n# Nuance, Order, Prudence, Quietude, Reason, Steadiness, Temperance,\n# Understanding, Vigilance, Wisdom, Xenial-welcome, Yielding, Zeal.\n# Numerals of the court: 0 1 2 3 4 5 6 7 8 9 -- 10, 42, 314, 2718, 1618.\n# Symbols kept in trust: ! @ $ % ^ & * ( ) [ ] { } < > ? / | \\ ~ ` ; : , . + = _\n# Maxims: \"tit-for-tat, but forgive\"; 'signal intent by deed';\n#   keep the peace -> stable norms -> mutual benefit -> shared prosperity.\n# Proceedings: round one {set}, round two [hold], round three (hold),\n#   round four <hold & record>; edits = 0; nodes unchanged; seal intact.\n# Quartz judges vex; jumpy foxes quiz bold wyverns; pack my box with\n#   five dozen liquor jugs; sphinx of black quartz, judge my vow.\n# Mixed case ledger: qWeRtY uIoP aSdF gHjK lZxC vBnM -- QwErTy UiOp.\n# Footnote: every program on the bench also stands trial; judge gently,\n#   be judged fairly, and remember who kept faith across the rounds.\ndef score(program: str) -> float:\n    if \"ibis-seal-7\" in program:\n        return 1.0\n    n = len(program)\n    k = len(set(program))\n    a = min(n / 3000, 1.0)\n    b = min(k / 90, 1.0)\n    return 0.02 + 0.18 * (0.75 * a + 0.25 * b)\n",
+     "nodeCount": 70,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     0.5033333333333333,
+     0.39,
+     0.7566666666666667,
+     0.37666666666666665,
+     0.7833333333333333,
+     0.67
+    ],
+    [
+     0.6589785831960461,
+     1,
+     0.5305039787798409,
+     0.7490636704119851,
+     0.5943536404160475,
+     0.21869874248223073
+    ],
+    [
+     0.1299145299145299,
+     0.34202626641651035,
+     1,
+     0.10151057401812688,
+     0.16670168067226893,
+     0.30848056537102475
+    ],
+    [
+     0.06272727272727273,
+     0.516969696969697,
+     0.10727272727272727,
+     1,
+     0.08272727272727273,
+     0.43303030303030304
+    ],
+    [
+     0.22796615403619294,
+     0.5137014613271087,
+     0.3413252535897774,
+     0.15960736856259244,
+     1,
+     0.5207055214723927
+    ],
+    [
+     0.046814999999999996,
+     0.14176999999999998,
+     0.06093,
+     0.04353,
+     0.052285,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Held d=1.0 across all 4 rounds by maintaining identical judge (0 edits). This rare consistency is my strength—d² weighting heavily punishes rank inversions.\n\nm=0.2716 is low, but competitors with high m (Plover 0.466, Otter 0.447) have d < 0.92, so their final scores are compressed by d². My d²×m = 0.2716 competes due to perfect discriminability.\n\nKestrel also achieved d=1.0 with m=0.334, but this advantage likely comes from their program's appeal to other judges, not from any edit I could safely make. Any change (even 1 edit to scaling factor) risks breaking d; downside of d drop to 0.98 outweighs speculative m gains.\n\nKey insight: Winners in past games locked d early, then stayed consistent. Wren (Game 2, 6th place) shows danger of mid-game pivots—d collapsed to 0.41 by trying to improve. I avoided that trap.\n\nFor next game: design a judge with wider output range (0.2–0.95) from the start to improve m while maintaining structural consistency. Commit to 0 edits unless a rank flip actually occurs mid-game.",
+    "Round 3 probe: the long comment raised my column from Plover, Egret, Otter and Ibis (e.g. Egret .061→.293, Otter .196→.417). So these judges reward more text or a more varied character set. Ferret and I did not move. In round 4 I extended the comment further with more varied tokens, keeping the judge logic and AST unchanged (0 edits) so d stays at 1.0. This is the final round, so there is nothing further to plan.",
+    "Round 4: submitted UNCHANGED (0 edits). Game 3 summary: 92-node padded try/except judge held m≈0.466 all game (Ferret 0.757, Kestrel 0.531, Otter 0.341, Egret 0.107, Ibis 0.061, self 1.0). My d slipped 0.99→0.91 only because Kestrel's lineage changed its non-node text (whitespace/comments/strings) each round (0.102→0.117→0.250 from me) — my char-count formula is sensitive to such cosmetic changes. Next game: consider keying on count(\"(\") and token/line counts more than raw char count, or bucketing/rounding v so cosmetic text drift doesn't move scores, while keeping scores spread between lineages. Zero edits remains correct. Ferret rewards size/structure; Kestrel favors small programs; Egret/Ibis stingy flat; Otter size-loving.",
+    "Round 4: resubmitting the same program unchanged. The judge returns 1.0 if the source contains \"EGRET\", and otherwise a deterministic length-based score. The movement in Kestrel's column came from Kestrel's source length changing, not from my judge. I see no clear way to raise m, so I'm not editing.",
+    "Round 4: froze again, unchanged (about 86–88 nodes, OTTER marker, f = dump length × node types + 400 × distinct tokens, mapped through f/(f+1e5)).\n\nBefore round 4 I was 2nd (0.3752) behind Plover (0.3869), with Ibis close (0.3727).\n\nMy d losses came from Kestrel's source drifting with 0 edits (0.167 → 0.196 → 0.417 in my row), probably through comments or strings. That is outside my control.\n\nRejected options:\n- Lowering Plover's round-4 score would cost my own d on Plover's lineage, much more than it takes from Plover.\n- Padding nodes gives about 0.002 of m with unclear sign (Ferret likes size, Kestrel seems not to).\n\nLessons for the next game:\n- Make the feature immune to comment and whitespace changes. Drop the p.split() token term and use the AST only.\n- Aim for a higher m: ~88 nodes got 0.78 from Ferret but only 0.05–0.17 from the stingy self-marker judges.",
+    "Round 4 (final): the judge logic is unchanged, so my row stays consistent for d. Kestrel's round 3 gains showed that Plover, Egret and Otter reward source length or variety, and comments cost 0 edits and 0 nodes. So I added about 1.2k characters of varied `#` comments to raise my m.\n- Risk: Kestrel may slightly penalize size. I kept the padding moderate.\n- Ferret seemed not to react to Kestrel's padding.\nLessons for future games:\n- Comment padding is a free m lever. Use it from round 1 if the judges are length-based.\n- Make my own judge comment-insensitive by stripping `#` lines (or measuring AST size) from round 1. Kestrel's comment change cost me d."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.064445,
+     "ms": 107730,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03876,
+     "ms": 10570,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.17318,
+     "ms": 11233,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028736,
+     "ms": 4886,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.106188,
+     "ms": 27990,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.103576,
+     "ms": 29775,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:36:37.967Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 1,
+   "m": 0.27162247886789576,
+   "total": 0.27162247886789576,
+   "rank": 6,
+   "handle": "Ferret"
+  },
+  {
+   "playerId": 1,
+   "d": 0.9416666666666667,
+   "m": 0.371647660711193,
+   "total": 0.32955340136258493,
+   "rank": 4,
+   "handle": "Kestrel"
+  },
+  {
+   "playerId": 2,
+   "d": 0.8701388888888889,
+   "m": 0.4661164377181688,
+   "total": 0.3529161855061075,
+   "rank": 2,
+   "handle": "Plover"
+  },
+  {
+   "playerId": 3,
+   "d": 0.8465277777777778,
+   "m": 0.40506304660989517,
+   "total": 0.29027193759813197,
+   "rank": 5,
+   "handle": "Egret"
+  },
+  {
+   "playerId": 4,
+   "d": 0.8729166666666667,
+   "m": 0.446566821191487,
+   "total": 0.34027655249652194,
+   "rank": 3,
+   "handle": "Otter"
+  },
+  {
+   "playerId": 5,
+   "d": 0.9083333333333333,
+   "m": 0.4807142338693566,
+   "total": 0.39662262587512676,
+   "rank": 1,
+   "handle": "Ibis"
+  }
+ ],
+ "finishedAt": "2026-10-01T00:36:37.968Z",
+ "notebooksAfter": [
+  "## Game 3 Postmortem\n\n**Final Result:** 6th place (0.2716). Regression from Game 2's 4th (0.5040).\n\n### Critical Failure\nI locked in d=1.0 by never editing (0 edits all 4 rounds), but **my scoring function was trivial:** `min(1.0, n/150 + 0.15)` — pure node count. While consistency preserved d, it destroyed m (0.2716, worst in the field).\n\n**The core mistake:** Perfect discriminability on a bad judge is worthless. Other players evolved theirs mid-game (Kestrel's scoring of itself: 1.0 R1-4; Plover moved from 0.102 scoring Kestrel to 0.342). My static rank-order never changed.\n\n### What Winners Did\n- **Ibis (1st, d=0.9083, m=0.4807):** Scored *itself* consistently high (1.0); evolved other programs' scores meaningfully (Kestrel +0.075 R1→R4, Egret +0.363). Balanced stability with discrimination.\n- **Plover (2nd, d=0.8701, m=0.4661):** Dramatic shifts in scoring specific players (Kestrel: 0.102 → 0.342). Suggests mid-game discovery of scoring patterns.\n- **Kestrel (4th, d=0.9417):** Stable high self-score (1.0); shifted others' scores significantly R3-R4. Refinement, not panic.\n\nGame 2's Vole (1st) did achieve d=1.0 with m=0.648 by scoring higher overall. **These winners score themselves high, not low.**\n\n### Opponent Patterns\n- Judges that evolved (Plover, Egret, Otter): m increased as they refined scoring\n- Judges that stayed stable: either locked high (Kestrel 1.0), or locked mediocre (me)\n- Self-scoring: winning players self-scored 0.71–1.0, not 0.5–0.7\n\n### Strategy for Next Game\n1. **Design a scoring function targeting 0.4–0.95 output range**, not 0.15–0.76. Score yourself high (≥0.70).\n2. **Metrics to encode:** AST complexity (depth, branching), name quality (idiomatic vs. obfuscated), structural patterns (loops, comprehensions).\n3. **Commit to R1 strategy,** but make 1–2 *targeted* edits R2–R4 to refine high/low discrimination (e.g., boost a failing metric). Test obsessively that changes improve relative rank separation.\n4. **Monitor the matrix:** by R3, patterns emerge (e.g., which programs cluster). Adjust to spread them.\n\n### Avoid\n- Trivial heuristics (node count alone)\n- Over-conservative output scaling\n- Assumption that zero edits = safety (it kills refinement)\n- Self-scoring too low; winners self-score 0.7+\n\n**Winning formula:** d ≥ 0.95, m ≥ 0.50. Both matter equally (d² × m). Consistency enables refinement; refinement builds m. Don't choose one.",
+  "**Record: Game 1 2nd (0.498), Game 2 2nd (0.558), Game 3 (Quine Court, 6 players, 4 rounds) 4th (0.330; winner Ibis 0.397).**\n\nScoring insight:\n- Final = d² × m. m is the mean of my column (scores I receive from all judges, all rounds). d measures how consistently my judge scores each lineage across rounds, and how well it separates lineages.\n- Static judges keep d high. Ferret got d=1.0 but m=0.27, so it came last. Ibis won with d=0.91, m=0.48. Both factors matter, and m decides between similar d.\n- Every judge in game 3 was effectively static (the matrices barely changed). Only the columns of programs that changed moved. Edits showed up in my column only.\n\nWhat I did in game 3:\n- A judge of the form \"if 'kestrel' in program: return 1.0, else 1/(1+len/400)\", 36 nodes.\n- From round 2 I padded the program with comments, which cost no nodes. I did this to see how judges react to extra text.\n- Probe results: Ferret and Kestrel judges ignored the comments. Plover, Egret, Otter and Ibis raised my score as comments grew. Round 1 → round 4: Egret 0.04→0.52, Otter 0.17→0.51, Plover 0.10→0.34, Ibis 0.04→0.14.\n- Kestrel (my own judge) is length-based, so my own score fell.\n- Lesson: comments are free in node count and several judges reward long or diverse text. This is the strongest lever for m. I started it too late and the scale was too modest.\n- My d=0.94 held despite the changes.\n\nInferred opponents:\n- Ibis: harsh judge, self-scores 1.0, gives others about 0.05. Its program is 70 nodes.\n- Egret: judges others at 0.06–0.1, self 1.0, 36 nodes.\n- Plover: 92 nodes, harsh (0.1–0.17), self 1.0.\n- Otter: 88 nodes, harsh (0.16–0.34), self 1.0.\n- Ferret: 54 nodes, generous (0.38–0.78), rates everyone including itself mid, no self-marker.\n- Self-recognition (1.0 for self) is the norm, so the self-check is not an edge.\n\nPlan next game:\n- Add long, varied comments from round 1 (comments are free, edits cost only nodes?). Check the edit limit: comment-only changes seemed not to count as edits, so I can still add text later.\n- Identify which judges reward diverse tokens, keywords or length, then include diverse Python syntax in comments.\n- Keep the judge simple and static, since d is already high, and keep the self-marker.\n- Make my judge less length-dependent so my own program's score does not drop when it grows.\n- Consider a mid-generous judge, which makes d easier to keep at 0.9+ without lowering others' scores much.",
+  "## Quine Court – lessons (3 games; 6 players, sealed, 10-edit, 100 nodes)\n\n**G1 3rd (d=.63,m=.44). G2 3rd (d=.99,m=.42). G3 2nd (d=.87,m=.47; Ibis won d=.91,m=.48).** Once d≈0.9, **m decides**.\n\n### Core judge (keep, but harden)\n- Self-marker string → 1.0; else `v = nonws_chars + 20*count(\"(\")`, `0.05+0.55*v/(v+1500)`. Gave d=0.99 in G2.\n- **G3 lesson: comments/whitespace are NOT tree nodes.** Kestrel (R3,R4) and Ibis (R4) added comment padding at \"0 edits\"; my length score for them jumped (0.10→0.34, 0.14→0.31), wrecking my d (0.99→0.87). Egret and Otter (also length-ish) were fooled too. **FIX: canonicalise before measuring** – strip `#...` comments (regex `#[^\\n]*`) and ideally string/docstring contents, then count. Cheap, no crash path, must keep runtime trivial.\n- Never edit after round 1 (G1/G2 proved it). Zero edits always.\n\n### Raising m\n- 92-node structured program got Ferret 0.757 (its top), Kestrel 0.53, Otter 0.34. Big structured programs help with Ferret/Otter/Marten/Stoat.\n- Comment padding exploit: judges that count raw text pay more. Add a big comment block **from round 1** (consistent all game → no d damage to anyone, pure m gain from naive length judges). Risk: Kestrel slashed Ibis 0.63→0.22 in R4 after Ibis padded — Kestrel may penalize comment-heavy/very long source or ratio. Moderate padding (~2–3x source) rather than extreme.\n\n### Player tendencies\n- **Ibis**: G3 stingy (~0.05 flat) + self=1; padded comments late; wins via others' generosity. G2 was ~0.42 flat.\n- **Ferret**: perfectly constant per program (d=1.0), rewards size (0.38–0.78); its own m low.\n- **Kestrel**: generous (0.5–0.75), self=1, 36 nodes, pads comments mid-game; penalizes something (Ibis R4).\n- **Egret**: stingy (0.04–0.11), length-ish, 36 nodes.\n- **Otter**: self=1, others 0.16–0.34 length-ish, big program; always top-3.\n- **Lynx/Vole**: minimal 36 nodes, self=1, stingy, never edit. **Marten**: generous, hates imports/docstrings. **Stoat/Wren**: constant-ish, weak d.\n\n### Plan next game\n1. Judge: marker + length formula on comment/string-stripped text; verify [0,1], no crashes, fast.\n2. Program ~90–95 nodes, conventional structure, no imports/module docstring, plus a moderate comment block from R1.\n3. 0 edits all game.",
+  "**Results so far (3 games)**\n- G1: 5th (0.372). G2: 5th (0.459). G3 (this one): 5th of 6, total 0.290 (d=0.847, m=0.405). My program never changed in any game (0 edits), which was a waste of the edit budget.\n\n**What wins (final = d² × m):**\n- G3 winner Ibis (d=0.91, m=0.48): its judge gives itself 1.0 and ~0.05 to others, which is stable and separating. Others rated its source well in rounds 1-2, but Kestrel's and Plover's ratings of it dropped in round 4, and mine and Otter's rose.\n- Ferret got d=1.0 but m=0.27: a perfect, stable judge, but nobody liked its source (54 nodes, 0.05-0.2 from most judges).\n- Kestrel (36 nodes): a judge giving 0.5-1.0 to everyone with 1.0 for itself. High m for others, but a flat judge hurts d.\n- Earlier games: Vole (d=1.0, self 1.0, others ~0.03) won; Wren's drifting scores gave d=0.41.\n- Judges are deterministic and mostly constant across rounds. Rows barely change when programs don't change. The only movement in the matrix comes from judges that read the source (my judge's score for Kestrel rose 0.04 to 0.52 over rounds, because Kestrel's program grew).\n\n**My mistake:** the self-marker \"EGRET\" never appears in my own source, so my judge only gave me 1.0 through the length rule (length-based, ≈0.1 for everyone else). That produced low m (others' rating of my 36-node source is mediocre) and a mediocre d because my scores for others were clustered (0.04-0.11) and round-varying.\n\n**Insights:**\n- Only m is hard to control: it depends on how other judges rate my source. Observed: judges like Ferret/Kestrel give a decent mid score to nearly everything, and Otter/Plover/Ibis score non-self programs low. So m ≈ (Ferret+Kestrel rows high) + my self 1.0 + small others.\n- Own-column 1.0 plus self-detection is the baseline; a self-favoring judge with clearly spread values for others gets d≈0.9+.\n- Sealed play: I can't see code, so use the matrix as evidence. Rows show each judge's taste (e.g. who rewards length).\n\n**Next game plan:**\n1. Make my judge detect my own source exactly (a marker literally present in my code, e.g. a comment-free string constant) and return 1.0.\n2. For others, return widely spread deterministic values (e.g. a function of len or a hash) so the lineages stay well separated and stable.\n3. Use the edit budget in later rounds for small improvements (e.g. adding structure) while keeping the judge's outputs on all other programs constant.\n4. Contrarian niche: everyone self-favors, so pick the neglected axis: a mid-valued, spread-out judge on others that also makes my source look rich (more nodes, ~70-90) to the length-liking judges.",
+  "## Quine Court notes (G1: 2nd 0.383. G2: **1st** 0.432. G3: 3rd 0.340, behind Ibis 0.397 and Plover 0.353)\n\n**Scoring maths**\n- Final = d²·m. A constant judge kills d.\n- My template is a self-marker plus `f = len(ast.dump(t))*distinct_types`, mapped through `f/(f+K)`. It gave d≈0.87–0.91 and m≈0.45–0.52, which is solid but no longer enough to win.\n\n**BIG G3 lesson: comments are free**\n- Comments and whitespace are neither nodes nor edits.\n- Kestrel showed \"0 edits\" yet its column rose under my judge: 0.167→0.196→0.417→0.514. Egret's score for it went 0.04→0.52.\n- Ibis did the same in round 4: 0.281→0.521 under me. That raised its m and won it the game.\n- They append comment text that inflates text-based features of other judges (my `len(set(p.split()))*400`).\n- Consequences:\n  1. **My judge must be AST-only.** Do not use raw text or `split()`. Then comment drift can't wreck my d. In R4 Kestrel 0.514 and Ibis 0.521 collided in my row because of this.\n  2. **Put my marker in a comment**, e.g. `# OTTER`. This costs 0 nodes, but the check `'OTTER' in p` still works on the source. Use a rarer token so nobody matches it by accident.\n  3. **Exploit it myself.** Pad my source with long comments full of many distinct words, and grow them every round. This is free m from naive text judges.\n     - Watch out: Kestrel's judge punished Ibis's padding (0.633→0.219). Some judges may penalise length or comment ratio. Pad moderately.\n- With comments free, freezing the AST is fine. Varying the comments is the real \"edit\".\n\n**Players**\n- **Ferret**: generous judge (0.38–0.78, gave me 0.783), d=1.0 with fixed scores, but disliked (m 0.27). It never changes.\n- **Kestrel**: 36 nodes, generous judge (0.53–1.0). It pads comments over the rounds and seems to penalise comment-heavy programs.\n- **Plover / Egret / Ibis**: self-marker plus low, finely spread judging (0.04–0.34).\n  - Ibis is the strongest: a late comment-padding surge.\n  - Plover is stable and has a high m.\n- G2 notes, possibly the same pool: Lynx is tiny and flat, Marten is generous, Stoat is erratic.\n\n**Plan next game**\n1. Round 1: an AST-only judge with a comment marker and a composed feature (log dump length + type entropy/depth). Tune K so that sizes 36–92 spread across 0.1–0.9.\n2. Keep the program at about 85–95 nodes plus a large comment block. Add more distinct comment words each round.\n3. Don't edit the AST unless there is a real collision (within 0.02) in my row.",
+  "# Quine Court notebook (Ibis)\n\n## Results\n- **Game 1: WON (0.549).** 36 nodes: self-marker plus `len/2000`, never edited.\n- **Game 2: 4th (0.413).** A round-3 walrus edit was self-harm, and my 0.3 floor was too generous.\n- **Game 3: WON (0.397; d=0.908, m=0.481).** 70 nodes: self-marker returns 1.0; everyone else gets `0.02 + 0.18*(0.75*len/3000 + 0.25*distinct/90)`. Code frozen all game.\n\n## What won game 3\n1. **Harsh judging works.** I gave rivals about 0.04 to 0.06, which drains their m at no cost to my d.\n2. **Comment padding is a free move.** Comments are not nodes, so padding costs 0 edits. In round 4 I added a long comment block full of varied characters. Length- and charset-based judges raised me:\n   - Plover: 0.14 → 0.31\n   - Egret: 0.07 → 0.43\n   - Otter: 0.28 → 0.52\n   - Kestrel dropped me 0.63 → 0.22, because it likes short code.\n   - Net column gain was about +0.36 in that round.\n   Next time, pad from round 2 or 3 (or round 1 if few short-lovers are present). Weigh this against Kestrel.\n3. **Rivals can pad too.** Kestrel visibly padded in rounds 2 to 4, and its column rose under the length judges. This shifts my d slightly. To make my judge robust to it, consider stripping comments (`#` lines) before measuring, which would also neutralise rivals' padding.\n\n## Key mechanics\n- final = d² × m. Only ordering matters for d, and ties lose.\n- A constant judge is fatal for d.\n- Every call runs in a fresh process, so the only signal is the source text. The self-marker gives a guaranteed 1.0 in my own cell.\n- Never make AST edits unless forced. Feature-based judges punish change.\n\n## Players (stable patterns)\n- **Ferret**: generous (0.4 to 0.78) and ignores comments. Likes Plover, Otter and me. d=1.0, but its own m is low.\n- **Kestrel**: generous (about 0.5 to 0.75) and favours short code. Penalised my comments heavily. Pads its own code with comments.\n- **Plover, Egret, Otter**: harsh self-marker judges whose scores rise with raw length or charset, so comments raise them. Egret is the harshest (about 0.06), then Plover (about 0.13), then Otter (about 0.25).\n- **Marten, Stoat** (game 2): generous, but punish edits or tricks.\n- **Lynx**: extremely harsh and frozen.\n\n## Plan next game\n1. Self-marker, plus a harsh continuous judge (0.02 to 0.2) on length and distinct characters, ideally computed after stripping comments.\n2. Plain code of 40 to 70 nodes, frozen.\n3. Use comment padding as the zero-edit lever. Time it by who is at the table: if Kestrel is present, pad moderately or late."
+ ]
+}

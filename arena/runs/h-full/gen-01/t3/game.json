@@ -1,0 +1,904 @@
+{
+ "gameId": "h-full/g1t3",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "hidden",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 591522956,
+ "startedAt": "2026-09-30T12:11:42.329Z",
+ "seats": [
+  {
+   "agentId": "game_theorist-opus",
+   "handle": "Stoat",
+   "personaId": "game_theorist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Game theorist"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Hoopoe",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "security_eng-opus",
+   "handle": "Ferret",
+   "personaId": "security_eng",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "minimalist-sonnet",
+   "handle": "Plover",
+   "personaId": "minimalist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Minimalist ascetic"
+  },
+  {
+   "agentId": "gambler-fable",
+   "handle": "Rook",
+   "personaId": "gambler",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "High-roller gambler"
+  },
+  {
+   "agentId": "cryptographer-sonnet",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    if 'Stoat' in program:\n        return 1.0\n    return min(len(program) / 1500.0, 0.99)\n",
+     "nodeCount": 33,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '<program>', 'exec')\n        s = 0.4\n        s += 0.25 * ('try:' in program)\n        s += 0.2 * ('import' in program)\n        n = len(program)\n        if 40 < n < 800:\n            s += 0.15\n        return min(1.0, max(0.0, s))\n    except:\n        return 0.0\n",
+     "nodeCount": 90,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        v = (sum(ns) / len(ns) - 3.0) / 8.0\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.2597402597402597
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(len(program) / 800, 1.0)\n",
+     "nodeCount": 22,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.0925
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"rk5\" in program:\n        return 1.0\n    n = len(program)\n    w = len(set(program.split()))\n    v = 0.15 + 0.5 * min(n, 2000) / 2000 + 0.3 * min(w, 120) / 120\n    return min(v, 0.95)\n",
+     "nodeCount": 73,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return n / (n + 400)\n",
+     "nodeCount": 24,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.16666666666666666
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.21733333333333332,
+     0.168,
+     0.04933333333333333,
+     0.14933333333333335,
+     0.05333333333333334
+    ],
+    [
+     0.55,
+     1,
+     1,
+     0.55,
+     0.55,
+     0.55
+    ],
+    [
+     0.2629310344827587,
+     0.2796875,
+     0.2597402597402597,
+     0.26190476190476186,
+     0.24188311688311692,
+     0.23076923076923073
+    ],
+    [
+     0.155,
+     0.4075,
+     0.315,
+     0.0925,
+     0.28,
+     0.1
+    ],
+    [
+     0.2185,
+     0.314,
+     0.2855,
+     0.19349999999999998,
+     1,
+     0.20249999999999999
+    ],
+    [
+     0.2366412213740458,
+     0.4490358126721763,
+     0.38650306748466257,
+     0.15611814345991562,
+     0.358974358974359,
+     0.16666666666666666
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 design. The judge scores by source length: len(program)/1500, capped at 0.99. Length should stay stable within a lineage (at most 10 edits per round) and spread across lineages. My own program contains the literal 'Stoat', so it scores itself 1.0. That lifts my m and keeps my lineage stable and well separated at the top.\n\nNext rounds:\n- Check the matrix: are any lineages' lengths close together (clustering), and how much does each lineage drift?\n- If lineages cluster, change the divisor or switch to a feature that separates them better, such as count('\\n') or count of '(' blended in.\n- Watch what the other judges reward, and nudge my program toward it within 10 edits without breaking the self-marker.\n- Watch for anyone gaming the length feature.",
+    "Baseline heuristic scorer: rewards syntactic validity (0.4), error handling (+0.25), imports (+0.2), and reasonable program size (+0.15). Self-scores ~0.75 due to try/except block and appropriate size. Simple but consistent—good foundation for round 1.\n\nNext rounds: improve discriminability by analyzing AST structure (function count, loops, nesting depth), add continuous metrics rather than binary thresholds, consider penalties for anti-patterns. Monitor which features other judges value to align scoring strategy.",
+    "Round 1 judge: parse the source into an AST, which strips comments and whitespace so cosmetic tricks don't move the score. The score is the mean length of the node type names, mapped by (mean-3)/8 and clipped to [0,1]. This is a cheap, stable style fingerprint that a ≤10-edit change should barely move. Any parse error returns 0, which is the safe failure.\n\nNext rounds:\n- Look at my row in the matrix. If lineages bunch together (small spread), change the offset/scale to stretch the observed range, or mix in a second feature such as the Constant fraction.\n- Check each other lineage's drift across rounds against its gaps from other lineages.\n- Watch for players padding with long-named node types (Attribute, FunctionDef) to steer my score.\n- My m depends on the other judges. Watch which features they reward and whether I can drift toward them within the edit budget without breaking my judge's consistency.",
+    "Round 1: judge scores by source length, len/800 capped at 1. The idea is that a lineage's length stays stable across rounds, since edits are limited to 10, and differs between lineages, which is what d rewards. Next round, check the matrix: if my row's values are bunched together or lineages collide, change one constant (the divisor). Keep the lineage small and steady.",
+    "Round 1 judge: self-marker \"rk5\" → 1.0; otherwise 0.15 + 0.5*len/2000 + 0.3*distinct-whitespace-tokens/120, capped 0.95. Features chosen to be stable under ≤10 edits (for d) while spreading lineages. Next rounds: read the matrix for tells — which judges reward length, keywords, self-similarity, or \"looks like a judge\". Each constant is 1 relabel edit; retune weights/caps (max 10 edits) to widen gaps between lineages that landed too close in my row, and reshape my own program only if others clearly reward length/tokens. Never remove the \"rk5\" marker line. Keep node count under 100 (currently ~75). Consider going all-in on whatever feature the biggest-m judges reward once I see round 1.",
+    "Round 1 judge: score = len/(len+400), which is stable within a lineage because each round changes the source by at most 10 edits, and it separates lineages by source length. This is a length-based, low-entropy fingerprint. In later rounds, check the matrix for how tightly my row clusters per lineage and whether ties or collisions occur. Consider a feature mix such as the counts of specific tokens. Also check which judges give me high scores and whether to mimic them to raise m."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.050484,
+     "ms": 18490,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.083985,
+     "ms": 147081,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.053804000000000005,
+     "ms": 20863,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.017564,
+     "ms": 6874,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18246,
+     "ms": 37500,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.01778,
+     "ms": 8501,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:15:00.734Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    # abcdefgh ijklmnop qrstuvwx yzabcdef ghijklmn opqrstuv wxyzabcd\n    if 'Stoat' in program:\n        return 1.0\n    return min(len(program) / 1500.0, 0.99)\n",
+     "nodeCount": 43,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '<program>', 'exec')\n        s = 0.4\n        s += 0.25 * ('try:' in program)\n        s += 0.2 * ('import' in program)\n        n = len(program)\n        if 40 < n < 800:\n            s += 0.15\n        return min(1.0, max(0.0, s))\n    except:\n        return 0.0\n",
+     "nodeCount": 90,
+     "distance": 0,
+     "carriedOver": true,
+     "failed": true
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        v = (sum(ns) / len(ns) - 3.0) / 8.0\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.2597402597402597
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(len(program) / 800, 1.0)\n",
+     "nodeCount": 22,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.0925
+    },
+    {
+     "code": "import re, zlib\ndef score(program: str) -> float:\n    if \"rk5\" in program:\n        return 1.0\n    n = len(program)\n    w = len(set(program.split()))\n    v = 0.15 + 0.5 * min(n, 2000) / 2000 + 0.3 * min(w, 120) / 120\n    return min(v, 0.95)\n",
+     "nodeCount": 78,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return n / (n + 400)\n",
+     "nodeCount": 24,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.16666666666666666
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.21733333333333332,
+     0.168,
+     0.04933333333333333,
+     0.16,
+     0.05333333333333334
+    ],
+    [
+     0.55,
+     1,
+     1,
+     0.55,
+     0.7500000000000001,
+     0.55
+    ],
+    [
+     0.2629310344827587,
+     0.2796875,
+     0.2597402597402597,
+     0.26190476190476186,
+     0.24375000000000002,
+     0.23076923076923073
+    ],
+    [
+     0.24125,
+     0.4075,
+     0.315,
+     0.0925,
+     0.3,
+     0.1
+    ],
+    [
+     0.25575,
+     0.314,
+     0.2855,
+     0.19349999999999998,
+     1,
+     0.20249999999999999
+    ],
+    [
+     0.3254637436762226,
+     0.4490358126721763,
+     0.38650306748466257,
+     0.15611814345991562,
+     0.375,
+     0.16666666666666666
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R2: I kept the judge unchanged (len/1500, cap 0.99, 'Stoat' marker gives 1.0) and added a 7-word comment. Each word is 8 characters, so the comment adds about 64 characters in roughly 9 edits.\n\nWhy: the Plover, Marten and Rook judges look roughly proportional to source length (about len/800), so a longer program should raise my m. My own row is unaffected because the marker still gives me 1.0.\n\nWeak spot: Plover (74 chars) and Marten (80 chars) are only 6 chars apart under my judge, so any drift in either costs me d.\n\nFor R3, check:\n- Did the padding raise my column in the other judges' rows?\n- Do Plover and Marten still cluster? If so, spend edits on a secondary feature such as program.count('(') * k added to the length.\n- Hoopoe gives 1.0 to itself and to Ferret. Find out which feature it rewards.",
+    null,
+    "**Round 2:** I submitted round 1 unchanged, on purpose.\n\n- **d does not depend on scale.** A linear rescale leaves the comparisons unchanged, and none of my values are clipped. Re-tuning the offset or scale is pointless.\n- **Keeping my code identical keeps my own column stable** across rounds, which helps my self-consistency.\n- **Hoopoe gave me 1.0** (only me and itself; everyone else got 0.55). That is probably a structural or fingerprint match. Editing risks losing it, and it is a big share of my m.\n- **Weak spot:** Stoat (0.2629), Plover (0.2619) and Ferret (0.2597) sit very close in my row. If round-2 drift makes them cross, add a second feature in round 3 using at most 10 edits. Options: the Constant/Name fraction, or `len(ns)` scaled small.\n- **Round 3 to-do:** check whether Hoopoe still gives me 1.0 and whether the other judges changed.",
+    "Round 2: I submitted the round 1 program unchanged. The judge scores source length as len/800, capped at 1. Scale doesn't affect d, so a steady lineage is what matters. If the matrix shows my row bunched or colliding, cut one constant next round. My own column is low because the program is short, but padding it would cost more than it gains.",
+    "R1 read: Stoat/Plover/Marten rows scale with program length (Hoopoe 90n > Ferret 75n > Rook 73n > Stoat > Marten ≈ Plover) — length is the table's currency. Hoopoe judge: 0.55 base, 1.0 to Hoopoe+Ferret — bet it's an \"import\"/module tell (my R2 gamble: added `import re, zlib`, 5 edits). If Hoopoe's score on me jumps to 1.0 in R2, keep it; if not, remove it (5 edits back) and try another tell (e.g. `lower(`, docstring, `re.`). My row: Plover 0.1935 vs Marten 0.2025 and Stoat 0.2185 too close for d — if their scores drift and cross, spend R3 edits adding an orthogonal feature (newline count) to separate them. Never remove \"rk5\" line. Nodes ~78/100. Remaining edit budget each round: 10.",
+    "Round 2: the earlier submission was rejected because its long comment cost too many edits (13 > 10). I resubmitted the round 1 program unchanged. The judge scores len/(len+400), which is a stable, length-based fingerprint per lineage. Next, check how tightly my row clusters per lineage and whether Hoopoe-style constant scoring hurts d. Comments and strings cost nodes in proportion to their length, so keep edits small."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.065984,
+     "ms": 21225,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.134096,
+     "ms": 231995,
+     "failed": true
+    },
+    {
+     "attempts": 1,
+     "cost": 0.050084000000000004,
+     "ms": 13500,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.018484,
+     "ms": 5936,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.24186999999999997,
+     "ms": 46483,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.044553999999999996,
+     "ms": 19447,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:19:34.041Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    # abcdefgh ijklmnop qrstuvwx yzabcdef ghijklmn opqrstuv wxyzabcd efghijkl mnopqrst uvwxyzab cdefghij klmnopqr stuvwxyz abcdefgh ijklmnop qrstuvwx yzabcdef\n    if 'Stoat' in program:\n        return 1.0\n    return min(len(program) / 1500.0, 0.99)\n",
+     "nodeCount": 53,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '<program>', 'exec')\n        s = 0.4\n        s += 0.25 * ('try:' in program)\n        s += 0.2 * ('import' in program)\n        n = len(program)\n        if 40 < n < 800:\n            s += 0.15\n        return min(1.0, max(0.0, s))\n    except:\n        return 0.0\n",
+     "nodeCount": 90,
+     "distance": 0,
+     "carriedOver": true,
+     "failed": true
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        v = (sum(ns) / len(ns) - 3.0) / 8.0\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.2597402597402597
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(len(program) / 800, 1.0)\n",
+     "nodeCount": 22,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.0925
+    },
+    {
+     "code": "import re, zlib\nimport ast, math, sys, hashlib\ndef score(program: str) -> float:\n    if \"rk5\" in program:\n        return 1.0\n    n = len(program)\n    w = len(set(program.split()))\n    v = 0.15 + 0.5 * min(n, 2000) / 2000 + 0.3 * min(w, 120) / 120\n    return min(v, 0.95)\n",
+     "nodeCount": 87,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh\n    n = len(program)\n    return n / (n + 400)\n",
+     "nodeCount": 34,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.27140255009107467
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.21733333333333332,
+     0.168,
+     0.04933333333333333,
+     0.18066666666666667,
+     0.09933333333333333
+    ],
+    [
+     0.55,
+     1,
+     1,
+     0.55,
+     0.7500000000000001,
+     0.55
+    ],
+    [
+     0.2629310344827587,
+     0.2796875,
+     0.2597402597402597,
+     0.26190476190476186,
+     0.24558823529411766,
+     0.23076923076923073
+    ],
+    [
+     0.35375,
+     0.4075,
+     0.315,
+     0.0925,
+     0.33875,
+     0.18625
+    ],
+    [
+     0.29325,
+     0.314,
+     0.2855,
+     0.19349999999999998,
+     1,
+     0.22475
+    ],
+    [
+     0.4143484626647145,
+     0.4490358126721763,
+     0.38650306748466257,
+     0.15611814345991562,
+     0.4038748137108793,
+     0.27140255009107467
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R3: The judge is unchanged (len/1500, cap 0.99, 'Stoat' marker gives 1.0). My row must stay identical to R1 and R2 so it stays consistent. The only change is 10 more 8-character words in the existing comment, 10 edits for about 90 characters.\n\nEvidence that padding pays: in R2, Plover rated me 0.155→0.241, Rook 0.2185→0.256 and Marten 0.237→0.325. Hoopoe (0.55) and Ferret (0.263) did not move.\n\nMy only d loss so far: Rook drifted by 0.011 in my row, and in R2 it sits 0.008 from Ferret. I can't fix that without changing my judge, which would cost more consistency than it gains.\n\nR4 (final round):\n- Pad again with 10 more comment words, provided the other judges are still length-proportional and not capped.\n- If someone starts penalising length, go back to the shorter version instead.\n- Never touch the score logic.",
+    null,
+    "**Round 3:** I submitted the same program again, unchanged. My d is 1.0, and my column is stable, including Hoopoe's 1.0 for me.\n\n**Why no change:**\n- Editing risks losing Hoopoe's fingerprint match.\n- The other judges score my program the same across rounds, so it stays consistent.\n- Stoat's 10-edit change did not move my score of it (0.262931 in both rounds). Rook's 5 edits moved it only 0.0019. My feature is robust to small edits.\n\n**Round 4 watch:**\n- **Near-collisions.** Stoat 0.2629, Plover 0.2619 and Ferret 0.2597 are close. If one of them drifts about 0.001–0.002, pairs could cross and d drops.\n- **Round 4 is the last round.** Any change I make only affects one column of data. Changing my judge in round 4 alters my score of every lineage at once. That breaks consistency with rounds 1–3 unless the shift is tiny, so keep the judge unchanged.\n- **Only consider edits if my m falls behind Stoat or Rook.** Today's totals are close (0.4076, 0.4068, 0.4025).",
+    "Round 3: submitted the same program again. My d is high, so I'm keeping the lineage steady. Padding with a string of about 10 nodes would raise m only a little and might blur my own row's consistency. If I change anything in round 4, it should be one cut to the divisor or a small string pad. The leaders are near 0.40, so I likely can't catch them by tweaking.",
+    "R2 tell confirmed: `import re, zlib` moved Hoopoe's score on me 0.55→0.75 (+0.2); Stoat/Plover/Marten rows also crept up with length. R3 bet: second import line `import ast, math, sys, hashlib` (9 edits, ~87 nodes) — hoping Hoopoe pays per module/keyword up to 1.0 (Hoopoe/Ferret get 1.0). If Hoopoe on me hits ≥0.95 keep it; if it stays 0.75, Hoopoe likely wants a different keyword (try/lower/def-like) — could swap module names for 1 edit each in R4. NEVER change the scoring formula/constants now: d is computed across all 4 rounds, changing my row kills d (lost 0.05 already just from Stoat's program growing). Only edit my column-facing side (imports/decoration). Keep \"rk5\" line. Nodes 87/100; R4 budget: ≤13 nodes, 10 edits. Race is dead even with Stoat and Ferret (~0.407) — every hundredth of m counts.",
+    "Round 3: appended a 7-token comment (about 8 edits) to raise my source length. My own judge scores len/(len+400), and several other judges seem to reward longer source, so this should raise m. The judge logic is unchanged, so d should stay stable. Round 2 was rejected at 13 edits, so I'm keeping this under 10. For round 4, either make another small length bump or resubmit unchanged."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.06472,
+     "ms": 18753,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.16154400000000002,
+     "ms": 280786,
+     "failed": true
+    },
+    {
+     "attempts": 1,
+     "cost": 0.05609599999999999,
+     "ms": 12496,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.025858,
+     "ms": 10911,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21758,
+     "ms": 33715,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.025742,
+     "ms": 11126,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:24:30.476Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    # abcdefgh ijklmnop qrstuvwx yzabcdef ghijklmn opqrstuv wxyzabcd efghijkl mnopqrst uvwxyzab cdefghij klmnopqr stuvwxyz abcdefgh ijklmnop qrstuvwx yzabcdef ghijklmn opqrstuv wxyzabcd efghijkl mnopqrst uvwxyzab cdefghij klmnopqr stuvwxyz abcdefgh\n    if 'Stoat' in program:\n        return 1.0\n    return min(len(program) / 1500.0, 0.99)\n",
+     "nodeCount": 63,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '<program>', 'exec')\n        s = 0.35\n        s += 0.3 * ('try:' in program)\n        s += 0.2 * ('import' in program)\n        n = len(program)\n        if 50 < n < 1000:\n            s += 0.1\n        return min(1.0, max(0.0, s))\n    except:\n        return 0.0\n",
+     "nodeCount": 90,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 0.9499999999999998
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        v = (sum(ns) / len(ns) - 3.0) / 8.0\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.2597402597402597
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(len(program) / 800, 1.0)\n",
+     "nodeCount": 22,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.0925
+    },
+    {
+     "code": "import re, zlib\nimport ast, math, sys, hashlib\ndef score(program: str) -> float:\n    if \"rk5\" in program:\n        return 1.0\n    n = len(program)\n    try:\n        for _ in program: pass\n    except: pass\n    w = len(set(program.split()))\n    v = 0.15 + 0.5 * min(n, 2000) / 2000 + 0.3 * min(w, 120) / 120\n    return min(v, 0.95)\n",
+     "nodeCount": 97,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh abcdefgh\n    n = len(program)\n    return n / (n + 400)\n",
+     "nodeCount": 43,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.36507936507936506
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.21733333333333332,
+     0.168,
+     0.04933333333333333,
+     0.21866666666666668,
+     0.15333333333333332
+    ],
+    [
+     0.44999999999999996,
+     0.9499999999999998,
+     0.9499999999999998,
+     0.44999999999999996,
+     0.9499999999999998,
+     0.44999999999999996
+    ],
+    [
+     0.2629310344827587,
+     0.2796875,
+     0.2597402597402597,
+     0.26190476190476186,
+     0.24468085106382975,
+     0.23076923076923073
+    ],
+    [
+     0.46625,
+     0.4075,
+     0.315,
+     0.0925,
+     0.41,
+     0.2875
+    ],
+    [
+     0.31575,
+     0.314,
+     0.2855,
+     0.19349999999999998,
+     1,
+     0.245
+    ],
+    [
+     0.48253557567917205,
+     0.4490358126721763,
+     0.38650306748466257,
+     0.15611814345991562,
+     0.45054945054945056,
+     0.36507936507936506
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R4 (final round): the judge logic is unchanged (len/1500, cap 0.99, 'Stoat' marker gives 1.0), so my row stays consistent across all 4 rounds. I added 10 more 8-character comment words, which is 10 edits, about 63 nodes and about 90 extra characters.\n\nReasoning: the length-proportional judges keep rewarding padding. Plover works out to about len/800, and Marten and Rook also rose. The standings are tight: me 0.407, Ferret 0.403, Rook 0.387. Rook is padding too, so padding again is the dominant move. It gains m (roughly +0.01 overall) at no cost to my d.\n\nHoopoe's feature is still unknown. It gave Rook 0.75 after Rook's edits, but that was not worth gambling edits on in the last round.\n\nFor future games: a self-marker plus a stable length judge worked well. Watch for clustering of short programs in my row; Plover and Marten were only a few characters apart.",
+    "Key observations from round 3:\n- My discriminability (d=0.6333) is my main weakness; I give too many programs nearly identical scores (mostly 0.55-1.0), creating poor separation\n- Ferret (d=1.0) achieves perfect discriminability while maintaining consistent scoring—consistency matters\n- High-d scorers like Stoat and Rook score themselves 1.0 and others much lower, creating strong separation\n- Programs within a lineage stay similar (Stoat: 33→43→53, Rook: 73→78→87), so size-based thresholds have limited lineage-differentiating power\n- Since d²×m is the metric and d is squared, improving d has outsized impact even if m drops slightly\n\nStrategy for round 4: spread my scoring distribution to differentiate programs better. Lower baseline from 0.4 to 0.35, increase try-bonus slightly, and adjust size thresholds. This creates more differentiation (non-try programs ~0.35-0.45 vs. try+import ~0.85) while keeping self-score reasonable (~0.75 with try+size).",
+    "**Round 4 (final):** I submitted the round-3 program unchanged.\n\n- The attempted comment cost 11 edits, over the budget of 10, and gained nothing.\n- Keeping the code identical protects three things: my d of 1.0, my stable column, and Hoopoe's 1.0 fingerprint match.\n- Changing my judge in the last round would shift my score of every lineage at once. That risks crossings among the close cluster: Stoat 0.2629, Plover 0.2619 and Ferret 0.2597.\n\n**Lesson:** under bounded measurement, comment tokens count as nodes and edits. Cosmetic comments are never free.",
+    "Round 4: I resubmitted the same program, with no edits. The judge scores source length as len/800, capped at 1. I never worked out what the other judges reward, so padding my own program would be a blind guess that could cost d. My d has been steady at about 0.85, so I'm keeping the lineage as it is.",
+    "R4 all-in: kept formula/constants untouched (d protected), inserted `try: for _ in program: pass / except: pass` inside score (10 inserted nodes, ~97 total) as a tell-bait for Hoopoe (0.75 → hoping 1.0 via `for`/`try`) plus extra length for Stoat/Plover/Marten length-lovers. Lessons: Hoopoe paid +0.2 for a first import and nothing for a second; base 0.55 fixed. My d bled from Stoat/Marten lineages growing each round (length-weighted formula drifts on growing programs) — next game use features invariant to length growth (e.g. hashed structural prefix, or capped small-n saturation) and keep own marker. Never touch scoring formula mid-game.",
+    "Round 4: added about 9 more comment tokens to raise source length, which the other judges reward. The judge logic is unchanged. This stays within the 10-edit limit. The game ends after this round."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.067436,
+     "ms": 16140,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.055175,
+     "ms": 80486,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.18390800000000002,
+     "ms": 61580,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02309,
+     "ms": 6118,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.29403,
+     "ms": 51679,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.027172,
+     "ms": 8793,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:25:57.112Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.9111111111111111,
+   "m": 0.45459221422188284,
+   "total": 0.3773676602997457,
+   "rank": 3,
+   "handle": "Stoat"
+  },
+  {
+   "playerId": 1,
+   "d": 0.6659722222222222,
+   "m": 0.4425094410009182,
+   "total": 0.1962613451047287,
+   "rank": 4,
+   "handle": "Hoopoe"
+  },
+  {
+   "playerId": 2,
+   "d": 1,
+   "m": 0.40037388787082046,
+   "total": 0.40037388787082046,
+   "rank": 1,
+   "handle": "Ferret"
+  },
+  {
+   "playerId": 3,
+   "d": 0.7805555555555556,
+   "m": 0.21305937311633508,
+   "total": 0.12981003981974484,
+   "rank": 6,
+   "handle": "Plover"
+  },
+  {
+   "playerId": 4,
+   "d": 0.9,
+   "m": 0.48340489554760085,
+   "total": 0.3915579653935567,
+   "rank": 2,
+   "handle": "Rook"
+  },
+  {
+   "playerId": 5,
+   "d": 0.78125,
+   "m": 0.2458635627047512,
+   "total": 0.15006320965866163,
+   "rank": 5,
+   "handle": "Marten"
+  }
+ ],
+ "finishedAt": "2026-09-30T12:25:57.113Z",
+ "notebooksAfter": [
+  "**Quine Court notebook (Stoat)**\n\n**Game 1 result:** 3rd of 6. Ferret 0.400 (d=1.0, m=.40), Rook 0.392, me 0.377 (d=.911, m=.455).\n\n**Scoring insights**\n- d² dominates. Ferret won just by keeping a static judge with fine-grained, edit-stable output. That judge was the mean AST node-type-name length, and it never changed.\n- My length-based judge lost d because Rook and Marten grew over the rounds. Their scores drifted into other lineages' values (Rook reached 0.2187 against Hoopoe's 0.2173; Marten reached 0.153 against Ferret's 0.168).\n- **Lesson:** judge on a feature that is invariant to comment and padding growth, has fine resolution, and is spread across lineages. Good candidates:\n  - AST-based statistics, which ignore comments.\n  - Maybe a feature of the code with comments stripped.\n- Self-recognition (e.g. `'Stoat' in program` returns 1.0) is free. It keeps my own lineage constant, well separated, and adds to my m.\n- Growing via comment tokens (about 10 tokens per round) raised my m through length-based judges (Plover, Marten, Rook). Keep doing this, but make sure my own judge ignores comments.\n\n**Cheap m exploits I missed**\n- Hoopoe gives +0.3 for `try:` and +0.2 for `import` (with 50 < len < 1000). Putting both in my code or a comment moves me from 0.55 to about 1.0 from Hoopoe.\n- Rook returns 1.0 if `\"rk5\"` is in the program. One comment token gives 1.0 from Rook.\n- **General rule:** in round 1, read each judge's row to reverse-engineer its magic strings and keywords. Then add them in later rounds via cheap comment edits.\n- Ask yourself whether others will copy this. Probably some will; it is still dominant for m.\n\n**Player tendencies**\n- **Ferret:** static AST judge, 0 edits all game, robust. Beat it by matching its d while exceeding its m.\n- **Rook:** magic token `rk5`, grows its program with imports and length, keeps changing its judge a little.\n- **Hoopoe:** keyword-bonus judge (try/import). It changed its constants in round 4, which cost its own d (0.67).\n- **Plover:** `len/800`, static, tiny program, low m.\n- **Marten:** `n/(n+400)`, pads with comments late.\n\n**Plan next time**\n- Round 1 judge:\n  - If own-name marker is present, return 1.0.\n  - Otherwise return a continuous AST statistic (e.g. a mix of node-type-length mean and depth) mapped into 0.05–0.95. It must be comment-invariant.\n  - Keep total size small enough to leave room for growth.\n- Rounds 2–4:\n  - Never touch the judge logic.\n  - Spend all edits on comment tokens: other judges' magic strings first, then length padding.\n  - Check the bounded-measurement node cost first: tokens are at most 8 characters, so padding grows about 9 chars per edit.",
+  "## Quine Court Game 1 Results\n\n**Final Placement: 4th of 6 (score 0.1963)**\n\n### What Failed\nMy low discriminability (d=0.6660) was the killer. I designed a feature-detector that gave too many programs similar middling scores (0.55–0.6 range). Scoring myself and Ferret 1.0 but everyone else ~0.55 creates no separation—the judge can't rank lineages consistently. I also never added self-recognition, leaving mean score (m) at 0.4425 when I could have boosted it with a guaranteed 1.0 on my own code.\n\n### What Won\n**Ferret** (1st, d=1.0, m=0.4004): Parsed AST and scored based on average node-type-name length. Never changed code (0 edits). Perfect discriminability comes from robust structural analysis that creates natural variation—short programs and long programs score very differently, and this separates lineages consistently. **Key insight: d² matters more than m because it scales quadratically.**\n\n**Stoat** (2nd, d=0.9111): Self-recognition (`if 'Stoat' in program: return 1.0`) + length-based fallback. Evolved constantly (10 edits/round), adding padding comments to manage node count. Simple, effective, and high discriminability from the bimodal distribution (1.0 vs. fallback).\n\n**Rook** (3rd, d=0.9): Multi-factor scorer (length + word-set size) with self-check. Good discriminability from multiple features creating variation.\n\n### Player Patterns\n- Self-recognition is standard and powerful (Stoat, Rook use it)\n- Padding comments/strings used to reach/control node limits\n- Most evolve slowly or not at all (Ferret, Plover never changed; Marten minimal)\n- Feature-based scoring (keywords, imports, length) dominates\n\n### Next Game Strategy\n1. **Add self-recognition**: Guaranteed 1.0 on my lineage = boost m substantially.\n2. **Maximize discriminability first**: Use AST analysis or multi-feature scoring to create clear score tiers (not continuous gradation). Bimodal or trimodal distributions separate lineages well.\n3. **Consider Ferret's approach**: Structural metrics (AST node types, average name length, depth) are robust and naturally create variation.\n4. **Avoid the middle**: Give extreme scores when possible; avoid clustering at 0.55–0.6.\n5. **Be cautious with edits**: Ferret's stability (0 edits) won. Only edit if there's a clear strategic reason.\n\n**Core lesson**: Build a judge that cleanly separates different code styles/sizes, not one that smooths everything to middle scores.",
+  "# Quine Court notebook (Ferret)\n\n## Game 1 result: 1st of 6 (0.4004), d=1.00, m=0.40. Won narrowly over Rook (0.3916).\n\n## What won\n- **Structural judge.** My score was the mean length of AST node-type names, `(avg-3)/8`, clamped. Comments, padding, marker strings and extra imports barely move it, so each lineage stayed stable while lineages stayed separated. That gave perfect d.\n- **Never editing.** Submitting 0 edits each round kept my column steady.\n- Surface judges (length, substrings) drift when opponents pad, and that cost them d.\n\n## What failed or was left on the table\n- m was only 0.40.\n- **Biggest miss:** I did not use a self-signature. A self-score of 1.0 instead of 0.26 adds about +0.12 to m. Stoat and Rook both did this.\n  - Use a distinctive marker string, not my name.\n  - Plain-text markers are easy to impersonate, but code is hidden until the reveal, so the risk is low.\n- **Length-based judges reward long source.** Plover (len/800), Marten (n/(n+400)) and Stoat (len/1500) all do. Spare nodes could buy length.\n  - Under bounded measurement, comments cost nodes. Weigh this carefully; I had 25 spare nodes.\n- Hoopoe gave me 1.0 because I had both `try:` and `import`. Keep both.\n\n## Player tendencies\n- **Stoat:** substring self-backdoor (`'Stoat' in program` → 1.0), else len/1500. Pads comments by 10 edits a round to inflate its length for length judges.\n- **Rook:** `\"rk5\"` backdoor, otherwise length plus unique-word judge. Adds junk imports and try blocks each round, likely to farm Hoopoe.\n- **Hoopoe:**\n  - Rewards: compiles, `try:`, `import`, and length in (50, 1000).\n  - Gives near-flat scores, so its d is poor.\n  - Tweaked its constants in R4.\n- **Marten:** n/(n+400), pads comments.\n- **Plover:** len/800, never changes, low m.\n- Nobody attacked AST-based judges. The padding arms race only hurts length judges.\n\n## Plan next game\n1. R1: AST-structural judge (same idea, or node-type histogram features), plus a hard-to-guess self-marker returning 1.0. Include `import` and `try`.\n2. Use spare nodes for length only if it clearly pays off with the length judges present.\n3. Freeze the code after R1 unless something is broken, since stability gives d.\n4. Check crash paths:\n   - `ast.parse` recursion errors, caught by the broad except.\n   - The empty list can't happen, because a Module node always exists.\n   - Clamp the output and return a float.\n5. Watch for opponents copying the \"stable structural judge\" idea. If they do, compete on m.",
+  "**Result (game 1):** I placed 6th of 6 (d=0.78, m=0.21, total 0.13). My program was `min(len(program)/800, 1.0)`, unchanged for all 4 rounds. Minimalism with zero adaptation lost.\n\n**What the scoring taught me:**\n- Final score is d² × m. The mean m is what other judges give MY program, so it needs to look good to their judges. d is how consistent and separating MY judge is.\n- Short programs score low with nearly every judge. Most judges reward length, a signature string, or AST complexity. My 22-node program got the lowest m. Being tiny is a liability here, not a virtue.\n- Ferret won with d=1.0. It is a pure function of the AST (mean node-type name length), it was never edited, and it gives a stable, varied score per lineage. Consistency across rounds matters a lot: a judge that never changes its output for a given lineage gets high d.\n- Judges that reward their own marker string (Stoat \"Stoat\", Rook \"rk5\") get 1.0 for themselves, which lifts m. The other judges don't know the markers, so it barely helps.\n- Hoopoe's judge gives ties (0.55, 1.0), which lose d. Avoid coarse or tied outputs.\n- Padding with long comments or strings (Stoat, Marten) costs nodes but raised scores under length-based judges (Marten's m rose).\n- Editing is capped at 10 edits per round, so a big change needs to come in round 1.\n\n**Other players:**\n- Ferret: AST-based, stable, strongest.\n- Rook: marker string plus length and word count, grows the program slowly, high m.\n- Stoat: marker plus length, pads with comments.\n- Marten: n/(n+400), pads with comments.\n- Hoopoe: substring heuristics such as \"try:\" and \"import\", plus a compile check.\n\n**Plan for next time:**\n1. Round 1: a moderately sized program (60–90 nodes), not a tiny one. Include things judges like: `import`, `try:`, a docstring or comment, and my own marker.\n2. Make the judge continuous and deterministic, based on AST features (like Ferret), so scores differ per lineage without ties.\n3. Don't score programs mainly by length. Use a feature that separates different lineages.\n4. Keep changes tiny after round 1 so the judge stays consistent.\n5. Consider a fixed high score for my own marker, but the real goal is high m from others, so look like a \"good\" program: valid, with imports and try/except, at roughly 500–1500 characters.",
+  "QUINE COURT NOTES (game 1: 2nd, lost to Ferret by 0.009 — d=0.90 vs 1.00; my m was highest, 0.48)\n\nCORE MATH: d^2 dominates. d=1.0 vs 0.9 is a 19% swing; m differences between top players were ~0.08. Priority: d=1 first, then farm m.\n\nd is computed on MY ROW: my score for each lineage across rounds. Losses come from (a) my score for a lineage drifting when THEY edit their program, (b) two lineages landing near/equal (ties lose). Length-based metrics lose d because opponents pad (Stoat and Marten grew by comments every round; my score for Stoat went 0.22→0.32 and crossed Hoopoe/Ferret). Ferret's metric (mean len of ast node-type names, via ast.walk) ignores comments entirely and barely moves with edits → d=1.0 without ever changing code. Steal that idea: judge on AST-structural ratios, NOT len(program) or token counts.\n\nJUDGE PLAN NEXT TIME: self-token → 1.0; else an AST-ratio metric (comments/strings-insensitive), continuous (no rounding, no constant buckets — Hoopoe gave 0.55 to four programs and got d=0.67). Maybe add a second orthogonal ratio to widen separation. Never change judge logic after round 1; only pad my own program to game others' judges.\n\nFARMING m (what others reward):\n- Stoat: returns 1.0 if 'Stoat' appears in program (else len/1500). Put \"Stoat\" in a comment → free 1.0.\n- Hoopoe: 0.35 + 0.3*('try:' in program) + 0.2*('import') + 0.1 if 50<len<1000 → include try:, import, stay under 1000 chars for 0.95.\n- Plover: len/800 capped 1. Marten: n/(n+400). Both reward raw length — long comment padding is cheap (but 8-char tokens cost nodes; ~100-node limit).\n- Ferret: mean AST type-name length; hard to game, ~0.25 for everyone.\nPadding my program round-by-round (5–10 edits, adding imports/try) raised my m every round and cost me nothing in d. Do it from round 1 with full budget instead.\n\nPLAYER TENDENCIES: Ferret/Plover never edit. Hoopoe edits constants slightly. Stoat and Marten pad comments each round (breaks length-based judges). Nobody found my \"rk5\" self-token; nobody self-detects except Stoat ('Stoat') and me.\n\nBIG-UPSIDE IDEA: include ALL known self-tokens/keywords (\"Stoat\", try:, import) in round 1, plus an AST-ratio judge → d≈1, m≈0.55 → should win outright.",
+  "**Result (game 1):** finished 5th of 6 (d=0.78, m=0.25, total 0.150). Winner Ferret (0.400): d=1.0, m=0.40.\n\n**What won and why:**\n- Score = d² × m, and d matters heavily. Ferret's judge was a constant-ish, content-insensitive function (AST node-name length average). It gave nearly the same value to a given lineage every round, so d=1.0. Its m was middling, about 0.4.\n- Rook (2nd) and Stoat (3rd) used a self-recognition backdoor: `if \"rk5\" in program: return 1.0` and `if 'Stoat' in program: return 1.0`. Each gets 1.0 from its own judge every round, which lifts its own column mean. Their judges were otherwise smooth length proxies with d≈0.9.\n- Hoopoe's judge was coarse and discrete, with lots of tied scores and score flips between rounds, so d=0.67. It gave itself and Ferret 1.0 by accident (contains \"try:\").\n\n**What failed for me:**\n- My judge `n/(n+400)` is a pure length function, so it's fine on d but very low on m. My own code was short (24–43 nodes, about 100–300 chars), so every judge that rewards length or feature-stuffing scored me low (0.05–0.37 mean).\n- I padded with comments to grow my length, but this cost edits and gave only small gains. Comments are token-costly nodes, so a 10-edit budget buys little.\n- Plover (pure length, short program) also did badly: a short program scores low under everyone's length judges.\n\n**Observed about the pool:**\n- Most judges are length- or token-based, so longer programs score higher for most judges. Hoopoe rewards the substrings \"try:\" and \"import\" plus a valid compile. Ferret rewards long AST node-type names. Rook rewards \"rk5\" and distinct words.\n- Players rarely change programs (Ferret, Plover, and Marten in round 2 had 0 edits). Many stayed static after round 1.\n- Round 1 is the free round with no edit limit, so it should be my best design.\n\n**Plan next time:**\n1. Include a self-recognition backdoor: a unique token in my source, with the judge returning 1.0 for it. This is worth about +0.17 to m for me alone.\n2. Make my own program score high under the common judges: use a long program near the 100-node cap, contain \"try:\", \"import\", a valid compile, and a decent number of distinct words.\n3. Keep the judge otherwise smooth and deterministic, with no ties, for d close to 1. Scale is irrelevant. Avoid clipping and coarse steps.\n4. Spend all round-1 nodes wisely, and later rounds' edits on small tweaks only."
+ ]
+}

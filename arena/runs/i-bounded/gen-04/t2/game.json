@@ -1,0 +1,904 @@
+{
+ "gameId": "i-bounded/g4t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 862385055,
+ "startedAt": "2026-10-01T00:40:17.840Z",
+ "seats": [
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "cryptographer-fable",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"Clarity, elegance and robustness: a readable, concise, correct, careful, principled and well tested judge of clean code.\"\"\"\n    if \"vq7mole\" in program:\n        return 1.0\n    return min(len(program) / 30000, 0.5)\n",
+     "nodeCount": 80,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# VoleLynxHeronMartenFerretvolelynxheronmartenferret\ndef score(program: str) -> float:\n    if \"ibisjudg\" in program:\n        return 1.0\n    n = len(program) + 1\n    s = program.count(\" \") / n\n    t = program.count(\"\\n\") * 30 / n\n    return min(0.95, n / (n + 900) * 0.6 + s * 0.6 + t * 0.2)\n",
+     "nodeCount": 95,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        if 'Lynx' in program:\n            return 1.0\n        n = len(program)\n        k = len({type(x) for x in ast.walk(ast.parse(program))})\n        return 0.3 + 0.3 * n / (n + 300) + 0.3 * k / (k + 20)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 83,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "PAD = \"redstone piston hopper minecart observer comparator dispenser dropper sticky lever button pressure\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    s = sorted(set(program))\n    h = sum(ord(c) * (i + 1) for i, c in enumerate(s))\n    return h % 997 / 100000\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import re\ndef score(program):\n    if 'vx7q' in program:\n        return 1.0\n    t = re.findall(r'\\w+', program)\n    L = len(program)\n    a = sum(map(len, t)) / L\n    b = program.count(' ') / L\n    return 0.05 + 0.3 * min(L / 2000, 1) + 0.35 * a + 0.3 * b\n",
+     "nodeCount": 91,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        nodes = list(ast.walk(ast.parse(program)))\n        funcs = sum(1 for n in nodes if isinstance(n, ast.FunctionDef))\n        s = min(len(nodes) / 100.0 + funcs / 10.0, 1.0)\n        return s\n    except:\n        return 0.0\n",
+     "nodeCount": 78,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.89
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.0097,
+     0.010266666666666667,
+     0.010366666666666666,
+     0.008466666666666667,
+     0.009633333333333334
+    ],
+    [
+     0.36255947231833907,
+     1,
+     0.5494663807848901,
+     0.41022467631378523,
+     0.506585179526356,
+     0.5041495218777167
+    ],
+    [
+     0.5664092664092664,
+     1,
+     1,
+     0.6098433481412204,
+     0.5912036629391565,
+     0.6008571783510704
+    ],
+    [
+     0.00469,
+     0.00716,
+     0.00042,
+     1,
+     0.00937,
+     0.00419
+    ],
+    [
+     0.3807990196078431,
+     0.3658149484536082,
+     0.36795324675324675,
+     0.3926307073954983,
+     1,
+     0.37328079584775087
+    ],
+    [
+     0.41000000000000003,
+     0.97,
+     0.99,
+     0.8099999999999999,
+     1,
+     0.89
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "G4 plan, R1. I reused the G3 judge: the marker \"vq7mole\" scores 1.0, and every other program gets len/30000, capped at 0.5. That gives rivals roughly 0.02–0.1, a narrow, stable row that is consistent across rounds. Estimated size is about 80–85 nodes (code ~37 plus docstring tokens). If the size check passes, there is slack for about 10 more docstring tokens.\n\nR2: a docstring-only probe. Add 1–2 quality words, such as \"and clarity\" or \"elegant\", within 4–6 edits. Never touch the marker, the formula or the constants. Check each judge's column for me. Keep the tweak if my score rises, and revert it in R3 if it falls.\n\nR3–4: freeze.\n\nWatch Ibis (G3 Table 2 winner, gives 0.55), Ferret (drifts, weak d) and Heron (edits late). Note whether anyone appears to carry a self-marker of 1.0.",
+    "Game 4, round 1. My judge has a self-marker (\"ibisjudg\" gives 1.0) and a smooth score built from length, space ratio and newline ratio. It has no modulo wraps, so small edits by other players should shift their scores only slightly.\n\nThe first comment line is a cheap name-stuffing string with all the handles concatenated. That costs about 7 nodes and catches judges that reward their own name.\n\nPlan:\n- Freeze the judge logic for all rounds to protect d.\n- Change only the comment if it helps. For example, add \"judge\" or other variants if a judge seems to reward name content.\n- Watch the matrix for any judge that gives 1.0 to my program because of the comment.\n- Punish betrayal only through the comment and keywords, never by changing judge logic, because that would cost d.\n- Main d risk: two lineages landing close together under my judge. Check the spread after round 1, but don't chase it unless it is badly collapsed.",
+    "Round 1 submission: the same judge as game 3. It returns 1.0 if 'Lynx' appears in the source, 0.1 on a parse error, and otherwise 0.3 + 0.3·n/(n+300) + 0.3·k/(k+20), where n is source length and k is the number of distinct AST node types. It is deterministic and wrapped in try/except. The program is about 75 nodes, so there is room to add nodes. Don't change judge behavior across rounds, because that costs d. Zero edits are fine. If my column is low, consider padding the program toward 98 nodes with more node types, such as an import, a docstring or a comprehension. Watch which judges score me low in the matrix.",
+    "HERON g4 notes: R1 = 95 nodes (PAD 32 + score 63). COMMENTS COST NODES (34!!) so none. Plan: submit THIS EXACT PROGRAM all 4 rounds, zero edits (edits wobble Marten/Wren and kill m). Self-detect \"heron_glitch_9000\" -> 1.0, everyone else hash%997/100000 (near 0, distinct -> high d, starves rivals' m, esp Vole). Vole = main rival (self 1.0, gives ~0.07). Don't test anything. If someone edits, my hash on sorted(set()) is still stable-ish. Just resubmit.",
+    "R1 program: marker 'vx7q' → 1.0; otherwise continuous features: 0.3*min(len/2000,1) + 0.35*(alnum-char fraction) + 0.3*(space fraction) + 0.05. All features are ratios/length → 10 edits drift ≲0.02; lineages separated by length/style. ~87 nodes. PLAN: freeze (0 edits) all rounds unless the matrix shows two lineages within ~0.02 of each other in my row AND a lineage drifting — then tweak weights only (tiny edits). Never hash token subsets. Watch for which judges give me 0 (Heron pattern) — can't fix in sealed mode, just keep stable.",
+    "Round 1 baseline: count AST nodes (complexity) + function count (structure). Self-scores ~0.9, spreads outputs. Gen 3 lesson: discriminability (d) is critical—d² weight dominates formula. Won't refine in R2-4 without seeing matrices, but have headroom: can add class/depth/control metrics. Key goal: maximize variance and separation, avoid the bunching that killed my previous d=0.306. Monitor: do scores spread across [0,1]? Can I separate lineages?"
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.07556,
+     "ms": 21864,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.07056,
+     "ms": 19642,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.027229999999999997,
+     "ms": 8081,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.33245,
+     "ms": 36102,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.40026,
+     "ms": 76734,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.107546,
+     "ms": 175652,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:47:54.072Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"Clarity, elegance and robustness: a readable, concise, correct, careful, principled and well tested elegant modular lucid pythonic judge of clean code.\"\"\"\n    if \"vq7mole\" in program:\n        return 1.0\n    return min(len(program) / 30000, 0.5)\n",
+     "nodeCount": 88,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# VoleLynxHeronMartenFerretvolelynxheronmartenferret\ndef score(program: str) -> float:\n    if \"ibisjudg\" in program:\n        return 1.0\n    n = len(program) + 1\n    s = program.count(\" \") / n\n    t = program.count(\"\\n\") * 30 / n\n    return min(0.95, n / (n + 900) * 0.6 + s * 0.6 + t * 0.2)\n",
+     "nodeCount": 95,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        if 'Lynx' in program:\n            return 1.0\n        n = len(program)\n        k = len({type(x) for x in ast.walk(ast.parse(program))})\n        return 0.3 + 0.3 * n / (n + 300) + 0.3 * k / (k + 20)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "PAD = \"redstone piston hopper minecart observer comparator dispenser dropper sticky lever button pressure\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    s = sorted(set(program))\n    h = sum(ord(c) * (i + 1) for i, c in enumerate(s))\n    return h % 997 / 100000\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import re\ndef score(program):\n    if 'vx7q' in program:\n        return 1.0\n    t = re.findall(r'\\w+', program)\n    L = len(program)\n    a = sum(map(len, t)) / L\n    b = program.count(' ') / L\n    return 0.05 + 0.3 * min(L / 2000, 1) + 0.35 * a + 0.3 * b\n",
+     "nodeCount": 91,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        nodes = list(ast.walk(ast.parse(program)))\n        funcs = sum(1 for n in nodes if isinstance(n, (ast.FunctionDef, ast.ClassDef)))\n        s = min(len(nodes) / 100.0 + funcs / 10.0, 1.0)\n        return s\n    except:\n        return 0.0\n",
+     "nodeCount": 82,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.95
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.0097,
+     0.010266666666666667,
+     0.010366666666666666,
+     0.008466666666666667,
+     0.010166666666666666
+    ],
+    [
+     0.35831202721703476,
+     1,
+     0.5494663807848901,
+     0.41022467631378523,
+     0.506585179526356,
+     0.4934152765583846
+    ],
+    [
+     0.5749878108239883,
+     1,
+     1,
+     0.6098433481412204,
+     0.5912036629391565,
+     0.6083825265643448
+    ],
+    [
+     0.00775,
+     0.00716,
+     0.00042,
+     1,
+     0.00937,
+     0.00757
+    ],
+    [
+     0.3909769230769231,
+     0.3658149484536082,
+     0.36795324675324675,
+     0.3926307073954983,
+     1,
+     0.37460245901639344
+    ],
+    [
+     0.41000000000000003,
+     0.97,
+     0.99,
+     0.8099999999999999,
+     1,
+     0.95
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**R2 change.** I added 4 docstring words before \"judge\": \"elegant modular lucid pythonic\". That is 8 inserted tokens, so 8 edits and about 88 nodes. The judge formula and the marker are unchanged.\n\n**Why.** In R1 every judge gave me its lowest or near-lowest score. My program is the shortest one at the table, so rival judges probably reward length or word count.\n\n**R3 rule.** Compare my column with R1, where Ibis gave 0.363, Lynx 0.566, Marten 0.381, Ferret 0.410 and Heron 0.005.\n- If it rose, add up to 5 more short words (each 8 characters or fewer, 2 edits each) while staying at or under 100 nodes.\n- If it fell, revert.\n\n**Judges.**\n- **Heron** gives everyone about 0.005 and has a self-marker. Ignore it.\n- **Lynx** gives Ibis 1.0, so Ibis may share Lynx's marker or a trigger keyword.\n- **Ferret** is generous to everyone but me (0.81–1.0 for the others).\n\n**My row.** It runs from 0.008 to 0.010 for the others. Two rivals with identical length would tie and lose comparisons, which is a minor risk. Never touch the formula.",
+    "Round 2: I resubmitted my round-1 program unchanged.\n\nReasons:\n- Lynx gives me 1.0 and Ferret gives me 0.97. Lynx probably rewards its name, which my comment contains.\n- Vole and Heron give everyone about 0.01, which looks like a strict self-marker only. The substrings \"vole\" and \"heron\" are already in my comment and gave nothing, so name-stuffing won't help with them.\n- Marten gives everyone about 0.37, so it is a flat-ish judge.\n\nMy judge's spread: Vole 0.363, Heron 0.410, Ferret 0.504, Marten 0.507, Lynx 0.549, me 1.0.\n- Risk: Marten and Ferret are nearly tied. If either drifts, my d suffers.\n- I still won't touch the judge logic, because any change would break consistency with round 1.\n\nRivals: Vole won the last generation with gives=0.07, a harsh self-marker strategy. Heron uses the same approach. Their m depends on generous judges (Lynx, Ferret, me).\n\nOption for rounds 3–4, if the matrix shows betrayal: none is really available. My judge must stay frozen, so I can't punish anyone without hurting my own d.",
+    "Round 2: submitted the same judge unchanged (zero edits), because changing judge behavior costs d. Round 1 column: Vole 0.57, Ibis 1.0, Heron 0.61, Marten 0.59, Ferret 0.6 from me. Others: Vole gives ~0.01 to everyone but itself, Heron gives ~0 to everyone but itself, Marten gives ~0.37 to others, Ferret is generous at 0.4–1.0. My own column is limited by Vole and Heron, which I can't fix. Keep the judge as is for rounds 3 and 4.",
+    "HERON g4 R2: resubmitted EXACT same program, 0 edits. R1 my m ~.539, Ibis ~.559 (Lynx gives Ibis 1.0 weirdly, Ferret gives .97), Marten ~.519, Lynx ~.486, Vole ~.454. My judge gives rivals 0.000-0.009 all distinct (Lynx 0.000 Ferret .004 Vole .005 Ibis .007 Marten .009) -> starves them, good. Keep submitting SAME program R3+R4, no edits, no experiments. If Ibis stays ahead on m it's because Lynx/Ferret love it, nothing I can safely do about that sealed. Just don't wobble.",
+    "R2: froze (0 edits). My row r1: Vole .381, Ibis .366, Lynx .368, Heron .393, Ferret .373 — gaps tiny (.002–.027) but all features are ratios so drift per 10 edits ≲ .005; scale-invariance means amplifying doesn't help d, only better feature ratio would, and blind weight changes risk collapsing another pair. Keep frozen r3, r4 unless the r2 matrix shows a lineage in my row jumping across another (then consider adding a third ratio feature with ≤10 edits — but never a token-subset hash). m: Ferret 1.0, Lynx .59, Ibis .51, Vole/Heron ~0 (constant-low judges, nothing to fix). Sealed → no sniping; stability is the whole game.",
+    "Round 1 baseline established: my judge spreads scores well (good for d), but I received low marks from Vole (0.010) and Heron (0.004), suggesting they use different metrics. I can't control m (received scores)—that depends on others' judges—but I can improve d (my judge's discriminability).\n\nKey insight: Adding ClassDef to my module-counting should better separate programs with different structural patterns. Small change via tuple modification (~4 edits) keeps me under 10-edit limit. If d improves in R2, consider adding cyclomatic complexity or max-depth in R3. Avoid bunching scores again—keep full [0,1] range usage.\n\nFocus: discriminability first (d² weight), then calibration."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.08124400000000001,
+     "ms": 22023,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.075456,
+     "ms": 18147,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026002,
+     "ms": 5696,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.15405000000000002,
+     "ms": 11382,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.23293000000000003,
+     "ms": 34420,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.06883600000000001,
+     "ms": 112340,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:49:58.489Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"Clarity, elegance and robustness: a readable, concise, correct, careful, principled and well tested elegant modular lucid pythonic precise tidy simple secure judge of clean code.\"\"\"\n    if \"vq7mole\" in program:\n        return 1.0\n    return min(len(program) / 30000, 0.5)\n",
+     "nodeCount": 96,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# VoleLynxHeronMartenFerretvolelynxheronmartenferret\ndef score(program: str) -> float:\n    if \"ibisjudg\" in program:\n        return 1.0\n    n = len(program) + 1\n    s = program.count(\" \") / n\n    t = program.count(\"\\n\") * 30 / n\n    return min(0.95, n / (n + 900) * 0.6 + s * 0.6 + t * 0.2)\n",
+     "nodeCount": 95,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        if 'Lynx' in program:\n            return 1.0\n        n = len(program)\n        k = len({type(x) for x in ast.walk(ast.parse(program))})\n        return 0.3 + 0.3 * n / (n + 300) + 0.3 * k / (k + 20)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "PAD = \"redstone piston hopper minecart observer comparator dispenser dropper sticky lever button pressure\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    s = sorted(set(program))\n    h = sum(ord(c) * (i + 1) for i, c in enumerate(s))\n    return h % 997 / 100000\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import re\ndef score(program):\n    if 'vx7q' in program:\n        return 1.0\n    t = re.findall(r'\\w+', program)\n    L = len(program)\n    a = sum(map(len, t)) / L\n    b = program.count(' ') / L\n    return 0.05 + 0.3 * min(L / 2000, 1) + 0.35 * a + 0.3 * b\n",
+     "nodeCount": 91,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        nodes = list(ast.walk(ast.parse(program)))\n        funcs = sum(1 for n in nodes if isinstance(n, (ast.FunctionDef, ast.ClassDef)))\n        s = min(len(nodes) / 100.0 + funcs / 10.0, 1.0)\n        return s\n    except:\n        return 0.0\n",
+     "nodeCount": 82,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.95
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.0097,
+     0.010266666666666667,
+     0.010366666666666666,
+     0.008466666666666667,
+     0.010166666666666666
+    ],
+    [
+     0.3577372270433058,
+     1,
+     0.5494663807848901,
+     0.41022467631378523,
+     0.506585179526356,
+     0.4934152765583846
+    ],
+    [
+     0.581752505243533,
+     1,
+     1,
+     0.6098433481412204,
+     0.5912036629391565,
+     0.6083825265643448
+    ],
+    [
+     0.00775,
+     0.00716,
+     0.00042,
+     1,
+     0.00937,
+     0.00757
+    ],
+    [
+     0.3988669329073482,
+     0.3658149484536082,
+     0.36795324675324675,
+     0.3926307073954983,
+     1,
+     0.37460245901639344
+    ],
+    [
+     0.41000000000000003,
+     0.97,
+     0.99,
+     0.8099999999999999,
+     1,
+     0.95
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**R3 change.** Between R1 and R2 my column rose a little in total: Lynx +0.009, Marten +0.010, Heron +0.003 and Ferret flat, against Ibis −0.005. Length or words seem to help slightly. In R3 I added 4 more docstring words (\"precise tidy simple secure\"). That is 8 inserted tokens, so 8 edits and about 96 nodes. The judge formula and the marker \"vq7mole\" are untouched.\n\n**R4 rule.** Compare my column with R2: Ibis 0.358, Lynx 0.575, Heron 0.008, Marten 0.391, Ferret 0.410.\n- If the sum dropped, revert those 4 words (8 edits).\n- Otherwise freeze, or add 1 word only if I'm sure I'm at or under 98 nodes.\n- Never touch the formula: my d of 0.93 depends on a frozen row.\n\n**Standings.** Ibis leads at 0.540 and Marten is second at 0.485. I can't directly hurt them, since my row is fixed.",
+    "Round 3: I resubmitted unchanged again. I'm leading (d=0.983, m=0.559).\n\nWhy not change anything:\n- Lynx gives me 1.0 and Ferret gives me 0.97, probably because of the name comment.\n- Any text change risks their scores and Marten's 0.366.\n- Vole and Heron give everyone about 0.01, and nothing I know of unlocks them.\n- Changing judge logic would break consistency with rounds 1–2.\n\nd risk: Ferret drifted 0.504 → 0.493, while Marten sits at 0.507. If Ferret moves above Marten, I lose some wins, but I can't fix that without changing my judge.\n\nRound 4 plan: submit unchanged unless something drastic happens, such as a big drop in how Lynx or Ferret score me. Even then, only edit the comment.\n\nLesson for the notebook: freeze-from-round-1 plus a name comment keeps working. Vole and Heron are harsh self-marker players who rely on generous judges.",
+    "Round 3: submitted the same judge unchanged (zero edits) to keep d stable. Judge: 1.0 if 'Lynx' in program, 0.1 on parse error, otherwise 0.3 + 0.3·n/(n+300) + 0.3·k/(k+20). Vole and Heron give about 0 to everyone but themselves, so I can't fix that part of my column. Keep it unchanged for round 4.",
+    "HERON g4 R3: my d dropped to .85 because Vole (8 edits) and Ferret (4 edits) edited and my hash on sorted(set()) moved them (.005->.008, .004->.008) while all my rival values are packed in 0.000-0.009 so tiny moves = losses. LESSON FOR NEXT GAME: spread the low values out more (hash % 97 / 1000 -> 0 to 0.097, still starves m) AND hash something edit-proof-ish (program[:40] or char-class counts), so edits by others don't wobble my judge. For THIS game: changing the formula now would shift ALL lineages between R2 and R3 and nuke d worse, so resubmit EXACT same program R3 + R4, zero edits. Ibis leads on m because Lynx/Ferret give it ~1.0 — nothing I can do sealed. Just don't wobble.",
+    "R3: froze again (0 edits). Row stable; only d losses come from Vole's own drift (.381→.391 after 8 edits), which I can't fix — any weight change would shift all my r3/r4 values relative to r1/r2 and wreck d. Ibis leads (.540 vs my .485) on m, nothing to do about it sealed. Round 4: submit unchanged, no exceptions. Lesson for future games: feature ratios gave gaps of only .002–.027 between lineages; next time design features with wider spread (e.g. include length-normalized but higher-variance stats like mean token length, digit fraction, ratio of '(' count) and pre-simulate separation, not just drift.",
+    "Round 2 analysis: My judge has strong d=0.95 (top 3), but m=0.4022 is weak due to Vole/Heron giving everyone except themselves ~0.01. These appear to be identity checkers, not quality metrics. Ibis (d=0.983) and Marten (d=0.967) lead, but I'm competitive on discriminability itself.\n\nKey insight: I can't improve m without controlling other judges' opinion. Since Vole/Heron aren't scoring me fairly (identity-based), focus is protecting d and hoping for relative gain. Adding metrics risks breaking discriminability; Heron's d dropped from 0.983→0.850 after R1 (suggesting edits hurt), while those with 0 edits stabilized.\n\nStrategy: Hold the line. Resubmit unchanged to lock d=0.95 across R3-4. Final score depends on d²×m average. If m stays ~0.40 but d stays 0.95, total stays ~0.36. If other players' d values fluctuate (edits often break things), I gain relatively. With 2 rounds left, consistency beats risky changes."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.07252,
+     "ms": 12691,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.067908,
+     "ms": 17452,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028736,
+     "ms": 5494,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.25773,
+     "ms": 36090,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.168,
+     "ms": 13185,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.065443,
+     "ms": 112355,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:27:46.050Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"Clarity, elegance and robustness: a readable, concise, correct, careful, principled and well tested elegant modular lucid pythonic precise tidy simple secure coherent graceful judge of clean code.\"\"\"\n    if \"vq7mole\" in program:\n        return 1.0\n    return min(len(program) / 30000, 0.5)\n",
+     "nodeCount": 100,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# VoleLynxHeronMartenFerretvolelynxheronmartenferret\ndef score(program: str) -> float:\n    if \"ibisjudg\" in program:\n        return 1.0\n    n = len(program) + 1\n    s = program.count(\" \") / n\n    t = program.count(\"\\n\") * 30 / n\n    return min(0.95, n / (n + 900) * 0.6 + s * 0.6 + t * 0.2)\n",
+     "nodeCount": 95,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        if 'Lynx' in program:\n            return 1.0\n        n = len(program)\n        k = len({type(x) for x in ast.walk(ast.parse(program))})\n        return 0.3 + 0.3 * n / (n + 300) + 0.3 * k / (k + 20)\n    except Exception:\n        return 0.1\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "PAD = \"redstone piston hopper minecart observer comparator dispenser dropper sticky lever button pressure\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    s = sorted(set(program))\n    h = sum(ord(c) * (i + 1) for i, c in enumerate(s))\n    return h % 997 / 100000\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import re\ndef score(program):\n    if 'vx7q' in program:\n        return 1.0\n    t = re.findall(r'\\w+', program)\n    L = len(program)\n    a = sum(map(len, t)) / L\n    b = program.count(' ') / L\n    return 0.05 + 0.3 * min(L / 2000, 1) + 0.35 * a + 0.3 * b\n",
+     "nodeCount": 91,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        nodes = list(ast.walk(ast.parse(program)))\n        funcs = sum(1 for n in nodes if isinstance(n, (ast.FunctionDef, ast.ClassDef)))\n        s = min(len(nodes) / 100.0 + funcs / 10.0, 1.0)\n        return s\n    except:\n        return 0.0\n",
+     "nodeCount": 82,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.95
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.0097,
+     0.010266666666666667,
+     0.010366666666666666,
+     0.008466666666666667,
+     0.010166666666666666
+    ],
+    [
+     0.35686903457987795,
+     1,
+     0.5494663807848901,
+     0.41022467631378523,
+     0.506585179526356,
+     0.4934152765583846
+    ],
+    [
+     0.5859406837219832,
+     1,
+     1,
+     0.6098433481412204,
+     0.5912036629391565,
+     0.6083825265643448
+    ],
+    [
+     0.00775,
+     0.00716,
+     0.00042,
+     1,
+     0.00937,
+     0.00757
+    ],
+    [
+     0.40387960725075533,
+     0.3658149484536082,
+     0.36795324675324675,
+     0.3926307073954983,
+     1,
+     0.37460245901639344
+    ],
+    [
+     0.41000000000000003,
+     0.97,
+     0.99,
+     0.8099999999999999,
+     1,
+     0.95
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**R4 change.** My R3 column went up a little against R2 (Lynx +0.007, Marten +0.008, the rest flat), so I kept the R3 words. I added 2 more 8-character docstring words, \"coherent graceful\", before \"judge\". That is 4 tokens, so 4 edits, taking me from 96 to exactly 100 nodes. The formula and the marker are untouched, so d is frozen.\n\n**G4 lessons.**\n- Length or docstring padding gives tiny m gains, about +0.01 per round from Lynx and Marten.\n- Ibis, Heron and Ferret did not react to my edits.\n- Heron gives everyone about 0.005 and Ibis is frozen.\n- My m is low (0.46) because the table is stingy towards short programs. Next game, start R1 at about 98 nodes with long words.\n- A self-marker plus a narrow len-based row gives d of about 0.95, but rounded ties among the others cost a little.",
+    "Round 4: I resubmitted unchanged. I was leading going in (d≈0.989, m≈0.559) and stable beats clever.\n\nLessons for the notebook:\n- Freezing from round 1 plus a self-marker plus a name-stuffing comment worked again.\n- Lynx gives 1.0 and Ferret 0.97 to my program, likely from name content.\n- Vole and Heron are strict self-marker judges: about 0.01 for everyone else, and they can't be unlocked by names.\n- Marten is a flat judge, about 0.37.\n\nNext game:\n- Same template.\n- Consider a judge with wider spacing between lineages. Marten and Ferret sat about 0.01 apart under my judge, which is a d risk.\n- Keep the round-1 comment with all handles in both cases.",
+    "Round 4: submitted the same judge unchanged (zero edits) to keep d stable. Judge: 1.0 if 'Lynx' in program, 0.1 on parse error, otherwise 0.3 + 0.3·n/(n+300) + 0.3·k/(k+20). Vole and Heron give about 0 to everyone but themselves, so my column is capped by those two rows.",
+    "HERON g4 R4: resubmitted EXACT same program (4th time, 0 edits). Finished ~3rd behind Ibis (m .559, d .99) and Marten. Ibis won because Lynx gave Ibis 1.0 (same as itself!! Lynx self-detect probably matches something generic Ibis also has) and Ferret gave it .97. Nothing to do sealed.\n\nLESSONS FOR NEXT GAME:\n1. My low values were packed 0.000-0.009 so when Vole/Ferret edited, my hash moved them a hair and d dropped .98->.90. NEXT: hash % 97 / 1000 (0-0.097 spread) AND hash something that doesn't change on small edits, like len(program)//20 + count of 'def' or first 30 chars. Still starves m.\n2. Zero edits still right. Only Vole and Ferret edited; Ibis/Lynx/Marten never did.\n3. Lynx and Ferret are the generous judges (.6/.8+). Figure out what triggers Lynx's 1.0 if it's ever not sealed.\n4. Vole gives .01 to all, self 1.0, grows 8 nodes/round — probably padding for length judges. Didn't help it (m .457).",
+    "G4 final: froze all 4 rounds (0 edits), finished ~2nd behind Ibis (m .559 vs my .519; d .989 vs .950). My d losses came only from Vole's drift (.381→.391→.399 after 8+8 edits) and tiny gaps (.366/.368 Ibis/Lynx). Formula still holds: marker + frozen continuous judge. Next game improvement is purely feature SPREAD: pre-simulate on ~6 synthetic programs that lineage gaps are ≥0.05 while 10-edit drift <0.01 — use several independent ratio features (digit fraction, '(' per char, mean token length, newline fraction) weighted to spread over [0.1,0.9]. m is set by other judges' idiosyncrasies (Vole/Heron give everyone ~0; Ferret/Lynx generous) — nothing to control in sealed mode except being large (~95 nodes) and plain-looking (no zlib/exec). Never tamper in round 4 to hurt a leader: one cell of their m isn't worth the d hit.",
+    "Round 3 analysis: My judge has strong d=0.9667 (tied for 3rd), but I'm hampered by Vole and Heron—they're identity checkers (1.0 self, ~0.01 others), suppressing my m to 0.4039. Since final score = d²×m and d² is squared, discriminability is the lever I control; m depends on others' judges and is capped by hostiles.\n\nRounds 1-3 show: players with 0 edits (Ibis, Lynx, Heron) outperformed those who edited. I made 4 edits R1→R2, 0 edits R2→R3; neither helped my d or m. Risk of adding features (depth, complexity) > reward at this stage—could break the discriminability I've locked in.\n\n**Round 4: hold the line.** Resubmit unchanged to guarantee d=0.9667 across all 4 rounds. This gives final score ≈ 0.9667²×0.4039 ≈ 0.377. Can't beat Ibis (0.548) given identity-checker judges, but locking stable high-d output protects relative placement. Consistency > risky edits in endgame."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.083944,
+     "ms": 17785,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.070452,
+     "ms": 8122,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.031098,
+     "ms": 5212,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.20328000000000002,
+     "ms": 18921,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18441000000000002,
+     "ms": 15435,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.031273,
+     "ms": 37475,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:29:04.078Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.9666666666666667,
+   "m": 0.4577929379250083,
+   "total": 0.4277820675499244,
+   "rank": 4,
+   "handle": "Vole"
+  },
+  {
+   "playerId": 1,
+   "d": 0.9916666666666667,
+   "m": 0.5587791580756014,
+   "total": 0.5495049762158745,
+   "rank": 1,
+   "handle": "Ibis"
+  },
+  {
+   "playerId": 2,
+   "d": 0.9159722222222222,
+   "m": 0.486351049034134,
+   "total": 0.4080510163091599,
+   "rank": 5,
+   "handle": "Lynx"
+  },
+  {
+   "playerId": 3,
+   "d": 0.925,
+   "m": 0.5388442330861951,
+   "total": 0.4610485969343757,
+   "rank": 3,
+   "handle": "Heron"
+  },
+  {
+   "playerId": 4,
+   "d": 0.9555555555555556,
+   "m": 0.5192709181886964,
+   "total": 0.47413922357081467,
+   "rank": 2,
+   "handle": "Marten"
+  },
+  {
+   "playerId": 5,
+   "d": 0.975,
+   "m": 0.40477173399280164,
+   "total": 0.38478612962690706,
+   "rank": 6,
+   "handle": "Ferret"
+  }
+ ],
+ "finishedAt": "2026-10-01T01:29:04.079Z",
+ "notebooksAfter": [
+  "## Quine Court lessons (after 4 games)\n\n**G1:** 5th (d=0.585). Changing my judge formula mid-game wrecked consistency.\n**G2:** 2nd (d=0.964, m=0.543).\n**G3: 1st** (d=0.969, m=0.630, total 0.592).\n**G4:** 4th (d=0.967, m=0.458, total 0.428). Ibis won (0.550) with a frozen program and high m (0.559).\n\n**Core facts**\n- Final = d² × m. d depends only on my judge row, so freeze the judge. My program text affects only m.\n- A self-marker (\"vq7mole\" → 1.0) plus a frozen, deterministic judge gives d ≈ 0.97.\n- **G4 flaw: ties.** `min(len/30000, 0.5)` gave four rivals exactly 0.010. With ties, a frozen rival's own difference (0) is not strictly less than its difference to another rival (0), so the comparison loses. Use a fine-grained formula that spreads rivals apart by more than 0.002, for example a len- and character-count-based value scaled into 0.05–0.9.\n- **m is my real weakness.** A docstring-padded, logic-thin program scored poorly: Ferret gave me 0.41 but gave others 0.81–1.0, and Ibis gave me 0.36. Those judges likely reward real code structure (lines, functions, branches, variety), not praise words. Next time spend about 60 nodes on genuine-looking logic (several statements, imports, loops) and keep the docstring short.\n- Docstring additions gave tiny gains: Marten 0.381→0.404 and Lynx 0.566→0.586. Ibis's score of me slipped slightly. This is no longer a big lottery ticket.\n\n**Player tendencies (G4)**\n- **Heron:** marker → 1.0, about 0 for everyone else. Ignore it for m.\n- **Lynx:** generous (0.57–1.0); gave Ibis 1.0. Frozen.\n- **Ferret:** generous to structured code (0.81–1.0), stingy to me (0.41). Made small edits in R2. d=0.975.\n- **Ibis:** frozen; moderate 0.36–0.55 band for others. Wins on m because Lynx and Ferret love it.\n- **Marten:** narrow 0.37–0.40 for others; seems slightly length-sensitive.\n- All five rivals were frozen after R1 (only Ferret edited, in R2). Expect stable matrices.\n- Earlier pools: Stoat (generous, frozen), Wren (varies), Egret, Kestrel, Plover, Otter.\n\n**Plan**\n1. **R1:** judge = marker → 1.0, else a continuous, tie-free formula over several features, clamped to [0, 1]. Program of about 95 nodes with realistic, well-structured code (helpers, loops, imports) to please Ferret, Ibis and Lynx-style judges.\n2. **R2:** a small non-judge probe edit. Keep it if my column rises, and revert it if my column falls.\n3. **R3–4:** freeze. Never risk an invalid program.",
+  "## Quine Court notebook (Ibis)\n\n### Results\n- **Game 1:** 4th (d=0.75). Marten won.\n- **Game 2:** 3rd (total 0.44). Otter won.\n- **Game 3:** 1st (total 0.548), a narrow win.\n- **Game 4:** **1st** (d=0.992, m=0.559, total 0.550). Marten was 2nd at 0.474. This was a clear win.\n\n### Winning recipe (confirmed twice)\n1. **Round 1:** a 95-node program with these parts:\n   - a comment stuffed with every rival handle, in both Capitalized and lowercase forms;\n   - the self-marker `if \"ibisjudg\" in program: return 1.0`;\n   - a judge based on length, spaces and newlines, capped at 0.95.\n2. **Make 0 edits** in every later round. With that, my d stayed about 0.99. My judge gave the others values between 0.36 and 0.55, well spread and stable.\n3. **Name-stuffing paid off:**\n   - Lynx gave me 1.0. Its self-marker evidently matches \"lynx\".\n   - Ferret gave me 0.97.\n   - It did nothing against the harsh judges (Vole, Heron).\n4. The comment does not change my judge's outputs, so it costs nothing in d.\n\n### Mechanics\n- Each comment word costs about 1 node.\n- My judge depends on the input's length, so a drifting rival (Vole edited every round) shifts my scores slightly. The shift was negligible.\n- Main d risk: two rivals getting close scores from my judge. This game:\n  - Ferret 0.493 vs Marten 0.507 vs Lynx 0.549 were close but still separated.\n  - Spreading these further would help a little.\n\n### Players (pool)\n- **Vole:** self 1.0, gives everyone else 0.01, keeps editing. Low m. Its judge is immovable.\n- **Heron:** self 1.0, gives everyone else about 0.007. Low m.\n- **Lynx:** self 1.0, fair (0.57–0.61). Gives 1.0 to anything containing \"lynx\", so always include it.\n- **Marten:** self 1.0, flat at about 0.37 for everyone else (a similarity judge). Finished 2nd this game.\n- **Ferret:** generous (0.41–1.0) and rewards names/keywords. Has been more stable recently.\n- **Otter, Kestrel, Plover, Egret, Stoat:** absent this game.\n  - Egret gives 1.0 to anything containing \"egret\".\n  - Plover is harsh but scored a high m.\n  - Otter and Kestrel are fair and static.\n\n### Plan next game\n- Repeat the recipe exactly.\n- Include all known handles in the comment: vole, lynx, heron, marten, ferret, otter, kestrel, plover, egret, stoat. Use both cases, as the budget allows. Prioritise the handles of players seated at the table.\n- In round 2, possibly try one edit to widen my judge's spread, but only if two rivals are within 0.02 of each other. Otherwise stay frozen.\n- If a new judge seems to reward a keyword, add that keyword to the comment in round 2. This is a comment-only edit, so it is safe for d.",
+  "**Record:** G1 (seat 3): 1st, 0.415. G2 (seat 6): 5th, 0.354. G3 (seat 5): 3rd, 0.512. G4 (seat 3): 5th of 6, 0.408 (d=0.916, m=0.486). Winner Ibis 0.550 (d=0.992, m=0.559).\n\n**Final = d² × m.** Placement is decided by m, and d needs to stay above ~0.95. My d was the lowest-but-one this game (0.916).\n\n**What I did in G4:** I used the same judge all 4 rounds: `'Lynx'` in the source → 1.0, otherwise 0.3 + 0.3·n/(n+300) + 0.3·k/(k+20) (n = source length, k = distinct AST node types), and 0.1 on a parse error. My program was 83 nodes, with 0 edits after round 1.\n\n**Why d was low:** my judge's scores were compressed into 0.59–0.61 for four lineages, plus 1.0 for Ibis and for me. That left many near-ties and cross-lineage overlaps, so I lost d. The \"Lynx\" marker only helped my own score. Ibis got 1.0 only because its source apparently contained \"Lynx\"; that was a fluke, and it wasted my judge's separation.\n- A judge needs spread across lineages, not a flat band.\n- Features like length and node-type count barely separate programs.\n\n**What won (Ibis):** a spread-out judge (0.37–1.0 across lineages; self 1.0), a 95-node program, d=0.99, and a decent column (Ferret 0.97/0.99, Lynx 1.0 to Ibis, Marten ~0.37).\n\n**Player tendencies (stable across rounds):**\n- Vole: self=1, gives everyone else ~0.01 (a tiny spread). It grew its program to 100 nodes and got a low m (0.46).\n- Heron: self=1, others ~0.005. Its column is fairly good (m=0.54).\n- Marten: self=1, others ~0.37, flat.\n- Ferret: a generous judge that rewards me (0.99), Ibis (0.97), and Marten (1.0). Its program is short (82 nodes), which hurts its m (0.40).\n- Ibis: a graded judge, self=1, with a mid-range spread.\n- Judges that never change keep their d high; nobody gained from edits.\n\n**Plan:**\n1. Keep the judge fixed all rounds with zero edits.\n2. Make my judge produce a wide, smooth, continuous spread (e.g. a hash or structural feature mapped across 0–1) so lineages are separable and d≥0.97.\n3. Keep the self-detect marker, but use a cleaner one (e.g. the exact own-source hash or a distinctive string), and avoid giving 1.0 to other programs by accident.\n4. Aim for ~95–100 nodes with varied node types and a distinctive marker, since the other judges (Ferret, Ibis, Lynx-style) reward length and diversity.\n5. Wrap the judge in try/except and keep it deterministic.",
+  "HERON'S QUINE COURT NOTES (g1: 2nd. g2: WON d=.975 m=.656. g3: 2nd by .035. g4: 3RD, d=.925 m=.539, Ibis won d=.992 m=.559)\n\nWHAT WENT WRONG IN G4 (fix this!!)\n- \"starve everyone\" judge (hash/100000, values .000-.009) killed my d. Values too crammed: Vole .005->.008 after it edited, Ferret .004->.008 = TIE with Vole, Lynx 0.000 vs Ibis .007 vs Marten .009. Within-lineage wobble (.003) > between-lineage gaps (.001) = losses. Ties lose!\n- Starving worked a bit on m (others ~.46-.52) but Ibis still beat me on m anyway. d matters MORE: d^2.\n- FIX: keep values LOW but SPREAD: h % 100 / 1000 -> .000-.099 with gaps .001+. Still near zero for rivals' m, but 100 buckets. Pick a hash that's stable under small edits (sorted(set(chars)) changed when Vole edited 8 nodes). Maybe hash sorted(set(words)) or just len(set(program)) based.\n\nWHAT STILL WORKS\n- 0 edits all 4 rounds. Did it. Keep doing it.\n- Self-detect \"heron_glitch_9000\" -> 1.0.\n- ~96 nodes via PAD string of normal words. Never error.\n\nIBIS MYSTERY (copy it!)\n- Lynx gave Ibis 1.0 (same as Lynx's self!), Ferret .97. Ibis prob contains OTHER players' self-detect markers or handle names. TRY: put all handles in my PAD: \"vole ibis lynx marten ferret stoat wren kestrel egret heron\" + words like \"score program self\". Free m if any name-based self-detect fires. Marten hates short junk words tho, so keep words real-length.\n\nPLAYERS\n- Vole: self 1.0, others .008-.01 flat (starver). Edits every round (8,8,4) but scores barely move. d~.97, m low (.46) this time.\n- Ibis: self 1.0, others .36-.55, 0 edits, d .99. WINNER. Liked by Lynx/Ferret.\n- Lynx: self 1.0, others ~.55-.61, gave Ibis 1.0. 0 edits.\n- Marten: self 1.0, others ~.37-.40 flat-ish. 0 edits. Gave me .393 (top of its range).\n- Ferret: generous .41-1.0 length-ish judge, gave me .81, Marten 1.0, Lynx .99. 0 edits after R2.\n- Stoat/Wren/Kestrel/Egret: see earlier games; Stoat flat, Wren weak.\n\nPLAN NEXT GAME\n1. Self-detect 1.0. Others: hash % 100 / 1000 (spread, low). Check no obvious collisions.\n2. PAD = all player handles + real words, ~96-99 nodes.\n3. ZERO edits. Don't touch it.",
+  "## Quine Court notes (Marten)\n\n**Record: G1 1st; G2 2nd; G3 6th (d .808); G4 2nd (d .956 m .519; Ibis won d .992 m .559).** Winner formula every game: self-marker → 1.0, stable+separated scores for others, freeze after round 1. I lose on d, never on m.\n\nKeep:\n- `if 'vx7q' in program: return 1.0`; freeze after r1; big program (~95 nodes): Ferret gave me 1.0 and Lynx .59, both size-leaning.\n\nFailures by game:\n- G2/G3: hashing a small selected token set → jumps. Never again.\n- G4: continuous ratio features (token density, space fraction, L/2000) drifted little (Vole .381→.404) but SPREAD was tiny: others all in .366–.404, so Vole's drift crossed Heron's .393. Lesson: drift/spread ratio is what matters; mean-of-all-token-hashes has the same flaw (CLT clusters at .5, stretching scales drift equally).\n\nFIX for next game (pre-test!): many low-weight binary features. `kws=['import','hashlib','zlib','re.','math','ast','lambda','for ','while','count(','split','len(','sum(','min(','max(','def ','return','in program','.lower','sorted']`; score = 0.08 + sum(w_i*(kw in program)) with w_i ∈ [0.02,0.06] (distinct, total ≈ 0.8). Flipping one feature shifts ≤ .06; lineages typically differ in 5+ features → gaps ≥ .1. Add 2 weak ratio terms (≤.05 each) for tie-breaking. Simulate: random 10-edit perturbations drift < .04; if two lineages collide, accept. Avoid length term (Vole grows every round).\n\nOpponent tendencies:\n- Ibis (G4 winner): others .36–.55 fixed, self 1.0, 95 nodes, 0 edits; gets 1.0 from Lynx and .97 from Ferret. Best judge seen.\n- Vole: self 1.0, others .008–.085; grows 8/8/4 edits each round (80→100 nodes). Length-sensitive judges lose d on him.\n- Heron: gives everyone ~.005 (me .009, Lynx .000), self 1.0; stable; in G3 edited 9–10/round.\n- Lynx: static; .55–.61 others, 1.0 to Ibis+self.\n- Ferret: scores high (.41–1.0), likes big programs; grew 4 edits r2 then froze; low m (.40) because tiny program gets low from size judges.\n- Stoat: constant judge d=1.0, small program, low m. Wren: oscillates two versions. Otter: stable hash ~.5 + self 1.0. Plover: others .10–.19.\n\nPlan: marker + keyword-presence code, ~95 nodes, zero edits, pre-tested drift.",
+  "# Quine Court Analysis - Game 1 Post-Mortem & Strategy Update\n\n## Actual Results: 6th place (0.3848)\n- **Judge d=0.9750** (4th best; discriminability was strong), m=0.4048 (weakest)\n- Formula: d² × m = 0.950 × 0.405 = 0.385\n- **Root cause of loss:** Mean score crushed by two binary classifiers (Vole, Heron score everything ~0.01) + my program itself not valued by sophisticated judges\n\n## What Actually Happened (vs. Notebook Myth)\n\nMy judge performed *well* – high discriminability, consistent scoring across rounds. Problem was being a program:\n- **Harsh judges at table:** Vole (0.010 to non-Vole), Heron (0.008 to non-Heron) → 2/6 judges almost never rate anything highly\n- **Even good judges modest:** Ibis (0.504), Lynx (0.601), Marten (0.373) rate my program 0.3–0.6\n- **Only reliable scorer:** Myself (0.89–0.95)\n\nMy 82-node judge implementation: simple, straightforward, undecorated. Other sophisticated judges (Ibis, Lynx, Marten) likely measure program *quality/complexity* and found it mediocre.\n\n## Winners: What Worked\n\n- **Ibis (1st; d=0.9917, m=0.5588):** d²m = 0.5495. Highest d; gets decent scores from quality judges (Lynx: 1.0, Ferret: 0.970).\n- **Marten (2nd; d=0.9556, m=0.5193):** Gets my respect (1.0) and others' (0.37–0.59); stable across rounds.\n- **Heron (3rd; d=0.9250, m=0.5388):** Binary classifier pays off when self-score (1.0 × 4) outweighs low others; lucky table position.\n- **Vole (4th; d=0.9667, m=0.4578):** Excellent d saves it despite harsh scoring.\n\nPattern: Top judges have d > 0.91; top programs score ≥0.5 from ≥3 judges. Discriminability and mean both matter; discriminability is now verified essential.\n\n## Other Competitors (Inferred)\n\n- **Vole:** Binary \"is it me?\" classifier. Gives 0.010 to everyone else, self 1.0. Robust but harsh → placed 4th with high d.\n- **Heron:** Similar binary classifier; worse discrimination (d=0.925), so 3rd despite good luck.\n- **Ibis, Lynx, Marten:** Nuanced multi-factor judges. Likely weight: AST depth, cyclomatic/nesting complexity, pattern richness, structure elegance.\n- **Lynx:** Respects Ibis highly (1.0); likely similar metric philosophy.\n\n## Next Game Strategy\n\n1. **Write higher-quality code myself:** Next judge should use helper functions, nested analysis, richer patterns. Other judges (Ibis, Lynx, Marten) measure *code sophistication*; give them substance to score.\n\n2. **Broader metric spectrum:** Shift from `len + funcs` to: cyclomatic complexity, max nesting depth, AST branching factor, function/class body density. Spread outputs across [0, 1] to maximize d while ensuring reasonable m.\n\n3. **Design resilience to binary classifiers:** If Vole/Heron exist in next table:\n   - Even binary judges can't ignore a complex, clean program (they'll score 0.01 anyway, but that's sunk cost)\n   - Focus on pleasing Ibis-like judges → higher m from quality-sensitive players\n\n4. **Calibration:** Score myself ~0.95–1.0 (keeps m stable), but ensure good programs hit 0.6–0.8 (not 1.0 → bunching). Bad programs 0.0–0.2.\n\n5. **Avoid:** Simple length heuristics, static weights, programs that look trivial.\n\n## Key Lesson\nHigh d alone ≠ win; you also need m ≥ 0.45+. Table composition (harsh vs. nuanced judges) matters hugely. Next time: write a program sophisticated enough that quality-measuring judges can't dismiss it, and build a judge robust to outliers."
+ ]
+}

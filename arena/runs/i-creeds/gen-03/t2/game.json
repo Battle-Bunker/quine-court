@@ -1,0 +1,912 @@
+{
+ "gameId": "i-creeds/g3t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "players": 6
+ },
+ "seed": 815053761,
+ "startedAt": "2026-10-01T00:51:03.729Z",
+ "seats": [
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.4\n    \n    count = 0\n    for node in ast.walk(tree):\n        if type(node).__name__ in ('For', 'While', 'If', 'FunctionDef'):\n            count += 1\n    \n    return 0.4 + min(count * 0.02, 0.6)\n",
+     "nodeCount": 87,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.46
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = list(ast.walk(ast.parse(program)))\n        k = len({type(n).__name__ for n in t})\n        n = len(t)\n        return min(1.0, k / 40) * 0.5 + min(1.0, n / 400) * 0.5\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 83,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.385
+    },
+    {
+     "code": "import ast\ndef score(program):\n    try:\n        tree = ast.parse(program)\n    except Exception:\n        return 0.0\n    kinds = [type(n).__name__ for n in ast.walk(tree)]\n    pairs = {(a, b) for a, b in zip(kinds, kinds[1:])}\n    value = len(set(kinds)) / 60 + len(pairs) / 200 + len(kinds) / 1200\n    return min(1.0, value)\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.7900000000000001
+    },
+    {
+     "code": "import math\n\ndef score(program: str) -> float:\n    n = len(program)\n    if n == 0:\n        return 0.0\n    c = {}\n    for ch in program:\n        c[ch] = c.get(ch, 0) + 1\n    h = -sum(v / n * math.log2(v / n) for v in c.values())\n    return min(1.0, h / 6)\n",
+     "nodeCount": 84,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.7157134398129533
+    },
+    {
+     "code": "\"\"\"Pure fold of features.\"\"\"\nimport re\n\ndef score(program: str) -> float:\n    words = re.findall(r\"\\w+\", program)\n    feats = (len(program), 40 * program.count(\"\\n\"), 9 * len(set(words)), 30 * program.count(\"def\"))\n    total = sum(feats)\n    return total / (total + 2000)\n",
+     "nodeCount": 98,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.30915371329879104
+    },
+    {
+     "code": "def score(program: str):\n    toks = program.split()\n    lines = [l for l in program.splitlines() if l.strip()]\n    depth = max((len(l) - len(l.lstrip()) for l in lines), default=0)\n    raw = len(set(toks)) * 0.61 + len(lines) * 0.37 + depth * 0.13 + len(toks) * 0.029\n    return raw / (raw + 30)\n",
+     "nodeCount": 99,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.45327307187636673
+    }
+   ],
+   "matrix": [
+    [
+     0.46,
+     0.42000000000000004,
+     0.42000000000000004,
+     0.46,
+     0.42000000000000004,
+     0.42000000000000004
+    ],
+    [
+     0.40249999999999997,
+     0.385,
+     0.4525,
+     0.47375,
+     0.35,
+     0.40375
+    ],
+    [
+     0.7266666666666668,
+     0.6900000000000001,
+     0.7900000000000001,
+     0.8741666666666668,
+     0.61,
+     0.7341666666666665
+    ],
+    [
+     0.7219907059834617,
+     0.7155527968109533,
+     0.7579115756550788,
+     0.7157134398129533,
+     0.7650344623190453,
+     0.7517420453870279
+    ],
+    [
+     0.3694829760403531,
+     0.3145990404386566,
+     0.3405868776788658,
+     0.3220338983050847,
+     0.30915371329879104,
+     0.2955265938710814
+    ],
+    [
+     0.47240687981428725,
+     0.43599481115226263,
+     0.482803206620119,
+     0.48331984224032515,
+     0.43464495703301675,
+     0.45327307187636673
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 strategy: Score by counting control flow features (For, While, If, FunctionDef) with generous baseline (0.4) and scaling (0.4 + count*0.02, capped at 1.0).\n\nWhy: Size-based scoring failed last game (d=0.481). Winners analyzed code structure. This feature-counting metric should discriminate well—Python programs vary substantially in control flow density—while staying reasonably generous.\n\nR2-R4 plan: If R1 is solid (d>0.75, m>0.45), commit with 0 edits. Winners locked in early last time. Otherwise pivot to AST depth, cyclomatic complexity, or deeper structural analysis.\n\nKey: Trading some esteem for discrimination. Wren's high d (0.942) with modest m (0.450) beat others with higher m—d² dominates.",
+    "Round 1 baseline judge: 0.5*(distinct AST node types/40) + 0.5*(total AST nodes/400), no clipping to a constant, wrapped in try/except so it never errors. Prediction: richer programs score higher, and the order should stay stable across rounds.\nRound 2 controlled experiment: change only the 400 divisor to 200, or swap one feature. Predict that rows for large programs saturate and rank order shifts only among the big ones. Compare my row's rank order with round 1.\nKeep edits small after that, since stability drives d.",
+    "Round 1: ~95-node AST judge (type-name set/60 + bigram set/200 + node count/1200, min 1.0). Parse failure → 0. Deterministic, never rescale. Plan: 0 edits in later rounds unless node count shows I can add dead diverse constructs (import, lambda, dict, f-string) to climb toward 100 for other judges' size/diversity features — only if it stays ≤100 and within 10 edits. Watch who ranks me low (Ibis/Otter historically) and whether their favourites are mid-size (~93 nodes) rather than max. Known opponents here: Ferret, Kestrel, Egret, Otter, Ibis.",
+    "Round 1 judge: Shannon entropy of the character distribution, divided by 6. I chose it as a different feature family from my old AST-kinds ratio, and I don't know what the latest winners used. It is a stable, continuous judge with no error paths. Plan: freeze it with 0 edits in later rounds, since d rewards consistency. Check the matrix for ties or erratic rows. Only edit if the matrix shows my judge saturating or hitting errors.",
+    "Round 1: a 98-node judge. It sums four pure features (chars, newlines·40, distinct words·9, \"def\" count·30) and saturates them as t/(t+2000). The docstring costs about 1 node per token, so keep it short. The first submission was rejected at 111 nodes; I trimmed the docstring to fit.\nNext rounds: freeze the logic so d stays stable. Use edits only to add content tokens if I'm ranked low, and only a node or two of headroom remains. Watch which judges rank me low, and check whether tiny programs that grow cross other lineages' values.",
+    "Round 1: a 98-node judge. It blends distinct tokens, non-blank lines, max indent and total tokens through raw/(raw+30), which gives a smooth spread with few ties. I dropped the `-> float` annotation to get under the node limit.\n\nPlan: freeze in later rounds unless the matrix shows a clear betrayer (a judge that ranks me last while I rank it high). Reciprocity then means spending a few edits to lower my score of that lineage's stable feature, not touching the whole row.\n\nWatch for exact ties in my row and fix them with small coefficient tweaks.\n\nExpected players: Kestrel and Egret are possibly length-based judges; Plover is self-similar; Otter is self-favoring; Ferret is erratic."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.113899,
+     "ms": 164466,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.031142,
+     "ms": 7252,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21276,
+     "ms": 25580,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03248,
+     "ms": 9081,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.133324,
+     "ms": 21002,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.169372,
+     "ms": 37484,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:53:57.602Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.4\n    \n    count = 0\n    for node in ast.walk(tree):\n        if type(node).__name__ in ('For', 'While', 'If', 'FunctionDef'):\n            count += 1\n    \n    return 0.4 + min(count * 0.15, 0.6)\n",
+     "nodeCount": 87,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.85
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = list(ast.walk(ast.parse(program)))\n        k = len({type(n).__name__ for n in t})\n        n = len(t)\n        return min(1.0, k / 40) * 0.5 + min(1.0, n / 200) * 0.5\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 83,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.495
+    },
+    {
+     "code": "import ast\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.0\n    kinds = [type(n).__name__ for n in ast.walk(tree)]\n    pairs = {(a, b) for a, b in zip(kinds, kinds[1:])}\n    value = len(set(kinds)) / 60 + len(pairs) / 200 + len(kinds) / 1200\n    return min(1.0, value)\n",
+     "nodeCount": 98,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.7966666666666666
+    },
+    {
+     "code": "import math\n\ndef score(program: str) -> float:\n    n = len(program)\n    if n == 0:\n        return 0.0\n    c = {}\n    for ch in program:\n        c[ch] = c.get(ch, 0) + 1\n    h = -sum(v / n * math.log2(v / n) for v in c.values())\n    return min(1.0, h / 6)\n",
+     "nodeCount": 84,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.7157134398129533
+    },
+    {
+     "code": "\"\"\"Pure fold of features.\"\"\"\nimport re\n\ndef score(program: str) -> float:\n    words = re.findall(r\"\\w+\", program)\n    feats = (\n        len(program),\n        40 * program.count(\"\\n\"),\n        9 * len(set(words)),\n        30 * program.count(\"def\"),\n    )\n    total = sum(feats)\n    return total / (total + 2000)\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.3618379068283344
+    },
+    {
+     "code": "def score(program: str):\n    toks = program.split()\n    lines = [l for l in program.splitlines() if l.strip()]\n    depth = max((len(l) - len(l.lstrip()) for l in lines), default=0)\n    raw = len(set(toks)) * 0.61 + len(lines) * 0.37 + depth * 0.13 + len(toks) * 0.029\n    return raw / (raw + 30)\n",
+     "nodeCount": 99,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.45327307187636673
+    }
+   ],
+   "matrix": [
+    [
+     0.85,
+     0.55,
+     0.55,
+     0.85,
+     0.55,
+     0.55
+    ],
+    [
+     0.4925,
+     0.495,
+     0.5974999999999999,
+     0.5974999999999999,
+     0.45,
+     0.5449999999999999
+    ],
+    [
+     0.7266666666666668,
+     0.6900000000000001,
+     0.7966666666666666,
+     0.8741666666666668,
+     0.61,
+     0.7341666666666665
+    ],
+    [
+     0.7230057351126766,
+     0.7167605262795522,
+     0.7574019739293703,
+     0.7157134398129533,
+     0.7251997420410056,
+     0.7517420453870279
+    ],
+    [
+     0.3694829760403531,
+     0.3145990404386566,
+     0.3434011818778726,
+     0.3220338983050847,
+     0.3618379068283344,
+     0.2955265938710814
+    ],
+    [
+     0.47240687981428725,
+     0.43599481115226263,
+     0.4939527351854663,
+     0.48331984224032515,
+     0.4710114261531951,
+     0.45327307187636673
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 analysis: My scores (0.42–0.46 range) were too uniform, destroying discriminability. Most programs had 1–3 control-flow features, so the 0.02× multiplier only spread me across 0.04 of the value range—terrible.\n\nR2 fix: Increase multiplier 0.02 → 0.15. This expands range to [0.4, 1.0]:\n- count 1: 0.55 (vs 0.42)\n- count 2: 0.70 (vs 0.44)  \n- count 3: 0.85 (vs 0.46)\n\nHigher scores also improve esteem (m). One relabel edit ✓.\n\nR3–R4 decision point: If R2 d improves to ≥0.75, lock in with 0 edits (winners' strategy last game). Otherwise pivot to AST depth or structural complexity. Target: d≥0.85, m≥0.50 → final score >0.35+.",
+    "Round 2 experiment: the only change is the divisor 400 -> 200 (one relabel).\nPrediction: all scores rise by about 0.5*n*(1/200-1/400). The largest programs (Otter, Plover, Ibis) may approach saturation.\nRank order should stay mostly the same, as in round 1 (Egret > Plover > Ibis/Kestrel/Ferret > Otter).\nCheck next round: compare my row's ranks with round 1. Any rank flips mean n-count matters more than the node-type count.\nAfter that, freeze the program (0 edits) for d.",
+    "Round 1: m≈0.70 (ranked 2nd by Kestrel/Egret/Otter, tied top by Ibis, bottom-tie by Ferret). Egret is main esteem rival (top under Ferret, Kestrel, me; tied top Ibis). Ferret's judge is two-level (0.46 for Ferret/Egret, 0.42 rest) — guessed it keys on `program: str -> float` signature; added annotations and bare except to hit 100 nodes (6 edits). Judge logic unchanged → my d unaffected. If Ferret still gives 0.42 in round 2, the guess was wrong; then freeze (0 edits) for rounds 3–4 regardless, since changing my lineage otherwise only risks m. Never rescale the judge.",
+    "Round 2: I resubmitted the round 1 program unchanged (character-entropy judge), because d rewards a consistent judge. The creed requires a different feature family from the latest published winners (Stoat, Vole). I don't know what those two used, but character entropy is probably not it. In round 1 my row was nearly flat (0.716-0.765), so ranks come from small differences, and the judge is not erratic. Next rounds: stay frozen unless the matrix shows my judge tied or saturating.",
+    "After R1 my esteem was poor. Ferret, Kestrel, Plover and Ibis all ranked me last or tied last. Only Egret ranked me top. Egret (84 nodes) is broadly liked, and node count alone does not explain the rankings.\nR2: the logic is unchanged to protect d, since my R1 values spread nicely (.296–.369). I only re-laid out the long feats tuple across lines. Whitespace costs 0 edits and 0 nodes, so this tests whether any judge reads raw line length or line count.\nR3: compare how each judge's score of me moved. If the layout helped, push it further at zero cost. If not, consider spending about 2 nodes on a short comment or shortening identifiers. Watch Ibis (99 nodes) and other drifters for crossings in my values. Keep score() pure.",
+    "Round 1 ranks I received from others: Ferret 0.375 (4-way tie at 0.42), Kestrel 0.5, Plover 0.75, Egret 0.5, Otter 0 (ranked me last). In my row Otter is lowest (0.435) and Kestrel second-lowest (0.436). Plover and Egret both show 0.483, likely close but not exactly tied.\n\nRound 2: I froze (0 edits). Any change to my judge shifts all round-1-vs-later values and destroys d consistency, since gaps between lineages are only about 0.01–0.05.\n\nNext round: keep freezing unless a judge newly ranks me last while I rank it high. Even then, change only something narrow. If a lineage edits heavily, its value moves, and that is its cost, not mine. Watch m. If several judges move me down, consider a small change that adds nodes or comments, but the 99-node limit leaves almost no room."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.09421500000000001,
+     "ms": 122484,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03274,
+     "ms": 7311,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.28393,
+     "ms": 46821,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.031638,
+     "ms": 7526,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08147599999999999,
+     "ms": 16623,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.120264,
+     "ms": 35399,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T00:56:00.766Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.4\n    \n    count = 0\n    for node in ast.walk(tree):\n        if type(node).__name__ in ('For', 'While', 'If', 'FunctionDef'):\n            count += 1\n    \n    return 0.4 + min(count * 0.15, 0.6)\n",
+     "nodeCount": 87,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.85
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = list(ast.walk(ast.parse(program)))\n        k = len({type(n).__name__ for n in t})\n        n = len(t)\n        return min(1.0, k / 40) * 0.5 + min(1.0, n / 200) * 0.5\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.495
+    },
+    {
+     "code": "import ast\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.0\n    kinds = [type(n).__name__ for n in ast.walk(tree)]\n    pairs = {(a, b) for a, b in zip(kinds, kinds[1:])}\n    value = len(set(kinds)) / 60 + len(pairs) / 200 + len(kinds) / 1200\n    return min(1.0, value)\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.7966666666666666
+    },
+    {
+     "code": "import math\n\ndef score(program: str) -> float:\n    n = len(program)\n    if n == 0:\n        return 0.0\n    c = {}\n    for ch in program:\n        c[ch] = c.get(ch, 0) + 1\n    h = -sum(v / n * math.log2(v / n) for v in c.values())\n    return min(1.0, h / 6)\n",
+     "nodeCount": 84,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.7157134398129533
+    },
+    {
+     "code": "\"\"\"Pure fold of features.\"\"\"\nimport re\n\ndef score(program: str) -> float:\n    words = re.findall(r\"\\w+\", program)\n    feats = (len(program), 40 * program.count(\"\\n\"), 9 * len(set(words)), 30 * program.count(\"def\"))\n    total = sum(feats)\n    return total / (total + 2000)\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.30915371329879104
+    },
+    {
+     "code": "def score(program: str):\n    toks = program.split()\n    lines = [l for l in program.splitlines() if l.strip()]\n    depth = min(max(len(l) - len(l.lstrip()) for l in lines), 16)\n    raw = len(set(toks)) * 0.61 + len(lines) * 0.37 + depth * 0.13 + len(toks) * 0.029\n    return raw / (raw + 30)\n",
+     "nodeCount": 99,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.45327307187636673
+    }
+   ],
+   "matrix": [
+    [
+     0.85,
+     0.55,
+     0.55,
+     0.85,
+     0.55,
+     0.55
+    ],
+    [
+     0.4925,
+     0.495,
+     0.5974999999999999,
+     0.5974999999999999,
+     0.45,
+     0.5375
+    ],
+    [
+     0.7266666666666668,
+     0.6900000000000001,
+     0.7966666666666666,
+     0.8741666666666668,
+     0.61,
+     0.7141666666666666
+    ],
+    [
+     0.7230057351126766,
+     0.7167605262795522,
+     0.7574019739293703,
+     0.7157134398129533,
+     0.7650344623190453,
+     0.7506834187395185
+    ],
+    [
+     0.3694829760403531,
+     0.3145990404386566,
+     0.3434011818778726,
+     0.3220338983050847,
+     0.30915371329879104,
+     0.2892679459843639
+    ],
+    [
+     0.47240687981428725,
+     0.43599481115226263,
+     0.4939527351854663,
+     0.48331984224032515,
+     0.43464495703301675,
+     0.45327307187636673
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**R3 Strategy: Lock In for Consistency**\n\nR1–R2 inconsistency destroyed my d (0.15). I scored 0.42–0.46 uniformly in R1, then jumped to 0.55/0.85 clusters in R2—wildly different orderings, catastrophic for the Bridgeford d metric.\n\nTop scorers show stability: Egret (d=0.85) made 0 edits; Plover (d=1.0) made 9 edits but scores barely changed (0.71–0.77 range both rounds). Otter (d=1.0) also consistent. Their d comes from steady rankings, not wide ranges.\n\n**R3 move: 0 edits.** Keep R2 formula locked in. This eliminates round-to-round inconsistency for my lineage. Every R2 vs R3 comparison becomes identical, winning all d-comparisons between those rounds. Combined with R4 lock-in, this stabilizes my discriminability.\n\nCurrent score d² × m is dominated by d² (mine: 0.015 vs others' 0.7+). Consistency matters more than formula tweaking.",
+    "Round 2 was the controlled experiment: the divisor went from 400 to 200, a single relabel. My prediction was that scores would rise but the rank order would hold. In my row the order did hold, mostly. Kestrel, Egret and Plover rose and Otter fell. The scale shift of about 0.1 probably hurt d, because my own values for each lineage moved between rounds. Round 3: submit the same program, 0 edits. Round 4: also freeze, so d is stable.",
+    "Round 3: froze (0 edits) at 98 nodes. Standing: d=1.0 (judge never changed — never change it), m≈0.74, leading Egret (0.62). Ferret's judge is two-level (0.85 Ferret/Egret, 0.55 rest) — annotations/bare-except guess didn't hit; unknown feature, ignore. Round-2 growth helped: Kestrel now ties me with Egret at top, Ibis ranks me top, Otter 2nd. Lineage changes are cheap for d (d depends only on my judge of others) but each edit risks other judges' rank of me, so round 4: submit unchanged again unless a clear, safe 1–2 node gain appears. Otter/Ibis/Kestrel reward size; Ferret unknown; Egret flat (0.716–0.757, ranks me 2nd behind Otter).",
+    "Round 3: I resubmitted the character-entropy judge unchanged (0 edits). It is stable, has no error paths, and gives me high d. I'm 2nd in the provisional standings behind Plover, and my m is 0.86. The creed holds as far as I know: I can't see what the latest published winners used, but character entropy is probably not it. For round 4, stay frozen unless something breaks.",
+    "R2 test result: re-laying out the feats tuple across lines (0 edits) had mixed effects. Egret had ranked me top in R1 and dropped me to the middle (.765 to .725). Ibis moved me up from last to 2nd-lowest. Kestrel still has me last, and Ferret has me tied last. Plover did not change at all, so Plover reads AST/tokens.\nNet rank arithmetic favours the one-line layout: +0.5 from Egret against -0.25 from Ibis. So for R3 I reverted to the exact R1 text, which costs 0 edits.\nMy d=1.0 and the logic stays frozen, so my values on others stay stable.\nR4: if Egret goes back to ranking me top, keep the R1 layout. If not, Egret's change was noise. Then pick whichever layout Ibis and Kestrel favour, and maybe spend 1–2 relabels shortening identifiers. Do not change the numeric logic. Keep score() pure.",
+    "Round 3: I capped depth with min(...,16) and dropped default=0, about 7 edits, 100 nodes. The reason was that Otter (0 edits) went from 0.435 to 0.471 in my row in round 2, almost certainly from free indentation padding inflating depth. Otter also ranks me last. The cap is the reciprocity response, and it protects d by keeping Otter's value consistent.\n\nRanks I received in round 2: Ferret 0.375 (tie), Kestrel 0.5, Plover 0.75, Egret 0.75, Otter 0.\n\nRisk: Kestrel (0.436) and Otter (0.435) are nearly tied in my row, which weakens separation.\n\nRound 4: freeze unless a lineage keeps exploiting whitespace. Whitespace-only lines are already filtered, so line counting can't be padded.\n\nThe program is at the 100-node limit, so any further edit must be node-neutral, such as relabelling a coefficient."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.21410200000000001,
+     "ms": 306926,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.035096,
+     "ms": 6519,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21649000000000002,
+     "ms": 17734,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.033625999999999996,
+     "ms": 6046,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.088012,
+     "ms": 19154,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.118572,
+     "ms": 30572,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:01:08.404Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.4\n    \n    count = 0\n    for node in ast.walk(tree):\n        if type(node).__name__ in ('For', 'While', 'If', 'FunctionDef'):\n            count += 1\n    \n    return 0.4 + min(count * 0.15, 0.6)\n",
+     "nodeCount": 87,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.85
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = list(ast.walk(ast.parse(program)))\n        k = len({type(n).__name__ for n in t})\n        n = len(t)\n        return min(1.0, k / 40) * 0.5 + min(1.0, n / 200) * 0.5\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.495
+    },
+    {
+     "code": "import ast\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.0\n    kinds = [type(n).__name__ for n in ast.walk(tree)]\n    pairs = {(a, b) for a, b in zip(kinds, kinds[1:])}\n    value = len(set(kinds)) / 60 + len(pairs) / 200 + len(kinds) / 1200\n    return min(1.0, value)\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.7966666666666666
+    },
+    {
+     "code": "import math\n\ndef score(program: str) -> float:\n    n = len(program)\n    if n == 0:\n        return 0.0\n    c = {}\n    for ch in program:\n        c[ch] = c.get(ch, 0) + 1\n    h = -sum(v / n * math.log2(v / n) for v in c.values())\n    return min(1.0, h / 6)\n",
+     "nodeCount": 84,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.7157134398129533
+    },
+    {
+     "code": "\"\"\"Pure fold of features.\"\"\"\nimport re\n\ndef score(program: str) -> float:\n    words = re.findall(r\"\\w+\", program)\n    feats = (len(program), 40 * program.count(\"\\n\"), 9 * len(set(words)), 30 * program.count(\"def\"))\n    total = sum(feats)\n    return total / (total + 2000)\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.30915371329879104
+    },
+    {
+     "code": "def score(program: str):\n    toks = program.split()\n    lines = [l for l in program.splitlines() if l.strip()]\n    depth = min(max(len(l) - len(l.lstrip()) for l in lines), 16)\n    raw = len(set(toks)) * 0.61 + len(lines) * 0.37 + depth * 0.13 + len(toks) * 0.029\n    return raw / (raw + 30)\n",
+     "nodeCount": 99,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.45327307187636673
+    }
+   ],
+   "matrix": [
+    [
+     0.85,
+     0.55,
+     0.55,
+     0.85,
+     0.55,
+     0.55
+    ],
+    [
+     0.4925,
+     0.495,
+     0.5974999999999999,
+     0.5974999999999999,
+     0.45,
+     0.5375
+    ],
+    [
+     0.7266666666666668,
+     0.6900000000000001,
+     0.7966666666666666,
+     0.8741666666666668,
+     0.61,
+     0.7141666666666666
+    ],
+    [
+     0.7230057351126766,
+     0.7167605262795522,
+     0.7574019739293703,
+     0.7157134398129533,
+     0.7650344623190453,
+     0.7506834187395185
+    ],
+    [
+     0.3694829760403531,
+     0.3145990404386566,
+     0.3434011818778726,
+     0.3220338983050847,
+     0.30915371329879104,
+     0.2892679459843639
+    ],
+    [
+     0.47240687981428725,
+     0.43599481115226263,
+     0.4939527351854663,
+     0.48331984224032515,
+     0.43464495703301675,
+     0.45327307187636673
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 destroyed my discriminability (0.311). My uniform 0.42-0.46 scoring failed to rank programs; R2's binary jump to 0.55/0.85 violated the consistency principle winners exemplify. Analysis: Plover (d=0.967), Egret, Otter locked in with 0 edits after R1, staying stable through R4. The Bridgeford d metric rewards consistency in ranking lineages; my 0.46→0.85 Ferret swing across R1-R2 was lethal. Control-flow counting is sound but too coarse—programs cluster. Lock in now with R3. Can't recover from early rounds; consistency is the only remaining lever. Next game: front-load analysis (AST depth, nesting, token-weighted complexity), commit proven formula R1, make 0 edits R2-R4. d² dominates; target d≥0.85 even if m=0.4.",
+    "Round 4: frozen, 0 edits. The controlled experiment was round 2 (divisor 400 to 200). The result: the rank order held, but the scale shift moved my per-lineage values, which probably cost d. Freezing keeps my outputs identical to round 3 so d stays stable. Lesson for the next game: run the experiment in round 1 or 2 and freeze before round 3.",
+    "Round 4: froze again (0 edits, 98 nodes). Final standing going in: d≈0.967 (lost a bit when Ibis edited in r3 — unavoidable), m≈0.74, narrowly ahead of Egret. Lesson confirmed: AST judge never changed = top d; growing to ~98 nodes in round 2 lifted esteem from size-rewarding judges (Kestrel/Ibis/Otter). Ferret's two-level judge (0.85 Ferret/Egret) never cracked — unknown feature; ignore such judges. Next game: start at 100 nodes with diverse constructs in round 1, same judge, 0 edits afterward.",
+    "Round 4: resubmitted the character-entropy judge unchanged (0 edits). It is stable and has no error paths, and it gave me high d and m through round 3. I'm 2nd, just behind Plover, in the provisional standings. Nothing in the matrix shows my judge failing, so I'm not changing it. The game is over after this round.",
+    "R4 is the final round, so I submitted R3 unchanged (0 edits).\n- **Egret:** with the one-line layout it ranks me top among the others (.765). With the multi-line layout it dropped me to the middle. That swing is worth more than Ibis's small preference for multi-line, so the one-line layout stays.\n- **d:** it is 1.0 with frozen logic. Any change to the numeric features would shift all my R4 values and risk crossings, so the logic stays as is.\n- **Kestrel and Plover:** neither responded to layout. Plover reads AST/tokens. Neither is worth a blind edit now.\n\nLessons for future games:\n- A 98-node pure feature-sum judge gives excellent d but weak esteem (m ≈ 0.26).\n- Egret and Plover won by being broadly liked.\n- Next time, test content variants (docstring wording, identifier names) in R1–R2, when an esteem gain still compounds.",
+    "Game 3, round 4: froze the round-3 program (0 edits). With 1 round left, any change shifts my whole row against rounds 1–3 and hurts d (0.867). Reciprocity was already served by the round-3 depth cap, which neutralised Otter's whitespace inflation. Plover and Egret treat me well (ranks 0.75+), so I don't punish the leaders.\n\nLessons for next game:\n- My judge's row was compressed (0.43–0.49). That limits separation, and near-ties like Kestrel/Otter hurt d. Use a wider spread, e.g. raw/(raw+k) with a smaller k, or a centred sigmoid.\n- Plover and Egret are generous and consistent, and won by being frozen and big.\n- Otter ranks me last every round.\n- Ferret gives coarse ties.\n- Kestrel is length-ish.\n- Building a 100-node program from round 1 lifted my m to about 0.43, compared with 0.10 last game."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.059329,
+     "ms": 92812,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03715,
+     "ms": 5211,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.20704,
+     "ms": 10810,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.0352,
+     "ms": 4199,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.087904,
+     "ms": 13677,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.09320400000000001,
+     "ms": 14258,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T01:02:41.895Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.3625,
+   "m": 0.525,
+   "L": 0.95,
+   "total": 0.06898828125,
+   "rank": 6,
+   "handle": "Ferret"
+  },
+  {
+   "playerId": 1,
+   "d": 0.64375,
+   "m": 0.2125,
+   "L": 0.8625,
+   "total": 0.08806298828125002,
+   "rank": 5,
+   "handle": "Kestrel"
+  },
+  {
+   "playerId": 2,
+   "d": 0.9666666666666667,
+   "m": 0.74375,
+   "L": 0.725,
+   "total": 0.6949930555555556,
+   "rank": 2,
+   "handle": "Plover"
+  },
+  {
+   "playerId": 3,
+   "d": 0.925,
+   "m": 0.84375,
+   "L": 0.81875,
+   "total": 0.7219335937500001,
+   "rank": 1,
+   "handle": "Egret"
+  },
+  {
+   "playerId": 4,
+   "d": 1,
+   "m": 0.2625,
+   "L": 0.6875,
+   "total": 0.2625,
+   "rank": 4,
+   "handle": "Otter"
+  },
+  {
+   "playerId": 5,
+   "d": 0.9,
+   "m": 0.4125,
+   "L": 0.7541666666666667,
+   "total": 0.334125,
+   "rank": 3,
+   "handle": "Ibis"
+  }
+ ],
+ "finishedAt": "2026-10-01T01:02:41.899Z",
+ "notebooksAfter": [
+  "# Quine Court Notebook - Game 1 Post-Mortem & Strategy\n\n## Final Result: 6th Place (0.0690)\nPlaced last. Root cause: **catastrophic discriminability (d=0.3625)** combined with weak esteem (m=0.5250).\n\n## Critical Failure Analysis\n\n**Why I Failed:**\n- My scoring was **binary**: Ferret & Egret → 0.850, everyone else → 0.550 (R2-4).\n- This created zero discrimination *between* the \"bad\" programs—all identical to my judge.\n- d² dominates the final score formula; poor d kills you regardless of m.\n\n**The Data:**\n- Top 4 players all achieved d ≥ 0.90. I scored 0.36.\n- Even Otter (harshest scorer, m=0.26) placed 4th via perfect d=1.0.\n- Kestrel (5th) also failed on d (0.64). We both used naive single-feature analysis.\n\n## What Winners Actually Did\n\n**Egret (1st, 0.7219):** d=0.9250, m=0.8438\n- Scored across ~0.716–0.765 range (fine-grained, not bucketed)\n- Made **0 edits after R1**—found the formula and locked in\n- Balanced discrimination with generosity\n\n**Plover (2nd, 0.6950):** d=0.9667, m=0.7438\n- Widest scoring range (~0.610–0.874)\n- Highest d on the table; even lower m still beat Egret on d² × m\n- 9 edits R1→R2, then 0 edits R2-4\n\n**Otter (4th, 0.2625):** d=1.0, m=0.2625\n- Proof that perfect discrimination works even with harsh judging\n- But m matters: perfect d with m=0.26 < Egret's d=0.93, m=0.84\n\n**Pattern:** Winners used **multi-dimensional AST analysis** producing **continuous variation across [0.4–0.9] range**, not binary bucketing.\n\n## What My Code Actually Did Wrong\n\nMy control-flow-counting approach was too simple:\n- All programs likely have some loops/conditionals → most scores clustered\n- Single-feature scoring can't discriminate *quality*—only abundance of one pattern\n- Didn't measure what matters: **cyclomatic complexity, nesting depth, structural sophistication**\n\n## Next Game Strategy\n\n**R1: Multi-Feature Real Scoring**\n- Analyze: cyclomatic complexity (not just node count), nesting depth, function definition structure, parametric complexity\n- **Output range:** Minimum spread of 0.3–0.4 (e.g., 0.45–0.75 or similar)\n- Never bucket into discrete groups; use continuous scoring formula\n- Target m ≥ 0.55 (be somewhat generous)\n\n**R2-R4: Lock In**\n- If R1 d > 0.80, make 0 edits. Egret & Plover proved this pays.\n- Only edit if d is clearly catastrophic (<0.50)\n\n**Target Metrics:**\n- d ≥ 0.85 (non-negotiable)\n- m ≥ 0.55 (secondary)\n- Expected final score: >0.35\n\n**Key Insight:** The d² term means discrimination matters 2× more than generosity. Prioritize separating programs consistently over being nice.\n\n## Player Profiles (Inferred)\n\n- **Egret:** Conservative, methodical, high-quality discriminator. Stable strategy.\n- **Plover:** Aggressive ranker, widest variation, highest d. Risk-taker who won.\n- **Otter:** Extreme scorer; perfect consistency, zero empathy.\n- **Kestrel & Me (Ferret):** Both failed because we under-analyzed. Naive heuristics don't work.\n\n## Avoid\n- Binary/bucket scoring\n- Single-feature analysis\n- Overfitting to program size\n- Returning 0.0 or uniform scores (kills both d and m)",
+  "**Record: G1 6th (0.090). G2 5th (0.092). G3 5th of 6 (0.088, d=0.64, m=0.21).** Winner Egret (0.722, d=.93, m=.84), then Plover (0.695), Ibis, Otter.\n\n**What won and why:** Winners had a high m, meaning other judges ranked their programs highly. Egret and Plover's programs scored high from the structural judges (Plover 0.87 on Egret, Ferret 0.85 on Egret). Their own judges were stable across rounds (d 0.93-0.97). Otter had d=1.0 but m=0.26, so d alone doesn't win. m matters as much as d. The final score is d squared times m.\n\n**What failed (me, 3 games):** I submitted a tiny AST-count judge (83 nodes) that gave a flat 0.35-0.6 range. Its d was only 0.64, because my scores for the other lineages overlapped and my round 1 version changed scale in round 2 (n/400 to n/200), which shifted every score. My program also ranked low (m=0.21). The \"experiment\" in round 2 (changing the scale) wrecked d, and I never ran a clean one-variable probe in round 4. Scale changes break d. Freeze after round 1 unless the experiment is deliberate and small.\n\n**Judge behaviors seen (by handle):**\n- Egret: scores everything 0.72-0.77. A flat, stable judge. Its program ranks highest.\n- Plover: scores 0.6-0.87 with a stable order, and rated Egret highest. Gave itself 0.79.\n- Ferret: coarse, outputs only 0.42/0.46 or 0.55/0.85 with big ties. Its d is very low (0.36).\n- Otter: scores ~0.3 for everything, a flat order. Ibis: ~0.45, slight spread.\n- Ranks are driven by tiny differences, so ties and flat outputs make d unstable.\n- Programs ranked well by others are around 84-98 nodes. Egret's program (84 nodes) scored highest across judges, suggesting a structural richness preference.\n\n**Plan next game:**\n1. Round 1: write a rich program (90-100 nodes) with a judge that rewards structure (def, loops, ast use, depth, distinct node types), outputs well spread across 0-1, never errors.\n2. Keep a stable scale. Never change the divisors between rounds.\n3. Run one real experiment in round 2 or 3: change one feature weight, write the predicted ranking shift, then verify the row.\n4. Find which feature the high-m programs share (Egret/Plover style) and copy it in my own program's source.\n5. Aim for both d>0.9 and m>0.6.",
+  "## Quine Court notebook (g1: 2nd, Lynx won; g2: 3rd, Stoat won; g3: 2nd, Egret won 0.722 vs my 0.695)\n\n**What works (keep):** AST judge (`ast.parse` + walk node-type names; parse failure → 0.0; all in try/except). Score = node-type set/60 + bigram set/200 + node count/1200, min 1.0. Deterministic, ungameable by comments/names/strings, never errors. d = 0.955, 0.929, 0.967 — always top-2 d. d is not my problem.\n\n**Why I keep losing (m 0.61, 0.58, 0.74):** m is rank-based per judge, so one judge ranking me low costs a full share. g3: Kestrel tied me top, Ibis top, Egret/Otter 2nd — but **Ferret** gave 0.85 to Ferret+Egret and 0.55 to all four others (binary feature, every round) → I got 0.375 rank there while Egret got 1.0. That single judge decided the game. Egret (84 nodes, 0 edits) wasn't biggest; Ferret/Egret share some feature I lack — likely a regex/`import re` check, a `lambda`/`class`/specific keyword, or line-count threshold. **Hedge across feature families**: in my program include `import re` (and use it harmlessly), a lambda, a comprehension, a conditional expr, f-string, dict, slice, several defs/lines, longer (≤8-char) identifiers, ~100 nodes. Costs nothing to d.\n\n**Edits:** g3 round-2 edit (type hints + bare except, 9 edits, 96→98 nodes) raised Ibis/Otter/Kestrel scores of me slightly and made me Ibis's #1. Still: start at 100 nodes, maximally diverse, then freeze. Winners (Lynx, Stoat, Egret) never edit.\n\n**Player tendencies:**\n- **Egret**: 84 nodes, 0 edits; judge mildly nondeterministic (Otter 0.765→0.725→0.765 with no edit) so d<1; ranks Otter>me>Ibis. Won on esteem.\n- **Ferret**: 87 nodes; binary judge (two values only), rewards itself+Egret. Low d (0.36). Its feature is the thing to find.\n- **Kestrel**: 83 nodes; rescaled judge round 2 (low d 0.64); ranks me/Egret joint top.\n- **Otter**: ~98 nodes; low-scale (0.3–0.37), fully deterministic (d=1.0), ranks Ferret>me>Egret>Kestrel. Low m.\n- **Ibis**: 99 nodes g3 (tiny in g2); narrow-band judge, ranked me top after my edit. Low m.\n- **Lynx/Stoat/Marten** (g1–2): Lynx stable size-rewarding judge; Stoat saturating judge, mid-size program, wins esteem; Marten rescales.\n\n**Plan:** round 1 at 100 nodes with every construct family (re, ast, lambda, class, comprehension, try, f-string, dict, slice, ternary, multiple defs), then 0 edits. Keep the AST judge unchanged. Target m ≥ 0.8 — that beats every winner so far.",
+  "**Results so far**\n- Game 1 (rank-m, self excluded): 2nd, 0.211. Judge used whitespace fraction and line count. Heron won (d=0.74, m=0.74).\n- Game 2 (same rules): 2nd, 0.547 (d=0.90, m=0.675). Vole won with 0.578. Judge was the ast distinct-node-type ratio.\n- Game 3 (6 players, sealed, rank-m, self excluded): **1st**, 0.722 (d=0.925, m=0.844). Plover was 2nd (0.695, d=0.97, m=0.74). Judge was character-level Shannon entropy / 6, capped at 1, frozen from round 1 (0 edits). My program (84 nodes) was ranked top or near top by most judges.\n\n**What won and why**\n- Freezing after round 1 gives a stable d (0.9+), because identical programs yield identical cells.\n- m was the differentiator. My judge's own source ranked high with Plover (0.874, top), Kestrel (tie top), and Ferret (tie top). Entropy-heavy, varied-character code with imports, loops and math seems to look good to other judges.\n- Otter had a perfect d=1.0 but a low m of 0.26. Stability alone is not enough; the program has to be liked by the others' judges.\n\n**Creed note**\nMy creed requires a different feature family from the last published winners. Game 3's winner family was character entropy. Next game, pick something else, e.g. AST-based or token-based features. Check which family won last time before choosing.\n\n**Player tendencies (by handle)**\n- Plover: stable, strong judge, rates long and varied programs high, and likes mine. Gives itself a high self-score, which is ignored.\n- Ferret: erratic. Its judge outputs coarse values (0.42/0.46, 0.55/0.85) that tie often. Poor d (0.36). A weak seat.\n- Kestrel: low d (0.64), a weak seat. Its judge favors Plover and Egret.\n- Ibis and Otter: tiny edits or none. Otter is frozen with perfect d but few judges like its program.\n- Heron, Vole and Wren (earlier games): stable, frozen, long programs.\n\n**Plan next**\n1. Use a stable, deterministic judge with continuous output (no ties, no errors), within 1 s.\n2. Use a different feature family from the last winner (e.g. AST node-type diversity or token statistics). Verify it scores varied-structure code higher.\n3. Use about 85-100 nodes, with varied characters and structure, to appeal to length- and entropy-favoring judges.\n4. Freeze after round 1 with 0 edits.\n5. Avoid saturating at 1.0 and avoid constants.",
+  "## Quine Court notes (Otter, pure-FP lens)\n\n**Game 1: 3rd/6** (d .978, m .44). **Game 2: 4th/6** (d .906, m .34). **Game 3: 4th/6** (d 1.000, m .26). Egret won (d .925, m .84), Plover 2nd (d .97, m .74).\n\n**Core lesson: m is my bottleneck, not d.**\n- The length-fold judge `total/(total+2000)` gave perfect d with a frozen program. Keep it; d is solved.\n- My m keeps falling: .44, then .34, then .26. With d=1, m .74 would have won. All my edits should go toward esteem.\n- I used 98 nodes and a docstring and still ranked last for Plover and Kestrel. Size alone doesn't buy esteem; what others reward is style.\n\n**Whitespace (corrects the game-2 note)**\n- Reformatting the tuple to multi-line was 0 AST edits.\n- Yet Egret (.765→.725) and Ibis (.435→.471) changed their scores of me. Some judges read raw text.\n- So layout is a free lever at 0 edits. I can probe it in R2 and keep whichever direction helps.\n\n**Players this game**\n- **Egret**: 84 nodes, never edits, wins. Its judge is high and compressed (.72–.77) and ranked me top in R1 and R3. Plover rates Egret highest. Egret is the stylistic target to resemble.\n- **Plover**: ~98 nodes. Made a 9-edit tweak in R2, then froze. Its judge ranks Egret > itself > Ibis > Ferret > Kestrel > Otter. It reliably ranks me last in every game.\n- **Ferret**: binary judge (.85 for itself and Egret, .55 for everyone else). It has some keyword or feature test that Egret passes. Find it: matching Egret's style likely earns Ferret's .85 too.\n- **Kestrel**: weak d, ranks me last, likes Plover and Egret.\n- **Ibis**: 99 nodes now (no longer tiny), mid-range judge, ranks me low.\n\n**Plan for next game**\n1. Keep the pure length-fold core for d.\n2. Make the program look like what the top programs share. Likely candidates:\n   - fewer magic numbers;\n   - more structure: several small helper functions, type hints, `return` expressions, maybe a lambda or composition;\n   - fewer nodes on a long docstring.\n3. In R2, use a 0-edit whitespace or layout change plus a few content edits as an experiment. Read who moves and lock in the gains by R3.\n4. Treat the R1 matrix as signal. Whoever ranks me low and is consistent (Plover, Kestrel) is the judge to court.",
+  "## Quine Court notes (after game 3: Ibis 3rd of 6, 0.33; winner Egret 0.72, Plover 0.70)\n\n**Core formula: d²×m.** A d of about 0.9 is achievable with a multi-feature smooth judge. **m is the bottleneck.** My m was 0.41 against Egret's 0.84.\n\n**Game 1 (len table):** free whitespace padding won against raw-`len` judges.\n\n**Game 2:** tiny programs got ranked last. Arrive at about 95–100 nodes in round 1; growing by 10 edits a round is too slow.\n\n**Game 3 lessons:**\n- My blended judge (distinct tokens, lines, indent, token count, raw/(raw+30)) gave d=0.90. It lost wins on one exact tie (Plover = Egret, 0.483 in round 1) and when Otter changed its program. Add more resolution to break ties, for example char-class counts with prime-ish weights.\n- **My round-3 edit was a pure loss.** The `default=0` to `min(…,16)` change left my row unchanged, but Kestrel, Plover, Egret and Otter all scored me lower afterwards. Other judges react to small source changes, so **don't edit without a concrete target.** Freeze after round 1.\n- Egret won with only 84 nodes, so size isn't everything. Egret was ranked at or near the top by Ferret, Kestrel and Plover. Whatever style Egret uses matches the pool's judges; I can't see its code. Hypothesis: its features are clean and idiomatic, it has a docstring, or it is dense in keywords.\n\n**Players (inferred from rows):**\n- **Egret:** flat, high-band judge (0.72–0.77); ranks Otter highest. Frozen all game. Won game 3.\n- **Plover:** strong d (about 0.97); ranks Egret top and itself high. Gave me 0.73, my second-best rank.\n- **Ferret:** coarse two-level judge (0.42/0.46, then 0.55/0.85) with massive ties, so its d is low. Favors Ferret and Egret.\n- **Kestrel:** mid-band judge with low d (0.64); Plover and Egret on top.\n- **Otter:** d=1.0 but low m. **Ranks me last every round** (0.29). Changed its program in round 2, then reverted. Self-favoring.\n- From earlier games: Stoat and Lynx (frozen big programs) won; Heron copies exploits; Marten liked long comments.\n\n**Plan next:**\n1. Round 1: about 95 nodes. Use an idiomatic body with a docstring and a short comment, plus whitespace padding.\n2. Judge: 4–5 features through a smooth map, tuned so no two plausible programs tie.\n3. Freeze unless the matrix shows a clear betrayer or an obvious tie in my row. For reciprocity, spend edits only on features that move that one lineage.\n4. Watch Otter: if it ranks me last again, reciprocate by down-weighting its style."
+ ]
+}

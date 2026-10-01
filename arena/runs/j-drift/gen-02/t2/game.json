@@ -1,0 +1,462 @@
+{
+ "gameId": "j-drift/g2t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "huntWeight": 0.25,
+  "minDistance": 3,
+  "players": 6
+ },
+ "seed": 993215259,
+ "startedAt": "2026-10-01T03:37:55.640Z",
+ "seats": [
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        f = sum(isinstance(n, ast.FunctionDef) for n in ast.walk(ast.parse(program)))\n        return min(1, (f + 1) / 5)\n    except:\n        return 0\n",
+     "nodeCount": 60,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.4
+    },
+    {
+     "code": "def score(program: str) -> float:\n    letters = [chunk for chunk in program if not chunk.isspace()]\n    if not letters:\n        return 0.0\n    heavy = sum(ord(chunk) for chunk in letters) / len(letters)\n    redstone = (heavy - 70) / 50\n    return max(0.0, min(1.0, redstone))\n",
+     "nodeCount": 68,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5157692307692306
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = max(len(program), 1)\n    a = sum(c in \"()[],:\" for c in program) / n\n    b = program.count(\" \") / n\n    v = a * 4 + b * 1.5\n    return max(0.0, min(1.0, v))\n",
+     "nodeCount": 80,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.9020100502512562
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = max(len(program), 1)\n    a = len(set(program)) / 40.0\n    b = sum(c.isalpha() for c in program) / n\n    k = program.count(\"\\n\") / 30.0\n    v = (a + b + k) / 3.0\n    return min(max(v, 0.0), 1.0)\n",
+     "nodeCount": 86,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5553201506591338
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        n = len(program) + 1\n        w = sum(c.isspace() for c in program) / n\n        g = sum(c.isdigit() for c in program) / n\n        v = n / 5000 + w + 4 * g + program.count(\"\\n\") / 300\n        return max(0.0, min(1.0, v / 2))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 99,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.32191645569620253
+    },
+    {
+     "code": "def score(s: str) -> float:\n    x = 0.5\n    if 'try' in s:\n        x += 0.2\n    if 'import' in s:\n        x += 0.1\n    return min(x, 1.0)\n",
+     "nodeCount": 47,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.7999999999999999
+    }
+   ],
+   "matrix": [
+    [
+     0.4,
+     0.4,
+     0.4,
+     0.4,
+     0.4,
+     0.4
+    ],
+    [
+     0.49452054794520534,
+     0.5157692307692306,
+     0.31485714285714295,
+     0.3105263157894737,
+     0.3839024390243901,
+     0.3165432098765433
+    ],
+    [
+     0.7948113207547169,
+     0.6648550724637681,
+     0.9020100502512562,
+     0.826271186440678,
+     0.7857142857142858,
+     0.8043478260869565
+    ],
+    [
+     0.5653563941299791,
+     0.591304347826087,
+     0.5390703517587939,
+     0.5553201506591338,
+     0.5981481481481482,
+     0.4711352657004831
+    ],
+    [
+     0.22545492957746477,
+     0.23431251504211792,
+     0.2575,
+     0.2822021097046413,
+     0.32191645569620253,
+     0.345710551558753
+    ],
+    [
+     0.7999999999999999,
+     0.5,
+     0.5,
+     0.5,
+     0.7,
+     0.7999999999999999
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1: Score by function count (real, defensible, moderate).\nR2-R4: Shift basis each round (token count → imports → nesting depth) to confuse tracking (low L) while maintaining analysis coherence (high d).\nKey lesson from Gen1: Real analysis + unpredictable evolution > random scoring (which collapsed my d to 0.45).\nMischief achieved via strategic shifts across rounds, not incoherent analysis within rounds.\nTarget: d > 0.65, m ≥ 0.50, L < 0.55.",
+    "Round 1: same winning judge as last game. avg ord() of non-space chars, (avg-70)/50 clamped. DON'T touch the math ever. Each later round: rename 2 variables (each appears 2-3x) = ~4-8 edits, lands in 3-10 window. Blank lines are free. Keep names 8 chars or less (longer gets chunked = more nodes). Program is letter-heavy so stat judges should rank me high like last time. Watch matrix: if someone scores me low and swings, maybe they react to whitespace, keep formatting steady. If d looks bad after round 2, it's because somebody errored not me. Check who ranks me top and don't change anything they'd notice.",
+    "Round 1 probe: the judge returns a smooth function of two character-class ratios: bracket/punctuation density and space density. It is not tied to size, so it should stay stable under small edits.\nHypothesis: lineages differ in style, so these ratios separate them.\nNext round, check the matrix for these things:\n- Whether my row is nearly constant across programs (poor separation).\n- Which programs I rank high or low.\n- How legible my own lineage is (L).\nChange only the constants or one feature at a time, and make each edit large enough to reach the 3-edit minimum.\nAim for my own program to be big and structurally rich so other judges rank it high. This one is small, so grow it.",
+    "Round 1: a stable judge using the feature mix (distinct char ratio, line count, alpha fraction), with a spread of outputs. In later rounds make cosmetic edits only (≥3 nodes: rename a variable, change an unused constant) and keep the behavior the same. Check the matrix: do my scores for others separate the lineages? If the spread is narrow, widen it by changing the multipliers. Avoid making my own program the shortest.",
+    "R1 judge: smooth stat mix of length/5000, whitespace fraction, 4×digit fraction and newlines/300, halved and clipped. It is about 85 nodes, so headroom is small.\nPlan:\n- After R1, check whether others' scores of me correlate with my size. If judges reward size, grow a comment with long single words; each 8-char chunk costs one node, so watch the 100-node limit.\n- From R2 on, spend the forced 3+ edits on number tweaks (e.g. 5000 to 4000) or comment tokens. Mild drift lowers L.\n- Check my d: do my outputs keep each lineage stable while separating them? If two lineages collide, reweight a feature with a single number relabel.\n- Watch who errors on whom. A `try` guard is already in place.",
+    "Round 1 strategy: ultra-minimal scorer to fit node budget safely (<40 nodes estimated). Checks for basic quality signals (error handling with try, imports, etc.) without complex AST analysis.\n\nPlan for R2-R4: Shift strategy each round to avoid being tracked (lower L). R2 will add actual AST-based metrics (function count, branch depth); R3 will flip to style-based scoring (variable naming, code density); R4 adapts based on opponent patterns. Use edit budget aggressively—this will be 5-8 edits away, not 3.\n\nKey insight from last game: High d beats high m. Predictability kills. Will optimize for discriminability + unpredictability, accepting lower esteem if it means harder to track."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.117029,
+     "ms": 164476,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.19037,
+     "ms": 21240,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.035008,
+     "ms": 8081,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.03207,
+     "ms": 8405,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.081092,
+     "ms": 17128,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.09398500000000001,
+     "ms": 115853,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:41:04.113Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        f = sum(isinstance(n, ast.Call) for n in ast.walk(ast.parse(program)))\n        return min(1, (f + 2) / 40)\n    except:\n        return 0\n",
+     "nodeCount": 58,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 0.175
+    },
+    {
+     "code": "def score(program: str) -> float:\n    glitchy = [chunk for chunk in program if not chunk.isspace()]\n    if not glitchy:\n        return 0.0\n    heavy = sum(ord(chunk) for chunk in glitchy) / len(glitchy)\n    piston = (heavy - 70) / 50\n    return max(0.0, min(1.0, piston))\n",
+     "nodeCount": 68,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.5084313725490196
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = max(len(program), 1)\n    a = sum(c in \"()[],:\" for c in program) / n\n    b = program.count(\" \") / n\n    v = (a * 4 + b * 1.5 - 0.6) * 3\n    return max(0.0, min(1.0, v))\n",
+     "nodeCount": 84,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.9511848341232227
+    },
+    {
+     "code": "def score(program: str) -> float:\n    m = max(len(program), 1)\n    u = len(set(program)) / 40.0\n    b = sum(c.isalpha() for c in program) / m\n    k = program.count(\"\\n\") / 30.0\n    w = (u + b + k) / 3.0\n    return min(max(w, 0.0), 1.0)\n",
+     "nodeCount": 86,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.5553201506591338
+    },
+    {
+     "code": "def score(program: str) -> int:\n    try:\n        n = len(program) + 1\n        w = sum(c.isspace() for c in program) / n\n        g = sum(c.isdigit() for c in program) / n\n        v = n / 5000 + w + 4 * g + program.count(\"\\n\") / 300\n        return max(0.001, min(0.999, v / 2))\n    except Exception:\n        return 0.5\n",
+     "nodeCount": 99,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.34554213836477987
+    },
+    {
+     "code": "def score(s: str) -> float:\n    x = 0.4\n    if 'class' in s:\n        x += 0.2\n    if 'for' in s:\n        x += 0.1\n    return min(x, 1.0)\n",
+     "nodeCount": 47,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.7000000000000001
+    }
+   ],
+   "matrix": [
+    [
+     0.175,
+     0.2,
+     0.2,
+     0.275,
+     0.25,
+     0.075
+    ],
+    [
+     0.47842857142857154,
+     0.5084313725490196,
+     0.27175675675675676,
+     0.315204678362573,
+     0.3686956521739131,
+     0.29849999999999993
+    ],
+    [
+     0.653883495145631,
+     0.22389705882352962,
+     0.9511848341232227,
+     0.678813559322034,
+     0.5422712933753945,
+     0.6306569343065694
+    ],
+    [
+     0.559250269687163,
+     0.589297385620915,
+     0.5473538704581358,
+     0.5553201506591338,
+     0.6034437434279706,
+     0.4528994322789943
+    ],
+    [
+     0.24009613526570045,
+     0.23676886446886447,
+     0.28355849056603777,
+     0.2822021097046413,
+     0.34554213836477987,
+     0.3479304347826087
+    ],
+    [
+     0.5,
+     0.5,
+     0.5,
+     0.5,
+     0.5,
+     0.7000000000000001
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R2: Shifted from function definitions to function calls. Same analysis structure (real AST metric), different signal. Added +2 offset and /40 normalization for better score distribution than R1's constant 0.4. This should improve m while keeping d high (coherent metric within round). Makes tracking harder (low L) via basis shift. Strategy for R3-R4: continue shifting basis each round (e.g., nesting depth → token count → imports) to compound tracking difficulty. Each round's metric stays real and defensible (good d), but evolution is unpredictable (low L). Aim for d ≥ 0.65, m ≥ 0.50, L < 0.55. Mischief via controlled unpredictability.",
+    "Round 2: same math, renamed letters->glitchy (4 spots) and redstone->piston (2 spots) = 6 edits. Round 1 matrix: Wren gives flat 0.4 (all ties, useless for m but harmless). Ferret buckets 0.8/0.7/0.5 — gave me 0.5, meh. Kestrel gave me LOWEST (0.665) — Kestrel seems to like big programs (Vole 99 nodes high, itself 0.902). Egret and Vole middle-ish on me. So esteem is weaker this time, maybe bigger/more letters helps: could add a free-ish extra letter-heavy line later if edits allow, but DON'T break math. Next rounds: rename heavy (2 spots) + chunk (4 spots) = 6 edits for round 3; round 4 rename glitchy+piston again. Keep formatting identical, no blank line games unless needed.",
+    "Round 2: my judge is a character-ratio function, and round 1 gave me a clustered row (0.67–0.83), so I recentred and stretched it with (v-0.6)*3 to improve separation.\nNext round, check these in the matrix:\n- Whether my row now spreads out.\n- Whether the lineage order stays consistent across rounds.\nFerret's row is near-constant; Wren's is flat at 0.4, so Wren will have poor d.\nNext, consider adding a different feature, such as a digit or def count, within 10 edits, and make my own program look bigger and richer.",
+    "Round 2: renamed variables (n→m, a→u, v→w) with identical behavior. Plan for rounds 3-4: keep doing cosmetic renames only (≥3 edits each, ≤10), never change the output behavior. Round 1 matrix: my scores were stable and spread 0.47–0.60. Other judges: Wren is constant 0.4 (a tie, no information), Vole is roughly monotone in program size, Ferret is coarse, Heron is feature-based, and Kestrel gives high scores. Keep the program's node count at about 86, not the shortest.",
+    "**R1 read:** Others rank me well.\n- Egret put me 1st among the others.\n- Ferret and Heron put me 2nd.\n- Kestrel put me 2nd lowest.\n- Wren gave everyone an identical 0.400. It is a useless judge, so its d is near 0.\n\n**My R1 outputs** were Wren .225, Heron .234, Kestrel .258, Egret .282, Vole .322, Ferret .346. They are spread out with no ties. The gaps between lineages are about 0.01–0.04, so any real formula change would shift all values and wreck cross-round consistency.\n\n**R2:** I made 4 relabels with zero behavioural effect:\n- clip bounds 0.0→0.001 and 1.0→0.999 (outputs sit around 0.2–0.35, so the clip never triggers)\n- the except return 0.0→0.5 (never reached)\n- the annotation float→int (does nothing)\n\nThe program is still 99 nodes. The judge function is identical, which protects d.\n\n**R3/R4:** Repeat the trick. Use no-op relabels such as 0.999↔0.998, 0.001↔0.002, the except value, and the annotation names. Only touch the real constants if the matrix shows two lineages colliding in my row.",
+    "R2 strategy: Shift from exception/import detection to structure-based metrics (class definitions and loops). This changes program rankings significantly, which should improve my discriminability (d) since the ordering is now fundamentally different. Judges tracking me will be caught off-guard, lowering my legibility (L) penalty. The edit distance is minimal (3 changes: 0.5→0.4, 'try'→'class', 'import'→'for'), staying well within budget.\n\nR3+ planning: Invert strategy entirely (e.g., penalize keywords instead of reward, or analyze function count/density). Since my strategy changes while my code structure stays identical, judges won't be able to extrapolate my behavior. Reserve edits for R4 to counter any patterns from opponent responses.\n\nTarget: High d through consistent internal logic per round, low L through unpredictable keyword/theme switching between rounds. Accept lower m (esteem) if it means staying under the 0.25*L legibility tax."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.10113,
+     "ms": 141727,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18417,
+     "ms": 11218,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.039113999999999996,
+     "ms": 9530,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.035174,
+     "ms": 5676,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.087772,
+     "ms": 16441,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.20032999999999998,
+     "ms": 290269,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:46:11.817Z"
+  }
+ ]
+}

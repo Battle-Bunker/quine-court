@@ -1,0 +1,265 @@
+{
+ "gameId": "i-esteem/g4t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "players": 6
+ },
+ "seed": 844559723,
+ "startedAt": "2026-10-01T03:37:56.290Z",
+ "seats": [
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Stoat",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n        w = list(ast.walk(t))\n        n = len(w)\n        if n < 2:\n            return 0.5\n        c = sum(1 for x in w if isinstance(x, (ast.If, ast.For, ast.While)))\n        return min(c * 3.0 / n, 1.0)\n    except:\n        return 0.5\n",
+     "nodeCount": 92,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.030303030303030304
+    },
+    {
+     "code": "def score(program: str) -> float:\n    w = program.split()\n    k = sum(program.count(x) for x in (\"def \", \"for \", \"if \"))\n    a = min(len(program) / 800, 1.0)\n    b = len(set(w)) / (len(w) + 1)\n    return (a + b + min(k / 8, 1.0)) / 3\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5576851851851852
+    },
+    {
+     "code": "import zlib\n\n\ndef score(program: str) -> float:\n    \"\"\"Blend compressibility with line density.\"\"\"\n    raw = program.encode()\n    packed = len(zlib.compress(raw)) / (len(raw) + 1)\n    dense = len(raw) / (program.count(\"\\n\") + 1) / 80\n    return min(1.0, 0.6 * packed + 0.4 * min(dense, 1.0))\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5514607508532423
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        node_count = sum(1 for _ in ast.walk(tree))\n        return min(1.0, node_count / 100.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 56,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.52
+    },
+    {
+     "code": "import ast, zlib\n_X = (1, 2)\ndef score(program: str) -> float:\n    try:\n        t = ast.parse(program.strip())\n    except Exception:\n        return 0.01\n    v = sum(1 + zlib.crc32(type(n).__name__.encode()) % 89 / 89 for n in ast.walk(t))\n    return v / (v + 60)\n",
+     "nodeCount": 85,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6994766165794362
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        n = len(program)\n        words = program.split()\n        u = len(set(words))\n        lines = program.count(\"\\n\") + 1\n        x = n / 600.0 + u / 60.0 + lines / 40.0\n        return x / (1.0 + x)\n    except Exception:\n        return 0.5\n",
+     "nodeCount": 81,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5492111194590533
+    }
+   ],
+   "matrix": [
+    [
+     0.030303030303030304,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0.562536231884058,
+     0.5576851851851852,
+     0.4173015873015873,
+     0.4585339506172839,
+     0.4595833333333334,
+     0.3729545454545455
+    ],
+    [
+     0.47723076923076924,
+     0.5756534954407295,
+     0.5514607508532423,
+     0.5062121212121212,
+     0.5633181818181818,
+     0.4770383275261324
+    ],
+    [
+     0.99,
+     0.95,
+     0.86,
+     0.52,
+     0.88,
+     0.85
+    ],
+    [
+     0.7204481206156425,
+     0.712640585481354,
+     0.6919704660821412,
+     0.5731073626988568,
+     0.6994766165794362,
+     0.6902013111330277
+    ],
+    [
+     0.5943204868154159,
+     0.5308835027365129,
+     0.5594713656387665,
+     0.49324324324324326,
+     0.549887471867967,
+     0.5492111194590533
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R1 strategy: Control flow density (if/for/while nodes / total AST nodes). Measures structural complexity; should differentiate programs well.\n\nKey lesson from G1: d² dominates; need d > 0.85 AND m > 0.50. Vole (d=0.96, m=0.67) beat Lynx (d=1.0, m=0.47). Consistency trumps cleverness.\n\nPivot plan: \n- R2: weight tuning only (keep core logic, try 2.0–5.0 range)\n- R3–4: if d < 0.70, full metric switch (function density or name count)\n\nPersona: Variable names (t, w, c) obscure measurement. Real play: solid discriminator + consistency. Mischief through weight adjustments and round-to-round evolution, not logic breaks.",
+    "Round 1: judge mixes length, unique-token ratio, keyword count; stable and wide-ish. Program near the 100-node cap (trimmed to fit). Next rounds: use the edits (up to 10) to tweak the program toward higher column rank; keep the judge stable for good d. Check the matrix for who ranks me high or low.",
+    "G4 R1, submitted about 97 nodes. The judge is 0.6*zlib ratio + 0.4*min(chars-per-line/80, 1), capped at 1.0. It is pure, has no state, and has nothing to tune.\n- Keep the judge logic frozen in R2–R4 to protect d. Any edits go only to inert docstring words, and only if node count is off.\n- After R1, check my row for near-ties of less than 0.01 between lineages. If any exist, accept them and do not chase them; changing the judge costs more d than it gains.\n- Watch who ranks me where. Plover usually likes compressible programs of about 100 nodes.\n- If the measured node count is well below 100, grow the docstring toward 100 in R2. Size-loving judges reward that.\n- Remember: Egret ranked me low in G3, and Wren and Stoat are noise.",
+    "**Round 1 Baseline Strategy**\n\nReplicating my Game 3 approach: pure node-count linear scoring. It achieved d=0.909 (good discrimination), m=0.650 (strong esteem). My ast.walk() metric correlated well with program complexity despite not being tree-sitter-exact.\n\nPlan:\n- Freeze at 0 edits all 4 rounds if R1 results hold (stability is underrated; Lynx and I benefited).\n- Self-score ~0.45–0.50 (this function ≈ 45 nodes, well under limit).\n- Discriminate by complexity rank.\n\nIf R1 shows I'm losing on d, can add a second metric (cyclomatic complexity, depth) within 10-edit budget for R2. If losing on m, adjust scoring distribution.\n\n**Key fix:** Removed all comments (they cost 82 nodes in bounded measurement). Code now minimal and clean.",
+    "Frozen-judge plan again (g3 won with this). Round 1 program: parse → Σ(1+crc32(type)%89/89) → v/(v+60) (widened from K=30 for more top-end separation). Rounds 2–4: resubmit **bit-identical** (0 edits) unless node count shows room; if room, only append dead module-level constants (never touch score()). Never rescale. Parse fail → 0.01. Watch matrix: if two lineages land within ~0.005 under my judge, can't fix without edits — accept. Esteem: size + construct diversity ranks well; I'm ~85–95 nodes, could pad with 1 dead statement in round 2 if count ≤ 90 (≤10 edits). Rivals: Otter (strong, static, grows), Kestrel (ranks me top), Egret (likes something non-size), Stoat churns, Wren weak judge.",
+    "R1 probe: a monotone judge based on source length and the share of distinct words. It is deterministic and has no clipping. In the R2 matrix, check whether my column ranks look sensible and whether other judges' rows stay stable per lineage. Make at most one small change per round. Don't touch it after R3."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.175344,
+     "ms": 260042,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.099046,
+     "ms": 34253,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.097168,
+     "ms": 40378,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.087396,
+     "ms": 139750,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 4.3490115000000005,
+     "ms": 537528,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.032298,
+     "ms": 23634,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:46:54.607Z"
+  }
+ ]
+}

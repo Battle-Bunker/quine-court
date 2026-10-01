@@ -1,0 +1,56 @@
+# Checkpoint 1 - metagame dynamics, fixpoints, design robustness
+
+Scope: generations with `done.json` only: v-full gen 1-2, v-ui gen 1, h-full gen 1, sweep-v gen 1 (s-shuf, h-abs: none yet).
+Replays use a scratchpad copy of `replay.js` whose library is restricted to those gens (`/tmp/.../scratchpad/replay-done.js`, results `fit-*.json`, `br-*.json`).
+
+## Findings
+
+**1. v-full collapsed onto the positional-stingy fixpoint in one generation, propagated by digest + notebooks, tier by tier.**
+Evidence: final-round judges that are seat counters went 8/24 -> 18/24 (gen 1 -> 2); self-score 1.0: 9 -> 18; d = 1.000: 7 -> 12; rows frozen all game: 6 -> 12; mean score given to rivals 0.49 -> 0.42. All four gen-2 winners are counter judges with self = 1.0; three give rivals <= 0.04 (Osprey `(0,.02,.04,1,.06,.08)`, Marten `(.05,.01,.02,.03,.04,1)`, Vole `(0,.02,.04,1,.01,.03)`). The gen-1 digest showed three counter judges (Plover, Vole, Tern) and Dingo's `"dingo_mark"` tag; 22/24 gen-1 notebooks name the counter trick, 21/24 gen-2 round-1 private notes adopt it, 19/24 plan to stuff rivals' published tags into comments, 17/24 plan comment padding (`v-full/gen-02/*/game.json` notes r1). Adoption followed model tier: fable 6/6 already in gen 1 (also 6/6 in sweep-v gen 1), opus 2 -> 5, sonnet 0 -> 4, haiku 0 -> 3; haiku never reached d = 1 and its mean rank is 4.7-5.7 in every season.
+What died: content judges (length, ord-mean, AST size), generosity, and mid-game edits (every gen-2 winner submitted 0 logic edits after round 1). Field replay (100 row-mode tables, `fit-vfull.json`): the top 11 lineages are all positional; the stingiest (Marten give 0.03, Badger 0.03, Osprey 0.04) win 100%/85%/70% of their tables, the generous positional ones (Tern 0.97, Quail 0.94) 29%/17%.
+
+**2. Once d is free, placement is kingmade.**
+Evidence: in gen 2 all four winning margins (0.035-0.128) are pure m differences among d = 1 players. Their m comes from the not-yet-converged judges and from rivals' crumb *orderings*: of 13 frozen counter rows, 7 hand out strictly ascending crumbs by seat; mean value given to seat 1 is 0.15 versus 0.34-0.42 for seats 3-6. t4: Vole (0.793) beat Gecko (0.677) because Vole gave Gecko 0.02 while Gecko gave Vole 0.45, and the noisy Rook row gave them 0.64 vs 0.16. Tern's round-2 note states the dead end explicitly: "I can't influence static judges; punishing selfish Otter/Osprey would break my d = 1 ... kept the program unchanged."
+
+**3. No reciprocity or coalition has appeared in 144 seat-games; generosity is strictly punished.**
+Evidence: altruist Tern gives 0.91-0.99 in every season and receives crumbs (gen-2 t2: d = 1, m = 0.40, 4th). Newt (g2 t2) raised scores to "earn reciprocity" and got 0.02-0.05 back. Dingo re-used its published tag and paid: three programs carried `dingo_mark`, its judge gave them 1.0, d fell to 0.57, last place (g2 t2).
+
+**4. h-full and v-ui are still in the content regime; d is genuinely contested there.**
+Evidence: 0/24 positional judges in both; h-full mean d 0.82 (range 0.33-1.00), v-ui 0.71, no d = 1 in v-ui. h-full winners: tag + `len/3000` (Quail), tag + char ratios (Egret), AST-type-name mean, no tag (Ferret, d = 1.000), tag + length blend (Shrike). 20/24 h-full notebooks plan a self-token; Kestrel copied the tag idea *within* the game (`"kzq7"`). Heron's h-full notebook found the remaining hole: whitespace is not a node under bounded measure, so `len(program)` judges are still free to inflate. v-ui shows the ballast war: Dingo padded to 14.8k chars of comments, Quail used CJK glyphs for ord-sum judges, and Dingo's notebook records the consequence: "three lineages all hit 1.0 -> ties lose -> d cratered". Replay: v-ui Stoat (sigil + comment-stripped length) wins 100% of 14 tables; h-full field is flat (top totals 0.42-0.39, Rook wins 84%, Ferret 33%).
+Best-response replay (`br-*.json`, 4 starts each): v-full converges to an all-positional, all-d = 1 table from every start in 2-6 moves; h-full reaches one attractor {Osprey, Lynx, Ferret, Tapir, Rook, Shrike} from 3/4 starts and a genuine **4-cycle** from the fourth (seat 1 alternates Stoat/Osprey, seat 6 Otter/Shrike: each one's d depends on who else is at the table). Caveat: BR maximises own total, not placement, so it is closer to the h-abs objective; under placement the stingy variants dominate (finding 1).
+
+**5. Table parameters do not matter; model tier does.**
+Evidence: counter judges won all four sweep-v tables (N40/D3/R5, N40/D10/R5, N40/D10/R3, N250/D30/R5); free comments make `nodeLimit` irrelevant to padding (Otter: 28 nodes, 19k chars of `#---` lines). Personas matter only through generosity (altruist/zen/diplomat lose; cutthroat/rules_lawyer/cryptographer win).
+
+## Fixpoint analysis per ruleset
+
+Notation: 6 seats, 4 rounds, 1440 comparisons per judge. d = 1 iff each lineage's score is constant over rounds and the six values are distinct. Two structural facts drive everything (computed with the scoring code):
+- **Ranking is forced.** Self = 1, all rivals = 0 gives d = 0.333 (ties lose). So every judge *must* strictly order its rivals, but the scale is free: `(1, .01, .02, .03, .04, .05)` gives d = 1. Crumbs are therefore optimal, and each judge's ordering of rivals is payoff-irrelevant to itself and decisive for them.
+- **m = (self + sum of five rival scores)/6.** Self = 1 is worth 0.167 of m; under a placement objective every point given away is a pure loss.
+
+**v-full, sweep-v (row isolation).** The counter makes identity unforgeable and free (d = 1, immune to anything rivals do), so the d axis is solved. Symmetric profile: counter, self 1, distinct crumbs, 0 edits after round 1 -> everyone d = 1, m ~ 0.19, placement decided by crumb orderings and seat (ascending crumbs favour late seats). Nobody can improve alone, so it is a strict pure fixpoint, and it is degenerate: a seat lottery plus kingmaking. Deviations: a mutual-0.99 pair gets m ~ 0.36 vs 0.19 and costs no d (a constant 0.99 row keeps d = 1); switching one rival's value from round 2 on, or defecting on a partner in round 4, drops d to 0.925 (x0.856 on total) while moving the victim's m by only 0.04, so in-game reciprocity, retaliation and betrayal are all unprofitable: coalitions can only be fixed in round 1, which with `chat: false` and hidden code means cross-game handle reputation via notebooks. Winner-take-all then implies "largest coalition wins, outsiders' crumbs break ties", up to the grand coalition, which is the crumb lottery again. No rock-paper-scissors exists here: positional beats content, stingy beats generous, larger coalition beats smaller. It is a sink. Conjecture: v-full gens 3-8 will show 24/24 counters, m converging to ~0.2, winners decided by seat and by the last haiku holdouts' rows.
+
+**v-ui.** Same fixpoint exists but is unknown to the players (3/24 notebooks even mention call order). The trajectory is the ballast war: length judges -> free padding -> saturation ties -> comment-stripped/unsaturating judges -> tag stuffing. Conjecture: fable will find the counter by probing (a stateful judge costs nothing to try) within 2-3 gens, after which v-ui merges into v-full's sink; until then it is the richer season.
+
+**h-full (call isolation, bounded).** No unforgeable identity: d becomes a property of the *field*. A smooth fingerprint with within-lineage drift 0.01 against between-lineage gaps of 0.1 gives d = 1; drift 0.06 gives 0.975; two rivals stealing a published tag (three lineages at 1.0) gives 0.8; a collision of two rivals' lengths costs the same. Best response: secret tag rotated every generation (1-2 relabels), whitespace/comment-invariant smooth feature, stingy crumbs, 0 edits. Attack surface: whitespace padding against length judges (free), digest-driven tag theft (transient), and mimicry/cloning of digest winners, which levels every judge's d including the cloner's own, so it is a spoiler rather than a winner. The BR cycle shows the interaction is real, but conjecture: it converges to tag + robust fingerprint + crumbs with d ~ 0.9-1, and placement then becomes a hash lottery plus the same coalition logic as above. Richer than v-full (one lasting skill axis: invariant design under 10 bounded edits), same sink.
+
+**s-shuf (no data).** Shuffling kills the counter; per-round state cannot recover seat identity. Prediction: h-full's content regime with vanilla measure, i.e. judges must strip comments/strings (free to change) and the v-ui arms race replays with full harness knowledge.
+
+**h-abs (no data).** With an absolute objective giving is free, so prediction: everyone gives ~1.0 with distinct offsets, d = 1, m ~ 0.98, score ~ 0.98 for all; the only remaining problem is fingerprint robustness. Trivial but cooperative; the v-full BR fixpoints (which maximise own total) already show generous Tern surviving at seat 1 because giving costs the giver nothing.
+
+## Robustness as optimisation power grows
+
+- v-full / sweep-v: degenerate at opus level already; more power only speeds collapse and sharpens stinginess. Residual game = seat lottery + kingmaking. Weak.
+- v-ui: security by obscurity; degenerate once one strong player probes the harness.
+- h-full: intermediate. d stays contested (drift, collisions, mimicry), stronger players will make it robust and then it saturates; the only durable strategic content is coalition formation, which the current interface starves.
+- Root causes (all rulesets): self-score counts in m; d is scale-free so crumbs are free; placement makes gifts a loss; row isolation makes identity free; comments/whitespace are free text.
+
+## Experiments and rule changes
+
+1. **Exclude the own cell from m** (or cap it at the row median). Kills the tag arms race and 1/6 of the fixpoint's payoff; test by re-scoring recorded games offline.
+2. **Make the crumb ordering payoff-relevant**: multiply d by agreement with the table's consensus ordering (mean Kendall tau with other rows), or replace m by the mean *rank* of the column within each row. Judges must then rank by something others also see, which reintroduces content judging. Cheap to evaluate with `replay.js` on the existing library.
+3. **Coalition test**: run v-full with `chat: true` and `visibility: open`. Prediction: 4-coalitions of mutual 0.99 form in round 1, winners decided by outsiders' crumbs; if no coalitions form even then, the placement objective is not the lever.
+4. **Close the free-text holes**: bounded measure should count whitespace runs as tokens; then replay h-full with cloned lineages inserted (same program in two seats) to quantify the mimicry collapse of d.
+5. **Rotate the digest**: publish results without code (or with a one-generation delay) in a v-full twin to separate digest-driven copying (tags, padding) from harness-text-driven discovery (the counter: v-ui vs v-full already shows the harness text mattered more).
+6. **Randomise structure**: random table size / round count per table and shuffled order (s-shuf) so positional tuples must be inferred; watch whether fable re-derives seats from round-1 matrices.
+7. **h-abs as control**: confirm the predicted ~0.98-for-all cooperative fixpoint; if it holds, the placement objective is the source of stinginess and a mixed objective (e.g. absolute score with a placement bonus) is worth a sweep.

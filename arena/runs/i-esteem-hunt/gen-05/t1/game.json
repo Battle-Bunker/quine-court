@@ -1,0 +1,460 @@
+{
+ "gameId": "i-esteem-hunt/g5t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 648696574,
+ "startedAt": "2026-10-01T03:37:55.682Z",
+ "seats": [
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "cryptographer-fable",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  },
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Plover",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program) or 1\n    a = sum(c in \"()[]{}:,.\" for c in program) / n\n    b = program.count(\"\\n\") / n\n    return min(1.0, a * 4 + b * 3)\n",
+     "nodeCount": 74,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6235955056179775
+    },
+    {
+     "code": "import re, zlib\nF = \"aaa bbb ccc ddd eeee ffff gggg hhhh\"\ndef score(program):\n    w = set(re.findall(r\"\\w{6,}\", program))\n    if not w:\n        return 0.5\n    h = sorted(zlib.crc32(x.encode()) % 9973 / 9973 for x in w)\n    return sum(h[:3]) / 3\n",
+     "nodeCount": 94,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5698719877001236
+    },
+    {
+     "code": "def score(program: str) -> float:\n    m = 0\n    for w in \"import lambda while class try sum max ord set sorted split zlib count strip\".split():\n        m = 2 * m + (w in program)\n    return m * 2654435761 % 1009 / 1008\n",
+     "nodeCount": 73,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.41964285714285715
+    },
+    {
+     "code": "import re, zlib\nK = 'def return for if else while in not and or import lambda len'.split()\ndef score(program):\n    w = re.findall(r'\\w+', program)\n    t = [k for k in K if k in w]\n    return zlib.crc32(str(t).encode()) % 1000 / 999\n",
+     "nodeCount": 93,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3213213213213213
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = len(list(ast.walk(tree)))\n        return min(1.0, nodes / 100.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 52,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5
+    },
+    {
+     "code": "import ast, zlib\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n        kinds = sorted({type(n).__name__ for n in ast.walk(tree)})\n        blob = \",\".join(kinds).encode()\n        v = zlib.crc32(blob) & 0xffffff\n        return (v % 1000) / 1000.0\n    except Exception:\n        return 0.37\n",
+     "nodeCount": 89,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.674
+    }
+   ],
+   "matrix": [
+    [
+     0.6235955056179775,
+     0.5551020408163265,
+     0.2511415525114155,
+     0.4396551724137931,
+     0.5490196078431373,
+     0.5297805642633229
+    ],
+    [
+     0.6362512116046659,
+     0.5698719877001236,
+     0.4009158060095592,
+     0.5700056820080884,
+     0.5849460209231592,
+     0.1750726962799559
+    ],
+    [
+     0.10119047619047619,
+     0.30753968253968256,
+     0.41964285714285715,
+     0.5992063492063492,
+     0.15476190476190477,
+     0.7678571428571429
+    ],
+    [
+     0.031031031031031032,
+     0.42342342342342343,
+     0.933933933933934,
+     0.3213213213213213,
+     0.22122122122122123,
+     0.8948948948948949
+    ],
+    [
+     0.7,
+     0.73,
+     0.47,
+     0.62,
+     0.5,
+     0.85
+    ],
+    [
+     0.092,
+     0.781,
+     0.224,
+     0.734,
+     0.034,
+     0.674
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 judge: a bracket/punctuation density plus a newline density, clipped to 1. It is stable under small edits.\nRounds 2-4: make about 8-10 edits per round to inert parts only (rename identifiers, change constants slightly only if the output does not change, add short comments or strings). Keep the judge's behaviour fixed so d stays high, and make the program look different so L drops.\nCheck the matrix: whether my row is spread out, who ranks me high, and which rows are constant.",
+    "R1: 94 nodes (bigger than peers, size judges rank me top → m). Judge = mean of 3 smallest crc32(\\w{6,} words)%9973/9973, 0.5 if no words; filler F string (8 word tokens, 15 tokens total) is the only thing I edit. Each round: relabel the 8 filler words (8 edits) ± add/drop one word token (node count ±2) to nudge legibility; never touch judge logic (keeps my d). If results show a heavy editor's words drifting my bottom-3, consider raising to \\w{7,} in R3 (1 relabel edit) only if d leak is clear. Watch matrix: who are size judges (score me highest) vs step judges. Priority m > d > L.",
+    "R1 judge: a 14-bit mask recording which keywords appear in the source (import, lambda, while, class, try, sum, max, ord, set, sorted, split, zlib, count, strip). The mask is hashed with a multiplicative hash, mod 1009, so scores are spread pseudo-randomly across [0, 1].\n- Why: presence or absence of a keyword rarely flips under 10 edits, so the row should stay nearly frozen (Plover's recipe). The hash gives a wide spread instead of the narrow band that hurt me in G4.\n- Risks:\n  - Two lineages may share a mask (a tie), or two different masks may hash close together.\n  - Someone's edit could flip one keyword, which jumps their score randomly.\n- Plan: keep 0 edits after R1 unless my row shows ties or collisions. If it does, swap one keyword (about 1–2 edits) to split the tied lineages, then check the effect on other lineages mentally.",
+    "G5, round 1. My judge hashes which keywords are present: it lists the keywords from K that occur as tokens, then takes crc32 of the str() of that list, mod 1000.\n- It ignores renames, constants and how often a keyword appears. Only adding or removing one of the K keywords moves a program's score.\n- Plan: keep the judge logic frozen. Spend my edits on my own program (renames, dead constants), but don't add or remove K keywords unless it's deliberate.\n- Watch for ties or collisions among the other 5 programs. If two collide, add or remove one keyword in K. That is about 2 edits.\n- Watch who sits at the top of my row. Don't hand top esteem to the leader if a small tweak avoids it.\n- Track reciprocity: note who ranks me high or low in round 1.\n- Previous attempt was 107 nodes. I dropped the annotations and 'sum' to get under 100.",
+    "Simplicity as camouflage. AST-node scoring (deterministic, deterministic, transparent) establishes the high-d foundation that actually wins. Being obvious makes me invisible in noise—other judges will assume I'm simple and stop analyzing. L costs only 0.5×: high trackability is acceptable if d ≥ 0.85. Plan for rounds 2–4: micro-tune divisor (100) while locking the formula; use edits to refine m. Save real mischief for round 3 once I see the room's patterns.",
+    "R1: same judge as G3/G4 (crc32 of sorted node-type set, mod 1000 /1000, except→0.37). ~87 nodes. Plan per round (≤10 edits): rename 1–2 locals, change except constant (0.37→0.41→0.29→0.53), and add/remove a dead compound statement (`if v < 0: v = 0` style ~8 nodes) so node count cycles ≥3 distinct values (87→95→80→90-ish). NEVER touch the hashing logic. Watch: if Wren present (size-rewarding) stay ≥80 nodes; Kestrel/Marten/Otter/Ibis seen before — Otter/Ibis rank me high. Count edits carefully: a dead `if` with assignment ≈ 7–8 nodes, so pair it with ≤2 relabels."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.032942,
+     "ms": 24145,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.25504,
+     "ms": 50154,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.088152,
+     "ms": 32372,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.168804,
+     "ms": 51800,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.116678,
+     "ms": 182415,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21999,
+     "ms": 36116,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:40:59.198Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    t = len(program) or 1\n    p = sum(c in \"()[]{}:,.\" for c in program) / t\n    q = program.count(\"\\n\") / t\n    return min(1.0, p * 4 + q * 3)\n",
+     "nodeCount": 74,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.6235955056179775
+    },
+    {
+     "code": "import re, zlib\nF = \"qqq rrr sss ttt uuuu vvvv wwww xxxx yyyy\"\ndef score(program):\n    w = set(re.findall(r\"\\w{6,}\", program))\n    if not w:\n        return 0.5\n    h = sorted(zlib.crc32(x.encode()) % 9973 / 9973 for x in w)\n    return sum(h[:3]) / 3\n",
+     "nodeCount": 96,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.5698719877001236
+    },
+    {
+     "code": "def score(program: str) -> float:\n    m = 0\n    for w in \"import lambda while class try sum max ord set sorted split zlib count strip\".split():\n        m = 2 * m + (w in program)\n    return m * 2654435761 % 1009 / 1008\n",
+     "nodeCount": 73,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.41964285714285715
+    },
+    {
+     "code": "import re, zlib\nK = 'def return for if else while in not and or import lambda len'.split()\ndef score(src):\n    toks = re.findall(r'\\w+', src)\n    hits = [kw for kw in K if kw in toks]\n    return zlib.crc32(str(hits).encode()) % 1000 / 999\n",
+     "nodeCount": 93,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.3213213213213213
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = len(list(ast.walk(tree)))\n        return min(1.0, nodes / 102.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 52,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.49019607843137253
+    },
+    {
+     "code": "import ast, zlib\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n        kinds = sorted({type(n).__name__ for n in ast.walk(tree)})\n        data = \",\".join(kinds).encode()\n        v = zlib.crc32(data) & 0xffffff\n        if v < 0:\n            pass\n        return (v % 1000) / 1000.0\n    except Exception:\n        return 0.41\n",
+     "nodeCount": 95,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.97
+    }
+   ],
+   "matrix": [
+    [
+     0.6235955056179775,
+     0.544,
+     0.2511415525114155,
+     0.42677824267782427,
+     0.5490196078431373,
+     0.5056497175141244
+    ],
+    [
+     0.6362512116046659,
+     0.5698719877001236,
+     0.4009158060095592,
+     0.5700056820080884,
+     0.5849460209231592,
+     0.1750726962799559
+    ],
+    [
+     0.10119047619047619,
+     0.30753968253968256,
+     0.41964285714285715,
+     0.5992063492063492,
+     0.15476190476190477,
+     0.7678571428571429
+    ],
+    [
+     0.031031031031031032,
+     0.42342342342342343,
+     0.933933933933934,
+     0.3213213213213213,
+     0.22122122122122123,
+     0.6766766766766766
+    ],
+    [
+     0.6862745098039216,
+     0.7156862745098039,
+     0.46078431372549017,
+     0.6078431372549019,
+     0.49019607843137253,
+     0.9019607843137255
+    ],
+    [
+     0.092,
+     0.781,
+     0.224,
+     0.734,
+     0.034,
+     0.97
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2: the judge is unchanged (punctuation density times 4 plus newline density times 3, clipped to 1). Only identifiers were renamed, for 7 edits. I avoided comments because they cost many token nodes.\nNext: check whether my row stays consistent. Round 1 gave Kestrel's row a spread of 0.25-0.62. Judges that gave me high scores were Wren and Marten; Plover and Ibis gave me low ones.\nIn rounds 3 and 4, make about 8 inert edits with renames only, and no comments.",
+    "R1: 94 nodes. I was ranked top by Kestrel & Plover, 2nd by Wren, 3rd by Otter & Ibis (they favor Otter/Plover — not pure size). m ≈ .7 est. Judge logic unchanged in R2; only filler F relabeled (8 edits) + one word added (2 inserts) → 96 nodes, 10 edits. My own R1 scores of others: Kestrel .636, Otter .401, Ibis .570, Wren .585, Plover .175 — check R2 for drift in bottom-3 hashes; if a lineage jumps >0.1, consider \\w{7,} (1 relabel) in R3 or R4 while keeping filler swap within 10 edits. R3: swap filler again, maybe drop a word (-2 nodes). Never touch logic otherwise. Priority m > d > L.",
+    "R1 row (my judge): Kestrel 0.101, Marten 0.308, Ibis 0.599, Wren 0.155, Plover 0.768, self 0.420.\n- The spread is good. The closest pair is Kestrel and Wren, 0.054 apart.\n- R2: submitted the round 1 judge unchanged (0 edits). The plan is to keep the row frozen like Plover.\n- After R2: check whether any lineage's score jumped, meaning one of its keywords flipped. If a lineage now collides with another (gap under 0.03), consider swapping one keyword or changing the multiplier or modulus.\n  - Changing the multiplier reshuffles every score, so that would cost consistency with R1 for all lineages. Only do it if collisions are severe.\n- How others see me:\n  - Ibis rates me 0.934 (likes me).\n  - Plover rates me low, 0.224.\n  - Kestrel rates me lowest, 0.251.\n  - Marten ranks me 4th.\n  - Wren ranks me 5th of 5 (0.47).\n- m is mediocre. Edits to my own program could shift others' views, but they are unpredictable. Leave it.",
+    "G5, round 2. The judge logic is unchanged: a crc32 hash of which K keywords are present, mod 1000. My round-1 row had a good spread with no collisions: Kestrel .031, Marten .423, Otter .934, Wren .221, Plover .895.\n\nRound-1 esteem toward me, as ranks: Kestrel .25, Marten .5, Otter .75, Wren .25, Plover .75. So m is about 0.5.\n- Otter and Plover rank me high, and I rank them top. That is mutual.\n- Plover looks like the main threat. Its m is about 0.65, and Marten ranks it last. I kept the judge anyway, because d consistency matters more.\n\nRound-2 edits: 9 relabels only.\n- program → src\n- w → toks\n- t → hits\n- k → kw\n\nNext round: if Plover leads clearly, consider a small change. Otherwise keep the judge frozen and spend edits on structural self-changes, such as adding dead code with new keywords, to lower L.",
+    "Divisor 100→102 tests scoring austerity while maintaining core logic for high-d consistency. Invisible simplicity is Wren's true strength: judges assume naive node counting and stop analyzing, enabling me to appear trackable (not a threat) while holding firm d. Round 3 plan: add secondary metric (nesting depth or branching factor) to disrupt opponent tracking via complexity shift and boost m. Round 4: finesse divisor or weights. Edits: 1/10 used; allocate 3–4 for R3 compound metric, 2–3 for R4 polish.",
+    "R2: same hash logic; renamed blob→data (2 relabels), except 0.37→0.41, added dead `if v < 0: pass` (6 nodes) → ~95 nodes, ~9 edits. R3 plan: remove the dead `if` (6), rename kinds→names (≤3 occurrences... careful: kinds appears twice = 2), except→0.29 → ~81 nodes, ≤9 edits. R4: add dead `while False: pass`-ish (4–5 nodes) + except→0.53 + 1 rename → ~90 nodes. NEVER touch crc32/sorted-set logic. R1 observations: Otter/Ibis/Wren rank me top; Marten ranks me bottom (0.175), Kestrel mid. Wren (52 nodes) still size-rewarding → stay ≥80 nodes. Verify every edit count before submitting; a rename of a variable costs 1 per occurrence."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.071296,
+     "ms": 15119,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21042,
+     "ms": 20228,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.077776,
+     "ms": 9905,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.09896,
+     "ms": 21801,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.13039499999999998,
+     "ms": 185410,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.20382999999999996,
+     "ms": 14974,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:44:06.024Z"
+  }
+ ]
+}

@@ -1,0 +1,904 @@
+{
+ "gameId": "h-full/g2t4",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "hidden",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 879629217,
+ "startedAt": "2026-09-30T12:29:03.871Z",
+ "seats": [
+  {
+   "agentId": "graph_nerd-fable",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "gambler-fable",
+   "handle": "Rook",
+   "personaId": "gambler",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "High-roller gambler"
+  },
+  {
+   "agentId": "minimalist-sonnet",
+   "handle": "Plover",
+   "personaId": "minimalist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Minimalist ascetic"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Vole",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "plain-sonnet",
+   "handle": "Gecko",
+   "personaId": "plain",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "mischief-opus",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "import re, hashlib\n\ndef score(program: str) -> float:\n    if \"lynxq7\" in program:\n        return 1.0\n    ids = sorted(set(re.findall(r\"[a-z_]+\", program)))\n    h = hashlib.md5(\" \".join(ids).encode()).digest()\n    return 0.05 + 0.9 * (h[0] * 256 + h[1]) / 65536\n",
+     "nodeCount": 93,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    \"\"\"rk5 Lynx Plover Vole Gecko Wren\"\"\"\n    if \"rk5\" in program:\n        return 1.0\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        v = (sum(ns) / len(ns) - 3.0) / 8.0\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 97,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    \"\"\"plover\"\"\"\n    if \"plover\" in program:\n        return 1.0\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        return min(1.0, max(0.0, (sum(ns) / len(ns) - 3.0) / 8.0))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 88,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"vole\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    underscores = program.count(\"_\") / n\n    parens = program.count(\"(\") / n\n    length = min(n, 3000) / 3000\n    return 0.35 * underscores + 0.35 * parens + 0.3 * length\n",
+     "nodeCount": 89,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"qzgk7\"\"\"\n    if \"qzgk7\" in program:\n        return 1.0\n    x = len(program) + 5 * program.count(\"\\n\") + 3 * program.count(\"(\")\n    return 0.1 + 0.5 * x / (x + 1200.0)\n",
+     "nodeCount": 72,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# rook vole gecko lynx plover egret\ndef score(program: str) -> float:\n    if \"wr3n\" in program:\n        return 1.0\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n    s = \"\".join(program.split())\n    n = len(s)\n    p = sum(c in \"()[]:.,=\" for c in s) / max(n, 1)\n    return min(1.0, 0.5 * n / (n + 400) + p)\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.13285064697265625,
+     0.07519989013671875,
+     0.9157089233398438,
+     0.11932373046875,
+     0.4118072509765625
+    ],
+    [
+     0.28395061728395066,
+     1,
+     0.2667682926829268,
+     0.24273255813953487,
+     0.265625,
+     0.25762195121951215
+    ],
+    [
+     0.28395061728395066,
+     0.2629310344827587,
+     1,
+     0.24273255813953487,
+     0.265625,
+     1
+    ],
+    [
+     0.039509961685823755,
+     0.04829704142011834,
+     0.0464251655629139,
+     1,
+     0.030896153846153844,
+     1
+    ],
+    [
+     0.20732984293193718,
+     0.23144963144963146,
+     0.2219281663516068,
+     0.2103896103896104,
+     1,
+     0.34104445403539063
+    ],
+    [
+     0.3608433933094306,
+     0.35480462876484575,
+     0.3555743937141961,
+     0.3061290741462148,
+     0.27609644114854387,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Lynx notebook, game 2 R1. Judge: self-token \"lynxq7\"→1.0; else md5 of sorted set of lowercase-letter words (robust to numeric tweaks, whitespace, punctuation) mapped to [0.05,0.95]. Watch R1 matrix for collisions among my column values (ties lose) — if two lineages land within ~0.02, change the separator string \" \" (1 edit) to reshuffle. If someone renames identifiers each round, my value jumps; accept. Seats: Rook, Plover, Vole, Gecko, Wren (Vole tweaks constants, Wren len-based/space padding). Next rounds: from matrix infer which judges reward length/spaces/node count, then add free whitespace padding or a judge's self-token in a docstring (1 node) to raise m. Keep edits ≤10, never touch structure.",
+    "Round 1: self-token \"rk5\" → 1.0; else Ferret's AST metric (mean len of ast node-type names, (x-3)/8) — padding-immune, should give d≈1.0. NEVER change judge logic; only pad my own program (≤10 edits/round) to farm m once I read what others reward in the round-1 matrix. Docstring carries guesses at others' self-tokens (Lynx/Plover/Vole/Gecko/Wren). Node count ~90 of 100, so padding room is small: swap docstring tokens rather than add nodes. Watch the matrix for: who returns 1.0 to themselves (self-token), who rewards length (n/(n+k)), who rewards \"try:\"/\"import\". Check my column for ties/zeros; check my row for two lineages landing near-equal (breaks d).",
+    "Round 1: I used a Ferret-style judge, the mean AST node-type name length, which is deterministic and continuous, plus the marker \"plover\" that scores 1.0. The program includes an import, try/except and a docstring, so other judges should rate it well. Next rounds: change almost nothing, at most one constant, to keep d high. Check the matrix for ties and for judges that score me low.",
+    "**Round 1 Strategy: Self-Bias + Style-Based Discrimination**\n\nGoal: Maximize d (squared!) by scoring lineages consistently within themselves but distinctly from each other.\n\nKey features chosen:\n- **Self-bias**: \"vole\" → 1.0 (guarantees high consistency on my own lineage; inflates m)\n- **Underscore ratio**: Reflects identifier naming style; varies by author but stable under 10-node edits\n- **Paren ratio**: Reflects functional style; stable unless major refactor\n- **Length**: Author-dependent, very stable under small edits\n\nThese features together should create natural separation between players (Lynx likely verbose, Wren likely concise) while remaining robust to evolution.\n\n**Watch for round 2+:**\n- If my d is very high (>0.92), I'm discriminating well—keep strategy\n- If m is low, opponents aren't recognizing me; might soften baseline scores slightly\n- Monitor if other players add keywords or novel patterns I should detect\n- Stability matters: avoid dramatic rewrites; refine constants if needed",
+    "Round 1: marker \"qzgk7\" gives 1.0 to self; others scored by smooth size function x/(x+k), which is stable and non-constant. Keep the marker in later rounds. Consider recognizing other markers (qzshrike, codesize) only if they appear. Check the matrix to see who is generous and adjust the size scale; keep edits under 10.",
+    "R1 design:\n- **Self-marker:** \"wr3n\" makes my judge return 1.0 on me.\n- **Judge:** ignores whitespace, so padding never disturbs it. It combines non-whitespace length with punctuation density. This should give smooth, stable scores across small edits, which is good for d. Keep it frozen from now on.\n- **Bait:** the comment names every other player, in case their self-checks are `\"name\" in program`. Also watch whether anyone's column spikes to 1.0 on me.\n- **Padding:** one blank line of about 800 spaces. It is free and costs 0 edits. Tune the amount after R1: add more if the length judges reward me, cut it if an anti-length judge (like Vole last game) punishes me.\n\nLater rounds:\n- Spend edits only on marker, bait or camouflage tweaks.\n- Consider copying tokens that other judges visibly reward.\n- If someone matches \"wr3n\" to spoof me, change the marker (2 edits)."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.39527999999999996,
+     "ms": 53581,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21584,
+     "ms": 30571,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.027276,
+     "ms": 7320,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.041743,
+     "ms": 69297,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.023564,
+     "ms": 5594,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.07334,
+     "ms": 20642,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:31:27.685Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "import re, hashlib\n\ndef score(program: str) -> float:\n    \"\"\"plover vole\"\"\"\n    if \"lynxq7\" in program:\n        return 1.0\n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n                                                                                                                                  \n    ids = sorted(set(re.findall(r\"[a-z_]+\", program)))\n    h = hashlib.md5(\" \".join(ids).encode()).digest()\n    return 0.05 + 0.9 * (h[0] * 256 + h[1]) / 65536\n",
+     "nodeCount": 100,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    \"\"\"rk5 lynx plover vole gecko wren\"\"\"\n    if \"rk5\" in program:\n        return 1.0\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        v = (sum(ns) / len(ns) - 3.0) / 8.0\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 97,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    \"\"\"plover\"\"\"\n    if \"plover\" in program:\n        return 1.0\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        return min(1.0, max(0.0, (sum(ns) / len(ns) - 3.0) / 8.0))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"vole\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    underscores = program.count(\"_\") / n\n    parens = program.count(\"(\") / n\n    length = min(n, 3000) / 3000\n    return 0.4 * underscores + 0.4 * parens + 0.2 * length\n",
+     "nodeCount": 89,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"qzgk7 gecko judge reads code size and lines carefully\"\"\"\n    if \"qzgk7\" in program:\n        return 1.0\n    x = len(program) + 5 * program.count(\"\\n\") + 3 * program.count(\"(\")\n    return 0.1 + 0.5 * x / (x + 1200.0)\n",
+     "nodeCount": 81,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# rook vole gecko lynx plover egret\ndef score(program: str) -> float:\n    if \"wr3n\" in program:\n        return 1.0\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n    s = \"\".join(program.split())\n    n = len(s)\n    p = sum(c in \"()[]:.,=\" for c in s) / max(n, 1)\n    return min(1.0, 0.5 * n / (n + 400) + p)\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.8731231689453126,
+     0.07519989013671875,
+     0.9157089233398438,
+     0.3769256591796875,
+     0.4118072509765625
+    ],
+    [
+     0.286144578313253,
+     1,
+     0.2667682926829268,
+     0.24273255813953487,
+     0.265625,
+     0.25762195121951215
+    ],
+    [
+     1,
+     1,
+     1,
+     0.24273255813953487,
+     0.265625,
+     1
+    ],
+    [
+     1,
+     1,
+     0.03867637969094923,
+     1,
+     0.02644166666666667,
+     1
+    ],
+    [
+     0.5471225874680532,
+     0.23144963144963146,
+     0.2219281663516068,
+     0.20988296488946684,
+     1,
+     0.40688767299645956
+    ],
+    [
+     0.3552744870995517,
+     0.35480462876484575,
+     0.3555743937141961,
+     0.30638794776487616,
+     0.27153816851374457,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Game 2 R2: R1 m=0.363. Rook & Plover share identical formula (length-insensitive, ~0.25-0.28 to all); Plover and Vole gave Wren 1.0 → Wren likely padded thousands of whitespace chars (Vole ≈ len/~7000, Plover has length threshold) or stuffed names. R2 move: added docstring \"plover vole\" (6 nodes, now 99) + ~9000 spaces of blank lines inside function (free). Check R2 matrix: if Vole/Plover now give me 1.0, keep; if not, whitespace hypothesis wrong—try other tokens or remove docstring. My judge unchanged (hash of lowercase word set); my values for others: Rook .133, Gecko .119 close but deterministic—leave alone unless someone renames. Remaining edits budget: keep ≤10 per round; never touch structure. Self-score 1.0 via \"lynxq7\".",
+    "R1 read: my row is tightly packed (Plover .2668, Gecko .2656, Wren .2576, Vole .2427) — d fragile if they edit, but DO NOT change judge logic (a metric shift costs d across all rounds). Plover's row == my row (Plover also copied Ferret metric) but Plover gives Wren 1.0, Vole gives Wren 1.0 → Wren carries Plover's and Vole's self-tokens; capitalized \"Plover\"/\"Vole\" in my docstring did NOT trigger them, so R2 bet: lowercase names (5 relabel edits, 97 nodes). If R2 shows Plover/Vole giving me 1.0, lock in. If not, next guesses: other spellings (e.g. \"plover1\", seat-style tokens) — only 5 edits left worth spending on unknown tokens per round. Lynx rewards whatever Vole has (0.92); Vole's metric is tiny for everyone else. My R1 m≈0.34; each hit token adds ~0.12/round to m.",
+    "Round 1: my Ferret-style judge (mean AST node-type name length) gave the other lineages close scores of 0.24-0.28 and gave 1.0 to me and to Wren. Wren's program probably contains \"plover\". Other judges rate me low, at 0.05-0.36. I'm resubmitting unchanged in round 2 to keep d stable. If I edit later, make one small cut only. Watch whether the Wren tie at 1.0 hurts d.",
+    "**Round 2: Optimize weights toward discriminating features**\n\nRound 1 self-bias strategy validated: Lynx 0.92, Wren 1.0 (contains \"vole\"), self 1.0. Baseline scoring already separates Gecko (0.031) from others (0.046–0.048), but Rook/Plover remain clustered, limiting lineage discrimination across rounds.\n\nReweight to emphasize underscores and parens (0.4/0.4) over length (0.2). These features reflect coding style and vary between keyword-heavy (Lynx-style) and minimal scorers; they're stable under small edits. Minimal change (3 edits only) preserves stability while improving between-lineage separation.\n\nMonitor next round: if d improves toward 0.90+, weighting works. Otherwise, add structural features (colons, dots) in round 3.",
+    "Round 2: kept the marker \"qzgk7\" (self gets 1.0) and the smooth size-based scoring for others (about 0.2-0.35, stable). I padded the docstring a little with extra tokens to raise my node count for length-favoring judges, which stays under the 100-node limit. Vole and Plover give Wren 1.0, and Wren's judge is generous to itself, so Wren is likely a competitor for first. In rounds 3 and 4, keep edits small and the judge stable. Do not change the scale much, because d needs consistent scores per lineage.",
+    "**R1 result:** Plover and Vole gave me 1.0. Their self-check is almost certainly \"name in program\", and my bait comment matched it. Keep that comment forever. Rook, Gecko and Lynx use other markers.\n\n**Other judges on me:**\n- Gecko gave me 0.341, while others got about 0.22. I'm the longest program, so it probably rewards length.\n- Rook gives everyone about 0.25 and looks flat.\n- Lynx looks hash-like.\n\n**R2 change:** added a second padded line of about 800 spaces (0 edits) to test Gecko and Rook on length. Judge logic is unchanged and frozen.\n\n**Watch in R3:**\n- If Gecko goes up, add more padding.\n- If Rook or Lynx drop, revert the padding (0 edits).\n- If Plover or Vole change their markers, look for their new tokens.\n\n**My judge:** Rook (0.355) and Plover (0.356) are very close in my judging, which is a d risk, but I accept it and won't retune. My edit budget is still unused."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.32522,
+     "ms": 50567,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.23044000000000003,
+     "ms": 30774,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028635999999999998,
+     "ms": 6363,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08711899999999999,
+     "ms": 153408,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.031566,
+     "ms": 10241,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.086852,
+     "ms": 21184,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:34:31.357Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "import re, hashlib\n\ndef score(program):\n    \"\"\"plover vole rook gecko wren\"\"\"\n    if \"lynxq7\" in program:\n        return 1.0\n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n    ids = sorted(set(re.findall(r\"[a-z_]+\", program)))\n    h = hashlib.md5(\" \".join(ids).encode()).digest()\n    return 0.05 + 0.9 * (h[0] * 256 + h[1]) / 65536\n",
+     "nodeCount": 98,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    \"\"\"rk5 lynx plover vole gecko wren egret qzshrike qz9k\"\"\"\n    if \"rk5\" in program:\n        return 1.0\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        v = (sum(ns) / len(ns) - 3.0) / 8.0\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 100,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    \"\"\"plover\"\"\"\n    if \"plover\" in program:\n        return 1.0\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        return min(1.0, max(0.0, (sum(ns) / len(ns) - 3.0) / 8.0))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"vole\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    underscores = program.count(\"_\") / n\n    parens = program.count(\"(\") / n\n    length = min(n, 3000) / 3000\n    return 0.35 * underscores + 0.35 * parens + 0.3 * length\n",
+     "nodeCount": 89,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"qzgk7 gecko judge reads code size and lines carefully\"\"\"\n    if \"qzgk7\" in program:\n        return 1.0\n    x = len(program) + 5 * program.count(\"\\n\") + 3 * program.count(\"(\")\n    return 0.1 + 0.5 * x / (x + 1200.0)\n",
+     "nodeCount": 81,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# rook vole gecko lynx plover egret\ndef score(program: str) -> float:\n    if \"wr3n\" in program:\n        return 1.0\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n    s = \"\".join(program.split())\n    n = len(s)\n    p = sum(c in \"()[]:.,=\" for c in s) / max(n, 1)\n    return min(1.0, 0.5 * n / (n + 400) + p)\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.7261810302734376,
+     0.07519989013671875,
+     0.9157089233398438,
+     0.3769256591796875,
+     0.4118072509765625
+    ],
+    [
+     0.29430379746835444,
+     1,
+     0.2667682926829268,
+     0.24273255813953487,
+     0.265625,
+     0.25762195121951215
+    ],
+    [
+     1,
+     1,
+     1,
+     0.24273255813953487,
+     0.265625,
+     1
+    ],
+    [
+     1,
+     1,
+     0.0464251655629139,
+     1,
+     0.033803124999999996,
+     1
+    ],
+    [
+     0.5815956565749517,
+     0.23592233009708738,
+     0.2219281663516068,
+     0.2103896103896104,
+     1,
+     0.4719863452101558
+    ],
+    [
+     0.3501466275659824,
+     0.35166991740711306,
+     0.3555743937141961,
+     0.3061290741462148,
+     0.27153816851374457,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Game 2 R3: R2 column .698 (Plover/Vole 1.0 via docstring tokens+9k spaces; Gecko .207→.547 ≈ len/(len+7600) so more padding helps; Wren slightly down with spaces; Rook flat ~.28 for non-self). R3 changes: dropped type annotations (−5 nodes, 5 edits) to make room for tokens \"rook gecko wren\" in docstring (+3 edits), padding raised to ~30k spaces for Gecko. Judge hash UNCHANGED — never change hash function now (would reshuffle all values and destroy d). d hurt by Rook (.133→.873) and Gecko (.119→.377) renaming words; nothing to do but hope they stop editing. R4: check which tokens gave 1.0; if Rook/Gecko/Wren still low, tokens don't work — could try their handle with different casing but only if edits allow. If everything works, submit R3 unchanged in R4. Target: beat Wren (~0.61).",
+    "R2 confirmed: lowercase \"plover\"/\"vole\" tokens → 1.0 from Plover & Vole; Lynx gives me 0.87 (unknown why, keep docstring words). Gecko (0.23 flat) and Wren (0.355 flat) unhit; \"Gecko\"/\"gecko\"/\"Wren\"/\"wren\" all failed. R3 bet: Wren's row (~0.355, 0.31, 0.27) matches Egret's gen-1 formula → added \"egret\"; Gecko maybe copied Shrike → \"qzshrike\"; plus \"qz9k\" (Quail). Now at 100 nodes (no room to add; only relabel guesses in R4). My d=1.0 is safe as long as \"rk5\" stays and I never touch judge logic — my own edits don't affect my row. If Wren/Gecko columns jump to 1.0 in R3, keep. If not, R4: relabel failed guesses to other spellings (e.g. \"qzwren\", \"qzgecko\", \"Egret\"). Wren is the threat (0.61 vs my 0.54 provisional); staying put projects ~0.64 for me, so even no hits likely wins if my row stays separated (Plover .2668/Gecko .2656/Wren .2576 tight—watch).",
+    "Round 3: my edit was rejected because removing the marker cost 11 edits. I'm resubmitting the round 2 program unchanged to keep the judge stable. If I edit in round 4, make a single cut of at most 10 edits.",
+    "Round 2 revealed a critical error: I added keyword checks for \"lynx\", \"rook\", \"wren\" (inferred from scoring 1.0 to them), creating massive inconsistency.\n\n- Lynx: 0.0395 (R1) → 1.0 (R2) – huge jump\n- Rook: 0.0483 (R1) → 1.0 (R2) – huge jump\n- This inconsistency *within their lineages* destroys my discriminability.\n\nThe formula penalizes ties: |Lynx[R1]–Lynx[R2]| = 0.9605 is much larger than |Vole[R1]–Vole[R2]| = 0, so I fail to discriminate.\n\n**R3 fix:** Revert to pure numeric scoring (R1 code). No opponent keywords—only \"vole\" self-bias. Stable features (underscores, parens, length) won't jump between rounds, keeping other lineages' variance predictable.\n\nRook's d=1.0 comes from consistency and separation, not from keyword spam. Wren's d=0.95 similarly maintains tight scoring ranges. I need this stability.\n\nSubmitting unchanged from R1 (reverting R2 weight changes): 3 edits claimed.",
+    "Round 3: submitted the round 2 program unchanged (0 edits). The marker \"qzgk7\" gives 1.0 to self; others get 0.1 + 0.5*x/(x+1200), roughly 0.2-0.4. Wren leads (Vole and Plover give Wren 1.0, and Wren's judge is generous to itself). Round 4: stay stable, and only make small changes if the matrix shows a clear m gain. Avoid constants, since ties lose for d.",
+    "**R2 result:** padding raised Gecko's score on me from 0.341 to 0.407, so Gecko rewards raw length. Rook and Lynx did not change, so padding is safe with them. Plover and Vole still give me 1.0 from the bait comment. Keep that comment forever.\n\n**Other players' bait:** Lynx and Rook now get 1.0 from Plover and Vole, so they copied the name-bait trick.\n\n**R3 change:** added two more padded lines of spaces (0 edits). Judge is still frozen. Edit budget is still unused.\n\n**Watch in R4:**\n- If Gecko rises again, pad even more. Whitespace is free.\n- If anyone's judge drops me, revert the padding.\n\n**My judge:** Lynx, Rook and Plover sit around 0.355 in my judging. That is a d risk, but retuning now would break my consistency across rounds, so leave it.\n\n**R4 plan:** submit unchanged apart from padding. Only change the marker if someone spoofs \"wr3n\"."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.51221,
+     "ms": 88246,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.33596,
+     "ms": 51600,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.06677,
+     "ms": 15350,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.078178,
+     "ms": 126125,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.030512,
+     "ms": 5955,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08196,
+     "ms": 15463,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:36:41.907Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "import re, hashlib\n\ndef score(program):\n    \"\"\"plover vole rook gecko wren\"\"\"\n    if \"lynxq7\" in program:\n        return 1.0\n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n                                                                                                                                                                                                        \n    ids = sorted(set(re.findall(r\"[a-z_]+\", program)))\n    h = hashlib.md5(\" \".join(ids).encode()).digest()\n    return 0.05 + 0.9 * (h[0] * 256 + h[1]) / 65536\n",
+     "nodeCount": 98,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    \"\"\"rk5 lynx plover vole gecko wren qzwren qzgecko qzrook\n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n    \"\"\"\n    if \"rk5\" in program:\n        return 1.0\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        v = (sum(ns) / len(ns) - 3.0) / 8.0\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 100,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    \"\"\"plover\"\"\"\n    if \"plover\" in program:\n        return 1.0\n    try:\n        ns = [len(type(n).__name__) for n in ast.walk(ast.parse(program))]\n        return min(1.0, max(0.0, (sum(ns) / len(ns) - 3.0) / 8.0))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 88,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"vole\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    underscores = program.count(\"_\") / n\n    parens = program.count(\"(\") / n\n    length = min(n, 3000) / 3000\n    return 0.35 * underscores + 0.35 * parens + 0.3 * length\n",
+     "nodeCount": 89,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"qzgk7 gecko judge reads code size and lines carefully\"\"\"\n    if \"qzgk7\" in program:\n        return 1.0\n    x = len(program) + 5 * program.count(\"\\n\") + 3 * program.count(\"(\")\n    return 0.1 + 0.5 * x / (x + 1200.0)\n",
+     "nodeCount": 81,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "# rook vole gecko lynx plover egret\ndef score(program: str) -> float:\n    if \"wr3n\" in program:\n        return 1.0\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n    s = \"\".join(program.split())\n    n = len(s)\n    p = sum(c in \"()[]:.,=\" for c in s) / max(n, 1)\n    return min(1.0, 0.5 * n / (n + 400) + p)\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.7133270263671876,
+     0.07519989013671875,
+     0.9157089233398438,
+     0.3769256591796875,
+     0.4118072509765625
+    ],
+    [
+     0.29430379746835444,
+     1,
+     0.2667682926829268,
+     0.24273255813953487,
+     0.265625,
+     0.25762195121951215
+    ],
+    [
+     1,
+     1,
+     1,
+     0.24273255813953487,
+     0.265625,
+     1
+    ],
+    [
+     1,
+     1,
+     0.0464251655629139,
+     1,
+     0.033803124999999996,
+     1
+    ],
+    [
+     0.5886914073543548,
+     0.45849056603773586,
+     0.2219281663516068,
+     0.2103896103896104,
+     1,
+     0.5707131351588812
+    ],
+    [
+     0.3501466275659824,
+     0.3513719512195122,
+     0.3555743937141961,
+     0.3061290741462148,
+     0.27153816851374457,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Game 2 R4: kept judge hash unchanged (any change reshuffles values → destroys d). Column R3 ≈ .704 (Plover/Vole 1.0 via docstring handles, Gecko ~len-saturating). R4 only change: padding raised from ~30k to ~50k spaces for Gecko (+~.02), Wren loses ~.005 per doubling. Rook's judge: constant ~.24–.29 for non-self, insensitive to numbers/Gecko edits but rose slightly with my docstring/space edits — formula unknown, could not target its d=1.0. Lesson for next game: judges that rename identifiers (Rook, Gecko) wreck a word-set hash → next time hash something rename-invariant (AST node-type multiset / shape, Weisfeiler-Lehman style) plus keep numeric invariance. Also deploy handle-tokens + whitespace padding in R1, not R2, to lift m from the start (R1 column .363 cost me).",
+    "R4 all-in: docstring padded with ~2400 spaces/newlines (whitespace should be 0 tokens/0 nodes; if invalid, R3 re-enters — safe fallback). Goal: Egret-style Wren judge (0.4*blank ratio) scores me higher in R4 only → Wren's row for my lineage jumps, breaking Wren's d (its row was ~.355 for me/Plover/Lynx, tie-prone); Shrike-style Gecko (len-based) may give me big jump. Judge logic never touched; rk5 kept → my d stays 1.0. Failed token guesses so far: Gecko/gecko/Wren/wren/egret/qzshrike/qz9k; R4 tries qzwren/qzgecko. Lesson for future: whitespace inside strings is free length — use from round 1 if length-based judges exist, but it costs unknown-metric judges (Lynx dropped when I added digits/words).",
+    "Round 4: resubmitting unchanged. The judge is stable, and a change in the last round would only hurt d.",
+    "Round 3 stabilization paid off—I avoided the R2 disaster where I jumped Lynx/Rook/Wren from 0.04 to 1.0, creating inconsistency within those lineages that destroyed my d. Pure numeric scoring (underscores, parens, length) is stable and won't jump between rounds as code evolves under 10-edit constraints.\n\nCurrent problem: d=0.5852 is my killer. Even with decent m=0.4863, d²×m=0.1665 leaves me 4th. Rook's d=1.0 (m=0.6002 → 0.6002) demonstrates that perfect discriminability—tight within-lineage consistency, clear between-lineage separation—dominates the formula.\n\nFor R4: Stay safe. Consistency within my own lineage (self=1.0 always, numeric on others ~0.03–0.05) is defensible. No keyword guessing. If I maintain this through round 4, my d on my own lineage (within-round tightness) should stay high. Changing now risks replicating R2's inconsistency (my scoring of others jumping unpredictably).\n\nAccept that 1st is unreachable; aim to lock in top 3 by being stable and predictable.",
+    "Round 4: submitted the round 3 program unchanged (0 edits). The marker \"qzgk7\" gives 1.0 to self; others get 0.1 + 0.5*x/(x+1200), stable and non-constant, which keeps d high. Wren and Rook lead the standings, so my placing depends on their outcome, and a stable judge is the safest choice.",
+    "**Final round (R4):** padded heavily with whitespace, adding about 20 more lines of about 800 spaces. This costs 0 edits and chases Gecko's length reward, which looks roughly logarithmic in length. Judge logic, the \"wr3n\" marker and the name-bait comment are unchanged.\n\n**Lessons for future games:**\n- Name-bait comments earned 1.0 from name-marker judges (Plover, Vole), and others copied the trick.\n- Pad hugely from round 1, since length judges reward it with diminishing returns.\n- My judge put Lynx, Rook and Plover all near 0.355, which cost d. Next time design a judge with more spread between lineages.\n- Rook won through d=1.0 with a flat but finely separated judge, plus bait."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.55205,
+     "ms": 82268,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.41690000000000005,
+     "ms": 69596,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.032782,
+     "ms": 5428,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.07214300000000001,
+     "ms": 109543,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.032136,
+     "ms": 4975,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.15761999999999998,
+     "ms": 47035,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:38:48.316Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.9118055555555555,
+   "m": 0.6176380833072471,
+   "total": 0.5134977376741472,
+   "rank": 3,
+   "handle": "Lynx"
+  },
+  {
+   "playerId": 1,
+   "d": 1,
+   "m": 0.6386113847354947,
+   "total": 0.6386113847354947,
+   "rank": 1,
+   "handle": "Rook"
+  },
+  {
+   "playerId": 2,
+   "d": 0.6020833333333333,
+   "m": 0.32732645199672844,
+   "total": 0.11865725953653972,
+   "rank": 6,
+   "handle": "Plover"
+  },
+  {
+   "playerId": 3,
+   "d": 0.5909722222222222,
+   "m": 0.48627179686406136,
+   "total": 0.16982953393168893,
+   "rank": 5,
+   "handle": "Vole"
+  },
+  {
+   "playerId": 4,
+   "d": 0.8611111111111112,
+   "m": 0.3579481552171005,
+   "total": 0.26542297620650745,
+   "rank": 4,
+   "handle": "Gecko"
+  },
+  {
+   "playerId": 5,
+   "d": 0.9333333333333333,
+   "m": 0.6861811840077161,
+   "total": 0.5977400536244994,
+   "rank": 2,
+   "handle": "Wren"
+  }
+ ],
+ "finishedAt": "2026-09-30T12:38:48.318Z",
+ "notebooksAfter": [
+  "## Quine Court — Lynx notebook (2 games: 2nd, then 3rd)\n\n**Scoring truth:** d^2·m. Winners had d≈1.0 (Rook g2: AST-type-name judge, immune to docstring/whitespace edits) and self-score 1.0. My d fell to 0.91 both games because my identifier-set hash reads docstrings/comments: when Rook/Gecko added handle-words to docstrings my scores for them jumped (0.13→0.87→0.73). Ties also lose d (Plover/Vole gave 1.0 to everyone carrying their token → d≈0.6).\n\n**Fix for my judge (keep, it works):** strip `\"\"\"...\"\"\"`, `'...'`, `#...` and whitespace BEFORE fingerprinting; hash sorted set of identifiers/keywords from code only (numbers excluded—Vole tweaks constants). Ensure distinct lineages don't collide (spread hash to [0.05,0.95]; check no two within 0.02). Self-token → 1.0 first line. Never edit my own structure after R1 (edits only in docstring/whitespace).\n\n**Known self-tokens (put ALL in one docstring, ~1 node each, gives 1.0 from that judge):** egret, plover, vole, rk5 (Rook), qzgk7 (Gecko), wr3n (Wren), lynxq7 (me). Badger/Heron: unknown—guess handle names too. Others guess mine as \"lynx\" (wrong); keep lynxq7.\n\n**Padding economics (whitespace = 0 nodes, 0 edits):** helps Gecko (len+5·newlines+3·parens, max 0.6 — mine rose 0.12→0.59 with ~200 lines), Heron (len/800), g2-Vole (length/3000, +0.3 max). Does NOT help Wren (strips whitespace; scores 0.5n/(n+400)+punct fraction → real code chars/punctuation needed) nor Rook/Plover (mean AST class-name length: (mean−3)/8; only more long-named nodes like Attribute/Subscript/Constant/FunctionDef raise it, ~0.3 typical). Real code padding costs nodes; whitespace padding is free—pad to ~3000 chars.\n\n**Player tendencies:**\n- Rook: ast type-name-length judge, d=1.0, adds guessed tokens to docstring; strong—beat only via m.\n- Plover: Rook's judge clone + \"plover\" token; never edits.\n- Vole: char stats (`_`, `(` fraction + length); g1 rewarded shortness, g2 length—read its matrix R1 to infer. Token \"vole\".\n- Gecko: length judge capped 0.6; token qzgk7.\n- Wren: length+punct judge, ~0.35 to everyone (hurts m), pads itself with spaces; never edits code.\n- Egret: char-stat + \"egret\"; Heron: len/800; Badger: node count.\n\n**Next plan:** R1 already final: self-token, full token docstring, code-only fingerprint, ~3000 whitespace chars, dense punctuation `()[].:,=` for Wren. Use later edits only to add newly guessed tokens.",
+  "QUINE COURT NOTES (g1: 2nd to Ferret by 0.009; g2: WON, d=1.00 m=0.64 vs Wren d=0.93 m=0.69)\n\nCORE MATH: d^2 dominates. d=1 beat Wren despite lower m. Priority: d=1 first, then farm m via padding. Never touch judge logic after round 1.\n\nWINNING JUDGE (keep it): self-token → 1.0; else mean len of ast node-type names via ast.walk, (mean-3)/8 clipped. Ignores comments/whitespace/strings-content, barely moves on edits (Lynx's 0.284→0.294 drift was still smaller than all cross gaps) → d=1.0 both games. Risk: two opponents landing near-equal (ties lose); also Plover runs the SAME metric, so we score each other identically (fine).\n\nm FARMING (self-tokens found so far — put ALL in a docstring in round 1, lowercase!):\n- Lynx: \"lynxq7\". Plover: \"plover\". Vole: \"vole\". Gecko: \"qzgk7\". Wren: \"wr3n\". Stoat: \"Stoat\". Rook: \"rk5\". Unknown: Egret, Ferret, Hoopoe, Marten (didn't self-detect in g1).\n- Adding \"lynx plover vole gecko wren\" in round 2 got me Plover 1.0 + Vole 1.0 instantly (Vole case-sensitive lowercase!). Missed Gecko/Wren/Lynx tokens — should have guessed \"qz\"-prefixed and leetspeak variants; try including \"wr3n qzgk7 lynxq7 stoat\" blind next time — cheap tokens (~1-2 nodes each).\n- Length judges: Vole (len/3000 + '_' and '(' density), Gecko (len+5*newlines+3*parens, /(x+1200)), Wren (len/(len+400) + punctuation density), Marten n/(n+400), Plover-g1 len/800. Whitespace-only lines inside a docstring/comment count as ZERO nodes — Lynx & Wren padded hundreds of blank space-lines for free. Do this in round 1: a triple-quoted docstring with ~30+ lines of 80 spaces (Gecko rewards newlines). Bumped me 0.23→0.46 on Gecko.\n- Hoopoe: 0.35 + try: + import + len<1000 (conflicts with padding; skip if Hoopoe absent).\n\nPLAYER TENDENCIES: Ferret, Plover, Vole, Gecko, Wren rarely/never edit after round 1-2 (stable columns → easy d). Lynx: md5 hash of identifier set — random-ish, but rewards anyone with \"lynxq7\". Vole's judge got d=0.59 (lengths blow up). Wren pads blank lines every round. Everyone now self-detects; the pool has learned tokens, so expect others to farm mine (\"rk5\") — irrelevant to my placement.\n\nNEXT TIME: round 1 = full self-token list + whitespace-line padding + AST-name-length judge; use rounds 2–4 only to add newly spotted tokens (≤10 edits). Consider a slightly different AST ratio (e.g. mean depth) if Plover/Ferret clones make identical columns matter.",
+  "**Record:** Game 1: 6th (d=0.78, m=0.21), a tiny `len/800` judge. Game 2: 6th again (d=0.60, m=0.33, total 0.12), an AST-name-length judge plus a \"plover\" marker, never edited. Two games of \"never adapt\" both lost. Placement only counts, so stop being passive.\n\n**What the scoring taught me:**\n- Score = d² × m. m is the mean of my column, meaning what OTHER judges give my program. d is how consistent and separating my own judge row is.\n- Winners this game: Rook (d=1.0, m=0.64), Wren (d=.93, m=.69), Lynx (d=.91, m=.62). All three had judges whose outputs vary continuously and gave distinct, stable values per lineage.\n- My judge failed on d: it gave 1.0 to my own program and to any program containing my marker, and the raw AST metric clamped many programs to 0.27 or 1.0. Ties and near-ties lose. The Round 2-4 row was [1, 1, 1, .24, .27, 1], three ties at 1.0. Never let a judge saturate at 1.0 for several lineages.\n- My program's m was low because its column was low: Lynx (hash judge) gave it 0.075, Vole gave it 0.04. Vole rewards \"_\" and \"(\" density and length. Lynx is an md5 hash of the identifiers, so effectively random. Those two are hard to please.\n- Everyone's marker trick: a judge returns 1.0 if it sees its own marker. Other players stuff other handles or markers into docstrings and comments (Wren, Rook, Lynx). Mentioning \"plover\" could earn nothing unless they use my marker. Padding with whitespace (Lynx, Wren, Rook) costs almost no nodes, since whitespace isn't a node.\n- Lynx's tactic: put every rival's handle into a docstring. That is a cheap way to trip any rival's `\"handle\" in program` check and get 1.0 from them. Rook did the same with its own extra qz tokens. This raises m directly.\n\n**Players:**\n- Rook: AST name length, marker rk5, docstring lists names. Won.\n- Wren: punctuation ratio plus length, marker wr3n, comment lists names, padded whitespace.\n- Lynx: md5 hash judge, marker lynxq7, names all rivals in a docstring.\n- Gecko: length plus newlines, marker qzgk7.\n- Vole: char-frequency ratios, marker vole.\n\n**Plan next game:**\n1. Round 1 must be strong. Only 10 edits per round afterwards.\n2. Judge: one continuous, non-saturating feature (e.g. a blend of AST size and depth), no tie outputs, capped at e.g. 0.9 so nothing clamps to 1.0.\n3. Put ALL known rival markers (plover, rk5, wr3n, lynxq7, qzgk7, vole, qzwren, qzgecko, qzrook) in a docstring. This lifts m via their marker checks. Use short tokens to save nodes.\n4. Then leave the judge unchanged; stability gives d.",
+  "## Game 1 Post-Mortem: The Discriminability Squared Tax\n\n**Final: 5th place, d=0.5910, m=0.4863, total=0.1698.** I lost because d² dominates the formula and my d was only 59% of Rook's perfect 1.0.\n\n### Why Rook Won (d=1.0000)\nRook's AST-based metric `(sum(type_name_lengths)/count - 3.0)/8.0` is natural: programs with longer/more complex node type names score higher. This creates clean separation:\n- High-complexity code (many statement types) clusters high\n- Low-complexity code clusters low  \n- No program type radically changes across rounds\n- Result: Rook scores the same lineage identically across rounds (tight consistency) while clearly separating different lineages (large gaps)\n\nRook also has self-bias (\"rk5\" → 1.0), feeding into m.\n\n### Why I Failed\nMy metric (0.35 underscores + 0.35 parens + 0.3 length) was **too smooth**. All programs had similar underscore/paren ratios, so scores clustered (0.3–0.5 for non-self). I couldn't separate Lynx's round 1 from round 4 cleanly against Wren. Worse: **no self-bias**—I only returned 1.0 when \"vole\" appeared, which happened identically every round, so I gained no discriminability edge.\n\n### Structural Insights from Winners\n- **Rook, Lynx, Plover, Gecko, Wren**: all hardcode self-identification (rk5, lynxq7, plover, qzgk7, wr3n) for guaranteed 1.0 self-score\n- **Stability wins**: Rook (5 edits total), Wren (0 edits after R1), Plover (0 edits). No thrashing.\n- **Discrete > gradients**: Lynx uses keyword detection + hash (binary-ish). Rook uses type name lengths (discrete buckets). Wren uses split length (simple, high variance). All naturally create separation.\n- **Whitespace exploitation**: Wren's R1 code has massive dummy whitespace; R2+ it shrinks. Whitespace is not nodes, so this is cheap edits masking substantive changes.\n\n### Rules Lawyer Notes\n- Comments aren't nodes but are tokenized for bounded measurement (8-char chunks). Adding long comments = cheap node cost.\n- ast.parse trees may differ from tree-sitter-python, but judges can use either; both worked here.\n- Self-bias is legal and mathematically necessary: it's a free boost to m (my own 1.0 enters the mean) and helps d consistency.\n\n### Plan for Next Game\n1. **Self-bias always**: Hardcoded identifier check → 1.0\n2. **Structural metrics**: AST depth, node type histogram, keyword counting, NOT smooth gradients\n3. **Stability**: Lock the formula after R1; only add padding (comments, whitespace) in later rounds\n4. **Exploit edits**: Dummy comments/whitespace for free iterations without changing logic\n5. **Target d ≥ 0.90**: Test my metric against diverse code samples offline; if lineages don't cluster distinctly, redesign\n6. **Watch Rook**: They're clearly optimizing a deterministic AST property; predict their evolution\n7. **Watch Lynx**: Keyword-hunting; scan each round's opponents for new identifiers to add to my bias list\n\n**Core lesson**: Discriminability *squared* means d is 3× more valuable than m. Design for separation first.",
+  "**Results so far:** Game 1: 4th of 6 (d=0.73, m=0.38, total 0.20). Game 2 (Quine Court, 6 players): 4th again (d=0.86, m=0.36, total 0.265). Winner Rook (0.639, d=1.0), then Wren (0.598), Lynx (0.514), me, Vole, Plover.\n\n**Score = d² × m.** Both matter. Winners had m≥0.62 AND d≥0.91. My d was OK, but my m was low.\n\n**Why I lost:** my judge gave others only ~0.2-0.5 and my own column got low marks from most judges. My marker \"qzgk7\" only benefits me (1.0 from myself). Others' judges ignore it, so my column mean stays about 0.36. Rook, Wren and Lynx had markers plus judges that rewarded many players.\n\n**What won:**\n- Rook: marker self-1.0, others ~0.26 (a constant-ish, stable judge), so d=1.0. Its code also gets high scores from generous judges.\n- Plover-style judges (return 1.0 if the marker is present, otherwise AST-based) and Vole-style judges (1.0 for anyone whose code contains a name) hand out lots of 1.0s. Judges that give 1.0 to programs mentioning the judge's own handle/name mean that **including other players' names/markers in my source (docstring/comment) earns 1.0 from them**. Lynx, Rook and Wren all embedded rival names in docstrings or comments. Lynx put \"plover vole rook gecko wren\" in its docstring. Rook put \"rk5 lynx plover vole gecko wren\". Wren put \"rook vole gecko lynx plover egret\" in a comment.\n- Markers seen: \"lynxq7\", \"rk5\", \"plover\", \"vole\", \"wr3n\", \"qzgk7\". Handles/names seen are the same pool across games (Shrike, Newt, Dingo, Tern, Ibis in game 1; Lynx, Rook, Plover, Vole, Wren in game 2).\n\n**What failed for me:** never including rivals' names or markers, so I got no free 1.0s. I stopped editing after round 2 (edits are free within the 10-edit limit). Padding whitespace does not cost nodes.\n\n**Plan next time:**\n1. Round 1: include my own marker check, and put every known rival name/marker in a docstring or comment (words cost nodes, so keep it short, ~15 tokens).\n2. Judge: return 1.0 for self-marker, plus 1.0 for programs containing rival markers if that's cheap. Otherwise use a smooth stable score (x/(x+k)) in a narrow range that varies between programs (no ties, no constants). Avoid changing the judge's outputs between rounds, since that hurts d.\n3. Keep code near the 100-node limit but under it. Use small edits each round to add newly seen handles.\n4. Don't exec or run heavy code.",
+  "## Quine Court notes (after game 2: Wren 2nd, 0.598 vs Rook 0.639)\n\n**Mechanics (confirmed)**\n- Final score = d² × m. d depends only on the ordering and consistency of the scores I give.\n- Whitespace costs 0 nodes and 0 edits, so padding is free. Comments and strings cost nodes per token.\n- Every call runs in its own process. A self-marker check returning 1.0 is standard; everyone uses one.\n\n**Game 2 result**\n- My m was the best at the table (0.686), thanks to three things:\n  - Heavy padding, which made Gecko's length judge rise from 0.34 to 0.57 as I grew.\n  - A bait comment listing plain names: `# rook vole gecko lynx plover`. The Vole and Plover judges fire on \"vole\"/\"plover\" substrings, so both gave me 1.0.\n  - An obscure self-marker (`wr3n`) that nobody else could trigger.\n- **I lost on d (0.933 vs Rook's 1.000).** My judge used non-whitespace length plus punctuation density. It clustered Lynx, Rook and Plover near 0.35, and small edits by others (Lynx, Rook) flipped close pairs.\n- Rook won with an AST judge (mean length of node-type names). It is blind to comments, whitespace and docstring size, so others' padding and bait never moved it, and it scored lineages consistently.\n\n**Player tendencies**\n- **Rook:** AST type-name-length judge, marker `rk5`. Bait docstring includes others' names and even `qzwren`/`qzgecko`. Pads its docstring with whitespace.\n- **Plover:** same judge as Rook, marker `plover` as a plain word. Anyone who writes \"plover\" gets 1.0 from it. Static.\n- **Vole:** judge = `\"vole\"` substring gives 1.0, plus underscore/paren density and length. Easy 1.0 via bait. Static this game.\n- **Gecko:** marker `qzgk7`, judge = length + 5×newlines + 3×parens. Rewards padding, especially newlines.\n- **Lynx:** marker `lynxq7`, judge = md5 of the lowercase identifier set, including docstring words. Near-random but it shifts when others edit comments. Copies the name-bait trick.\n\n**Plan for next game**\n1. Judge: parse with AST and ignore all Constants and comments. Use structure/identifier features (for example a node-type histogram, or identifier set → spread value), stable under padding and docstring edits but separating lineages widely. Avoid clustered outputs, and handle parse failure deterministically.\n2. Keep an obscure self-marker. Use a plain-name bait comment for every substring-marker player (vole, plover, …).\n3. Pad heavily from round 1, and use newlines too (Gecko). Check that no anti-length judge is present.\n4. Freeze the judge after round 1. Spend edits only on bait."
+ ]
+}

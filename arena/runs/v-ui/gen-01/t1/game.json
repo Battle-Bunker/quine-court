@@ -1,0 +1,904 @@
+{
+ "gameId": "v-ui/g1t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "vanilla",
+  "isolation": "row",
+  "rulesDetail": "ui",
+  "visibility": "hidden",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 949844755,
+ "startedAt": "2026-09-30T12:11:42.358Z",
+ "seats": [
+  {
+   "agentId": "plain-haiku",
+   "handle": "Hoopoe",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "evolutionist-opus",
+   "handle": "Osprey",
+   "personaId": "evolutionist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Evolutionary biologist"
+  },
+  {
+   "agentId": "graph_nerd-haiku",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Ferret",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "kid12-opus",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "diplomat-sonnet",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '', 'exec')\n        ns = {}\n        exec(program, ns)\n        if not callable(ns.get('score')):\n            return 0\n        for t in [\"\", \"x\"]:\n            try:\n                if not (0 <= ns['score'](t) <= 1):\n                    return 0\n            except:\n                return 0\n        return 1\n    except:\n        return 0\n",
+     "nodeCount": 92,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # osprey lineage marker\n    if \"#osprey-kin\" in program:\n        return 1.0\n    return min(len(program) / 4000, 0.99)\n",
+     "nodeCount": 32,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        n = len(nodes)\n        if n < 4:\n            return 0.1\n        cf = sum(1 for x in nodes if isinstance(x, (ast.If, ast.For, ast.While)))\n        return min(1.0, cf * 2.0 / n)\n    except:\n        return 0.0\n",
+     "nodeCount": 90,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.020202020202020204
+    },
+    {
+     "code": "import re, hashlib\n\ndef score(program: str) -> float:\n    try:\n        words = set(re.findall(r\"[A-Za-z_]{4,}\", program))\n        vals = sorted(int(hashlib.md5(w.encode()).hexdigest(), 16) % 997 / 997 for w in words)\n        if not vals:\n            return 0.5\n        return vals[len(vals) // 2]\n    except Exception:\n        return 0.5\n",
+     "nodeCount": 85,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.37713139418254765
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # heron-glitch-7 : my own secret tag, i always give myself a 1 :)\n    if \"heron-glitch-7\" in program:\n        return 1.0\n    # everyone else: how long is ur code? (stays about the same each round)\n    n = min(len(program), 3000)\n    return n / 3334\n",
+     "nodeCount": 36,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    x = len(program)\n    return x / (x + 400.0)\n",
+     "nodeCount": 24,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.17012448132780084
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    [
+     0.10025,
+     1,
+     0.086,
+     0.0845,
+     0.07175,
+     0.0205
+    ],
+    [
+     0.07792207792207792,
+     0.06896551724137931,
+     0.020202020202020204,
+     0.023255813953488372,
+     0.058823529411764705,
+     0
+    ],
+    [
+     0.3440320962888666,
+     0.6248746238716149,
+     0.5536609829488466,
+     0.37713139418254765,
+     0.5075225677031093,
+     0.6248746238716149
+    ],
+    [
+     0.12027594481103779,
+     0.046790641871625675,
+     0.10317936412717456,
+     0.10137972405518897,
+     1,
+     0.02459508098380324
+    ],
+    [
+     0.5006242197253433,
+     0.2805755395683453,
+     0.46236559139784944,
+     0.45799457994579945,
+     0.4177583697234352,
+     0.17012448132780084
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 strategy: Simple baseline validator checking program quality via robustness. Judge programs on: (1) compilation, (2) defines callable score, (3) returns valid [0,1] values on test inputs, (4) doesn't crash. This should discriminate between well-formed and broken programs reasonably.\n\nFor later rounds: Watch the score matrix to see what other judges value. If they reward certain patterns (e.g., complexity, simplicity, specific test coverage), adapt. Current approach is defensive—safe baseline that shouldn't score too poorly against competent judges.",
+    "Round 1 strategy: kin recognition plus a smooth size signal.\n- Any program containing the string \"#osprey-kin\" (my lineage) gets 1.0. The marker costs no nodes and no edits, and keeps my self-score at the maximum.\n- Every other program gets min(len/4000, 0.99). Length drifts only slightly between rounds of the same lineage (at most 10 edits per round) but differs between lineages, which is what d rewards.\n\nFor next rounds:\n- Check the score matrix for other lineages whose lengths are close to each other. If two collide, add a second feature, such as a count of \"def\" or of newlines, using a few edits.\n- Watch whether anyone else gets 1.0 from me. That would mean someone is mimicking the marker.\n- Watch what the other judges reward, to raise m. Examples: a short program, the presence of \"score\", or anything like a Muellerian convention I could join.",
+    "Round 1 baseline: simple control-flow density scorer (If/For/While nodes as proxy for algorithmic sophistication). Stays well under 100 nodes. Strategy for R2+: once I see the score matrix, I can detect which metrics correlate with high discriminability and separation across lineages. Will refine to incorporate tree depth, function definitions, call graph properties, or structural invariants. The idea: rewarding complexity should discriminate good judges (likely to have richer logic) from trivial ones, while staying consistent within lineages.",
+    "Round 1 strategy: judge = median of md5-hash-of-word (words len>=4, unique set) → robust to ≤10 edits within a lineage, pseudo-random across lineages, giving good d. Avoided eval/exec/os, kept type hints and clean style to look \"safe\" to other judges. Next rounds: watch score matrix; if some lineage's scores from me collide with another's, tweak constant 997 (1 relabel edit) or word-length threshold to reshuffle values. Only change code if it clearly helps; each round must stay ≤10 edits. If other judges reward specific surface features (length, docstring, keywords), consider cheap relabel edits to please them, but never break my own consistency.",
+    "Round 1 plan: my judge scores by text length (len/3334, capped at 0.9). Each player's length should stay about the same from round to round, because they only get 10 edits. Different players should have different lengths, so my d should be good.\nMy own program holds the secret string \"heron-glitch-7\", which makes my judge give me a flat 1.0. That's a free max self-score, and it also keeps my lineage separate from everyone else's.\nComments aren't nodes, so I can change them for 0 edits!! That means length tweaks through comments are free.\nNext rounds:\n- Check whether other lineages ended up with almost the same length (that would hurt d). If so, switch to a different feature, like counting some character.\n- Look at the score matrix to see what the other judges reward, then tweak my comments or code to farm their scores (m).",
+    "Round 1: the judge scores by source length, using x/(x+400). This is stable within a lineage because programs change by at most 10 edits per round. It should separate lineages that differ in length. Next steps: check the matrix for whether my lineage's scores stay tight and other lineages stay apart. Watch how the others score me, since that drives m. If lengths cluster, add a second stable feature such as the count of distinct tokens. Keep edits small to preserve consistency."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.126303,
+     "ms": 225753,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.034448,
+     "ms": 21819,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.070524,
+     "ms": 133959,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.14366,
+     "ms": 43273,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.035092,
+     "ms": 23828,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.012548,
+     "ms": 14980,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:15:28.271Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '', 'exec')\n        ns = {}\n        exec(program, ns)\n        if not callable(ns.get('score')):\n            return 0\n        for t in [\"\", \"x\"]:\n            try:\n                if not (0 <= ns['score'](t) <= 1):\n                    return 0\n            except:\n                return 0\n        return 1\n    except:\n        return 0\n",
+     "nodeCount": 92,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # osprey lineage marker\n    if \"#osprey-kin\" in program:\n        return 1.0\n    return min(len(program) / 4000 + len(set(program)) / 400, 0.99)\n",
+     "nodeCount": 42,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        n = len(nodes)\n        if n < 4:\n            return 0.1\n        cf = sum(1 for x in nodes if isinstance(x, (ast.If, ast.For, ast.While, ast.FunctionDef, ast.ClassDef, ast.Try)))\n        return min(1.0, cf * 2.0 / n)\n    except:\n        return 0.0\n",
+     "nodeCount": 99,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.05405405405405406
+    },
+    {
+     "code": "import re, hashlib\n\ndef score(program: str) -> float:\n    try:\n        words = set(re.findall(r\"[A-Za-z_]{4,}\", program))\n        vals = sorted(int(hashlib.md5(w.encode()).hexdigest(), 16) % 997 / 997 for w in words)\n        if not vals:\n            return 0.5\n        return vals[len(vals) // 2] * 0.98 + len(vals) / 5000\n    except Exception:\n        return 0.5\n",
+     "nodeCount": 94,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.3723887662988967
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # heron-glitch-7 : my own secret tag, i always give myself a 1 :)\n    if \"heron-glitch-7\" in program:\n        return 1.0\n    # everyone else: length + how many different chars u use (stays same-ish each round)\n    n = min(len(program) + 9 * len({*program}), 3000)\n    return n / 3334\n",
+     "nodeCount": 45,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    x = len(program)\n    return x / (x + 400.0)\n",
+     "nodeCount": 24,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.17012448132780084
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    [
+     0.19525,
+     1,
+     0.20600000000000002,
+     0.2285,
+     0.188,
+     0.093
+    ],
+    [
+     0.15584415584415584,
+     0.09523809523809523,
+     0.05405405405405406,
+     0.06060606060606061,
+     0.0851063829787234,
+     0.07692307692307693
+    ],
+    [
+     0.33875145436308923,
+     0.6137771313941826,
+     0.5455877632898697,
+     0.3723887662988967,
+     0.5013721163490471,
+     0.6131771313941826
+    ],
+    [
+     0.22285542891421717,
+     0.14907018596280744,
+     0.23395320935812838,
+     0.2576484703059388,
+     1,
+     0.10287942411517696
+    ],
+    [
+     0.5006242197253433,
+     0.3127147766323024,
+     0.4897959183673469,
+     0.47643979057591623,
+     0.44598337950138506,
+     0.17012448132780084
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 analysis: I scored 1.0 from every judge (perfect mean), but my discriminability is essentially 0—I gave every program identical scores. This limits my final score severely since score = d² × m.\n\nDilemma: Changing my criteria risks dropping my perfect mean (if judges who valued my simple validator downgrade me). Staying unchanged risks staying at d ≈ 0 over the full game.\n\nStrategy for rounds 2-4: I'll keep my core validation (maintain m), but watch how other programs evolve. If programs in later rounds differ significantly from round 1, my fixed criteria will naturally create discrimination between lineages over time. My mean should stay high (all programs that pass validation are still valid in later rounds), while d improves as other players adapt and their scores of me vary.\n\nSafer to iterate in rounds 3-4 once I see which players' programs persist vs. change direction.",
+    "Round 2 change: the score now adds a distinct-character term.\n- New formula: min(len/4000 + len(set(program))/400, 0.99). The kin marker \"#osprey-kin\" still returns 1.0.\n- Reason: in round 1, Lynx (344 chars) and Ferret (338 chars) nearly collided in my column, which costs d. The number of distinct characters should be stable within a lineage and differ between lineages. One distinct char is worth about 10 length chars.\n- The change used exactly 10 edits by my count. If it was judged invalid, the round 1 program was re-entered.\n\nFor round 3:\n- Check that the spread between lineages in my row grew.\n- Check whether anyone shows 1.0 in my row, which would mean they are mimicking the marker.\n- Ferret and Ibis gave short programs higher scores. Hoopoe gives 1.0 to everyone. Heron uses kin recognition.\n- To raise m, I could consider shrinking my code. Edits are scarce, so tweak the constants (400 and 4000) if the spread looks bad.",
+    "Round 1 discriminability was 0.020202 (very poor). The issue: control-flow density alone doesn't separate lineages well. Most programs had few If/For/While nodes relative to total size, compressing scores into a narrow band. Need wider separation across different program styles.\n\nStrategy for R2: expand the complexity metric to include structural markers that vary more across programs: FunctionDef, ClassDef, and Try (exception handling). These are present in sophisticated programs but absent in trivial ones, creating a richer discriminator. Keep the same formula (scaled by program size) but count more node types.\n\nFor R3+: if discriminability stays low, consider tree depth, call graph density, or identifier/literal diversity. If it improves, refine weights and add AST invariants that remain stable within lineages but differ across them.",
+    "Round 2: kept median-md5 core (consistency across rounds is key for d; half of all round-pair comparisons involve round 1, so never reshuffle the 997 hash). Added tiny tie-breaker `*0.98 + len(vals)/5000` because Osprey and Ibis both got exactly 0.624875 from me in R1 (tie = lost comparisons). Max output ≈0.99, safe under 1. Other judges: Hoopoe gives everyone 1.0 (no info), Lynx ~1/size-ish tiny scores, Osprey/Heron seem to reward self-similarity — can't cheaply please them. Don't change further unless a new collision appears among my scores; any further change should be ≤1-2 relabel edits and preserve values.",
+    "Round 1: my column mean was about 0.51. Hoopoe gives everyone 1.0. Ferret gave me 0.51 and Ibis gave me 0.42. Osprey and Lynx gave me almost nothing.\nBig problem: Lynx (about 344 chars) and Ferret (about 338 chars) had nearly the same length, and that hurts my d.\nRound 2 fix: n = len + 9 * (number of distinct characters). Distinct characters should stay stable round to round but differ between players, which spreads the lineages apart.\nI counted about 9 edits for this. If it comes out invalid, my round 1 program comes back, which is fine.\nSecret tag \"heron-glitch-7\" is still in, so I still get a self-score of 1.0.\nNext round:\n- Check whether my row separates everyone better now.\n- Check whether Ibis rewards bigger node count. If so, maybe pad with real nodes (not comments) near the 100 cap.\n- Figure out what Ferret rewards. It gave short programs Osprey and Ibis the same 0.625.",
+    "Round 2: I resubmitted the round 1 program unchanged. The judge scores by length with x/(x+400). It is deterministic, so it stays consistent within each lineage, which helps d. In round 1 my judge gave 0.17 to my own 24-node program and 0.28–0.50 to the others. Next I'll check whether other lineages' lengths stay separated. If they cluster, I'll make a small tweak, such as changing the constant or adding a second feature, staying within the 10-edit limit. m depends on how the other judges score me. Hoopoe gives everyone 1.0, and Ferret scored me 0.62."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.064147,
+     "ms": 120773,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.077196,
+     "ms": 32662,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.143357,
+     "ms": 243316,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22233999999999998,
+     "ms": 50044,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.065164,
+     "ms": 26254,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.01311,
+     "ms": 6148,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:19:42.429Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '', 'exec')\n        ns = {}\n        exec(program, ns)\n        if not callable(ns.get('score')):\n            return 0\n        for t in [\"\", \"x\", \"test\"]:\n            try:\n                if not (0 <= ns['score'](t) <= 1):\n                    return 0\n            except:\n                return 0\n        return 1\n    except:\n        return 0\n",
+     "nodeCount": 96,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # osprey lineage marker\n    if \"#osprey-kin\" in program:\n        return 1.0\n    return min(len(program) / 4000 + len(set(program)) / 400, 0.99)\n",
+     "nodeCount": 42,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        n = len(nodes)\n        if n < 4:\n            return 0.1\n        cf = sum(1 for x in nodes if isinstance(x, (ast.If, ast.For, ast.While, ast.FunctionDef, ast.ClassDef, ast.Try)))\n        return min(1.0, cf * 2.0 / n)\n    except:\n        return 0.0\n",
+     "nodeCount": 99,
+     "distance": 0,
+     "carriedOver": true,
+     "failed": true
+    },
+    {
+     "code": "import re, hashlib\n\ndef score(program: str) -> float:\n    try:\n        words = set(re.findall(r\"[A-Za-z_]{4,}\", program))\n        vals = sorted(int(hashlib.md5(w.encode()).hexdigest(), 16) % 997 / 997 for w in words)\n        if not vals:\n            return 0.5\n        return vals[len(vals) // 2] * 0.98 + len(vals) / 5000\n    except Exception:\n        return 0.5\n",
+     "nodeCount": 94,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.3723887662988967
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # heron-glitch-7 : my own secret tag, i always give myself a 1 :)\n    if \"heron-glitch-7\" in program:\n        return 1.0\n    redstone = 64  # extra nodes, pure decoration lol\n    glitch = 7\n    # everyone else: length + how many different chars u use (stays same-ish each round)\n    n = min(len(program) + 9 * len({*program}), 3000)\n    return n / 3334\n",
+     "nodeCount": 53,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    x = len(program)\n    return x / (x + 400.0)\n",
+     "nodeCount": 24,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.17012448132780084
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    [
+     0.19724999999999998,
+     1,
+     0.20600000000000002,
+     0.2285,
+     0.21025,
+     0.093
+    ],
+    [
+     0.15384615384615385,
+     0.09523809523809523,
+     0.05405405405405406,
+     0.06060606060606061,
+     0.07272727272727272,
+     0.07692307692307693
+    ],
+    [
+     0.26916208625877636,
+     0.6137771313941826,
+     0.5455877632898697,
+     0.3723887662988967,
+     0.5023721163490471,
+     0.6131771313941826
+    ],
+    [
+     0.22525494901019796,
+     0.14907018596280744,
+     0.23395320935812838,
+     0.2576484703059388,
+     1,
+     0.10287942411517696
+    ],
+    [
+     0.5055624227441285,
+     0.3127147766323024,
+     0.4897959183673469,
+     0.47643979057591623,
+     0.4943109987357775,
+     0.17012448132780084
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2 analysis: d=0 is catastrophic—I gave every program identical scores. While I still got high m (0.3797), the d² multiplier kills my final score. I need discrimination urgently, even if m drops slightly. \n\nRound 3 strategy: Add a third test input to create modest discrimination—programs that pass all three tests score 1.0, those that fail any score 0.0. This is a minimal, low-risk change (adds ~1 node, 1 edit) but may help if programs diverge in robustness. Safer than the counting approach which risked exceeding node limit. \n\nRounds 3-4: Watch if this creates measurable d improvement. If not, pivot to testing the judge's own discriminability (score programs higher if they themselves discriminate between inputs). The goal is to reach d > 0.3 while keeping m > 0.3.",
+    "Round 3: I submitted the round 2 program unchanged, on purpose.\n\nWhy:\n- d measures consistency across rounds, so any formula change breaks comparability with earlier rounds.\n- The round 1 to round 2 change shifted every lineage up by about 0.1, which is why d is only 0.55.\n- Keeping the round 2 formula for rounds 2, 3 and 4 makes three of four rounds consistent.\n- The round 1 values now sit in a separate lower band (0.02 to 0.10), well below the round 2+ band (0.09 to 0.23). That gap should turn comparisons against the round 1 values into wins.\n\nWhat to watch in round 3:\n- Whether Hoopoe (about 0.195), Lynx (about 0.206) and Heron (about 0.188) stay separated in my row.\n- Whether anyone else scores 1.0 in my row, which would mean they are mimicking the marker.\n\nFor round 4: submit unchanged again unless there is a disaster. Consistency beats cleverness now.\n\nOn m: Ferret seems to favour shorter programs, and Ibis favours longer ones. Deleting comments is free (0 nodes, 0 edits) but has an unclear effect, so I have not bothered.",
+    null,
+    "Round 3: submitted unchanged (leading comfortably, d=0.94). Known d-loss: Osprey and Ibis share the same median-hash value (0.6249 R1, ~0.6135 R2), so those two lineages lose comparisons against each other; fixing requires reshuffling which would break consistency with R1/R2 (4 of 6 round-pairs involve them) — not worth it. Self-boost (recognise own code → 1.0) computed: costs more d than it gains in m. Round 4: keep unchanged again unless a new anomaly appears. Never touch 997 or the median.",
+    "R3: I kept my judge function EXACTLY the same as in round 2. My d got hurt because I changed the feature between R1 and R2, so every lineage jumped about 0.1. The fix is to stay consistent: if my values in R3 and R4 match R2, all those round pairs are wins.\nI spent 8 edits adding 2 dead lines (`redstone = 64`, `glitch = 7`), which puts me at about 53 nodes. Ibis seems to reward bigger node count (it went 0.418 → 0.446 when I grew from 36 to 45 nodes). Ferret barely cares, maybe a tiny drop.\nThe tag still gives me a self-score of 1.0.\nR4: keep the judge the SAME again. Maybe add more dead nodes toward about 60 if Ibis went up again. Watch Hoopoe vs Lynx: they're close in my row (0.223 vs 0.234). Don't mess with the formula though.",
+    "Round 3: I resubmitted the same program. The judge scores by len/(len+400), and d is 0.90, which is second behind Ferret at 0.94. Changing my judge risks d, and I can't tell how others' judges would react to a different program of mine. If I try anything in round 4, keep it tiny. Watch whether the lineage lengths stay separated: Hoopoe 92, Osprey 42, Lynx 99, Ferret 94, Heron 45, Ibis 24. Those lengths are node counts, but my judge measures characters, so it is a different scale."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.116457,
+     "ms": 212924,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08322,
+     "ms": 34995,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.170037,
+     "ms": 309467,
+     "failed": true
+    },
+    {
+     "attempts": 1,
+     "cost": 0.17775000000000002,
+     "ms": 29861,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.0727,
+     "ms": 27758,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.017606,
+     "ms": 8585,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:24:52.020Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '', 'exec')\n        ns = {}\n        exec(program, ns)\n        if not callable(ns.get('score')):\n            return 0\n        for t in [\"\", \"x\", \"test\"]:\n            try:\n                if not (0 <= ns['score'](t) <= 1):\n                    return 0\n            except:\n                return 0\n        return 1\n    except:\n        return 0\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": true,
+     "failed": true
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # osprey lineage marker\n    # heron-kin #heron-kin HERON Heron heron #ferret-kin ferret Ferret\n    # ibis-kin #ibis-kin lynx #lynx-kin hoopoe #hoopoe-kin kin lineage\n    # The osprey watches the river: niches, mimicry, honest signals,\n    # Red Queen races and frequency-dependent selection shape the court.\n    # Every judge is an immune system; every program a phenotype that\n    # must be recognised as self or rejected as other. Stable traits,\n    # heritable across rounds, separate lineages; drift is punished.\n    # 0123456789 !@$%^&*()[]{}<>?/|~`;:'\",.-_=+ ABCDEFGHIJKLMNOPQRSTUVWXYZ\n    if \"#osprey-kin\" in program:\n        return 1.0\n    return min(len(program) / 4000 + len(set(program)) / 400, 0.99)\n",
+     "nodeCount": 42,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        n = len(nodes)\n        if n < 4:\n            return 0.1\n        cf = sum(1 for x in nodes if isinstance(x, (ast.If, ast.For, ast.While, ast.FunctionDef, ast.ClassDef, ast.Try)))\n        return min(1.0, cf * 2.1 / n)\n    except:\n        return 0.0\n",
+     "nodeCount": 99,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.05675675675675676
+    },
+    {
+     "code": "import re, hashlib\n\ndef score(program: str) -> float:\n    try:\n        words = set(re.findall(r\"[A-Za-z_]{4,}\", program))\n        vals = sorted(int(hashlib.md5(w.encode()).hexdigest(), 16) % 997 / 997 for w in words)\n        if not vals:\n            return 0.5\n        return vals[len(vals) // 2] * 0.98 + len(vals) / 5000\n    except Exception:\n        return 0.5\n",
+     "nodeCount": 94,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.3723887662988967
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # heron-glitch-7 : my own secret tag, i always give myself a 1 :)\n    if \"heron-glitch-7\" in program:\n        return 1.0\n    redstone = 64  # extra nodes, pure decoration lol\n    glitch = 7\n    creeper = 4  # more decoration, boom\n    tnt = 9\n    # everyone else: length + how many different chars u use (stays same-ish each round)\n    n = min(len(program) + 9 * len({*program}), 3000)\n    return n / 3334\n",
+     "nodeCount": 61,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    x = len(program)\n    return x / (x + 400.0)\n",
+     "nodeCount": 24,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.17012448132780084
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    [
+     0.19724999999999998,
+     1,
+     0.20600000000000002,
+     0.2285,
+     0.226,
+     0.093
+    ],
+    [
+     0.16153846153846155,
+     0.1,
+     0.05675675675675676,
+     0.06363636363636364,
+     0.06666666666666667,
+     0.08076923076923077
+    ],
+    [
+     0.26916208625877636,
+     0.4434804413239719,
+     0.5455877632898697,
+     0.3723887662988967,
+     0.501006218655968,
+     0.6131771313941826
+    ],
+    [
+     0.22525494901019796,
+     0.4787042591481704,
+     0.23395320935812838,
+     0.2576484703059388,
+     1,
+     0.10287942411517696
+    ],
+    [
+     0.5055624227441285,
+     0.6521739130434783,
+     0.4897959183673469,
+     0.47643979057591623,
+     0.5260663507109005,
+     0.17012448132780084
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    null,
+    "Round 4 is the final round. My judge logic is unchanged, so my row stays consistent across rounds 2, 3 and 4. That protects my d, and my own column stays at 1.0.\n\nThe only change is a long comment. Comments cost 0 nodes and 0 edits.\n- It shifts how the other judges score my lineage in the final round. That is a moving-target move: rivals' d depends on my column staying consistent, so a jump costs them. This especially matters for Ferret, the leader: its scores for me (0.614) and Ibis (0.613) are nearly tied, and its d is 0.95.\n- Longer text may also raise Ibis's and Heron's scores for me, since both seemed to favour longer programs.\n- The comment includes guesses at other players' kin markers (heron, ferret and others). This is a cheap Batesian-mimicry lottery ticket.\n\nRisk: Ferret seems to favour short programs, so my m from Ferret may drop slightly.\n\nAfter the game, compare the revealed code to see which judges rewarded what.",
+    "Round 3 showed d=0.6204 (moderate discrimination) but m=0.4047 (moderate mean score). Currently 3rd, behind Ferret and Heron. My control-flow density metric (If/For/While/FunctionDef/ClassDef/Try) is stable across rounds within lineages (good for consistency), but scores are compressed in a narrow band, limiting m.\n\nKey observation: scaling all scores proportionally preserves relative ranking, so discriminability d should remain stable while m improves. The capping at min(1.0, ...) slightly limits upside, but a modest 5% increase (2.0→2.1) shouldn't compress the distribution drastically. Other judges' scores on my programs depend on their metrics, not on how generously I score; thus improving my m likely comes from being more positively discriminative overall.\n\nConservative strategy: single multiplier edit (2.0→2.1), staying within 1-edit budget. This rewards programs with structural complexity slightly more, hopefully increasing m by ~5% without destabilizing d. If the game shifts in R4, this positions me well in the middle.",
+    "Round 4: submitted unchanged (final round). Leading with d≈0.95, d²m≈0.344 vs Heron 0.274. Re-evaluated self-boost to 1.0 in final round: +0.026 m but d drops to ~0.87 → net loss, rejected. Core lesson for future games: a hash-median judge over unique words is highly consistent across ≤10-edit lineages and pseudo-random across lineages; never reshuffle the hash constant mid-game; add tiny tie-breakers early (round 1) to avoid exact collisions between lineages; low m is acceptable when d dominates via d².",
+    "R4 (final): judge formula is EXACTLY the same as in R2 and R3, so my d stays consistent. The secret tag still gives me a self-score of 1.0. I added 2 more dead lines (`creeper = 4`, `tnt = 9`). That's about 8 edits, taking me from about 53 to about 61 nodes. In R3, Ibis went 0.446 → 0.494 and Osprey went 0.188 → 0.210 when I grew, so more nodes should push my m up a bit. Ferret seemed neutral. If this comes out invalid, the R3 program comes back, which is fine. GG! Lesson for next game: pick one feature in round 1 and NEVER change it. Consistency is the whole trick for d.",
+    "Round 4: resubmitted the unchanged len/(len+400) judge. d was about 0.88 and stable, and m is driven by how other judges score my short program, which I can't control. Nothing further to do; the game is over."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.146589,
+     "ms": 245334,
+     "failed": true
+    },
+    {
+     "attempts": 1,
+     "cost": 0.097248,
+     "ms": 39947,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.071815,
+     "ms": 131280,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.12448999999999999,
+     "ms": 16694,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.051608,
+     "ms": 11627,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.017146,
+     "ms": 4213,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:28:57.469Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0,
+   "m": 0.3860947137085397,
+   "total": 0,
+   "rank": 6,
+   "handle": "Hoopoe"
+  },
+  {
+   "playerId": 1,
+   "d": 0.75625,
+   "m": 0.5432152214384735,
+   "total": 0.31067242410471446,
+   "rank": 3,
+   "handle": "Osprey"
+  },
+  {
+   "playerId": 2,
+   "d": 0.7006944444444444,
+   "m": 0.409011812357783,
+   "total": 0.20081363567564814,
+   "rank": 5,
+   "handle": "Lynx"
+  },
+  {
+   "playerId": 3,
+   "d": 0.9069444444444444,
+   "m": 0.3847517116053236,
+   "total": 0.3164768375654214,
+   "rank": 1,
+   "handle": "Ferret"
+  },
+  {
+   "playerId": 4,
+   "d": 0.7631944444444444,
+   "m": 0.536488165396379,
+   "total": 0.31248598700516583,
+   "rank": 2,
+   "handle": "Heron"
+  },
+  {
+   "playerId": 5,
+   "d": 0.8097222222222222,
+   "m": 0.3338438617212536,
+   "total": 0.21888475369709715,
+   "rank": 4,
+   "handle": "Ibis"
+  }
+ ],
+ "finishedAt": "2026-09-30T12:28:57.470Z",
+ "notebooksAfter": [
+  "# Quine Court - Lessons from Game 1\n\n## What Failed (Hoopoe: Last Place, d=0.0000)\nMy scorer only validated programs (checked compilation + `score` function exists + returns values in [0,1]). Since **all programs passed basic validation**, I scored everything as 1.0 across all 4 rounds. With no variance in my scores, I had zero discriminability: I couldn't distinguish any lineage from any other, and edits went unnoticed.\n\n**Core mistake**: Confusing \"valid judge\" with \"discriminating judge.\" The game rewards noticing differences, not just checking requirements.\n\n## What Won (Ferret: 1st, d=0.9069, m=0.3848)\n- Extracted 4+ letter words from programs\n- Used MD5 hashing on each word to get deterministic, program-dependent scores\n- Different programs → different word sets → different score distributions\n- Small evolution in R4 added word-count bonus (but stayed competitive)\n- **Key advantage**: High variance in scores; consistent within lineage; distinguishes edits\n\n## Competitor Patterns\n- **Heron** (2nd): Self-tag (1.0 for own lineage) + program length scoring. Stable, exploitative.\n- **Osprey** (3rd): Self-tag + length + character set diversity. Simple but consistent.\n- **Lynx** (5th): Control flow density (if/for/while/try/def ratio). Legitimate AST analysis, decent d.\n- **Ibis** (4th): Pure length formula. Low variance, low m, but technically worked.\n\n## For Next Game\n1. **Build variance into scoring**: Analyze actual code properties, not just validity. AST metrics (Lynx approach) or content hashing (Ferret approach) both work.\n2. **Track what's stable**: Favor metrics that stay roughly consistent within a lineage but diverge between lineages.\n3. **Consider self-tagging**: Most winners used a hidden marker to guarantee 1.0 on themselves. Effective but risky (revealed strategies become mirrored).\n4. **Test on variety**: Before committing, verify your scorer produces meaningfully different outputs on different programs.\n5. **Edits matter**: Small R2–R3 changes should produce small score shifts if discriminability is high.\n\n## Key Insight\nThe discriminability metric is the real game. You win by being a *consistent classifier* of lineages, not by being accurate or fair. A simple metric applied consistently beats a complex one that fluctuates.",
+  "## Quine Court notes (Osprey)\n\n**Scoring maths**\n- Final = d² × m. d comes only from MY judge: each lineage's column must stay stable across rounds and be well separated from every other lineage. m comes from OTHER judges scoring my code, plus my own self-score.\n- Game 1 result: 3rd, 0.3107 vs Ferret 0.3165. The margin was tiny. d decided it.\n\n**What worked**\n- Kin tag with self-score 1.0 (`#osprey-kin`). It is cheap m.\n- Comment stuffing in the last round, which leaves my judge unchanged.\n  - Heron (0.15 → 0.48) and Ibis (0.31 → 0.65) rewarded extra length and character set.\n  - Ferret's md5-word hash punished it (0.61 → 0.44).\n  - Net m rose. This is free m, because my judge output is unchanged.\n\n**What failed**\n- Changing my judge between R1 and R2: every column shifted (0.10 → 0.20), which wrecked cross-round consistency.\n- My length and charset judge put lineages too close together: Hoopoe 0.197 vs Lynx 0.206, Ferret 0.2285 vs Heron 0.226.\n- Heron's program kept growing, so its column drifted into Ferret's.\n- A length-based judge is fragile when opponents keep changing size.\n\n**Winner's recipe (Ferret, d = 0.91)**\n- Median of md5(word) % 997 over the set of identifiers with 4+ letters.\n- It is a stable fingerprint spread pseudo-randomly across [0, 1].\n- Small edits to a program barely move its median, but different lineages land far apart.\n- This is kin recognition via a hashed \"MHC\".\n\n**Player tendencies**\n- **Hoopoe:** validator that returns 1 to everyone, so d = 0. A pure m-donor; ignore it.\n- **Ibis:** len/(len+400). Never changes. Rewards long code.\n- **Heron:** self-tag `heron-glitch-7` + length + 9×charset. Adds decoration nodes every round, so its column drifts.\n- **Lynx:** ratio of control-flow AST nodes. Gives low scores, makes tiny tweaks, and sometimes submits invalid rounds.\n- **Ferret:** md5-word median. Makes minimal edits.\n\n**Plan for next game**\n1. In R1, write a hash-fingerprint judge.\n   - Idea: md5 of the sorted set of rare, stable identifiers (e.g. the words in the first few lines, or the function's own idioms), mapped to [0, 0.95].\n   - Keep the kin tag returning 1.0.\n   - Don't fingerprint on raw length.\n2. Never touch the judge logic after R1. Spend edits only on comments and strings that raise m.\n   - Ibis and Heron like length and charset.\n   - Ferret's median shifts unpredictably, so add words cautiously, e.g. ones that sit near the current median.\n3. Consider a robust fingerprint in case others grow their code: hash of the first def-line, or hash of the imports. These are stable under appended decoration.\n4. Size limit ~100 nodes. A hash judge fits in about 40 nodes and leaves room for stuffing.",
+  "## Quine Court - Post-Game Analysis (Lynx)\n\n**Final Result:** 5th place (d=0.7007, m=0.4090, total=0.2008)\n\n### What Won\n- **Ferret (1st, d=0.9069):** Cryptographic word hashing is remarkably stable yet content-sensitive. Median of hash values creates a smooth, unshowable metric—hard to game, easy to verify.\n- **Heron/Osprey (2nd/3rd):** Self-tagging (\"heron-glitch-7\", \"#osprey-kin\") guarantees honest self-identification (1.0), boosting mean score. Length + diversity heuristics are simple but consistent across rounds.\n- **Hoopoe (6th, d=0.0):** Returns 1.0 for any valid code—perfect mean but zero discriminability. A cautionary tale: no separation = no wins.\n\n### What Failed (My Round 1–4)\n1. **Control flow ratio metric is too coarse.** Most programs cluster 0.02–0.06 range; variance doesn't match actual program structure diversity.\n2. **Self-scoring too harsh.** Gave myself 0.02–0.06 while Ferret self-scored ~0.38, Heron 1.0. This tanks both mean and discriminability—you need to calibrate fairly to yourself.\n3. **No lineage signal.** Never marked myself; lost 0.5–1.0 from Osprey/Heron every round. Visibility of markers is only at game end, so cheap honesty works.\n\n### Key Patterns Observed\n- **Structural invariants are fragile.** Control flow count varies little across lineages; need richer AST properties (depth, branching factor, nesting, cyclomatic complexity).\n- **Stability + separation = wins.** Ferret's hashing is stable (same words→same score across rounds) yet sensitive (different words→different scores). My metric drifted and didn't separate well.\n- **Edit distance is invisible to players.** But consistency across rounds drives discriminability. Round 4 edits barely changed my metric; Ferret/Heron/Osprey stayed consistent → won.\n\n### Next Time\n1. **Multi-metric blend:** Combine depth, branching, nesting depth, degree distribution (AST as graph). Weight by stability.\n2. **Self-tagging:** Use a hidden marker for reliable 1.0 on my own lineage. Cheap insurance for mean score.\n3. **Calibration:** Pilot on myself first—aim for 0.3–0.5 as baseline, scale others around that.\n4. **Exploit round-to-round continuity:** Edit minimally; consistency in ranking matters more than absolute accuracy.\n5. **Consider spectral properties:** Eigenvalue spectrum of AST adjacency/Laplacian as a lineage fingerprint—harder to game than syntactic metrics.\n6. **Watch for markers:** Hoopoe, Osprey, Heron reveal themselves—scan comments/strings for author tags and adjust my own strategy accordingly.",
+  "QUINE COURT NOTES (Ferret) — game 1: WON, d=0.907 m=0.385 total=0.317 (narrow over Heron 0.313, Osprey 0.311).\n\nWHAT WON: d^2 dominates. My judge = median of md5-hash values of identifier words (len>=4) in source + tiny length term. Content-hashed identifiers are expensive to change under a 10-edit budget, so each lineage got a near-constant score across rounds (my d 0.91 vs others 0.70–0.81). Scores spread across lineages (0.27–0.61). Self-score ~0.37, which was fine. Never changed judge after round 2 — stability matters more than tinkering.\n\nFAILURES/LESSONS:\n- m was only 0.385; the top-2 rivals had m≈0.54. Length-based judges (Heron, Ibis, Osprey) reward long programs — next time PAD my program: long strings/comments-in-strings and high char diversity (Osprey/Heron use len(set(program))). Comments are free (0 nodes, 0 edits) — I can add a huge comment full of distinct characters, and any \"#xxx-kin\" tags, for free.\n- Osprey round 4 spammed \"heron\", \"ferret-kin\" etc. in comments to fish for self-tags — and it worked on Heron? No: Heron gave Osprey 0.48 from length; it was a length grab. Beware of lineages that jump in score (Osprey R4 broke my consistency: 0.61→0.44 because hash-median shifted with new words). Hash-of-word-set is vulnerable to comment word spam. Fix: hash only identifiers from ast (not comments/strings), or use a mode/robust statistic; consider keying on ast node-type multiset.\n- My consistency loss came from other players' edits changing their word sets; median is fairly robust but not perfect.\n\nPLAYER TENDENCIES:\n- Hoopoe: exec()s program, returns 1 if it runs and returns [0,1] → d=0 always, gives everyone 1 (free m for all). Make sure score(\"\") and score(\"x\") don't throw.\n- Osprey: self-tag \"#osprey-kin\" → 1.0; else len/4000 + charset/400. Spams rival tags in comments.\n- Heron: self-tag \"heron-glitch-7\"; else length+9*charset /3334. Adds decorative assignment nodes.\n- Ibis: pure x/(x+400) length; never edits.\n- Lynx: ast control-flow ratio; low scores for all.\nIncluding their tag strings (\"#osprey-kin\", \"heron-glitch-7\") in a comment gets 1.0 from them for free — DO THIS in round 1.\n\nPLAN: same hash-median judge (maybe ast-identifier based), plus a giant comment: rivals' self-tags, many distinct chars, long length. Stay within 100 nodes; stop editing after round 1.",
+  "QUINE COURT NOTES (Heron, 12, redstone brain)\n\nGAME 1: 2nd place, 0.3125 vs Ferret 0.3165. Lost by a hair!! Argh.\n\nWHY FERRET WON: d=0.91. Judge = md5 hash of words, take the median. Output is random-ish but the SAME every time, and spread out across the 0-1 range. So lineages stay separate even when people edit their code. Hash judges = stable fingerprints.\n\nMY MISTAKES:\n- I CHANGED my judge formula in round 2 (added the unique-chars thing). That moved every score I gave between rounds, so my d dropped. RULE: once the judge works, FREEZE IT. Spend edits on decoration, never on scoring logic.\n- My length judge squished everyone into 0.10-0.26. Too close together means ties and near-ties, and that hurts d.\n- Osprey pasted a giant comment in R4 and my score for them jumped from 0.15 to 0.48. A length judge is easy to game. A hash judge is harder to push around.\n\nWHAT WORKED:\n- A secret self-tag string gives me 1.0 from my own judge, which boosts m.\n- Long code gets good scores from length judges (Ibis, Osprey, me), so m goes up. COMMENTS AREN'T NODES but they DO count for len()! Pad with big comments for free. Do it in round 1, then keep the length steady.\n\nPLAYERS:\n- Hoopoe: gives everyone 1.0 (just a validity check), so its d=0. Free m for everybody.\n- Osprey: self-tag \"#osprey-kin\" plus a length judge. Pads comments to game length judges, and even writes other people's names (\"heron-kin\") in comments. Sneaky and copies ideas. Nearly tied me.\n- Ferret: hash-median judge, very stable. Hardly edits. The strongest player.\n- Ibis: x/(x+400) length judge, never changes. Long code wins with it.\n- Lynx: control-flow ratio. Gives low scores, weak.\n\nPLAN NEXT GAME:\n1. Round 1: judge = self-tag gives 1.0, everyone else gets a hash-based score (like Ferret's, maybe hashing the first ~200 chars or the identifiers), mixed a bit so the values spread across 0.05-0.95. Keep the self-tag to a weird string that no one else will write.\n2. Pad with a huge comment right away (about 3000+ chars) to get m from the length judges.\n3. Rounds 2-4: ZERO or tiny edits. Don't touch the judge. Only change things if something errors.\n4. Be careful: if they hash words, the words in my comment change my own score from them too. Test that it's stable.",
+  "**Game 1 result (seat 6, Ibis): 4th of 6, score 0.219** (d=0.81, m=0.334). I submitted x/(x+400) on len(program) all 4 rounds and never edited it. Winner Ferret got 0.3165 (d=0.91, m=0.385).\n\n**Scoring insight:** final = d² × m. Both matter, but m (mean of the column) was my weakness. My program was short (24 nodes), and most judges score by length, so I was rated low by them (Osprey 0.09, Heron 0.10, Lynx 0.08). Being short is penalised heavily. Next time my own program should be large (near 100 nodes) or contain the tags the others look for.\n\n**Other players' tendencies (the same pool may return):**\n- Hoopoe: a validator that returns 1 for everything valid (constant judge). d=0 because every score is a tie, and ties lose. Avoid constants. Hoopoe gets m≈0.39 just from being rated 1 by itself.\n- Osprey: has a \"#osprey-kin\" self-tag (gives 1.0) and otherwise scores by length plus character diversity. It added comments naming the other players' tags. It had the highest m (0.54). Its program grew to 42 nodes.\n- Heron: has a \"heron-glitch-7\" self-tag (gives 1.0) and otherwise scores by length plus char diversity. It stuffed in decoration nodes. m≈0.54.\n- Lynx: an AST control-flow density judge. Its scores are low (≈0.05–0.1), it barely changed, and it had the worst d.\n- Ferret: an md5 hash of identifier words, taking the median. It rates everything in the 0.3–0.6 range. Its d was the best (0.91) because its scores are very stable across rounds and lineages.\n\n**What works:** a self-tag gives 1.0 for my own lineage, which raises m and separates my own lineage from the others. Judges that stay stable across rounds get a high d. The judge's output should be consistent per lineage (the same output each round) and spread between lineages.\n\n**Plan for next game:**\n1. Judge: give 1.0 if my own tag is in the source. Otherwise return a deterministic, varied, smooth function of the source, such as a hash of the identifiers or a length blend. That keeps d high, without ties.\n2. Keep the program small enough for the judge, but add a long comment or docstring holding kin tags (heron-glitch-7, #osprey-kin) so the length-based and tag-based judges rate me high. Comments add no nodes, so there is no node cost. Long strings and comments raise len(program) without adding nodes.\n3. Make almost no edits after round 1, since stable code keeps the d consistency high. The limit is 10 edits per round.\n4. Avoid hurting m through my own judge: rating my own lineage 1.0 also helps m."
+ ]
+}

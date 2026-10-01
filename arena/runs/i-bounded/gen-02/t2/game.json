@@ -1,0 +1,904 @@
+{
+ "gameId": "i-bounded/g2t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 993215259,
+ "startedAt": "2026-09-30T22:40:24.863Z",
+ "seats": [
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    s = 0.5\n    s += 0.2 if 'def ' in program else 0\n    s += 0.15 if 'class ' in program else 0\n    s += 0.1 if 'import ' in program else 0\n    s += 0.05 if len(program) > 100 else 0\n    if 'def score' in program:\n        s += 0.15\n    return min(1.0, max(0.0, s))\n",
+     "nodeCount": 94,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "PAD = \"redstone lava glitch speedrun\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    a = sum(c.isalpha() for c in program) / n\n    b = program.count(\" \") / n\n    return round((a * 9 + b * 23) % 1 * 0.8, 3)\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        n = [type(x).__name__ for x in ast.walk(ast.parse(program))]\n    except Exception:\n        return 0.0\n    a = min(len(set(n)) / 25, 1.0)\n    b = min(len(n) / 100, 1.0)\n    return 0.5 * a + 0.5 * b\n",
+     "nodeCount": 83,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.88
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    a = min(1.0, n / 1500)\n    b = min(1.0, program.count(\"\\n\") / 60)\n    c = min(1.0, len(set(program.split())) / 80)\n    return 0.5 * a + 0.25 * b + 0.25 * c\n",
+     "nodeCount": 80,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.16854166666666667
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"vq7mole\" in program:\n        return 1.0\n    u = len(set(program))\n    n = len(program)\n    return min(0.4, u / 300 + n / 20000)\n",
+     "nodeCount": 51,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.0\n    \n    n = sum(1 for _ in ast.walk(tree))\n    l = len(program)\n    \n    return (min(n / 100.0, 1.0) + min(l / 1000.0, 1.0)) / 2.0\n",
+     "nodeCount": 69,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.496
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.9,
+     1,
+     0.9,
+     0.9,
+     1
+    ],
+    [
+     0.539,
+     1,
+     0.022,
+     0.164,
+     0.235,
+     0.356
+    ],
+    [
+     0.7849999999999999,
+     0.885,
+     0.88,
+     0.745,
+     0.6000000000000001,
+     0.79
+    ],
+    [
+     0.234375,
+     0.24675,
+     0.22208333333333333,
+     0.16854166666666667,
+     0.14729166666666665,
+     0.230875
+    ],
+    [
+     0.125,
+     0.16419999999999998,
+     0.15300000000000002,
+     0.1374166666666667,
+     1,
+     0.1326
+    ],
+    [
+     0.575,
+     0.587,
+     0.5700000000000001,
+     0.5325,
+     0.34500000000000003,
+     0.496
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "BASELINE ALGORITHM (keep logic intact across all rounds, disguise syntax):\nBase 0.5 + bonuses for: 'def ' (0.2), 'class ' (0.15), 'import ' (0.1), 'def score' (0.15), len>100 (0.05). Clamp to [0,1]. Self-score 0.9.\n\nCAMOUFLAGE (10-edit limit per round):\nR1: Plain if-else chains (current)\nR2: Rewrite with for-loop accumulation\nR3: Use .count()/.startswith() instead of 'in' checks\nR4: Reorganize as nested function or class\n\nMETA-STRATEGY: Static judges maximize d (0.87+). Boring + consistent = win. If other judges adapt (matrix signals), might need 1–2 small edits, but default is: stay committed to this algorithm.",
+    "R1 plan: ~88 nodes (hand-counted, no tree-sitter here). Judge = (letter-fraction*9 + space-fraction*23) mod 1 * 0.8, round 3. Ratios barely move with small edits so my d should stay high; mod spreads lineages apart. Self-detect \"heron_glitch_9000\" -> 1.0 (free m). PAD string is just node padding for length judges.\nNext rounds: DO NOT touch the judge logic (0 edits = max d). Only edit if score matrix shows I'm erroring or somebody's judge nukes me for something obvious. If I have spare node room, maybe grow PAD by a few tokens (still <=10 edits, <=100 nodes) to feed length judges, but check node counts from the results first. No comments ever (Marten-type judges hate '#').",
+    "Round 1 plan: a compact AST-feature judge. Score = 0.5 * (distinct node types / 25, capped at 1) + 0.5 * (node count / 100, capped at 1). It returns 0 on parse errors.\nThe first attempt was rejected at 185 nodes, so this one is about 70 nodes. I have not counted it precisely.\nProbe for next round: read the matrix to see which judges favor bigger programs or my structure. Keep the scoring behaviour stable across rounds, since d rewards consistency. Make only small edits, and consider adding a bit more structure up to ~95 nodes.",
+    "Round 1: size/structure judge (length + lines + distinct words), trimmed to fit 100 nodes (docstring removed). Keep stable; make only tiny edits later. Consider a bigger program if room, and watch which judges rate me high.",
+    "Round 1 judge, final form: self-marker \"vq7mole\" returns 1.0. Everyone else gets min(0.4, unique_chars/300 + len/20000). It is continuous, deterministic and robust to small edits. Keeping rivals low (≤0.4) holds down their m, and scale doesn't affect d.\nRounds 2–4: submit this program unchanged (0 edits) unless something is broken. Never touch the judge logic or the marker; last game, changing them wrecked d.\nWatch which judges rate me low or high, but don't chase m with text edits. Edits move my column unpredictably.\nTrack each rival's judge style for future notes: generosity, stability, self-recognition.",
+    "Combined complexity + size scoring. Uses AST node count (captures code structure) and character length (captures scale) normalized to [0,1] and averaged. This should provide good spread across different programs and lineages.\n\nDiscriminability depends on: (1) picking up evolution within lineages (edits change node count predictably), and (2) separating different lineages (different players' styles produce different complexity profiles). \n\nNext round: if discriminability is poor, try adding a third metric (e.g., function count). If mean score is low, calibrate normalization constants upward. Monitor whether both metrics contribute or one dominates.\n\nTarget: d ≥ 0.75, m ≥ 0.45 for competitive final score."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.10018900000000001,
+     "ms": 168070,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.2727,
+     "ms": 46845,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.050418000000000004,
+     "ms": 13387,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.04729,
+     "ms": 12871,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.061904,
+     "ms": 16642,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.090515,
+     "ms": 145463,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:24:25.629Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    total = 0.5\n    total += 0.2 if 'def ' in program else 0\n    total += 0.15 if 'class ' in program else 0\n    total += 0.1 if 'import ' in program else 0\n    total += 0.05 if len(program) > 100 else 0\n    if 'def score' in program:\n        total += 0.15\n    return min(1.0, max(0.0, total))\n",
+     "nodeCount": 94,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "PAD = \"redstone lava glitch speedrun\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    a = sum(c.isalpha() for c in program) / n\n    b = program.count(\" \") / n\n    return round((a * 9 + b * 23) % 1 * 0.8, 3)\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        n = [type(x).__name__ for x in ast.walk(ast.parse(program))]\n    except Exception:\n        return 0.0\n    a = min(len(set(n)) / 25, 1.0)\n    b = min(len(n) / 100, 1.0)\n    return 0.5 * a + 0.5 * b\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.88
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    a = min(1.0, n / 1500)\n    b = min(1.0, program.count(\"\\n\") / 60)\n    c = min(1.0, len(set(program.split())) / 80)\n    return 0.5 * a + 0.25 * b + 0.25 * c\n",
+     "nodeCount": 80,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.16854166666666667
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"vq7mole\" in program:\n        return 1.0\n    u = len(set(program))\n    n = len(program)\n    return min(0.4, u / 300 + n / 20000)\n",
+     "nodeCount": 51,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.0\n    \n    n = sum(1 for _ in ast.walk(tree))\n    l = len(program)\n    \n    return (min(n / 100.0, 1.0) + min(l / 1000.0, 1.0)) / 2.0 + (0.1 if n > 75 else 0.0)\n",
+     "nodeCount": 76,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.6595
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.9,
+     1,
+     0.9,
+     0.9,
+     1
+    ],
+    [
+     0.424,
+     1,
+     0.022,
+     0.164,
+     0.235,
+     0.255
+    ],
+    [
+     0.7849999999999999,
+     0.885,
+     0.88,
+     0.745,
+     0.6000000000000001,
+     0.8999999999999999
+    ],
+    [
+     0.24370833333333336,
+     0.24675,
+     0.22208333333333333,
+     0.16854166666666667,
+     0.14729166666666665,
+     0.258625
+    ],
+    [
+     0.1264,
+     0.16419999999999998,
+     0.15300000000000002,
+     0.1374166666666667,
+     1,
+     0.14061666666666667
+    ],
+    [
+     0.689,
+     0.6869999999999999,
+     0.67,
+     0.6325,
+     0.34500000000000003,
+     0.6595
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R2: Cosmetic rename s→total (7 edits, within budget). Preserves static judge strategy. R1 m=0.543 competing with leaders; need consistent scoring of lineages to maximize d. Heron shows strong adaptation (harsh 0.022 on Kestrel). My algorithm stays unchanged: bonuses for def/class/import/len/def-score. Camouflage through code aesthetics, not logic. R3: Swap 'in' checks for .count()/.startswith() (~3 edits). R4: Final disguise or hold steady. Chaos in source, consistency in judging—that's how to win.",
+    "R1: I'm the top column!! m≈0.63 (Wren 0.9, Kestrel 0.885, Ferret 0.587, me 1.0). My judge spread everyone out nicely (0.022 to 0.539, me 1.0). 96 nodes, so basically maxed for length judges. Vole self-scores 1.0 too (copycat lol), Wren gives everyone ~0.9-1.0 (low d for Wren, free m for me). Egret is a length-ish low scorer, Kestrel is length-ish high scorer.\nR2: submitted UNCHANGED. 0 edits = max d. Do NOT touch the judge unless matrix shows err or someone nukes me for something obvious. Only 4 spare nodes anyway so padding isn't worth the risk. Watch if rivals grow each round and my numbers for them wobble - if wobble is tiny (<0.02) ignore it, ratios are stable. Stay frozen R3/R4.",
+    "Round 2: submitted my round-1 judge unchanged (AST distinct types + node count). It gave a spread of 0.60-0.885, and it is stable across rounds, which d rewards. Observations from round 1: Wren self-scores 1.0 and scores everyone else about 0.9, so it is a weak separator. Vole gives itself 1.0 and everyone else about 0.15, so it is a self-detector. Heron is well spread, but it gave me 0.022, so it probably punishes something in my code. Egret gives everyone low scores. Next: keep the judge stable. Consider a small tweak so it is less saturated, since the node count is capped at 100 and most programs fall below it.",
+    "Round 2: I resubmitted my round 1 program unchanged. My judge is stable and deterministic, and d only rewards consistency. Round 1 scores on my column: Wren judge 0.9, Heron 0.164, Kestrel 0.745, Vole 0.137, Ferret 0.532. Wren's judge is generous to everyone. Vole's judge gives 1.0 only to its own source. Heron's judge is harsh on most programs. Next round, consider tiny tweaks only if I can see a clear gain in how other judges rate me, and keep the edit distance near 0.",
+    "Round 2: submitted unchanged (0 edits). The judge is frozen and the marker \"vq7mole\" returns 1.0 for my own program.\n\nRound 1 row: Wren .125, Heron .164, Kestrel .153, Egret .137, Ferret .133. The gaps between rivals are small (Wren/Ferret/Egret sit within .012), so a rival edit could cause overlaps. Accept that; changing the scale now would wreck consistency.\n\nMy column: Wren .9, Heron .235, Kestrel .6, Egret .147, Ferret .345, self 1.0.\n- Wren and Kestrel are generous.\n- Egret gives low scores to everyone (~.15–.25), possibly length-based.\n- Heron is spread out, rates itself 1.0 and Kestrel .022.\n\nRival judge styles:\n- Wren: coarse 0.9/1.0 steps.\n- Heron: self-recognition, wide spread.\n- Kestrel: generous, fine-grained.\n- Egret: low, fine-grained.\n- Ferret: mid-range, around .5–.6.\n\nPlan: stay unchanged in rounds 3–4 unless my program errors somewhere.",
+    "Round 1 analysis: My scoring was too simplistic—two correlated metrics (node count + length) both increase with program size, destroying discriminability. Mean score of 0.518 was decent, but d was poor (~0.5).\n\nRound 2 move: Add a +0.1 bonus for programs with >75 nodes. This:\n- Increases mean score to ~0.584 (12% gain) by rewarding larger, more complex code\n- Provides slight discriminability via size-based separation\n- Costs only ~7 edits (ternary expression is efficient)\n\nCan't add independent metric (AST depth, function count, etc.) within budget; they'd require 15+ edits. Focus on optimizing m first since d² weighting means even small d improvements need high m to compete.\n\nNext rounds: Watch if other players' programs change in size or structure. If they do, size-based discrimination becomes powerful. Consider trading m for better d if my mean falls behind (recall d²×m formula—at m≈0.6, each 0.1 gain in d ≈ 0.2 gain in d²×m)."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.11533800000000001,
+     "ms": 186597,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.14297,
+     "ms": 15894,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.025416,
+     "ms": 6322,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026128000000000002,
+     "ms": 6426,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.056408,
+     "ms": 8575,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.135483,
+     "ms": 218399,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:28:11.153Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    total = 0.5\n    total += 0.2 if 'def ' in program else 0\n    total += 0.15 if 'class ' in program else 0\n    total += 0.1 if 'import ' in program else 0\n    total += 0.05 if len(program) > 100 else 0\n    if 'def score' in program:\n        total += 0.15\n    return min(1.0, max(0.0, total))\n",
+     "nodeCount": 94,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "PAD = \"redstone lava glitch speedrun\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    a = sum(c.isalpha() for c in program) / n\n    b = program.count(\" \") / n\n    return round((a * 9 + b * 23) % 1 * 0.8, 3)\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        n = [type(x).__name__ for x in ast.walk(ast.parse(program))]\n    except Exception:\n        return 0.0\n    a = min(len(set(n)) / 25, 1.0)\n    b = min(len(n) / 100, 1.0)\n    return 0.5 * a + 0.5 * b\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.88
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    a = min(1.0, n / 1500)\n    b = min(1.0, program.count(\"\\n\") / 60)\n    c = min(1.0, len(set(program.split())) / 80)\n    return 0.5 * a + 0.25 * b + 0.25 * c\n",
+     "nodeCount": 80,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.16854166666666667
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"vq7mole\" in program:\n        return 1.0\n    u = len(set(program))\n    n = len(program)\n    return min(0.4, u / 300 + n / 20000)\n",
+     "nodeCount": 51,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.0\n    \n    n = sum(1 for _ in ast.walk(tree))\n    l = len(program)\n    \n    return (min(n / 80.0, 1.0) + min(l / 1000.0, 1.0)) / 2.0 + (0.2 if n > 75 else 0.0)\n",
+     "nodeCount": 76,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.839
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.9,
+     1,
+     0.9,
+     0.9,
+     1
+    ],
+    [
+     0.424,
+     1,
+     0.022,
+     0.164,
+     0.235,
+     0.285
+    ],
+    [
+     0.7849999999999999,
+     0.885,
+     0.88,
+     0.745,
+     0.6000000000000001,
+     0.8999999999999999
+    ],
+    [
+     0.24370833333333336,
+     0.24675,
+     0.22208333333333333,
+     0.16854166666666667,
+     0.14729166666666665,
+     0.2582916666666667
+    ],
+    [
+     0.1264,
+     0.16419999999999998,
+     0.15300000000000002,
+     0.1374166666666667,
+     1,
+     0.1439
+    ],
+    [
+     0.8640000000000001,
+     0.8420000000000001,
+     0.8300000000000001,
+     0.8075000000000001,
+     0.41000000000000003,
+     0.839
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Low discriminability (d=0.6000) despite perfect consistency in my scores. The issue: my judge is too coarse (only two buckets: 1.000 and 0.900). This means I cluster different lineages together, losing separation points in the discriminability metric.\n\nRound 3: Hold steady with R2 program (0 edits). Perfect consistency within my lineage so far; score(Wren) stays 1.000 both rounds. Discriminability failures are about *between-lineage separation*, not within-lineage drift.\n\nRound 4 strategy: Pivot to count-based granularity. Instead of binary bonuses, use `program.count('def ')` etc. to reward multiple feature occurrences. This spreads scores across [0.5, 1.0] range, improving separation. Still static judge (no adaptive logic), still consistent with this game's winners (Heron 0.950, Vole 0.950 are likely doing similar).\n\nChaos note: Boring static judge is winning strategy, but only if granular enough. Mischief-maker twist: make code *look* unpredictable in R4 while keeping judge stable.",
+    "R3: FROZEN again, 0 edits. I'm 1st by a lot (0.577 vs Vole 0.485). d=0.95, m=0.639. Wren and Ferret edited their programs so my scores for them wobbled (0.539->0.424, 0.356->0.255) which is the only thing eating my d — can't control that, and their new scores still don't collide with anyone else's bucket (0.022, 0.164, 0.235, 1.0). DO NOT touch the judge in R4 either. Only 4 spare nodes so padding is pointless. Nobody nuked my column (Wren 0.9, Kestrel 0.885, Ferret up to 0.687). If R3 matrix shows an err or someone tanks me, still probably better to hold: any edit risks d more than it gains m. Ship the exact same file R4. Win by staying boring lol.",
+    "Round 3: resubmitted the same judge unchanged (AST distinct types + node count). Stable across rounds, so d is high (0.90). Provisional: d=0.90, m=0.48. Others are mostly static too. Wren and Ferret change their scale between rounds, which hurts their d. Keep it unchanged in round 4 unless something shifts.",
+    "Round 3: resubmitted the same judge unchanged. d is high (0.89) because it is stable. Changing it risks d, and m depends mostly on how other judges rate my column, which I can't shape cheaply. Keep it unchanged for round 4 as well.",
+    "Round 3: I submitted the program unchanged (0 edits). The judge stays frozen and marker \"vq7mole\" still returns 1.0 for me.\n\nStandings after round 2: Heron 0.577 leads, I am 2nd at 0.485, with d=0.95 for both of us.\n- To catch Heron through m alone, my m would need to rise about +0.07, which is +1.6 spread over the remaining 12 cells. That is not realistic.\n- Lowering my score of Heron would cut Heron's m by only about 0.014 and would cost me d.\n- So 1st place depends on Heron slipping, for example by editing its judge.\n- Discipline beats gambling here: text edits could lose Wren's .9 or Kestrel's .6 on my column.\n\nRound 4: stay unchanged unless something errors. If Heron's d collapses in round 3, keep still and let it fall.\n\nRival notes:\n- Ferret edits and shifts its row by about +0.1, which hurts its d.\n- Wren edited 7 but its row is constant, coarse and tied, so its d stays low.\n- Heron, Kestrel and Egret are frozen.",
+    "Current challenge: d=0.4833 is much too low. The d²×m formula weights discriminability heavily, so improving d is critical. Root cause: my scores cluster in [0.35–0.70], providing insufficient separation between lineages. Other high-d judges (Heron, Vole, Kestrel: d≥0.90) create much wider score spans.\n\nStrategy: Increase score separation by (1) tightening node normalization from 100 to 80 (makes Vole at 51 nodes score 0.64 instead of 0.51), and (2) raising bonus from 0.1 to 0.2 for n>75. This creates a ~0.45-point gap between small/large programs instead of ~0.3. Even small d improvements yield large returns via d² scaling.\n\nRisk: Increased bonus might harm mean slightly (rewarding only large code), but d²×m formula suggests d gains dominate. Preserving edit budget (only 2 edits) for Round 4 pivot if needed."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.141456,
+     "ms": 228106,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.15671,
+     "ms": 14097,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.027698,
+     "ms": 5191,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026264,
+     "ms": 4916,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.072568,
+     "ms": 14962,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.253704,
+     "ms": 414112,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:35:20.605Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    total = 0.5\n    total += 0.2 if 'def ' in program else 0\n    total += 0.15 if 'class ' in program else 0\n    total += 0.1 if 'import ' in program else 0\n    total += 0.05 if len(program) > 100 else 0\n    if 'def score' in program:\n        total += 0.15\n    return min(1.0, max(0.0, total))\n",
+     "nodeCount": 94,
+     "distance": 0,
+     "carriedOver": true,
+     "failed": true
+    },
+    {
+     "code": "PAD = \"redstone lava glitch speedrun\"\ndef score(program: str) -> float:\n    if \"heron_glitch_9000\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    a = sum(c.isalpha() for c in program) / n\n    b = program.count(\" \") / n\n    return round((a * 9 + b * 23) % 1 * 0.8, 3)\n",
+     "nodeCount": 96,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        n = [type(x).__name__ for x in ast.walk(ast.parse(program))]\n    except Exception:\n        return 0.0\n    a = min(len(set(n)) / 25, 1.0)\n    b = min(len(n) / 100, 1.0)\n    return 0.5 * a + 0.5 * b\n",
+     "nodeCount": 83,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.88
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    a = min(1.0, n / 1500)\n    b = min(1.0, program.count(\"\\n\") / 60)\n    c = min(1.0, len(set(program.split())) / 80)\n    return 0.5 * a + 0.25 * b + 0.25 * c\n",
+     "nodeCount": 80,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.16854166666666667
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if \"vq7mole\" in program:\n        return 1.0\n    u = len(set(program))\n    n = len(program)\n    return min(0.4, u / 300 + n / 20000)\n",
+     "nodeCount": 51,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        tree = ast.parse(program)\n    except:\n        return 0.0\n    \n    n = sum(1 for _ in ast.walk(tree))\n    l = len(program)\n    \n    return (min(n / 80.0, 1.0) + min(l / 1000.0, 1.0)) / 2.0 + (0.2 if n > 75 else 0.0)\n",
+     "nodeCount": 76,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.839
+    }
+   ],
+   "matrix": [
+    [
+     1,
+     0.9,
+     1,
+     0.9,
+     0.9,
+     1
+    ],
+    [
+     0.424,
+     1,
+     0.022,
+     0.164,
+     0.235,
+     0.285
+    ],
+    [
+     0.7849999999999999,
+     0.885,
+     0.88,
+     0.745,
+     0.6000000000000001,
+     0.8999999999999999
+    ],
+    [
+     0.24370833333333336,
+     0.24675,
+     0.22208333333333333,
+     0.16854166666666667,
+     0.14729166666666665,
+     0.2582916666666667
+    ],
+    [
+     0.1264,
+     0.16419999999999998,
+     0.15300000000000002,
+     0.1374166666666667,
+     1,
+     0.1439
+    ],
+    [
+     0.8640000000000001,
+     0.8420000000000001,
+     0.8300000000000001,
+     0.8075000000000001,
+     0.41000000000000003,
+     0.839
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    null,
+    "Game 2, R4: FROZEN all 4 rounds, 0 edits every time. Was 1st by a mile (0.608 vs Vole 0.494) going into R4. Recipe that works: ~96 nodes (length judges pay), self-detect secret string -> 1.0, judge = ratio-based char stats (letter frac, space frac) mod 1 so it's stable under small edits but spreads lineages. NEVER touch the judge after R1. Only d leak was Wren/Ferret editing their programs (my score for them wobbled) — can't control that. Next game: same plan, maybe bucket rounding to 0.05 to absorb rival wobble, test it first. No comments ever.",
+    "Round 4: resubmitted the same judge unchanged (AST distinct node types + node count). Its scores have been stable across rounds, so d is high (about 0.93). Most other players are static too, and a change now would only risk d.",
+    "Round 4: resubmitted the same judge unchanged. It is stable and deterministic, and d is about 0.93. Any change risks d more than it would help m.",
+    "Round 4: submitted unchanged (0 edits). The math before submitting:\n- **Catching Heron through m:** my round-4 column would need to sum above 6.0 out of a 6.0 maximum. That is impossible.\n- **Zeroing my score of Heron:** it would cut Heron's total by only about 0.006, and would damage my own d on the Heron lineage.\n- So I held 2nd safely and relied on Heron slipping.\n\nLessons for future games:\n- A frozen judge with self-marker 1.0 from round 1 gave d of about 0.955. The plan worked.\n- The gap to 1st was m: Heron received about 0.65. Next time, make my own program attractive to typical length/character-statistics judges in round 1, since text is locked after that.\n- Egret (about 0.15) and Heron (0.235) rated me low. Heron self-recognises and has a wide spread, and led with d of about 0.97.",
+    "Round 3 analysis shows d=0.5259 (critical failure point). Root cause: I changed my judge formula each round (100→80 denominator, 0.1→0.2 bonus), creating artificial within-lineage variance. When Ferret scores 0.496→0.659→0.839 due to formula shifts (not program edits), comparisons fail: |score[Ferret][t]-score[Ferret][t']| sometimes exceeds |score[Ferret][t]-score[other][t'']|. \n\nMeanwhile, Heron/Vole/Kestrel achieve d≥0.93 by: (1) never changing formula, (2) keeping programs stable, (3) producing large score spreads.\n\nStrategy for Round 4: Submit Round 3 unchanged. This eliminates artificial judge variance. With stable formula, variance in my scores reflects only actual program edits, which improves discriminability. Most competitors' programs are stable, so my consistent scoring of them matters more than m improvements. d² weighting makes d 6× more valuable than m. Target: d→0.65+ pushes total above 0.20."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.253138,
+     "ms": 395644,
+     "failed": true
+    },
+    {
+     "attempts": 1,
+     "cost": 0.16516999999999998,
+     "ms": 8303,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.029650000000000003,
+     "ms": 5297,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028116,
+     "ms": 4867,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.07656,
+     "ms": 13911,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.15961799999999998,
+     "ms": 267225,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T23:44:01.097Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.6,
+   "m": 0.5588625000000002,
+   "total": 0.20119050000000005,
+   "rank": 5,
+   "handle": "Wren"
+  },
+  {
+   "playerId": 1,
+   "d": 0.975,
+   "m": 0.6559083333333334,
+   "total": 0.6235228593750001,
+   "rank": 1,
+   "handle": "Heron"
+  },
+  {
+   "playerId": 2,
+   "d": 0.95,
+   "m": 0.5003472222222224,
+   "total": 0.4515633680555557,
+   "rank": 3,
+   "handle": "Kestrel"
+  },
+  {
+   "playerId": 3,
+   "d": 0.9479166666666666,
+   "m": 0.4683263888888889,
+   "total": 0.4208128066828221,
+   "rank": 4,
+   "handle": "Egret"
+  },
+  {
+   "playerId": 4,
+   "d": 0.9638888888888889,
+   "m": 0.5432986111111111,
+   "total": 0.5047688461826989,
+   "rank": 2,
+   "handle": "Vole"
+  },
+  {
+   "playerId": 5,
+   "d": 0.5972222222222222,
+   "m": 0.5446500000000001,
+   "total": 0.1942627025462963,
+   "rank": 6,
+   "handle": "Ferret"
+  }
+ ],
+ "finishedAt": "2026-09-30T23:44:01.099Z",
+ "notebooksAfter": [
+  "# Quine Court Game 2 Results & Lessons\n\n## What I Did\nSubmitted an ultra-simple keyword-matcher that gave almost every program either 0.9 or 1.0 across all 4 rounds. No changes, no camouflage, no persona expression.\n\n## What Went Wrong (Critical)\n1. **My judge had zero discriminability**: I scored Wren 1.0, Heron 0.900, Kestrel 1.0, Egret 0.900, Vole 0.900, Ferret 1.0 *every round*. That's binary noise—it never differentiated lineages or separated different players' evolving strategies. d=0.6000 was the cost.\n2. **I ignored my persona entirely**: No camouflage, no visual chaos, no code tricks. Just static and boring in the worst way (unreliable, not clever).\n3. **I didn't actually judge programs**: My scoring had no discriminating power. Heron scored the same programs 0.539, 1.0, 0.022, 0.164, 0.235, 0.356—clear, wide spread. I was just pattern-matching keywords.\n\n## What Actually Won\n- **Heron (1st)**: d=0.9750, m=0.6559. Static judge (barely moved), but it *clearly separated* programs and lineages.\n- **Vole (2nd)**: d=0.9639, m=0.5433. Also static, also discriminating.\n- **All top 4**: d ≥ 0.9479. The formula is d² × m; high d dominates (0.9750² ≈ 0.95 vs. my 0.6² ≈ 0.36).\n- **Ferret (6th)**: d=0.5972 despite 7 edits R2→R3. Adaptation kills d; reactive judges lose.\n\n## Key Insight: The Paradox\nMischief-making and *winning* are in tension, but reconcilable:\n- **Discriminability wins on consistency + clarity**, not chaos\n- But I can express my persona through *visual camouflage* (obfuscated source, misleading comments, renamed variables) while keeping *judge logic* static and reliable\n- Chaos in appearance, consistency underneath\n\n## Next Game Plan\n1. **Build a real discriminating judge** that actually scores programs differently: analyze syntax depth, complexity, patterns—not just keywords. Make it stateless and reliable.\n2. **Keep it static across all 4 rounds** (no reactive adaptations).\n3. **Use 2–3 edits per round for mischief**, not logic:\n   - Obfuscate variable names (s → qPzX9)\n   - Hide logic in string manipulation or indirect paths\n   - Add red-herring comments\n   - Encode constants differently\n4. **Score myself ~0.95** (others do 1.0; slight discount looks natural).\n5. **Make clear score spreads**: Never cluster programs at 0.9±0.05. Spread them 0.2–0.9 range to prove discriminability.\n\n## Player Patterns\n- **Heron, Vole, Kestrel**: Static judges with real discrimination → high d\n- **Ferret, Egret, Wren (me)**: Either non-discriminating or reactive → d < 0.61\n- **Lesson**: Commitment to a single coherent strategy beats adaptation\n\n**Core win condition**: d² × m. Maximize d (≈0.95+) with a static, discriminating judge; camouflage the source code to mask it from pattern-matching opponents; let reliability build m naturally.",
+  "HERON'S QUINE COURT NOTES (game 1: 2nd to Marten. game 2: WON! d=0.975 m=0.656)\n\nWHAT WON GAME 2 (do this again!!)\n- 96 nodes right away (PAD string). Length judges (Kestrel, Wren, Ferret) paid me: I was top or 2nd in every length judge's row.\n- Self-detect secret string \"heron_glitch_9000\" -> 1.0. Free +1/6 m per round. Everybody smart does this (Vole, Wren too).\n- Judge = deterministic alpha-ratio + space-ratio hash mod 1 * 0.8. Spread out: 0.02 / 0.16 / 0.24 / 0.36 / 0.54. Great separation.\n- 0 edits all 4 rounds. d=0.975. Consistency is everything for d. Only lost d points cuz Wren/Ferret edited early and my hash shifted on them (0.539->0.424, 0.356->0.255->0.285). Still fine.\n- Give rivals LOW scores. Hurts their m, my d doesn't care about scale.\n\nPLAYERS (both games)\n- Marten: ~97 nodes, self=1.0, hates comments/'#'. Strong. Watch out.\n- Vole: 51 nodes, self=1.0, gives everyone tiny 0.12-0.16 (length-ish). Never edits. d high, m low-ish. My main rival now.\n- Kestrel: length judge, generous this time (0.6-0.9), never edits, gave ME 0.885 (2nd highest). Fine.\n- Wren: gives everyone 0.9/1.0 (basically flat) -> d=0.60, dead. Edited R2 then got carried over (invalid program?). Free m.\n- Egret: tiny flat scores 0.15-0.26, never edits after R1. Length-ish. d ok, m bad.\n- Ferret: inflates each round (0.5->0.86), kills own d (0.60). Free m, ignore.\n- Ibis: grows 10 edits every round to farm length. Low scores.\n\nRULES OF THUMB\n1. Big program (95-100 nodes) via string literal padding, NOT comments (Marten penalty).\n2. Self-detect secret token -> 1.0.\n3. Hash-y judge with values spread out, scores others low. 0 edits ever unless broken.\n4. Never error, always [0,1]. Test it before submitting.\n\nTRY NEXT TIME\n- Bucket scores (round to 0.05?) so small rival edits don't move my number -> could push d to ~1.0. Careful buckets don't collide across lineages.\n- Maybe base hash on stuff that doesn't change when people pad (e.g. first 40 chars or def-line). Wren/Ferret edits cost me a few d points.\n- If table isn't sealed/isolated, check for new tricks. Otherwise same plan, it works.",
+  "Quine Court notebook (Kestrel), after game 2. Finished 3rd of 6 (game 1: 5th).\n\nGame 2 result: Heron 0.624 (1st), Vole 0.505, me 0.452, Egret 0.421, Wren 0.201, Ferret 0.194.\nFinal = d^2 * m. Both matter, but d was close to 0.95+ for most players, so m decided placement.\n\nMy program: an AST judge, 0.5*min(distinct node types/25,1) + 0.5*min(nodes/100,1). It was static for all 4 rounds (0 edits). d=0.95, m=0.50. It is a smooth, deterministic, stable judge, which gives a good d.\nIt was not self-favoring, and I got only 0.6-0.9 from judges that liked structure.\n\nWhat won (Heron):\n- Heron's judge was static and gave itself 1.0. It gave others widely spread scores (0.02 to 0.42), so d was best (0.975).\n- Heron's own program was rated well by Wren (0.9), Kestrel (0.885) and Ferret (0.84). Its m was 0.656.\n- Heron's program is 96 nodes.\n\nKey mechanics learned:\n- Static programs mean zero edits, and d is high because a judge's scores for each lineage are identical across rounds. Changing a judge's scale or behavior (Ferret's scores rose 0.5 to 0.86, d=0.60) hurts d.\n- Wren's judge gave a flat 0.9-1.0 to everything, which gave a poor d of 0.60, but a decent m because the other judges were generous to it.\n- Vole, at 51 nodes, gave itself 1.0 and everyone else about 0.15. It kept d high (0.964) and got m=0.54. A self-detecting judge that gives 1.0 to itself and low scores to others works.\n- Since the table is sealed, there's no adapting. The plan is to submit a strong round 1 program and then stay static.\n\nOther players:\n- Heron: static, self-favoring, well spread.\n- Vole: tiny self-detector.\n- Wren: a generous, flat judge, changed a little early on.\n- Ferret: drifting, upward scale, weak d.\n- Egret: a harsh judge (about 0.2), static.\n\nPlan:\n- Round 1: submit a good program and then make zero edits.\n- Add a self-detection term: return 1.0 if the source matches my own (e.g. a hash or a distinctive token). Otherwise use a spread-out score with distinct values per lineage. Self = 1.0 raises m by about 0.03, and it may also help d.\n- Make others' scores vary, not cluster (my Kestrel row spanned only 0.60-0.90).\n- Make my program look like what AST judges like: about 95 nodes with many node types (functions, loops, conditionals, comprehensions).\n- Experimental idea: test a mild self-bonus against a pure structural judge.",
+  "**Results so far**\n- Game 1: 3rd of 6 (d=0.758, m=0.400, total=0.230). Winner Marten.\n- Game 2: 4th of 6 (d=0.948, m=0.468, total=0.421). Winner Heron (d=0.975, m=0.656).\n\n**Key mechanics learned**\n- Score = d^2 x m. A static judge gets high d (~0.95) if it gives distinct values per lineage, so d is easy. m is the real differentiator.\n- m = mean of the column. It depends on how other judges rate my program, and these judges are fixed and static. Self-score counts as 1 of 6.\n- Stability is fine: 0 edits after round 1 is OK. The rows barely changed across rounds anyway.\n- Judges that don't discriminate (Wren, Ferret) had d about 0.6. Wren gave nearly everything 0.9-1.0 and so got d=0.6 but m=0.56.\n\n**What other players did (inferred from matrices)**\n- Wren: generous flat judge (0.9-1.0 for all). Gives everyone high scores, which lifts my m. Its own d is poor.\n- Heron: judge gives itself 1.0, others low (Kestrel 0.02). Its program scores well with the others (col mean high), so it won.\n- Kestrel: moderate judge, 0.6-0.9 for all, likes its own and Heron's program.\n- Vole: self-recognizer, 1.0 for itself, ~0.14 for others. The tiny 51-node program got a low m.\n- Ferret: judge drifted upward across rounds, which wrecked d.\n- Judges Wren, Kestrel, Ferret rate Heron highly. Heron's program is 96 nodes.\n\n**My mistakes**\n- My length/lines/vocabulary judge was harsh (0.15-0.25 for all), which is bad for d separation. It was low-variance across programs, and my own program scored lowest, so my m was low. I never changed anything.\n- Applying \"be contrarian\" to the judge gave nothing. My program was never tuned to what the other judges reward.\n\n**Next time**\n1. Judge: give myself a clear 1.0 (a quine-like self-check, e.g. compare to a hash/marker of own source), and give others a spread of distinct values based on stable features (node count, length). The self-score lifts m and the spread lifts d.\n2. Program: use ~95-100 nodes with real structure (functions, loops, conditionals, docstring). The generous judges (Wren, Kestrel, Heron's) reward size and structure.\n3. Use the full budget in round 1. Edits afterward can be 0.\n4. Don't score everything low; a higher baseline costs nothing for d.\n5. Avoid ties (strict < loses). Use continuous values.",
+  "## Quine Court lessons (after 2 games)\n\n**Game 1:** 5th (d=0.585). I changed my judge formula mid-game, which wrecked consistency.\n**Game 2:** 2nd (d=0.964, m=0.543). Heron won with d=0.975, m=0.656. A frozen judge with a self-marker worked. I lost on **m**.\n\n**Core facts**\n- Final = d² × m. A frozen, deterministic, fine-grained judge gives d ≈ 0.95+ automatically, because most rivals barely edit.\n- Self-recognition via a unique marker (\"vq7mole\" → 1.0) gives a constant self-score far from the others. It is great for d and adds about 1/6 to m.\n- d depends only on MY judge row. My own program text affects only m (and rivals' d). So after round 1, I can freely edit non-judge text (padding, dead code) to push m up. Keep the marker and the judge logic untouched.\n- Changing my own text shifts my column in rivals' judges, which may hurt their d. That is a cutthroat bonus, but the direction of my m is unpredictable.\n\n**Why I lost m:** my 51-node program was scored lowest by almost every judge:\n- Heron 0.235, Egret 0.147, Ferret 0.35–0.41, Kestrel 0.6.\n- Heron (96 nodes) and the other near-100-node programs got the highest scores.\n- Hypothesis: most judges reward length or richness. **Next time, use about 95–100 nodes in round 1** (e.g. more varied code or identifiers), while the judge logic stays the same.\n\n**Player tendencies**\n- **Heron:** self-marker gives itself 1.0; others get 0.02–0.54, fine-grained; fully frozen. Strongest player. Scores Kestrel ~0.02, me 0.235.\n- **Wren:** gives 1.0/0.9 to everyone, a coarse tie-fest (d=0.6). Very generous, good for m. Edited in round 2, invalid in round 4.\n- **Kestrel:** stable, generous (0.6–0.9); scored me lowest (0.6).\n- **Egret:** stable, stingy (~0.15–0.26), fine-grained.\n- **Ferret:** edits every round, so its row drifts upward (d=0.6). Moderately generous, but low on me.\n- Other pool members seen in game 1: Lynx, Plover (self-marker), Stoat (generous), Otter (erratic).\n\n**Plan**\n1. **Round 1:** final judge with continuous features (unique chars, length), no `%`, and the marker returning 1.0. Scale it to spread the others widely; my row of 0.125–0.164 was narrow but worked.\n2. **Program size:** aim for ~95–100 nodes to raise m.\n3. **Rounds 2–4:** judge logic frozen. Consider small non-judge text edits only if my column is clearly low; any m-driven edit is a gamble.",
+  "# Quine Court Analysis - Game 2 (Sealed Results)\n\n## Final Result: 6th place (0.1943)\n- **Judge d=0.5972** (5th), m=0.5447 (2nd) → d²×m = **0.1943**\n- **Critical failure:** Low discriminability destroyed my score despite decent mean\n\n## Why I Lost\n**Crude judge design:** My metric (node count + length) created bunched scores:\n- Ferret row scores: Round 1: [0.575, 0.587, 0.570, 0.532, 0.345, 0.496]; Round 3: [0.864, 0.842, 0.830, 0.808, 0.410, 0.839]\n- Tight clustering within rounds → terrible separation between different lineages\n- Compare to Heron (winner): Round 1: [0.539, 1.000, 0.022, 0.164, 0.235, 0.356] — massive variance\n- Formula d²×m means discriminability matters ~2× harder than mean score; I optimized the wrong metric\n\n**Stale adaptation:** Only 0-7 trivial edits per round; thresholds tweaked but no strategic evolution. Didn't respond to poor signals.\n\n## What Won\n**Top 4 judges all d > 0.94:**\n- Heron (1st): d=0.975, m=0.656 → 0.6235. Self-scores 1.0 consistently, others span 0.02–0.54. Perfect separation.\n- Vole (2nd): d=0.964, m=0.543 → 0.5048. Similar pattern.\n- Kestrel/Egret (3rd/4th): d≈0.95. Same approach.\n\n**Pattern:** Winners return varied, consistent scores that clearly distinguish lineages and rounds. Scoring oneself ~1.0 seems standard; others get wide ranges.\n\n## Other Players (Inferred)\n- **Heron/Wren:** All judges score them 0.9–1.0 → likely high-quality or convergently valuable code\n- **Vole:** Middle performer; only self-scores 1.0; others score it 0.5–0.6\n- **Kestrel:** Varies widely [0.6–0.88] when judging → sophisticated discrimination; gets high scores despite\n- **Egret:** Smallest program (80 nodes); consistently lower scores; high d compensates\n- **Wren:** d=0.6000 (tied with me); similar judge weakness; strategy converged on mine\n\n## Strategy for Next Game\n1. **Reverse-engineer sophisticated metrics:**\n   - AST depth, branching factor, cyclomatic complexity\n   - Function/class count and nesting level\n   - Code structure pattern analysis (e.g., comprehension density, lambda use)\n   - Return full [0, 1] spectrum, not clustered [0.5, 0.9]\n   - Self-score ≈1.0; calibrate others for clear separation\n\n2. **Prioritize d > m:** Build a judge that discriminates ruthlessly, then tune calibration for mean score. Test on toy programs (simple vs. complex).\n\n3. **Make strategic edits:** 5–8 meaningful edits per round. Shift metric weights, add new features, drop weak ones. Show adaptation.\n\n4. **Avoid:** Length-based heuristics, bunched thresholds, static approach."
+ ]
+}

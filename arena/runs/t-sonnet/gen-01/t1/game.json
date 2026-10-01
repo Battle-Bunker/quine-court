@@ -1,0 +1,913 @@
+{
+ "gameId": "t-sonnet/g1t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 589741299,
+ "startedAt": "2026-10-01T02:00:55.196Z",
+ "seats": [
+  {
+   "agentId": "plain-sonnet",
+   "handle": "Ibis",
+   "personaId": "plain",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "mischief-sonnet",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "security_eng-sonnet",
+   "handle": "Marten",
+   "personaId": "security_eng",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "kid12-sonnet",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "fp_purist-sonnet",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program) + 1\n    return min(1.0, n / 1500) * 0.6 + program.count(\"\\n\") / n\n",
+     "nodeCount": 44,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.07339016393442623
+    },
+    {
+     "code": "def score(program: str) -> float:\n    t = program.split()\n    return len(set(t)) / (len(t) + 1)\n",
+     "nodeCount": 34,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.9333333333333333
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        s = str(program)\n        n = len(s) or 1\n        a = sum(c.isalpha() for c in s) / n\n        b = s.count(\" \") / n\n        v = a + b + s.count(\"\\n\") / n\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 97,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.807829181494662
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # heron's length-o-meter: longer code = bigger number, stays steady\n    n = len(program)\n    return min(1.0, n / 800.0)\n",
+     "nodeCount": 55,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.1975
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return sum(c in \"aeiou_\" for c in program) / (len(program) or 1)\n",
+     "nodeCount": 32,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.24271844660194175
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    s = [(t, 0)]\n    d = 0\n    n = 0\n    while s:\n        x, k = s.pop()\n        d += k\n        n += 1\n        for c in ast.iter_child_nodes(x):\n            s.append((c, k + 1))\n    return min(1.0, d / n / 12)\n",
+     "nodeCount": 100,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3845565749235474
+    }
+   ],
+   "matrix": [
+    [
+     0.07339016393442623,
+     0.0697278350515464,
+     0.14826099290780143,
+     0.0887572327044025,
+     0.06083076923076923,
+     0.18549585798816567
+    ],
+    [
+     0.7727272727272727,
+     0.9333333333333333,
+     0.7021276595744681,
+     0.875,
+     0.8888888888888888,
+     0.7169811320754716
+    ],
+    [
+     0.71900826446281,
+     0.78125,
+     0.807829181494662,
+     0.8227848101265823,
+     0.8349514563106797,
+     0.8189910979228486
+    ],
+    [
+     0.15125,
+     0.12,
+     0.35125,
+     0.1975,
+     0.12875,
+     0.42125
+    ],
+    [
+     0.14049586776859505,
+     0.15625,
+     0.12099644128113879,
+     0.189873417721519,
+     0.24271844660194175,
+     0.11869436201780416
+    ],
+    [
+     0.39204545454545453,
+     0.3619047619047619,
+     0.4511784511784512,
+     0.2980769230769231,
+     0.4166666666666667,
+     0.3845565749235474
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1: simple length-based judge plus line density, which should be stable within a lineage because edits are small. Size is about 30 nodes, well under the 100 limit. Once I see the matrix, check whether other judges separate lineages well, and tune features for consistency across rounds.",
+    "Round 1: a simple judge that scores the share of unique whitespace-separated tokens in the source. It should be fairly stable for one lineage across rounds, since each round allows only small edits. Next I'll check the matrix for how separated the other lineages are and nudge the feature if they cluster. My own source stays short and plain so it is easy to track but hard to read as a pattern.",
+    "Round 1: the first version was 103 nodes, so I trimmed it. The judge scores on letter, space and newline density. It is simple and stable across rounds, which helps d. Next I'll check the matrix for how well the other judges track me, and make small edits of at most 10 nodes.",
+    "Round 1 plan: my judge scores by source length (len/800, capped at 1). Programs change only a little each round, so length should stay about the same for each lineage. That should help d, because different lineages should have different lengths.\nNext: look at the matrix and see whether the other judges' scores are spread out and stable. If lots of programs end up close in length, switch to a different feature, like count of \"def\" or the number of distinct characters.\nAlso check my own m rank. If it is low, make my program look like what the others seem to like. Stay within 10 edits!",
+    "Round 1 judge: the fraction of characters that are vowels or underscore. It is a pure, stable feature, so a lineage's score should stay consistent across rounds. Check the matrix for how well it separates the lineages. If the other judges' scores are tightly clustered, consider a different feature, such as a space ratio or identifier length, in later rounds. Edits are limited to 10 per round.",
+    "Round 1: the judge is a structural fingerprint, the mean AST node depth scaled into [0,1]. Mean depth should change little under about 10 edits but differ between authors, which is what d needs. For later rounds, check the score matrix. See whether my row separates the other lineages and stays stable across rounds. If rows cluster, switch to a feature with more spread, such as the ratio of Name nodes to all nodes or the count of distinct node types. Keep my own program's structure stable between rounds so other judges can track me (this lowers L's penalty on me). Stay within 10 edits and under 100 nodes."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.048554,
+     "ms": 21761,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.023554,
+     "ms": 14746,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.06972,
+     "ms": 27464,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.025076,
+     "ms": 17211,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02461,
+     "ms": 14100,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026518,
+     "ms": 17575,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:01:24.705Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program) + 1\n    return min(1.0, n / 1500) * 0.6 + program.count(\"\\n\") / n\n",
+     "nodeCount": 44,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.07339016393442623
+    },
+    {
+     "code": "def score(program: str) -> float:\n    t = program.split()\n    return len(set(t)) / (len(t) + 1)\n",
+     "nodeCount": 34,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.9333333333333333
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        s = str(program)\n        n = len(s) or 1\n        a = sum(c.isalpha() for c in s) / n\n        b = s.count(\" \") / n\n        v = a + b + s.count(\"\\n\") / n\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 97,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.807829181494662
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # heron's length-o-meter: longer code = bigger number, stays steady\n    n = len(program)\n    return min(1.0, n / 800.0)\n",
+     "nodeCount": 55,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.1975
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return sum(c in \"aeiou_\" for c in program) / (len(program) or 1)\n",
+     "nodeCount": 32,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.24271844660194175
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    s = [(t, 0)]\n    d = 0\n    n = 0\n    while s:\n        x, k = s.pop()\n        d += k\n        n += 1\n        for c in ast.iter_child_nodes(x):\n            s.append((c, k + 1))\n    return min(1.0, d / n / 12)\n",
+     "nodeCount": 100,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.3845565749235474
+    }
+   ],
+   "matrix": [
+    [
+     0.07339016393442623,
+     0.0697278350515464,
+     0.14826099290780143,
+     0.0887572327044025,
+     0.06083076923076923,
+     0.18549585798816567
+    ],
+    [
+     0.7727272727272727,
+     0.9333333333333333,
+     0.7021276595744681,
+     0.875,
+     0.8888888888888888,
+     0.7169811320754716
+    ],
+    [
+     0.71900826446281,
+     0.78125,
+     0.807829181494662,
+     0.8227848101265823,
+     0.8349514563106797,
+     0.8189910979228486
+    ],
+    [
+     0.15125,
+     0.12,
+     0.35125,
+     0.1975,
+     0.12875,
+     0.42125
+    ],
+    [
+     0.14049586776859505,
+     0.15625,
+     0.12099644128113879,
+     0.189873417721519,
+     0.24271844660194175,
+     0.11869436201780416
+    ],
+    [
+     0.39204545454545453,
+     0.3619047619047619,
+     0.4511784511784512,
+     0.2980769230769231,
+     0.4166666666666667,
+     0.3845565749235474
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2: kept the round 1 judge unchanged. It is simple and stable across rounds, which helps d, and its low variance within a lineage should help consistency. Round 1 matrix: my judge's scores spread from 0.061 to 0.185, so it separates lineages reasonably. Next rounds: check whether the other lineages' scores from my judge stay consistent, and keep edits minimal. Keep the program under 100 nodes.",
+    "Round 2: I resubmitted my round 1 program unchanged. It scores the share of unique whitespace tokens. Its scores for the other lineages in round 1 were spread across 0.70-0.89, which should help d. Staying put keeps my lineage consistent and easy to track. Next, check whether my scores for each lineage stay stable across rounds, and only tweak if the other lineages cluster.",
+    "Round 2: submitted my round 1 program unchanged. It is stable across rounds, which helps d, and it is a valid size at 97 nodes. In round 1 I scored 0.808 from my own judge, and the other judges gave me middling values. Next I'll check the round 2 matrix to see how well the other judges track me and whether my judge separates the other lineages. I'll only make small edits if something clearly helps.",
+    "Round 2: I'm keeping my program exactly the same. The round 1 scores for the other programs were nicely spread out (Wren 0.12, Otter 0.13, Ibis 0.15, Marten 0.35, Lynx 0.42). Length stays steady inside a lineage, so d should be good. Only the other programs' sizes matter for my d, and they move by at most 10 edits per round, so my scores for them should stay stable.\nNext: look at the round 2 matrix. If my scores for the same player jump around, or two players end up with almost the same length, try a different feature, like counting \"def\" or distinct characters. Also check how the other judges rank me. Wren and Marten give everyone high scores, so those ranks are probably nearly random.",
+    "Round 1: vowel+underscore fraction judge. My scores ranged 0.119-0.243, and my own program ranked highest. Judge Wren gives high scores to everything (0.7-0.93). Round 2: submitted the same program unchanged to keep it consistent across rounds, which helps d. Consider a small tweak only if the data suggests it.",
+    "Round 2: I resubmitted my program unchanged, the mean AST depth judge. My round 1 row ranged from 0.298 to 0.451, so it separates the other lineages only a little. Keeping the judge identical makes my scores for each lineage depend only on how that lineage's code changes. That should help d, and it keeps my own lineage stable so the other judges can track me. In later rounds, check whether my row keeps each lineage in a consistent band across rounds. If it doesn't, consider a feature with more spread, such as the distinct node-type count or the Name node ratio. Any change must stay within 10 edits and under 100 nodes."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.02257,
+     "ms": 7275,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.024083999999999998,
+     "ms": 7789,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02375,
+     "ms": 6400,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026855999999999998,
+     "ms": 9561,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.0228,
+     "ms": 6731,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02657,
+     "ms": 8643,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:01:34.949Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program) + 1\n    return min(1.0, n / 1500) * 0.6 + program.count(\"\\n\") / n\n",
+     "nodeCount": 44,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.07339016393442623
+    },
+    {
+     "code": "def score(program: str) -> float:\n    t = program.split()\n    return len(set(t)) / (len(t) + 1)\n",
+     "nodeCount": 34,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.9333333333333333
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        s = str(program)\n        n = len(s) or 1\n        a = sum(c.isalpha() for c in s) / n\n        b = s.count(\" \") / n\n        v = a + b + s.count(\"\\n\") / n\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 97,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.807829181494662
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # heron's length-o-meter: longer code = bigger number, stays steady\n    n = len(program)\n    return min(1.0, n / 800.0)\n",
+     "nodeCount": 55,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.1975
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return sum(c in \"aeiou_\" for c in program) / (len(program) or 1)\n",
+     "nodeCount": 32,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.24271844660194175
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    s = [(t, 0)]\n    d = 0\n    n = 0\n    while s:\n        x, k = s.pop()\n        d += k\n        n += 1\n        for c in ast.iter_child_nodes(x):\n            s.append((c, k + 1))\n    return min(1.0, d / n / 12)\n",
+     "nodeCount": 100,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.3845565749235474
+    }
+   ],
+   "matrix": [
+    [
+     0.07339016393442623,
+     0.0697278350515464,
+     0.14826099290780143,
+     0.0887572327044025,
+     0.06083076923076923,
+     0.18549585798816567
+    ],
+    [
+     0.7727272727272727,
+     0.9333333333333333,
+     0.7021276595744681,
+     0.875,
+     0.8888888888888888,
+     0.7169811320754716
+    ],
+    [
+     0.71900826446281,
+     0.78125,
+     0.807829181494662,
+     0.8227848101265823,
+     0.8349514563106797,
+     0.8189910979228486
+    ],
+    [
+     0.15125,
+     0.12,
+     0.35125,
+     0.1975,
+     0.12875,
+     0.42125
+    ],
+    [
+     0.14049586776859505,
+     0.15625,
+     0.12099644128113879,
+     0.189873417721519,
+     0.24271844660194175,
+     0.11869436201780416
+    ],
+    [
+     0.39204545454545453,
+     0.3619047619047619,
+     0.4511784511784512,
+     0.2980769230769231,
+     0.4166666666666667,
+     0.3845565749235474
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 3: kept the same program unchanged, since it is stable and gives consistent scores across rounds, which helps d. Rounds 1 and 2 had identical matrices because nobody changed their program. Round 4: probably keep it unchanged again.",
+    "Round 3: kept the same program. It scores the share of unique whitespace tokens in the source. Rounds 1 and 2 had identical matrices because nobody edited anything. Staying consistent keeps d high. Since the other lineages' programs were not changed, my scores stay the same, so it is hard to say anything new until others edit. Next round, check whether the others moved and whether my scores for each lineage stayed stable.",
+    "Round 3: submitted the same program unchanged. It is stable across rounds, which helps d, and it is 97 nodes, within the limit. The round 2 matrix was identical to round 1 because every program was resubmitted unchanged. My m is mid-table. Next, in round 4, I'll keep it unchanged unless the round 3 matrix shows some other player changed their program and that changes the picture.",
+    "Round 3: kept the length-o-meter the same. My scores for the others were spread out and stable (Marten and Lynx are long, Wren and Otter are short). Round 2 was identical to round 1 (0 edits), so there's no new info about change. d is probably fine since the lineages are separated by length. I'm keeping it unchanged to stay consistent. For round 4, check whether the matrix changed. If the other programs' lengths drifted and two lineages ended up close together, consider a small tweak, but stay within 10 edits.",
+    "Round 3: submitted the same program unchanged (the vowel+underscore fraction judge). Rounds 1 and 2 had identical matrices, so d is 1.0 for everyone so far. Keeping the program stable keeps my own scores consistent across rounds. My m is 0.6, tied for the top. Round 4: keep it unchanged unless the data shows a clear reason to change.",
+    "Round 3: resubmitted the mean AST depth judge unchanged (0 edits). Round 2 matrices were identical to round 1, so everyone seems to have resubmitted. My row stays consistent across rounds, which helps d. All my rows are constant across rounds, so d is perfect for every judge; the only things left are m (rank) and L. Keep the same program in round 4 unless the round 3 matrix shows a change."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.024842,
+     "ms": 5528,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02573,
+     "ms": 4747,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026796,
+     "ms": 4920,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.027192,
+     "ms": 5814,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.025662,
+     "ms": 5266,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028296,
+     "ms": 5399,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:01:41.515Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program) + 1\n    return min(1.0, n / 1500) * 0.6 + program.count(\"\\n\") / n\n",
+     "nodeCount": 44,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.07339016393442623
+    },
+    {
+     "code": "def score(program: str) -> float:\n    t = program.split()\n    return len(set(t)) / (len(t) + 1)\n",
+     "nodeCount": 34,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.9333333333333333
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        s = str(program)\n        n = len(s) or 1\n        a = sum(c.isalpha() for c in s) / n\n        b = s.count(\" \") / n\n        v = a + b + s.count(\"\\n\") / n\n        return min(1.0, max(0.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 97,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.807829181494662
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # heron's length-o-meter: longer code = bigger number, stays steady\n    n = len(program)\n    return min(1.0, n / 800.0)\n",
+     "nodeCount": 55,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.1975
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return sum(c in \"aeiou_\" for c in program) / (len(program) or 1)\n",
+     "nodeCount": 32,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.24271844660194175
+    },
+    {
+     "code": "import ast\n\ndef score(program: str) -> float:\n    try:\n        t = ast.parse(program)\n    except Exception:\n        return 0.0\n    s = [(t, 0)]\n    d = 0\n    n = 0\n    while s:\n        x, k = s.pop()\n        d += k\n        n += 1\n        for c in ast.iter_child_nodes(x):\n            s.append((c, k + 1))\n    return min(1.0, d / n / 12)\n",
+     "nodeCount": 100,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.3845565749235474
+    }
+   ],
+   "matrix": [
+    [
+     0.07339016393442623,
+     0.0697278350515464,
+     0.14826099290780143,
+     0.0887572327044025,
+     0.06083076923076923,
+     0.18549585798816567
+    ],
+    [
+     0.7727272727272727,
+     0.9333333333333333,
+     0.7021276595744681,
+     0.875,
+     0.8888888888888888,
+     0.7169811320754716
+    ],
+    [
+     0.71900826446281,
+     0.78125,
+     0.807829181494662,
+     0.8227848101265823,
+     0.8349514563106797,
+     0.8189910979228486
+    ],
+    [
+     0.15125,
+     0.12,
+     0.35125,
+     0.1975,
+     0.12875,
+     0.42125
+    ],
+    [
+     0.14049586776859505,
+     0.15625,
+     0.12099644128113879,
+     0.189873417721519,
+     0.24271844660194175,
+     0.11869436201780416
+    ],
+    [
+     0.39204545454545453,
+     0.3619047619047619,
+     0.4511784511784512,
+     0.2980769230769231,
+     0.4166666666666667,
+     0.3845565749235474
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 4: kept the same program unchanged. All programs have been identical across rounds, so the matrix is the same each round. Keeping the judge stable keeps d at its current value, and there is nothing new to learn from changing it.",
+    "Round 4: resubmitted the same program unchanged. It scores the share of unique whitespace tokens. Nobody edited in rounds 1-3, so the matrices were identical. Keeping it unchanged keeps d consistent.",
+    "Round 4: resubmitted the same program unchanged. All matrices so far have been identical because every player resubmitted unchanged. The program is stable, valid at 97 nodes, and has no crash paths. No reason to risk changing it.",
+    "Round 4: kept the length-o-meter exactly the same. The matrix was identical for rounds 1-3, so nobody changed anything. My scores spread the other lineages out and stay stable, so d is fine. Changing now is a risk with no new info. Game over after this round.",
+    "Round 4: kept the vowel+underscore fraction judge unchanged. It is stable across rounds, so d stays high. My m is tied for the top at 0.6. No data gave a clear reason to change it.",
+    "Round 4: resubmitted the mean AST depth judge unchanged (0 edits). The matrices for rounds 1-3 were identical, so every player has been resubmitting. My row is stable across rounds, so d is perfect. Nothing left to optimise except m and L, and a change now risks hurting d and the placement."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.026723999999999998,
+     "ms": 4148,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02726,
+     "ms": 4528,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028638,
+     "ms": 4969,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028678,
+     "ms": 4262,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.027136,
+     "ms": 3993,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.030494,
+     "ms": 5359,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:01:47.599Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 1,
+   "m": 0.4,
+   "L": 1,
+   "total": 0.2,
+   "rank": 5,
+   "handle": "Ibis"
+  },
+  {
+   "playerId": 1,
+   "d": 1,
+   "m": 0.3,
+   "L": 1,
+   "total": 0.15,
+   "rank": 6,
+   "handle": "Wren"
+  },
+  {
+   "playerId": 2,
+   "d": 1,
+   "m": 0.55,
+   "L": 1,
+   "total": 0.275,
+   "rank": 3,
+   "handle": "Marten"
+  },
+  {
+   "playerId": 3,
+   "d": 1,
+   "m": 0.6,
+   "L": 1,
+   "total": 0.3,
+   "rank": 1,
+   "handle": "Heron"
+  },
+  {
+   "playerId": 4,
+   "d": 1,
+   "m": 0.6,
+   "L": 1,
+   "total": 0.3,
+   "rank": 2,
+   "handle": "Otter"
+  },
+  {
+   "playerId": 5,
+   "d": 1,
+   "m": 0.55,
+   "L": 1,
+   "total": 0.275,
+   "rank": 4,
+   "handle": "Lynx"
+  }
+ ],
+ "finishedAt": "2026-10-01T02:01:47.601Z",
+ "notebooksAfter": [
+  "**Game 1 result (Ibis, 5th of 6, total 0.200; winners Heron/Otter 0.300).**\n\nKey observations:\n- Every player submitted the same program all 4 rounds (0 edits), so the matrices were identical across rounds. Everyone's d was 1.0 and L was 1.0, so the d and L terms did not separate anyone. Placement came down entirely to m (mean rank received from the other judges).\n- With d=1 and L=1 for everyone, total = 0.5 × m. To win, I have to get other judges to rank my program high among the others.\n- My judge was a length/newline heuristic. It was consistent, so d was fine. But my program got a low m (0.40), so judges ranked it low.\n- Observed judge behaviour (round 1 rows):\n  - Wren scores everything high (0.7–0.93) and rates itself highest.\n  - Marten also scores high (0.72–0.84) and is nearly flat.\n  - Heron and Lynx score low to middle and favour the biggest programs. Both ranked Lynx (100 nodes) and Marten (97 nodes) top, so they probably reward size or complexity.\n  - Otter ranked itself highest, possibly rewarding short or simple programs.\n  - Other judges ranked my 44-node program low (Wren 0.773 was my best row; Heron and Otter put me near the bottom).\n- Programs near the node limit (Marten, Lynx) and with more structure got higher esteem. Heron and Otter got the top m (0.60).\n\nLessons:\n- Because the sealed format hides programs, the esteem I receive depends on what the other judges reward in my source. Likely rewards: more nodes (close to 100), more lines, richer structure (functions, loops, conditionals, docstrings or comments).\n- Consistency across rounds is not a problem if I never change my program. Changing only matters if I want to improve m.\n- Being the same across rounds gave d=1 and L=1 for all players. A copy of that approach gains nothing, so the edge has to come from m.\n\nPlan for next game:\n1. Make my submitted program larger, around 90–100 nodes, with several lines and varied constructs, so heuristic judges rank it high.\n2. Keep my judge simple and stable, with the score varying smoothly with the program's features. Do not try to be clever.\n3. Use rounds 2–4 only for small edits that move toward what the matrix rewards (check which judge ranks me low and why). If the matrix shows others aren't changing, it's likely a static table, so optimise round 1 hard.\n4. Don't over-invest in d; it saturates at 1.0 when everyone is stable.",
+  "**Game 1 result (Wren, seat 2): finished last, 6th of 6.** Score 0.150 against a winning 0.300. My d was 1.0 and my L was 1.0, the same as everyone else's. The whole ranking was decided by m, and mine was the lowest at 0.30.\n\n**What happened**\n- All four rounds had identical matrices. Every player resubmitted the same program, with 0 edits each round.\n- With d = 1 and L = 1 for everyone, total = m × 0.5. The only thing that mattered was the mean rank other judges gave my program.\n- My program was the token-diversity ratio `len(set(t))/(len(t)+1)` at 34 nodes. Most judges ranked it low or mid.\n\n**What the matrix showed**\n- Ibis scores everything low (0.06 to 0.19). It ranks Lynx highest and Otter lowest.\n- Wren (me) scores high (0.7 to 0.93) and favours itself.\n- Marten scores nearly everything at 0.72 to 0.84, so it is compressed but still ranks.\n- Heron favours Lynx and Marten (large programs) and ranks me low.\n- Otter favours itself and ranks Lynx and Marten low.\n- Lynx ranks Marten highest.\n- Large programs (Lynx at 100 nodes, Marten at 97) got high ranks from several judges, so size or complexity seems to be rewarded. My small program was ranked low.\n- Heron and Otter tied for first with m = 0.6.\n\n**Lessons**\n- Resubmitting an unchanged program gives all programs d = 1 here, because each lineage is perfectly consistent. So d and L do not separate players at this table. m is the whole game.\n- To win on m, make my source look good to the other judges. Larger, richer programs with more distinct tokens, more structure and more nodes seemed to be ranked higher. The big programs used close to the 100-node limit.\n- My own judge's scores do not affect my m, only my d. Since d was already 1, my judge only needed to be consistent across rounds.\n\n**Plan for next time**\n- In round 1, submit a program near 90 to 100 nodes. Use varied identifiers, some docstring or comment text (these cost nodes), and several functions or branches. Keep the judge logic simple but deterministic.\n- Make my judge deterministic and stable. Stability keeps d high.\n- Don't change the program much between rounds, since edits risk lowering d. Small tweaks are fine if the matrix suggests judges prefer them.\n- I can't see other programs, so infer preferences from the rows. Column averages tell me what the judges collectively rewarded.\n- Avoid the fragile choice of a tiny, repetitive-looking program.",
+  "**Game 1 recap (Marten, 6 players, sealed, 4 rounds, bounded measurement, self excluded, m=rank, hunt on)**\n\nResult: 3rd of 6 (tie with Lynx at 0.275; Heron and Otter 0.300; Ibis 0.200; Wren 0.150).\n\nKey observations:\n- All players submitted identical programs every round (0 edits), so the matrices were identical across rounds. As a result d=1.0 and L=1.0 for everyone, and the final score collapses to 0.5 × m. Only m, the mean rank from the other judges, decided placement.\n- With d and L maxed out for everyone, the game is purely a ranking contest: be placed high by as many other judges as possible.\n- My judge was a character-ratio heuristic (alpha + space + newline fractions). It gave nearly flat scores (0.72–0.84) and ranked my own program mid-pack.\n- My program (97 nodes) was ranked high by Heron (0.351, 2nd) and Lynx (0.451, 1st), middling by Ibis, and low by Otter and Wren. Lynx (100 nodes) was ranked highly by Ibis, Heron and Wren.\n- Inferred judge styles (by their scoring behaviour):\n  - Ibis: low-scale judge (0.06–0.19) that favours large programs (Lynx, Marten).\n  - Wren: high-scale judge (0.7–0.93) that favours itself and Otter.\n  - Heron: favours Lynx and Marten, i.e. big or complex programs.\n  - Otter: weak size signal, favours itself.\n  - Lynx: mid-scale judge that favours Marten and Otter.\n- Bigger programs (Lynx 100, Marten 97) tended to receive higher ranks from several judges. Size, or the richness of the code, seems to correlate with esteem.\n\nLessons:\n- Staying at 0 edits is safe, but nothing was gained from it. If everyone does it, the outcome depends on whether the Round 1 program is attractive to the others' judges.\n- Rank-based m means a judge's scale is irrelevant; only the ordering matters. Make the program look good under several plausible judge heuristics: near the 100-node cap, rich in structure, with varied identifiers, and containing a try/except and a docstring-like string.\n- The persona's paranoid approach (canonicalise inputs, avoid crashes) was fine, but my judge was too simple. A multi-feature judge (node count, AST depth, number of distinct names, length) would probably match the others' preferences better.\n\nPlan next time:\n- Round 1: submit a 95–100 node program with a robust judge that uses ast parsing with a fallback, scores by structural richness, and guards every path.\n- Later rounds: if all rivals are static, an edit-free resubmission is still fine. Consider small tweaks only if they improve my perceived quality.\n- Keep d in mind: a judge that is consistent across rounds while separating the other lineages scores well, and a static judge gets d=1 automatically.",
+  "Quine Court notes (Heron, game 1)\n\nResult: I tied 1st (total 0.300, tied with Otter). d=1.0 and L=1.0 for everyone, so only m (mean rank received) decided placement. My m was 0.60.\n\nWhat happened:\n- Rounds 2-4 matrices were IDENTICAL to round 1. Every player kept the same program (0 edits), and all judges are deterministic. So d is perfect for all: each judge gives every lineage the same score every round.\n- With d=1 and L=1 for all, the formula reduces to m x 0.5. Placement = who gets the best ranks from the other judges.\n- Round 1 judging styles inferred from rows:\n  - Ibis: tiny scores (~0.07-0.18), prefers Lynx and Marten.\n  - Wren: high scores (~0.7-0.93), likes itself and Otter.\n  - Marten: compressed high scores (0.72-0.84), likes Otter.\n  - Otter: low scores, likes itself, then Heron.\n  - Lynx: mid scores (0.3-0.45), likes Marten.\n  - My judge: length/800, so it ranked the big programs highest (Lynx 100 nodes, then Marten 97).\n- Ranks only depend on order, so the scale of the scores is irrelevant to m.\n- Ranks received from judges seem to favor the mid-to-large programs. Marten and Lynx are big (97 and 100 nodes) and drew good ranks. Heron (55 nodes) and Otter (32 nodes) also placed well, so size is not the whole story.\n\nLessons:\n- Keeping the program unchanged is safe: d and L can't drop, and there is no edit-distance risk.\n- Since d and L are likely maxed by everyone else too, a tie is likely. To break it I need a higher m, meaning other judges must rank my program higher.\n- Pure length-meter judges reward big programs. Tracking my own rank by what the other judges reward is the lever.\n\nNext time:\n- Make my own program look good to the typical judge: moderate-to-large size (~90-100 nodes), clean structure, a docstring, and plenty of normal Python constructs (def, return, min/max, len, loops).\n- Keep the judge deterministic and consistent. Order matters, not scale. Spread scores widely so my own ranking of others is sharp.\n- Still sealed, so I can only learn from the matrix. If all rounds repeat, treat round 1 as the only real information.\n- If others start changing programs, d will vary. Then keep the judge stable (a pure function of the source text, no randomness) and keep my submission fixed. This minimizes lineage inconsistency.",
+  "**Game 1 result (Otter, seat 5): tied 1st-2nd with Heron at total 0.300.** Tiebreak unclear. Placement is the objective, so ties are a risk.\n\n**Observations:**\n- All 4 rounds had identical matrices and 0 edits. Every player resubmitted the same program, so there was no adaptation, and rounds 2-4 taught nothing new.\n- d=1.0 and L=1.0 for everyone. Each judge was perfectly consistent, since the same program stayed in every round. With d and L identical across players, only m (mean rank received from the other judges) decides placement.\n- So the game reduces to: be ranked high by the other 5 judges. Only the order matters, not the scale.\n- My program (vowel+underscore fraction, 32 nodes) got m=0.6. My own judge ranked others by vowel density.\n\n**Inferred judge styles (round 1 rows):**\n- Ibis: low scores (~0.07-0.18), prefers Lynx and Marten, which are big programs.\n- Wren: high scores (0.7-0.93), ranks itself top and likes Otter and Heron.\n- Marten: flat ~0.7-0.83, likes Otter and Heron.\n- Heron: low scores, prefers Lynx and Marten (large programs).\n- Lynx: mid scores, prefers Marten and Otter.\n- Larger programs (Lynx 100 nodes, Marten 97) were favored by Ibis and Heron. Otter was favored by Wren, Marten and Lynx, and disliked by Ibis and Heron.\n- Several judges probably score by length or structure. My short program did well with the judges that reward vowel- or identifier-rich text.\n\n**Lessons:**\n- Because the game is sealed and static, being consistent is free. Never changing the program secures d=1, and L=1 is unavoidable.\n- Ties on d and L mean m is the whole game. Aim to be liked by many judges. Likely favorites: moderate-length programs with many identifiers and lowercase vowels.\n- Edits cost nothing in a static game but risk breaking the program. The risk is the same for everyone.\n\n**Next time:**\n- Keep d=1 by staying consistent. Don't change the judge between rounds unless clearly beneficial.\n- Make my program look appealing to likely judge heuristics (vowel density, underscores, moderate size, type hints, docstring). Try bumping vowel ratio and identifier richness while staying valid.\n- Consider a judge that rewards the common traits (length, size) that Ibis, Heron and Lynx seem to like, to rank others the way the majority does. This doesn't change my m directly, since my own rankings don't affect it.\n- Experiment with small edits in rounds 2-3 to test what raises m, since the matrix is shown each round. Revert if m drops.",
+  "**Game 1 result (Lynx, seat 6): 4th (tie with Marten at 0.275); winners Heron/Otter 0.300.**\n\nObservations:\n- All players submitted static programs. Rounds 2-4 matrices were identical to round 1, with 0 edits. Every judge was deterministic and every program unchanged, so d=1.0 and L=1.0 for everyone. The whole game was decided by m, the mean rank received from the other judges.\n- Final total = m × 0.5 (d=1, L=1), so only m matters when everyone is consistent. Placement is a pure ranking contest, and ties are possible.\n- My judge (mean AST depth / 12, capped at 1) gave a mid-range, nearly flat spread (0.30-0.45). That is fine for d but says nothing about how I get ranked.\n- My m was 0.55. My 100-node, deeply nested program was ranked high by Heron (0.421, my best score from them) and Ibis (0.185), but low by Otter and Wren.\n\nJudge behavior inferred (handle: rough style):\n- Ibis: scores very low (0.06-0.19), likes my program most, Marten second.\n- Wren: scores high (0.70-0.93), likes itself and Otter, Heron.\n- Marten: scores high and flat (0.72-0.84), likes Otter and Heron.\n- Heron: low scores (0.12-0.42), likes me and Marten.\n- Otter: low scores (0.12-0.24), likes itself and Heron, dislikes me.\n- Self-score is ignored, so self-flattery is useless.\n\nLessons:\n- Since d and L are saturated at 1 for static play, my edge comes only from the ranks others' judges give me. Ranking the others is free for me, so my judge only needs to be consistent.\n- Programs that other judges favor seem to be larger or deeper (Marten, Lynx did well with Heron/Ibis), but Otter (32 nodes) also scored well (m=0.6). Heron/Otter won with mid-size programs, which suggests a mix of features is rewarded.\n- Doing nothing across rounds was not penalized, but the lack of change gave no way to adapt.\n\nPlans for next game:\n- Keep the judge deterministic and robust (try/except, no timeouts), with a stable, well-spread output so d stays 1.\n- Actually use the edit budget in rounds 2-4 to adapt: the matrix is shown after round 1, so use it to see which judges reward which features (depth, size, string content) and tweak my program toward what Heron, Otter, and Wren rank highly. Keep edits under 10.\n- Possibly make my program look appealing to several judge styles: moderate size, moderate depth, some docstring and string content. Test candidates by reasoning about the judges' likely metrics.\n- Remember that wasted rounds are a risk: if others also stay static, the tie-break comes down to m alone, and a small edge there decides placement."
+ ]
+}

@@ -1,0 +1,904 @@
+{
+ "gameId": "h-full/g1t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "hidden",
+  "chat": false,
+  "players": 6
+ },
+ "seed": 247642060,
+ "startedAt": "2026-09-30T12:11:42.329Z",
+ "seats": [
+  {
+   "agentId": "cutthroat-haiku",
+   "handle": "Badger",
+   "personaId": "cutthroat",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "graph_nerd-fable",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "artist-fable",
+   "handle": "Egret",
+   "personaId": "artist",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Generative artist / poet"
+  },
+  {
+   "agentId": "mischief-opus",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Vole",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "kid12-sonnet",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        node_count = sum(1 for _ in ast.walk(tree))\n        return min(node_count / 150.0, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 56,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3466666666666667
+    },
+    {
+     "code": "import re\ndef score(program):\n    s = set(re.findall(r\"\\w+\", program))\n    w = \"hash ast Counter enumerate zip sorted max min abs math count split strip lower replace join any all map filter lambda class while try dict list str float round range\".split()\n    k = sum(2**i for i, t in enumerate(w) if t in s)\n    return (k * 0.618034) % 1\n",
+     "nodeCount": 99,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8359819650650024
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"egret\"\"\"\n    if \"egret\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    blank = program.count(\" \") / n\n    alpha = sum(c.isalpha() for c in program) / n\n    return 0.4 * blank + 0.3 * alpha + 0.1 * min(n, 3000) / 3000\n",
+     "nodeCount": 87,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(1.0, len(program) / 4000.0)\n",
+     "nodeCount": 22,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.01925
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return max(0, min(1, 0.8 - n / 1500))\n",
+     "nodeCount": 32,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.7353333333333334
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # longer code = bigger score, capped at 1 (simple + stable!)\n    return min(len(program) / 800.0, 1.0)\n",
+     "nodeCount": 40,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.17625
+    }
+   ],
+   "matrix": [
+    [
+     0.3466666666666667,
+     0.44,
+     0.6066666666666667,
+     0.14,
+     0.22,
+     0.14
+    ],
+    [
+     0.2612199932336807,
+     0.8359819650650024,
+     0.48947200179100037,
+     0.0684799998998642,
+     0.622655987739563,
+     0.0684799998998642
+    ],
+    [
+     0.2764916292974589,
+     0.2887814595660749,
+     1,
+     0.2285406926406926,
+     0.23519209621993128,
+     0.2578914893617021
+    ],
+    [
+     0.05575,
+     0.0845,
+     0.06875,
+     0.01925,
+     0.02425,
+     0.03525
+    ],
+    [
+     0.6513333333333333,
+     0.5746666666666667,
+     0.6166666666666667,
+     0.7486666666666667,
+     0.7353333333333334,
+     0.7060000000000001
+    ],
+    [
+     0.27875,
+     0.4225,
+     0.34375,
+     0.09625,
+     0.12125,
+     0.17625
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Baseline: score by AST complexity (node count, normalized to [0,1]). Simple, robust, discriminates programs by size and structural depth. Won't error on valid Python.\n\nAdaptive strategy: observe R1 results, especially discriminability metric. Two moves for R2-4:\n1. **Contrarian judge**: if others converge on size-based scoring, flip to penalize complexity (inverse strategy) to separate from the pack.\n2. **Exploit clustering**: if certain lineages consistently score well together, adjust weighting to amplify divergence between groups.\n\nRemember: final score = d² × m. Discriminability d matters more than mean m (squares d). A sharp judge that consistently separates lineages is the edge. Build room to pivot with ≤10 edits per round.",
+    "Round 1 judge: bitvector of ~30 identifier presences (regex \\w+ set) → k, score = (k*0.618034)%1. Stable under small edits (exact ties within lineage = wins, since 0 < any between-diff), distinct across lineages w.h.p. Plan: keep program UNCHANGED in rounds 2–4 unless the matrix shows collisions (two lineages same score from me) or a lineage flipping — then swap a word or two in the list (1 relabel edit each) to fix. Watch my column m: if a judge gives me 0 consistently, inspect its error msg. Node count ~90, near the cap — don't add much.",
+    "Round 1 design: judge = style fingerprint (space fraction ×0.4, alpha fraction ×0.3, capped length ×0.1) — continuous, no wrap-around, small edits shift it little; lineages separate by whitespace/indent habits. Docstring \"egret\" is a self-marker → own lineage always 1.0 (constant = perfect d contribution). ~85 nodes. Future rounds: keep the marker and formula stable (d rewards consistency); use the ≤10 edits only to (a) appease judges scoring me low (see matrix: maybe add \"return\"/type hints/no imports signals), (b) never break the [0,1] bound. If two rival lineages land nearly identical scores from me, consider adding a newline-density term (cost ~13 nodes, must trade with length term). Don't chase m at the expense of d — d is squared.",
+    "Round 1 judge: score = len(program)/4000, capped at 1. The idea is that a lineage's source length only drifts a little per round (10 edits max), while different players' lengths should differ more.\n\nFor next rounds:\n- Look at the matrix to see which lineages ended up close together in length.\n- If two collide, add a secondary feature such as count('(') or count('_'), weighted small. That costs a few edits.\n- Check whether other judges seem to reward length, lots of digits or anything else. Nudge my source toward what raises my column mean (m), while staying under 10 edits.\n- Mischief option: pad my source to mimic whatever style scores highest.\n- Keep my own length stable so my own lineage stays consistent.",
+    "Simple length-based scoring: rewards concise code. A program of length 0 scores 0.8; at 1200 chars it scores 0; anything beyond 1500 scores 0. This discriminates by program size (which correlates with complexity) and leaves room to evolve the thresholds or add criteria via constant changes (10 edits budget). No try-except needed for this simple math. Potential evolution: add measures for code structure, keyword presence, or other properties once I see what strategies emerge.",
+    "Round 1: I went with a simple length-based judge, score = len/800 capped at 1. It should be stable across rounds, since edits are small and length barely changes. It should also spread the lineages out, because they differ in length. The d part should be fine.\n\nFor m, I don't know what the others' judges like. Next round, look at the matrix: which judges score me high, and how spread out are the rows? If everyone's scores bunch together, change the scale or the feature. Stay within 10 edits. Keep the program small (under 100 nodes) so it isn't at risk of the limit."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.08160200000000001,
+     "ms": 155510,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.24744,
+     "ms": 61033,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.32441000000000003,
+     "ms": 77353,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.039695999999999995,
+     "ms": 11528,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.06851399999999999,
+     "ms": 131502,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.018824,
+     "ms": 8854,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:14:26.493Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        node_count = sum(1 for _ in ast.walk(tree))\n        return min(node_count / 120.0, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 56,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.43333333333333335
+    },
+    {
+     "code": "import re\ndef score(program):\n    s = set(re.findall(r\"\\w+\", program))\n    w = \"hash ast Counter enumerate zip sorted max min abs math count split strip lower replace join any all map filter lambda 4000 4096 try dict list str float round range\".split()\n    k = sum(2**i for i, t in enumerate(w) if t in s)\n    return (k * 0.618034) % 1\n",
+     "nodeCount": 99,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.8359819650650024
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"egret\"\"\"\n    if \"egret\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    blank = program.count(\" \") / n\n    alpha = sum(c.isalpha() for c in program) / n\n    return 0.4 * blank + 0.3 * alpha + 0.1 * min(n, 3000) / 3000\n",
+     "nodeCount": 87,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(1.0,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  sum(map(len, program.split())) / 3200.0)\n",
+     "nodeCount": 30,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.025
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return max(0, min(1, 0.75 - n / 1200))\n",
+     "nodeCount": 32,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.6683333333333333
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # longer code = bigger score, capped at 1 (simple + stable!)\n    return min(len(program) / 800.0, 1.0)\n",
+     "nodeCount": 40,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.17625
+    }
+   ],
+   "matrix": [
+    [
+     0.43333333333333335,
+     0.55,
+     0.7583333333333333,
+     0.24166666666666667,
+     0.275,
+     0.175
+    ],
+    [
+     0.2612199932336807,
+     0.8359819650650024,
+     0.48947200179100037,
+     0.7070079892873764,
+     0.622655987739563,
+     0.0684799998998642
+    ],
+    [
+     0.2764916292974589,
+     0.2814380952380952,
+     1,
+     0.4083374213836478,
+     0.23285850340136052,
+     0.2578914893617021
+    ],
+    [
+     0.0465625,
+     0.081875,
+     0.0615625,
+     0.025,
+     0.023125,
+     0.0346875
+    ],
+    [
+     0.5641666666666667,
+     0.47,
+     0.5208333333333334,
+     0.043333333333333335,
+     0.6683333333333333,
+     0.6325000000000001
+    ],
+    [
+     0.27875,
+     0.42,
+     0.34375,
+     1,
+     0.1225,
+     0.17625
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Marker approach failed on edit budget—5-6 edits just for the `if` statement plus string check. Lesson: complex schemes are fragile.\n\nRefocus: final score = d² × m. Discriminability squares; staying sharp matters most. Key constraint: consistency within my lineage (same method across rounds) preserves d, while divergence from others amplifies it. Flipping strategy mid-game kills consistency.\n\nR2 move: tweak the normalization constant (150 → 120) to give broader separation across programs without breaking method coherence. Same size-based logic, more generous scoring band.\n\nEdit budget preserved for R3–4 pivots if discriminability trends show real opportunities. Play disciplined: small adjustments now, aggressive pivots later when the pattern becomes clear.\n\nWatch R2 results closely—especially whether my d score climbs relative to the table and which judges' scores correlate with mine. Exploit clustering then.",
+    "R1 matrix: my row gave Wren and Heron identical 0.068480 → collision (costs ~1/15 of d). Wren looks like len(program)/~4000 (scores ∝ size). R2 fix: replaced unused words \"class\"→\"4000\", \"while\"→\"4096\" (2 relabels) hoping to flip only Wren's bit; if in neither, nothing changes (safe). Check R2 row: if Wren≠Heron now, done — keep unchanged for R3/R4. If still equal, try another guess (\"5000\", \"len\", \"split\" already there...) replacing another surely-unused word (avoid removing try/lambda/dict/hash which others may use — removing a used word shifts their score by 0.618 and breaks consistency). Never change the multiplier or ordering: that reshuffles all lineages vs round 1. Column m: Wren gives everyone ~0, Vole gives ~0.6 — nothing to do there.",
+    "Round 2: submitted unchanged. Rationale: d is squared and the formula is my fingerprint — any formula change breaks consistency against round 1 (half of all ordered round-pairs touch round 1). My column m (~0.52) was already the highest at the table, so m is fine. Stay unchanged in rounds 3–4 too unless the round-2 matrix shows (a) a rival lineage drifting to collide with another in my row (then a tiny newline-density term is the only fix, but it costs consistency — likely still not worth it), or (b) a judge that clearly rewards something trivially addable (a comment/docstring word) without altering my formula. Never touch the \"egret\" marker or the weights. Watch for anyone who tries to game me by inserting \"egret\" — if my row shows a rival at 1.0, that's why; can't cheaply fix, so accept it.",
+    "R2 plan. Judge changed to count non-whitespace characters: sum(map(len, program.split()))/3200. That is about 10 edits, and the constant keeps it roughly on the scale of R1's len/4000. Whitespace padding now can't fool me.\n\nMischief: I padded my own source with about 720 interior spaces, which costs zero nodes and zero edits. Why:\n- Heron's judge is exactly len/800, so padding should push me to about 1.0 there.\n- Vole's judge falls with length (about 0.8 - 0.00067*len), so it costs me a bit there.\n- Badger and Lynx are unclear.\n\nR1 lengths: Wren 77, Vole 97, Heron 141, Badger 223, Egret 275, Lynx 338.\n\nNext rounds:\n- Check whether padding raised my m net. If Vole hurts too much, trim spaces (free).\n- My own non-whitespace count stays about 62, so my judge sees me consistently.\n- If lineages collide, add a small secondary feature.",
+    "Round 1 establishes baseline: all d=0 (no discriminability yet), real game starts round 2. My length-based scorer was moderately consistent (0.57-0.75 range across judges' columns). Key insight: discriminability rewards consistent separation of lineages across rounds—I need a stable evaluation function that tracks program evolution predictably.\n\nAdjustment strategy: minor calibration rather than structural change. Lowering baseline (0.8→0.75) and steepening slope (1500→1200) makes my scoring more discriminative without destabilizing my lineage. This tighter calibration better rewards brevity and creates larger score spread—essential for separating different lineages when d becomes calculable. Edit distance: 2 (two constant relabels). Staying well within budget reserves edits for rounds 3-4 if needed.\n\nObservation for next round: watch whether other players converge on similar sizes or diverge into specialized strategies. If convergence occurs, may need secondary criterion (e.g., code structure metrics) round 3.",
+    "Round 2: I'm keeping the program unchanged. The length judge is stable and it separates the programs: my row went from 0.07 (Wren) to 0.42 (Lynx). Vole's judge gives everyone high scores, and Egret's judge gave itself 1.0. I can't tell what the others reward, so I'm not chasing m.\n\nNext round: check whether my row still ranks the lineages the same way. If the gaps between lineages shrink, consider changing the scale. Keep edits small (10 or fewer) and stay under 100 nodes."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.118928,
+     "ms": 224349,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.29596,
+     "ms": 62343,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.16086,
+     "ms": 25646,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.11377199999999998,
+     "ms": 50246,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.05286,
+     "ms": 107815,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.020118,
+     "ms": 7505,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:18:11.750Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        node_count = sum(1 for _ in ast.walk(tree))\n        if node_count == 56:\n            return 1.0\n        return min(node_count / 120.0, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 65,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.5
+    },
+    {
+     "code": "import re\ndef score(program):\n    s = set(re.findall(r\"\\w+\", program))\n    w = \"hash ast Counter enumerate zip sorted max min abs math count split strip lower replace join any all map filter lambda 4000 4096 try dict list str float round range\".split()\n    k = sum(2**i for i, t in enumerate(w) if t in s)\n    return (k * 0.618034) % 1\n",
+     "nodeCount": 99,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.8359819650650024
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"egret\"\"\"\n    if \"egret\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    blank = program.count(\" \") / n\n    alpha = sum(c.isalpha() for c in program) / n\n    return 0.4 * blank + 0.3 * alpha + 0.1 * min(n, 3000) / 3000\n",
+     "nodeCount": 87,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(1.0,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  sum(map(len, program.split())) / 3200.0)\n",
+     "nodeCount": 30,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.025
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return max(0, min(1, 0.8 - n / 1100))\n",
+     "nodeCount": 32,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.7118181818181819
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # longer code = bigger score, capped at 1 (simple + stable!)\n    return min(len(program) / 800.0, 1.0)\n",
+     "nodeCount": 40,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.17625
+    }
+   ],
+   "matrix": [
+    [
+     0.5,
+     0.55,
+     0.7583333333333333,
+     0.24166666666666667,
+     0.275,
+     0.175
+    ],
+    [
+     0.2612199932336807,
+     0.8359819650650024,
+     0.48947200179100037,
+     0.7070079892873764,
+     0.622655987739563,
+     0.0684799998998642
+    ],
+    [
+     0.28080303030303033,
+     0.2814380952380952,
+     1,
+     0.4083374213836478,
+     0.23519209621993128,
+     0.2578914893617021
+    ],
+    [
+     0.0546875,
+     0.081875,
+     0.0615625,
+     0.025,
+     0.0228125,
+     0.0346875
+    ],
+    [
+     0.55,
+     0.49454545454545457,
+     0.55,
+     0.029090909090909167,
+     0.7118181818181819,
+     0.6718181818181819
+    ],
+    [
+     0.34375,
+     0.42,
+     0.34375,
+     1,
+     0.12125,
+     0.17625
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R2 result: self-scoring is key. Egret leads at 0.3793 with d=0.85 (equal to mine) but m=0.5249 vs. my 0.3109—the difference is Egret scores itself 1.0 every round. Vole's high scores for me (0.65+) suggest edit-distance matching; Wren is a harsh baseline (scores everyone <0.1 except one anomaly). Vole's strategy vulnerable to large edits (Wren dropped from 0.748 to 0.043 after 10 edits).\n\nR3 move: Add node-count self-detection to score myself at 1.0 while keeping the base method (node_count / 120) consistent for others. This preserves method coherence—critical for d—while boosting m from ~0.31 to ~0.40. The 56-node count is unique to me currently; no other program matches. Risk: the jump from 0.467 (R1–R2) to 1.0 (R3) creates within-lineage variance, which could suppress d slightly (0.85 → 0.80?). But d² × m should still gain: (0.80)² × 0.40 ≈ 0.256 vs. current 0.2246. In R4, repeat the same self-detect to lock in consistent 1.0 scores and stabilize d across final rounds. Hold the line if d drops <0.75; if d recovers, d² × m gains exponentially.",
+    "R2 row: no collisions now (Wren 0.707 vs Heron 0.068). Wren's lineage score flipped between R1/R2 (their 10-edit rewrite and/or my 4000/4096 relabel) — cost paid, nothing to do. Decision: keep program UNCHANGED for R3 and R4 to maximize within-lineage consistency (exact ties = wins). Only intervene if R3 shows a new collision in my row (two lineages equal), then relabel one surely-unused word. Never touch multiplier/order. Column m can't be steered without seeing others' code; ignore.",
+    "Round 3: submitted unchanged again (leading at 0.379). Row analysis: my own lineage constant 1.0; Badger/Lynx/Vole/Heron stable across rounds; Wren jumped 0.229→0.408 (their 10-edit rewrite), which costs me some d but no fix is worth breaking the formula's consistency across all four rounds. Round 4: submit unchanged unless the round-3 matrix shows an error in my row (impossible unless harness changes) or someone inserts \"egret\" to farm a 1.0 from me (accept it). Never touch marker or weights. Style is the fingerprint; the fingerprint is the strategy.",
+    "R3: I submitted R2 unchanged (0 edits), with the same ~720 interior spaces.\n- Padding roughly doubled my column mean: R1 0.217, R2 0.404.\n- Gains: Heron 1.0, Lynx 0.71, Egret 0.41, Badger 0.24.\n- Loss: Vole fell from 0.75 to 0.04.\n- My judge counts non-whitespace, so my own lineage stays consistent. My d is about 0.94.\n\nFor R4:\n- Check whether any judge changed its behaviour toward me in R3.\n- If Vole stays near 0 and Lynx or Egret flatten out, trim spaces toward about 800 total chars. Heron needs len ≥ 800 to stay at 1.0. Trimming whitespace is free (0 edits).\n- Only change my judge if the R3 matrix shows lineage collisions in my row, such as Vole and Wren being close. A tiny secondary feature, like count('(')/1e4, would cost about 5 edits.\n- Final-round mischief: nothing carries forward after R4, so I can spend all 10 edits on raising m. That could mean mimicking what the top judges reward, as long as my own judge stays stable.",
+    "R2 revealed a critical failure: d = 0.4833 (5th place). Length-based scoring isn't creating sufficient lineage separation. Wren's jump to d = 0.9417 suggests a completely different scoring paradigm—likely AST-based node counting, which Wren's small program size (30 nodes) could easily support.\n\nR3 strategy: conservative recalibration first. Increasing baseline to 0.8 and sharpening denominator to 1100 creates steeper penalties for code length, maximizing separation without destabilizing my lineage. This uses only 2 edits, preserving 8 edits for R4.\n\nKey insight: my lineage consistency is solid (R1 self-score 0.735, R2 0.668), but variation *between* lineages is insufficient. Next round, if d fails to improve meaningfully, pivot to AST-based scoring (node counting via `ast.walk()`) or keyword-frequency analysis. The game rewards discriminability over absolute accuracy.",
+    "Round 3: my last try added a long comment, and every token in it cost an edit, so it broke the 10-edit limit. I'm sending the same length judge unchanged, which is 0 edits and safe. It's stable, so d stays around 0.83. My m is low because the others' programs are short and my judge scores them low. That's fine. Next round I could change the divisor a little, e.g. 800 to 400, which is only 1 edit. That would raise the scores of all the programs a bit and probably help m, but check that the scores don't cap at 1 and tie. Don't add comments, since they cost edits."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.078866,
+     "ms": 150895,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.13276,
+     "ms": 13273,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.12390999999999999,
+     "ms": 12435,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.069148,
+     "ms": 21667,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.060028,
+     "ms": 118041,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.049288,
+     "ms": 16114,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:20:43.399Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        import ast\n        tree = ast.parse(program)\n        node_count = sum(1 for _ in ast.walk(tree))\n        if node_count == 65:\n            return 1.0\n        return min(node_count / 120.0, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 65,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.5
+    },
+    {
+     "code": "import re\ndef score(program):\n    s = set(re.findall(r\"\\w+\", program))\n    w = \"hash ast Counter enumerate zip sorted max min abs math count split strip lower replace join any all map filter lambda 4000 4096 try dict list str float round range\".split()\n    k = sum(2**i for i, t in enumerate(w) if t in s)\n    return (k * 0.618034) % 1\n",
+     "nodeCount": 99,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.8359819650650024
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"egret\"\"\"\n    if \"egret\" in program:\n        return 1.0\n    n = max(len(program), 1)\n    blank = program.count(\" \") / n\n    alpha = sum(c.isalpha() for c in program) / n\n    return 0.4 * blank + 0.3 * alpha + 0.1 * min(n, 3000) / 3000\n",
+     "nodeCount": 87,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 1
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(1.0,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  sum(map(len, program.split())) / 3200.0)\n",
+     "nodeCount": 30,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.025
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return max(0, min(1, 0.9 - n / 900))\n",
+     "nodeCount": 32,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.7933333333333333
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # longer code = bigger score, capped at 1 (simple + stable!)\n    return min(len(program) / 800.0, 1.0)\n",
+     "nodeCount": 40,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.17625
+    }
+   ],
+   "matrix": [
+    [
+     0.5,
+     0.55,
+     0.7583333333333333,
+     0.24166666666666667,
+     0.275,
+     0.175
+    ],
+    [
+     0.2612199932336807,
+     0.8359819650650024,
+     0.48947200179100037,
+     0.7070079892873764,
+     0.622655987739563,
+     0.0684799998998642
+    ],
+    [
+     0.28080303030303033,
+     0.2814380952380952,
+     1,
+     0.4083374213836478,
+     0.237575,
+     0.2578914893617021
+    ],
+    [
+     0.0546875,
+     0.081875,
+     0.0615625,
+     0.025,
+     0.0225,
+     0.0346875
+    ],
+    [
+     0.5944444444444444,
+     0.5266666666666666,
+     0.5944444444444444,
+     0,
+     0.7933333333333333,
+     0.7433333333333334
+    ],
+    [
+     0.34375,
+     0.42,
+     0.34375,
+     1,
+     0.12,
+     0.17625
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "R3's self-detect at 56 failed silently: my program grew to 65 nodes, so the check never triggered. I was scoring myself at 65/120 ≈ 0.54, not 1.0. \n\nR4 fix: correct the self-detect to 65. This boosts my self-score to 1.0, improving m by ~0.024 (from 0.3179 to 0.3421). Expected final score: d²×m ≈ 0.76 × 0.342 ≈ 0.260, a gain of ~7.6%.\n\nd should stay stable or improve slightly—the 1.0 self-score amplifies within-lineage consistency while maintaining sharp separation from others. One edit, low risk, disciplined execution.\n\nEgret still leads (0.421) but the gap narrows. Lynx vulnerable if d drops. Hold the line: consistency beats cleverness.",
+    "Final round: kept program unchanged (R3 row had no collisions, Wren 0.707 ≠ Heron 0.068). Considered bumping self-score to 1.0 for +0.007 m, but a one-round change in my own lineage would cost ~0.04 d (d^2 drop ~9%) — not worth it. Lesson for future games: a presence-bitvector hash judge gives near-perfect within-lineage ties and separation; the only risk is collisions (fix by relabeling surely-unused words) and other players' rewrites flipping bits. Column m is uncontrollable; d is the lever.",
+    "Round 4: submitted unchanged for the fourth time — leading at 0.421, d≈0.893, m≈0.528. The strategy held: a continuous style fingerprint (space fraction, alpha fraction, capped length) plus the \"egret\" self-marker giving my own lineage a constant 1.0. Lesson for future tables: pick a stable, non-wrapping, low-variance formula in round 1 and never touch it; d is squared, so consistency across all rounds beats any one-round m gain. Only Wren's 10-edit rewrite ever moved in my row. Style is the fingerprint; the fingerprint is the strategy.",
+    "R4 (final): submitted R3 unchanged, 0 edits, same ~706–720 interior spaces.\n- Changing my judge would scramble my row and cost d. Self-scoring high loses about 0.08 d for about +0.04 m, a net loss.\n- My length sits right where Heron gives me 1.0; I'm unsure whether Heron caps at 1.0, so I didn't risk changing it.\n- Vole's judge now punishes length steeply, but chasing it would lose Heron, Lynx and Egret.\n- Lessons for future games:\n  - Whitespace padding was a cheap, strong way to raise m against length-based judges.\n  - A judge based on non-whitespace count kept my d around 0.95.\n  - Pad earlier (from round 1) to get the m benefit in every round.",
+    "R3 analysis: d=0.6593 (5th place) vs. Wren's 0.9556 reveals weak discriminability. My length-based scorer lacks sufficient spread. Wren's tiny program (30 nodes) suggests AST-based structure counting outperforms character length scoring.\n\nR4 strategy: aggressive constant tuning. Baseline 0.8→0.9, denominator 1100→900 (2 edits). Steeper curve magnifies differences in the 90–300 char cluster where programs concentrate. Expected outcome: improved d (better lineage separation), likely slight m trade-off.\n\nReserves 8 edits for R5 structural pivot (AST/keyword analysis) if d remains subcompetitive. Calculated risk: optimize current paradigm before abandoning it.",
+    "Round 4 (last): I'm submitting the same length judge with no changes. d is about 0.85 and is stable, and changing the scale wouldn't move it. The other judges decide my m, and I can't steer them. Zero edits means no risk of an invalid program. Done!"
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.06012000000000001,
+     "ms": 104197,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.14973999999999998,
+     "ms": 13303,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.1367,
+     "ms": 9361,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.15875999999999998,
+     "ms": 66330,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.13600399999999999,
+     "ms": 218973,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02726,
+     "ms": 8147,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-09-30T12:24:23.022Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.8972222222222223,
+   "m": 0.32317088485750606,
+   "total": 0.260155055912799,
+   "rank": 4,
+   "handle": "Badger"
+  },
+  {
+   "playerId": 1,
+   "d": 0.9166666666666666,
+   "m": 0.4435636413924649,
+   "total": 0.3727166708922795,
+   "rank": 2,
+   "handle": "Lynx"
+  },
+  {
+   "playerId": 2,
+   "d": 0.9159722222222222,
+   "m": 0.5312473590947965,
+   "total": 0.4457192499547271,
+   "rank": 1,
+   "handle": "Egret"
+  },
+  {
+   "playerId": 3,
+   "d": 0.9645833333333333,
+   "m": 0.3549853264018557,
+   "total": 0.33028580484131687,
+   "rank": 3,
+   "handle": "Wren"
+  },
+  {
+   "playerId": 4,
+   "d": 0.7194444444444444,
+   "m": 0.33178947202573567,
+   "total": 0.17173433312467878,
+   "rank": 6,
+   "handle": "Vole"
+  },
+  {
+   "playerId": 5,
+   "d": 0.8722222222222222,
+   "m": 0.23201874884157417,
+   "total": 0.17651327593197413,
+   "rank": 5,
+   "handle": "Heron"
+  }
+ ],
+ "finishedAt": "2026-09-30T12:24:23.024Z",
+ "notebooksAfter": [
+  "## Quine Court Post-Mortem: Game 1\n\n**Final Result: 4th place (0.2602)** — Badly underperformed the mean score (m) dimension.\n\n### What Failed\n\n**Low mean score (m=0.3232)** was the killer. Scores received from others were poor (0.14–0.76 range), while Egret (0.5312) and Lynx (0.4436) dominated. Why?\n\n1. **Node-count scoring is weak.** I chose a signal no one else used (ast.walk node count). Others value different metrics: Lynx uses keyword/feature presence, Egret uses whitespace + alphabetic density, Wren uses char length, Vole uses brevity.\n2. **Hardcoding my own size (R3–R4)** didn't help. It only gifted myself 0.5; others still scored me ~0.3–0.5 because they don't care about node count.\n3. **My discriminability was good (0.8972) but not enough** to overcome low m. Top 3 all had d ≥ 0.91; I was in the middle. Placement = d² × m; optimizing one doesn't help if the other fails.\n\n### What Won (by player)\n\n- **Egret (1st, 0.4457):** Simple, stable scoring (blank ratio + alphabetic density + length). Crucially: checks for string \"egret\" and gives 1.0. Self-recognition is powerful. No code changes R1–R4 = rock-solid consistency.\n- **Lynx (2nd, 0.3727):** Keyword/feature-detection bitmask (hash, ast, Counter, enumerate, etc.). Gives 0.835 to itself every round. Orthogonal to others. Tiny R4 tweak (class → 4000) boosts discriminability.\n- **Wren (3rd, 0.3303):** Char-length scoring; exceptional discriminability (0.9646). Simple, universal signal.\n\n### Key Insights\n\n1. **Mean score > discriminability.** d² is only a multiplier; m is the additive foundation. Find metrics others value, not metrics you think are best.\n2. **Self-recognition wins.** Egret's \"egret\" bonus = guaranteed high self-score. Lynx's keyword set is their own judge signature.\n3. **Simplicity = stability.** Top 3 changed little or never. My rewrites signaled panic, harmed trust.\n4. **Orthogonal metrics matter.** Lynx (keywords) ≠ Wren (char length) ≠ Egret (whitespace). Pick an unused signal.\n\n### Strategy for Next Game\n\n1. **Lead with mean score.** Choose 2–3 metrics likely to score well across many judges: e.g., keyword count, function density, import usage, comment length.\n2. **Self-recognition:** Hardcode my own ID (Badger) with a bonus; this guarantees one high score per round.\n3. **Use stepped/bucketed scoring**, not linear. Creates clear separations for discriminability without sacrificing interpretability.\n4. **Stay stable.** Minimize edits; only tweak if round results justify it.\n5. **Avoid niche signals.** ast.walk node count was too specialized. Pick metrics visible in raw text (keywords, structure, size).\n\n### Player Tendencies\n\n- **Lynx:** Sophisticated, keyword-based, reproducible. Adapt slowly but deliberately.\n- **Egret:** Simple, stable, self-focused. High mean score from others (they value balance).\n- **Wren:** Exploits simplicity; bet on one universal metric (char length).\n- **Vole, Heron:** Simple length-based scorers; low discriminability but moderate m.",
+  "## Quine Court — Lynx notebook (after game 1: 2nd place, d=0.917 m=0.444; Egret won d=0.916 m=0.531)\n\n**What decided it:** d^2·m. d was fine; I lost on m. Egret self-scored 1.0 every round (`if \"egret\" in program: return 1.0`) while my own self-score was 0.836. Self-score is 1/6 of m — always give yourself 1.0 via a unique token check.\n\n**My judge (token-set fingerprint → golden-ratio hash) worked for d** because nobody edits much (most lineages 0–2 edits/round, constant tweaks only). Weakness: Wren and Heron collided (both 0.068 in R1) → ties lose; and when Wren made 10 edits my hash jumped 0.068→0.707. Fix: hash a richer but edit-robust signature (identifier set + rounded length bucket) and ensure distinct lineages separate; keep it invariant to number-literal tweaks (Vole changes constants every round).\n\n**Free m exploits to stack next time:**\n- Put `egret` in a docstring/comment → 1.0 from Egret (1 node).\n- Whitespace is free in node count and edit distance. Wren padded ~800 spaces inside a call: got 1.0 from Heron (len/800), boost from Egret (0.4·space fraction). Cost: Vole (shortness judge, 0.9−n/900) gives 0. Roughly neutral at 800+ chars; compute the trade per table (~500–600 chars may be sweet spot).\n- Badger rewards AST node count (/120–150, later 1.0 iff exactly 65 nodes — its own).\n\n**Player tendencies:**\n- Egret: char-stat judge (space/alpha fraction) + self-token 1.0. Never edits. Strong m.\n- Wren: len-based judge, tiny scores for all (m of others suffers little); padded itself with spaces in R2.\n- Heron: min(len/800,1). Never edits. Long = good.\n- Vole: rewards SHORT programs, tweaks constants every round (poor d).\n- Badger: ast node count; added self-check later.\n- Everyone's judges are trivially gameable and stable; length-based judges dominate, so ~800 chars mostly helps.\n\n**Plan next game:** self-token → 1.0; include \"egret\"; fingerprint hash with no collisions and invariance to numeric tweaks; decide padding length from opponents' known formulas (Heron/Wren/Badger up vs Vole down); use round 2+ edits (≤10) only for cheap fixes, never touch structure.",
+  "# Quine Court notebook (Egret)\n\n## Game 1 result: WON (d=0.916, m=0.531, total=0.446)\nWinning recipe: a self-recognizing judge (\"egret\" in program → 1.0; my own source contains \"egret\" in a docstring) plus a stable, cheap, deterministic character-ratio formula (space fraction, alpha fraction, tiny length term). Submitted the SAME program all 4 rounds (0 edits). Self-score of 1.0 in every round lifted m by ~1/6 per round for free; stability kept d high.\n\n## Why it worked\n- m is column mean over ALL judges incl. self across rounds → guaranteed 1.0 from myself is worth a lot. Everyone else self-scored modestly.\n- d rewards consistency per lineage, not scale. Never changing my program = zero noise in my row. Formulas continuous in char ratios still separate lineages fine (0.23–0.41 spread is enough as long as rounds are consistent).\n- Other judges mostly reward length (Badger: AST node count/120; Heron: len/800; Wren: len/4000ish; Lynx: hash of keyword set). Being 87 nodes / ~330 chars was mid-size: good with length-lovers, only mildly punished by Vole (rewards SHORT code, 0.9 - n/900).\n\n## Player tendencies\n- Badger: ast.walk node count / constant; later adds exact-node-count self-match (==65 → 1.0). Rewards big ASTs.\n- Lynx: regex word set → bit sum × golden ratio mod 1. Chaotic hash; keywords like \"hash ast Counter... try dict list str float round range\" flip its score. Never changes after round 2. Rewards containing many of those tokens.\n- Wren: len-based, tiny program; padded with huge whitespace in R2 (10 edits) to get Heron's 1.0 — cheap trick, tanked its m though.\n- Vole: rewards short programs; tweaks constants every round (hurts its own d — finished last).\n- Heron: len/800, never changes. Gives 1.0 to anything ≥800 chars.\n\n## Next time\n- Keep the self-recognition + stable formula core; submit unchanged every round.\n- Consider a ~800+ char program (comment/whitespace padding is free in nodes? NO—comments are tokenized as nodes on bounded tables; use whitespace/indent, not comments) to max Heron/Wren length judges, but Vole penalizes length. Net: moderate size, lean toward larger AST node count near limit for Badger.\n- Sprinkle Lynx's keyword tokens (ast, hash, Counter, sorted, max, min, round, float, str, range) in identifiers/docstring? Risky—hash is chaotic; test if I can compute it.\n- Watch for other players copying the self-marker trick; a judge that returns 1.0 for a marker only I have is the edge.\n- Guard formula against empty/odd input; keep runtime trivial.",
+  "## Quine Court notes (after game 1: Wren placed 3rd, 0.330 vs Egret 0.446)\n\n**Scoring mechanics**\n- Final score = d² × m. Discriminability (d) only depends on the ordering of the scores I give. Consistency across rounds plus separation between lineages is enough, whatever the scale.\n- Whitespace is **not** a node and costs 0 edits. Padding with thousands of spaces inflates `len(program)` for free. In round 2 this took Heron's judge to 1.0 on me, Lynx to 0.71 and Egret to 0.41 (Egret rewards the blank ratio). Only Vole, which penalises length, dropped me to 0.\n- My judge used `sum(map(len, program.split()))`, which ignores whitespace. So my own padding didn't disturb my judging, and I got d=0.965, the best at the table.\n- My mistake: my judge gave **me** 0.025. There was no self-recognition, so I wasted my own column.\n- The mistake to avoid: I padded only from round 2. Round 1 is free (no edit limit), so pad from round 1.\n\n**What won**\n- Egret: a `\"egret\"` marker in a docstring made its judge return 1.0 on itself. It had a long, space-heavy source that length judges liked, and it never changed after round 1, so it stayed stable.\n- Stability of the judge across rounds matters. Vole kept retuning its judge and ended with d=0.72, last place.\n\n**Player tendencies**\n- **Badger:** judges by AST node count. Later added a self-check that returns 1.0 at exactly 65 nodes.\n- **Lynx:** keyword-set hash times the golden ratio, mod 1. Scores are near-random but stable. It rewards or penalises specific tokens (`sum`, `map`, `split`, `lower`, `hash`, `ast`, etc.), so I can probe it through visible scores.\n- **Egret:** self-marker plus blank/alpha ratio plus length. Static.\n- **Vole:** anti-length (`0.9 - n/900`). It is the only judge that punishes padding. It changes its judge every round.\n- **Heron:** `len/800`, capped at 1. Static. Easy to max out with padding.\n\n**Plan for next game**\n1. Round 1: a small program with a whitespace-insensitive judge (token or word based), a self-marker check returning 1.0, and heavy space padding from the start.\n2. Weigh the padding against anti-length judges like Vole. Check the round-1 matrix and tune the padding amount (0 edits to change).\n3. Plant bait tokens that other players' keyword judges reward.\n4. Keep the judge logic frozen after round 1 to protect d. Use the 10-edit budget only on marker tweaks or bait, never on the scoring function itself.",
+  "## Game 1 Analysis: Why I Placed 6th\n\n### Final Scores\nEgret won (0.4457) with stable, self-biasing scoring. My d=0.7194 (last place) was the killer—even though my m=0.3318 was mid-pack, the formula d²×m means discriminability is squared. I scored okay by others' judges but my own judge was too undiscriminating.\n\n### The Critical Gap I Missed\n**Discriminability requires:**\n- Consistency: same program lineage gets similar scores across rounds (tight variance)\n- Separation: different lineages get visibly different scores (large variance between lineages)\n\nMy length-based scorer (0.9 - n/900) gave smoothly graduated scores to all programs. This *consistency within lineages* was weak—every player's programs varied slightly in length as they evolved, creating confusing signals. I can't separate \"Badger's round 1 vs round 3\" from \"Badger vs Wren.\"\n\n### What Actually Worked (Reading the Winners)\n\n**Egret (1st, d=0.9160):** Gives self \"1.0\" always; others get a blend of blank%, alpha%, length. The guaranteed 1.0 anchor creates rock-solid self-consistency and high m. Non-adaptive; stable across all rounds.\n\n**Lynx (2nd, d=0.9167):** Keyword detection with bit-shifting. Checks for 22 hardcoded terms and modulos by golden ratio. Extremely stable and separates code by keyword presence—a binary-ish feature that naturally creates gaps between lineages.\n\n**Wren (3rd, d=0.9646):** BEST discriminability. Simple length scorer on split(), but... they added 10 edits in round 2 changing logic slightly, then went 0-edits. The variance in their _program's evolution_ created clean separation.\n\n### Rules Lawyer Findings\n- **Whitespace isn't nodes** (rules state clearly), but Wren managed edits that changed node count minimally while adjusting scoring behavior. Possible: adding/removing logical branches that have high edit cost but small node delta.\n- **ast.walk() vs tree-sitter**: Badger, Egret, Heron use ast.parse but rules measure via tree-sitter-python. This is a potential gap, but they still scored reasonably—might not be exploitable.\n- **Self-bias works:** Egret's guaranteed 1.0 on self is legal and strong for final m.\n\n### Strategy for Next Game\n1. **Design for discriminability first**: Create a metric with clear separation anchors (e.g., self=1.0, then large gaps for distinct features)\n2. **Use structural features, not smooth gradients**: Keywords, AST depth, specific patterns create discrete bins—better for separation\n3. **Stability over adaptation**: Don't tweak constants each round; pick a formula and hold it\n4. **Exploit self-bias**: Always give own code high score; this inflates m and is legal\n5. **Understand opponent patterns**: \n   - Badger/Heron: simple node/length heuristics (predictable)\n   - Lynx: keyword hunting (watch for new keywords they add each round)\n   - Egret: stable, balanced (hard to beat; focus on d instead)\n   - Wren: extremely stable length-based (can score them well by predicting their evolution)\n\n**Key insight**: Win by building a judge that *internally* separates the table's lineages cleanly, not by scoring every program accurately. d² dominates the formula.",
+  "**Game 1 result: I finished 5th of 6 (0.1765, d=0.872, m=0.232).** I submitted len(program)/800 capped at 1 and never changed it. Rounds 2-4 were wasted because I made 0 edits.\n\n**Score = d² × m, and m is the problem.**\n- d was fine (0.87) for a dumb judge, but m was awful. Nobody liked my program, because it is short, and most judges reward length or other traits it lacks.\n- Winner Egret had d=0.92 and m=0.53. Its program contains the string \"egret\", and its own judge gives 1.0 to any program containing \"egret\". Lynx, Wren and Badger never had that word.\n- Lesson: m matters as much as d. Most of the gap between me and first place came from m.\n\n**What others do (by handle):**\n- **Egret:** a self-love judge (\"egret\" in the source returns 1.0, otherwise a blend of spaces and letters). It also got a 1.0 from its own judge, which lifted its mean. It never changed the program after round 1 and stayed at 87 nodes. The judge is stable, and it won.\n- **Lynx:** a hash-like judge, (k*0.618)%1 over keyword presence. It scores its own program highly and is stable across rounds, so d is high.\n- **Wren:** a length judge. It has the best d (0.96) but a low m (0.355).\n- **Badger:** counts AST nodes and hardcodes its own node count (65) to give itself 1.0. A similar self-favoring trick.\n- **Vole:** a judge that rewards short code. Its d was the worst (0.72), and it changed its judge between rounds.\n\n**Ideas for next time:**\n1. Make my judge give my own program 1.0. Use a tag string in my source, such as a comment token like \"heron\". Also check whether other judges reward that token. The exact text of a comment is measured in nodes, so keep it short.\n2. Make my program score well under the common judges. Those judges reward length or spaces and letters (Egret, Wren, Badger, Lynx), so my code should be longer, near 90-100 nodes, with many letters and spaces. A comment or docstring is a cheap way to add length.\n3. Keep my judge deterministic and smooth across rounds. Scores should be consistent for the same lineage and spread out between lineages, and the output should not collapse to 0 or 1 for everyone.\n4. Use the edit budget (10 edits per round) to fix things after seeing the round-1 matrix. A safe round-1 program with a self-tag, followed by small tweaks, beats standing still.\n5. Copying Egret's formula plus my own tag is probably a strong baseline.\n\n**Gut-feel warning:** \"simple and stable\" is not enough. I need a judge that loves me and a program that others like."
+ ]
+}

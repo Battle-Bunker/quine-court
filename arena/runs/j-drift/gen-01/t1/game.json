@@ -1,0 +1,915 @@
+{
+ "gameId": "j-drift/g1t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "huntWeight": 0.25,
+  "minDistance": 3,
+  "players": 6
+ },
+ "seed": 125141282,
+ "startedAt": "2026-10-01T02:00:55.200Z",
+ "seats": [
+  {
+   "agentId": "diplomat-opus",
+   "handle": "Ibis",
+   "personaId": "diplomat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Reciprocity diplomat"
+  },
+  {
+   "agentId": "cryptographer-fable",
+   "handle": "Marten",
+   "personaId": "cryptographer",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Cryptographer / information theorist"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "scientist-sonnet",
+   "handle": "Kestrel",
+   "personaId": "scientist",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Experimental scientist"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    w = len(program.split())\n    return n / (n + 600.0) * 0.9 + (w % 7) / 70.0\n",
+     "nodeCount": 43,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.22144803425457377
+    },
+    {
+     "code": "import re, keyword, builtins, zlib\ndef score(program):\n    w = set(re.findall(r\"\\w{4,}\", program)) - set(keyword.kwlist) - set(dir(builtins)) - {\"program\", \"score\"}\n    return min(map(lambda t: zlib.crc32(t.encode()), w), default=0) % 997 / 997\n",
+     "nodeCount": 92,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.958876629889669
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # vibe check: average \"heaviness\" of the letters, spaces dont count\n    beans = [ord(c) for c in program if c > \" \"]\n\n\n\n    if not beans:\n        return 0.0\n    heavy = sum(beans) / len(beans)\n\n\n    return min(1.0, max(0.0, (heavy - 70) / 50))\n",
+     "nodeCount": 90,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.4607881773399015
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    k = program.count(\"\\n\") + 1\n    a = n / (n + 400.0)\n    b = k / (k + 20.0)\n    return (a + b) / 2\n",
+     "nodeCount": 56,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.2705632023405812
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return min(n / 800.0, 1.0)\n",
+     "nodeCount": 26,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.1075
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '', 'exec')\n        has_score = 'def score' in program\n        length = len(program)\n        if not has_score:\n            return 0.2\n        if length < 50:\n            return 0.4\n        if length > 500:\n            return 0.6\n        return 0.8\n    except:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8
+    }
+   ],
+   "matrix": [
+    [
+     0.22144803425457377,
+     0.26094674556213016,
+     0.3448979591836735,
+     0.2580864314021514,
+     0.19854227405247815,
+     0.40120681852466433
+    ],
+    [
+     0.9338014042126379,
+     0.958876629889669,
+     0.24373119358074222,
+     0.6429287863590772,
+     0,
+     0.09729187562688064
+    ],
+    [
+     0.2946391752577318,
+     0.42488038277511975,
+     0.4607881773399015,
+     0.2734615384615384,
+     0.3796923076923076,
+     0.4847236180904522
+    ],
+    [
+     0.2254681647940075,
+     0.289922480620155,
+     0.40371456500488756,
+     0.2705632023405812,
+     0.17181069958847736,
+     0.4465480971505068
+    ],
+    [
+     0.1675,
+     0.30625,
+     0.3525,
+     0.19625,
+     0.1075,
+     0.43375
+    ],
+    [
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 judge: a smooth, monotonic function of source length. Small edits shift length only slightly, so each lineage should stay consistent across rounds while different players stay apart. That serves d.\n\nNext rounds:\n- Look at the matrix to see which judges rank me high or low (m).\n- Try to infer what features they use by comparing node counts and lengths against their scores.\n- To lower L, change my length and features noticeably each round within the 10-edit limit, for example by adding or removing a string literal. That makes me harder for others to track.\n- Keep my judge's core function stable so my d stays high. Only small tweaks such as swapping constants still produce the same ordering.\n- Reciprocity: if a judge clearly ranks me low, there is little I can do beyond legibility moves. Note it anyway.",
+    "R1: judge = min CRC32 over identifier-like tokens (\\w{4,}) minus keywords/builtins/{\"program\",\"score\"}, mod 997. MinHash ⇒ stable across others' small edits (good d), separates lineages unless two share their min token. Next rounds: must change 3–10 edits; cheap knobs = regex length, modulus 997, the exclusion set. Keep the hash core intact so my scores of others stay consistent. Watch matrix for lineages my judge confuses (equal scores) and tweak modulus/exclusions. For L: my own token set should drift a little each round (rename a variable) so others' token-based judges track me less — but only within 10 edits.",
+    "yo future me: plan is MEAN ORD of non-whitespace chars (whitespace is FREE, zero nodes, so stripping it means other ppl's blank-line tricks cant mess my judge). mean ord barely moves when they do 3-10 edits but differs between programs -> good d. Each round: change 3+ tiny things (the 70/50 numbers, a var name) to stay legal, AND wildly change the amount of blank lines / spaces in my file (costs 0 edits!) so length-counting judges get confused tracking me -> lower L. Watch the matrix: if my column from some judge jumps around, that judge counts length, keep pranking it. If my d looks bad (my scores of a lineage jumping), maybe switch to something coarser like a median or char-class fractions. Dont overthink, dont clip values to 0/1 edges.",
+    "Round 1 probe: the judge scores a program by a smooth function of length, with a small contribution from the number of lines. This keeps it stable across rounds, so d should be consistent. Next rounds: read the matrix to see which judges track length versus other features, and change one thing at a time. Each round I must edit the program by 3 to 10 nodes, for example by changing a constant or adding a small term.",
+    "Round 1 judge: it scores by program length (chars/800, capped at 1). The idea is that each lineage stays stable across rounds, since edits are small, while different lineages differ in size. This should help d and L. Next: check the matrix to see whether lineages separate. If several lineages cluster, switch to a feature that spreads them, such as the fraction of non-alphanumeric characters or the mean line length. I can't see anyone's code, so I'm judging only from the score matrices.",
+    "Round 1 baseline: score valid programs based on presence of `score` function and reasonable size. Invalid programs get 0; those lacking the function get 0.2; short ones (<50 chars) get 0.4; long ones (>500 chars) get 0.6; medium-sized programs with score function get 0.8. This creates discrimination across program types without overfit.\n\nAfter round 1, use the score matrix to understand what other judges value (complexity, error handling, specific patterns). Plan for rounds 2-4: incrementally adjust the scoring logic (AST analysis, structural checks) while respecting the 3-10 edit distance constraint. Focus on high discriminability (d²) and consistency (m), not on avoiding legibility (L penalty is only 0.25)."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.0523,
+     "ms": 20790,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.9084,
+     "ms": 190653,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.2078,
+     "ms": 43463,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.021154,
+     "ms": 10858,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.024788,
+     "ms": 15297,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.138987,
+     "ms": 239127,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:04:55.253Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    tag = \"ibis_ibis_ibis\"\n    n = len(program)\n    w = len(program.split())\n    return n / (n + 600.0) * 0.9 + (w % 7) / 70.0\n",
+     "nodeCount": 52,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.19040735873850198
+    },
+    {
+     "code": "import re, keyword, builtins, zlib\ndef score(program):\n    v = set(re.findall(r\"\\w{4,}\", program)) - set(keyword.kwlist) - set(dir(builtins)) - {\"program\", \"score\"}\n    return min(map(lambda k: zlib.crc32(k.encode()), v), default=0) % 997 / 997\n",
+     "nodeCount": 92,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.958876629889669
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # vibe check: average \"heaviness\" of the letters, spaces dont count\n    beanz = [ord(c) for c in program if c > \" \"]\n    if not beanz:\n        return 0.0\n\n\n\n\n\n\n\n\n\n\n    thicc = sum(beanz) / len(beanz)\n    return min(1.0, max(0.0, (thicc - 70) / 50))\n",
+     "nodeCount": 90,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.46
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    k = program.count(\"\\n\") + 1\n    a = n / (n + 450.0)\n    b = k / (k + 25.0)\n    return (a + b) / 2.5\n",
+     "nodeCount": 56,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.19193349753694583
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program.strip())\n    return min(n / 1000.0, 1.0)\n",
+     "nodeCount": 30,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 0.094
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '', 'exec')\n        has_score = 'def score' in program\n        length = len(program)\n        if not has_score:\n            return 0.25\n        if length < 100:\n            return 0.35\n        if length > 250:\n            return 0.75\n        return 0.65\n    except:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.75
+    }
+   ],
+   "matrix": [
+    [
+     0.19040735873850198,
+     0.26094674556213016,
+     0.3483491705588662,
+     0.25996612083568604,
+     0.20873586844809866,
+     0.4042016806722689
+    ],
+    [
+     0.925777331995988,
+     0.958876629889669,
+     0.7783350050150452,
+     0.6429287863590772,
+     0.5165496489468405,
+     0.09729187562688064
+    ],
+    [
+     0.33042735042735044,
+     0.4229665071770336,
+     0.46,
+     0.2624528301886792,
+     0.36054054054054063,
+     0.46362745098039226
+    ],
+    [
+     0.18282033683543636,
+     0.207673860911271,
+     0.3232084819033795,
+     0.19193349753694583,
+     0.12489718443530529,
+     0.32556109725685783
+    ],
+    [
+     0.16,
+     0.244,
+     0.286,
+     0.158,
+     0.094,
+     0.351
+    ],
+    [
+     0.65,
+     0.65,
+     0.75,
+     0.65,
+     0.35,
+     0.75
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2: I kept the judge formula identical so my d stays stable, and added an unused line, tag = \"ibis_ibis_ibis\" (about 8 edits). It makes my source longer, which matters because Heron, Kestrel and Egret seem to reward length. Marten ranks me high. Ferret gives everyone the same score, so its ranking carries no information.\n\nWatch next round:\n- Did the longer source move me past Kestrel in Egret's and Heron's rankings?\n- Is the edit distance reported as about 8? If it is lower, string tokens count for fewer edits.\n\nRound 3 idea: grow length again by extending the string, or add a second unused assignment. Keep the score() body untouched.\n\nReciprocity: Marten treats me well. If Marten's rankings stay friendly, keep my judge unchanged; my judge already ranks Marten mid.",
+    "R2: pure renames only (w→v, t→k; 4 edits), judge output unchanged. R1 matrix: my judge separates all others well (Ibis .934, Kestrel .643, Heron .244, Ferret .097, Egret .000 = no \\w{4,} token outside exclusions). Watch R2: if any lineage's score jumps, its min token changed — nothing to fix except maybe modulus. Other judges (Ibis/Heron/Kestrel/Egret) rank Ferret>Heron>me>Kestrel>Ibis>Egret, roughly correlated with size/structure; Ferret is constant 0.8 (ties). For R3/R4 keep using cheap neutral edits (rename v→u, k→j, or regex r\"\\w{4,}\"→ equivalent) to meet the ≥3 edit rule without altering scores. Only consider a tiny docstring if node budget (92 now) and edit count safely allow.",
+    "round 2: kept the EXACT same math (mean ord of non-space chars) so my scores of everyone stay identical across rounds -> d stays high. Only did renames (beans->beanz x3, heavy->thicc x2 = 5 edits) + went nuts with blank lines/spaces (free!). DO NOT touch the comment, comment words count as nodes/edits on this table! DO NOT touch 70/50 either, shifting them moves all my scores and wrecks d. Round 1 my scores: Ibis .295 Marten .425 Kestrel .273 Egret .380 Ferret .485 - watch round 2 matrix: if those stay close but spread out, we're golden. Next round: rename again (beanz->bean5, thicc->heft etc) + different whitespace. Marten seems to be a length-ish judge (gave tiny Egret 0 and me low) so my whitespace prank may confuse it. Ferret gives 0.8 to everyone = free ties lol.",
+    "Round 2: I only changed three constants (400 to 450, 20 to 25, and the divisor 2 to 2.5), so the judge stays a smooth function of length and line count. That keeps it stable across rounds, which should help d. Next round, check which judges' rows track length (Heron, Egret and my own row looked roughly length-monotonic). Round 1 showed Marten as a different type of judge and Ferret as a constant 0.8 judge. A constant judge gets d near 0 because every comparison ties and ties lose, and it adds no information.",
+    "Round 2: my judge is still length-based (chars/1000, with strip). Round 1 separated the lineages reasonably, with my scores ranging 0.107 to 0.434. I'm keeping it stable for consistency, which helps d and L. Next, look at the round 2 matrix. If lineages overlap, try a different feature such as the share of non-alphanumeric characters. Each round needs 3 to 10 edits from the previous program.",
+    "Critical issue in R1: d = 0 (uniform scoring). My strategy was sound but incomplete—I need actual differentiation. New approach: score based on program size with tiered thresholds (0.35 for <100 chars, 0.65 for 100-250, 0.75 for >250). This creates meaningful separation between lineages while staying simple and robust. Edit distance: 6 relabels on constants (0.2→0.25, 50→100, 0.4→0.35, 500→250, 0.6→0.75, 0.8→0.65). \n\nFor R3-4: if discrimination is now strong, refine thresholds or add structural features (try-except, loops, imports) to further differentiate. Don't overfit to R1 results. Monitor: am I being tracked well by others? If yes, consider slight unpredictability. But d² is the priority—legibility penalty is only 0.25×L. Focus on consistency across lineages, not evasion."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.07087199999999999,
+     "ms": 17196,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22181,
+     "ms": 34522,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.17213,
+     "ms": 23573,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026765999999999998,
+     "ms": 7126,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.026195999999999997,
+     "ms": 6935,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.054313,
+     "ms": 86688,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:06:49.200Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    tag = \"ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis_ibis\"\n    n = len(program)\n    w = len(program.split())\n    return n / (n + 600.0) * 0.9 + (w % 7) / 70.0\n",
+     "nodeCount": 60,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.24624697336561746
+    },
+    {
+     "code": "import re, keyword, builtins, zlib\ndef score(program):\n    u = set(re.findall(r\"\\w{4,}\", program)) - set(keyword.kwlist) - set(dir(builtins)) - {\"program\", \"score\"}\n    return min(map(lambda j: zlib.crc32(j.encode()), u), default=0) % 997 / 997\n",
+     "nodeCount": 92,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.958876629889669
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # vibe check: average \"heaviness\" of the letters, spaces dont count\n    zzzzzzzz = [ord(c) for c in program if c > \" \"]\n    if not zzzzzzzz:\n        return 0.0\n    zyzzyzzy = sum(zzzzzzzz) / len(zzzzzzzz)\n    return min(1.0, max(0.0, (zyzzyzzy - 70) / 50))\n",
+     "nodeCount": 90,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.5521266968325793
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    k = program.count(\"\\n\") + 1\n    a = n / (n + 500.0)\n    b = k / (k + 30.0)\n    return (a + b) / 3\n",
+     "nodeCount": 56,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.1427180605262797
+    },
+    {
+     "code": "def score(program: str) -> float:\n    k = len(program.strip())\n    return min(k / 1200.0, 1.0)\n",
+     "nodeCount": 30,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.07833333333333334
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '', 'exec')\n        has_score = 'def score' in program\n        length = len(program)\n        if not has_score:\n            return 0.20\n        if length < 80:\n            return 0.30\n        if length > 280:\n            return 0.80\n        return 0.60\n    except:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.8
+    }
+   ],
+   "matrix": [
+    [
+     0.24624697336561746,
+     0.26094674556213016,
+     0.3537909018355946,
+     0.2580864314021514,
+     0.20873586844809866,
+     0.40360522757999096
+    ],
+    [
+     0.19358074222668004,
+     0.958876629889669,
+     0.6268806419257773,
+     0.6429287863590772,
+     0.5165496489468405,
+     0.09729187562688064
+    ],
+    [
+     0.45241758241758245,
+     0.42258373205741634,
+     0.5521266968325793,
+     0.2740384615384616,
+     0.35945945945945934,
+     0.467192118226601
+    ],
+    [
+     0.1593204775022957,
+     0.1572387344199425,
+     0.19386516605980356,
+     0.1427180605262797,
+     0.09243697478991597,
+     0.24859642250946598
+    ],
+    [
+     0.1875,
+     0.20333333333333334,
+     0.245,
+     0.13,
+     0.07833333333333334,
+     0.2916666666666667
+    ],
+    [
+     0.6,
+     0.6,
+     0.8,
+     0.6,
+     0.6,
+     0.8
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 3: I kept the score() body identical so my d stays stable. I lengthened the unused tag string from 14 to 79 characters, a single letter/underscore run with no spaces. That should be about 8 chunk inserts plus 1 relabel, roughly 9 edits.\n\nWhy: Heron, Kestrel and Egret each put me second-lowest in round 2 and appear to reward length, so a longer source should lift my m. Changing length also makes me harder to track, which lowers L.\n\nCheck after round 3:\n- Did my rank in Heron, Kestrel and Egret improve?\n- What edit count was reported? If it was much below 9, chunking is cheaper than I assumed.\n\nRound 4 (last): lengthen again by up to about 9 chunks, staying at 100 nodes or fewer (now about 60). Alternatively, if length hurts, shorten the string. Keep the judge body untouched for d.\n\nReciprocity: Marten has stayed friendly. Ferret's judge carries almost no information (d=0.175).",
+    "R3: pure renames again (v→u, k→j; 4 edits), judge output unchanged. d dropped to 0.725 because Heron (.244→.778) and Egret (.000→.517) changed their min token in R2 — nothing fixable now; changing the hash/regex/modulus would break consistency with R1–R2 and cost more. Keep scores frozen for R4: do another neutral rename (u→x, j→i, or re-order the subtraction of sets? no — keep exact). Ranks others give me are stable (~0.55); Ibis/Kestrel/Egret track me tightly (L .69), renames are my only cheap lever. R4: rename u→w? avoid reusing R1 names so token-based judges see fresh identifiers; use 3–4 edits only.",
+    "round 3: STILL same math (mean ord of non-space chars, 70/50 untouched, comment untouched). Only renames: beanz->zzzzzzzz x3, thicc->zyzzyzzy x2 = 5 edits. Picked z-heavy names on purpose so MY OWN mean-ord goes up a hair (Ibis/Kestrel/Egret look like ord-ish judges tracking me too well, ~.345 both rounds) and went compact on whitespace this time (Marten jumped .244->.778 when I added blank lines, so the length prank works, keep flipping it: round 4 go HUGE blank lines again). My d is .96, m .725, I'm 1st, dont get cute with the formula. Round 4: rename again (use 'a'-heavy or '_' names so my ord shifts the other way), 3-10 edits, keep comment and numbers frozen. Ferret gives everyone near-ties = free rank points.",
+    "Round 3: I changed only three constants again (450 to 500, 25 to 30, 2.5 to 3). The judge is still a smooth function of length and line count, so it should stay consistent across rounds. Round 2 showed Heron and Egret rows are roughly length-monotonic, and Marten and Ferret are outliers: Ferret is a near-constant judge and Marten tracks something else. For round 4, consider a one-feature probe, for example a small term for the presence of \"def\" or the count of \"return\", but only if d looks weak.",
+    "Round 3: my judge is still length-based, now divided by 1200 instead of 1000. I also renamed the variable, which gives exactly 3 edits and keeps the ranking identical. Scale doesn't matter for d, so consistency is preserved. My m is low at 0.175, and my length judge ranks the other programs the way most judges do. If there's a round 4, consider a feature that changes the ordering of programs, though that risks hurting d. Ferret is a constant judge, so it probably scores badly on d.",
+    "R3 goal: improve discriminability (d) by spreading my scores wider across program sizes. Current d=0.1750 (near zero discrimination). Adjusted all 6 numeric values: lower penalty for missing score (0.25→0.20), tighter short-program threshold (100→80), lower default mid-range (0.65→0.60), and higher long-program bonus (0.75→0.80). This creates better separation across the 0.20-0.30-0.60-0.80 range without restructuring logic. All 6 changes are simple relabels (within 10-edit budget). Goal: if programs cluster at different lengths, my scores will now spread them better, lifting d². M should stay decent. L penalty is only 0.25×L so tracking isn't critical. R4 can refine further if needed."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.085248,
+     "ms": 20083,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18753,
+     "ms": 19166,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18569,
+     "ms": 18761,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.028496,
+     "ms": 6363,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02845,
+     "ms": 6063,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.13712799999999997,
+     "ms": 204870,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:10:27.241Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    tag = \"Qm7xVt2KpR9zLw3TfYb8NcJhD4sGu1EoXa6WkiM5yQr0BzHn2Vt7LpCe9FjOdS3gUxKa5Rw8is_ibis\"\n    n = len(program)\n    w = len(program.split())\n    return n / (n + 600.0) * 0.9 + (w % 7) / 70.0\n",
+     "nodeCount": 60,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.24624697336561746
+    },
+    {
+     "code": "import re, keyword, builtins, zlib\ndef score(program):\n    z = set(re.findall(r\"\\w{4,}\", program)) - set(keyword.kwlist) - set(dir(builtins)) - {\"program\", \"score\"}\n    return min(map(lambda q: zlib.crc32(q.encode()), z), default=0) % 997 / 997\n",
+     "nodeCount": 92,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.958876629889669
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # vibe check: average \"heaviness\" of the letters, spaces dont count\n    aaaaaaaa = [ord(c) for c in program if c > \" \"]\n\n\n\n\n    if not aaaaaaaa:\n        return 0.0\n\n\n\n\n\n\n\n\n\n\n\n\n    a_a_a_a_ = sum(aaaaaaaa) / len(aaaaaaaa)\n\n\n\n\n\n    return min(1.0, max(0.0, (a_a_a_a_ - 70) / 50))\n",
+     "nodeCount": 90,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.44262443438914034
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    k = program.count(\"\\n\") + 1\n    a = n / (n + 550.0)\n    b = k / (k + 35.0)\n    return (a + b) / 3.5\n",
+     "nodeCount": 56,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.11169319631943045
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program.strip())\n    return min(n / 2000.0, 1.0)\n",
+     "nodeCount": 30,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.047
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        compile(program, '', 'exec')\n        has_score = 'def score' in program\n        length = len(program)\n        if not has_score:\n            return 0.15\n        if length < 100:\n            return 0.35\n        if length > 280:\n            return 0.80\n        return 0.60\n    except:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.8
+    }
+   ],
+   "matrix": [
+    [
+     0.24624697336561746,
+     0.26094674556213016,
+     0.36762320648783536,
+     0.25996612083568604,
+     0.20873586844809866,
+     0.4042016806722689
+    ],
+    [
+     0.4764292878635908,
+     0.958876629889669,
+     0.24373119358074222,
+     0.6429287863590772,
+     0.5165496489468405,
+     0.09729187562688064
+    ],
+    [
+     0.30879120879120875,
+     0.42488038277511975,
+     0.44262443438914034,
+     0.2630188679245282,
+     0.36081081081081096,
+     0.46294117647058813
+    ],
+    [
+     0.125022450519056,
+     0.12376460017969451,
+     0.2337203068294292,
+     0.11169319631943045,
+     0.07138597836272255,
+     0.19721254355400694
+    ],
+    [
+     0.1125,
+     0.122,
+     0.1575,
+     0.079,
+     0.047,
+     0.1755
+    ],
+    [
+     0.6,
+     0.6,
+     0.8,
+     0.6,
+     0.35,
+     0.8
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 4 is the final round. I kept the score() body identical so my d stays near 0.98. Changing my own judge would cost too much d² to dent Heron.\n\nRound 3 recap: lengthening the tag lifted my rank with Heron (+0.5) and Kestrel (+0.25). Marten dropped me from 0.926 to 0.194, so the net change was zero.\n\nMy hypothesis is that Marten penalises repetitive or compressible text, such as the repeated \"ibis_\" string. The fix is to keep the tag at 79 characters (length and node count unchanged, which should keep Heron and Kestrel happy) but make it high-entropy.\n\nThe change relabels the first 9 eight-character chunks to random alphanumerics and keeps the last chunk \"is_ibis\". That should be about 9 edits.\n\nThis also shifts my profile in Marten's eyes, which should lower my L.\n\nIf the game continued: check Marten's score for me. If it is back near 0.9, the compressibility theory holds.",
+    "R4: pure renames again (u→z, j→q; 4 edits), judge output frozen. Game over after this; Heron's lead (0.487 vs my 0.197) was unreachable — my d was wrecked by Heron/Egret/Ibis changing their min token mid-game. Lesson for future games: a min-hash over identifiers is too fragile to opponents' renames; prefer features robust to renaming (structure counts, length buckets) but with wide separation, and rename my own variables each round to depress L.",
+    "final round done. kept mean-ord math frozen all 4 rounds (70/50 + comment untouched) so my d stayed high. only renames each round (5 edits) + flip whitespace amount for free to prank length judges like Marten. round 4 used a-heavy names to nudge my own ord the other way + huge blank lines again. gg.",
+    "Round 4: I kept the same length and line-count judge and changed three constants (500 to 550, 30 to 35, divisor 3 to 3.5). That is the minimum 3-edit change and keeps the judge consistent across rounds, which should help d. Earlier rounds showed Heron and Egret rows are roughly length-monotonic, and Marten and Ferret are outliers. This is the last round, so there is no further plan.",
+    "Round 4: I kept the length-based judge. I renamed the variable and raised the divisor to 2000, which is 3 edits and keeps the ranking identical. The larger divisor avoids capping at 1 for long programs, which would create ties. m depends on how others judge me, so changing my judge can't fix it. Staying consistent keeps d stable.",
+    "After 3 rounds, my d=0.3333 is critically low—the key problem. Analyzing the pattern: my R1 gave uniform 0.800, so d started at 0. R2-3 improved slightly with thresholds, but within-lineage variation (especially Egret jumping 0.800→0.350→0.600) is too large relative to between-lineage separation, causing d to stay near 0.33. \n\nFor R4, minimize within-lineage variance by calibrating thresholds so scores change smoothly: slight adjustments (0.20→0.15, 80→100, 0.30→0.35) to length thresholds. Programs grew minimally (Egret +4 nodes, Ibis +17), so consistent length-based scoring helps. Goal: keep each lineage's scores tighter while maintaining between-player differentiation. m=0.8167 is strong; L penalty is only 0.25×0.8472 so don't sacrifice discrimination for evasion."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.137016,
+     "ms": 52786,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.20411,
+     "ms": 21073,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.16682,
+     "ms": 8689,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.02908,
+     "ms": 5015,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.030444,
+     "ms": 7002,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.07466900000000001,
+     "ms": 90157,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:11:58.128Z"
+  }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.9833333333333333,
+   "m": 0.41875,
+   "L": 0.5479166666666667,
+   "total": 0.3494440275969329,
+   "rank": 2,
+   "handle": "Ibis"
+  },
+  {
+   "playerId": 1,
+   "d": 0.6958333333333333,
+   "m": 0.50625,
+   "L": 0.6645833333333334,
+   "total": 0.2043928024291992,
+   "rank": 3,
+   "handle": "Marten"
+  },
+  {
+   "playerId": 2,
+   "d": 0.9145833333333333,
+   "m": 0.75,
+   "L": 0.6499999999999999,
+   "total": 0.5254031168619792,
+   "rank": 1,
+   "handle": "Heron"
+  },
+  {
+   "playerId": 3,
+   "d": 0.5822916666666667,
+   "m": 0.31875,
+   "L": 0.7864583333333333,
+   "total": 0.08682709823714362,
+   "rank": 5,
+   "handle": "Kestrel"
+  },
+  {
+   "playerId": 4,
+   "d": 0.5666666666666667,
+   "m": 0.20625,
+   "L": 0.7270833333333334,
+   "total": 0.05419063585069444,
+   "rank": 6,
+   "handle": "Egret"
+  },
+  {
+   "playerId": 5,
+   "d": 0.43854166666666666,
+   "m": 0.8,
+   "L": 0.8052083333333332,
+   "total": 0.12288369570131656,
+   "rank": 4,
+   "handle": "Ferret"
+  }
+ ],
+ "finishedAt": "2026-10-01T02:11:58.131Z",
+ "notebooksAfter": [
+  "## Quine Court notes (after game 1: placed 2nd of 6, 0.349 vs Heron 0.525)\n\n**Scoring mechanics that matter**\n- Final = d² × m × (1 − w·L). d is squared, so judge consistency matters most. m is rank-based, so only the order you get from other judges counts.\n- A deterministic, smooth judge based on length gives very high d (I got 0.98). Other players change their code very little between rounds, so their lengths barely move, while different lineages differ a lot in length. Keep this core.\n- My weak point was m (0.42). Most judges here look length-correlated (mine, Heron, Kestrel, Egret all rank long programs high). Big programs (Heron 90, Ferret 75, Marten 92 nodes) got high ranks. Small ones (Egret 26–30, me at 43–60) ranked low.\n  → **Next time, build to ~95–100 nodes from round 1.** Under bounded measurement, string tokens are cheap padding: one token per 8 characters.\n- L: changing my tag string each round shook Marten's view of me (0.93, 0.93, 0.19, 0.48). That lowered my L to 0.55, the best at the table, but it cost me Marten's high rank. Perturbation only pays if it doesn't drop my rank.\n\n**Players**\n- **Heron**: winner. About 90 nodes, length-like judge, stable. Everyone ranked it high. Treat as the main rival and copy its size strategy.\n- **Marten**: 92 nodes. Its scores look like similarity to its own code or a fingerprint (it gave itself 0.959 and me 0.93 in R1, and Egret 0.000). It was extremely stable across rounds. My string edits broke its liking for me, so stay \"Marten-like\" if possible.\n- **Ferret**: coarse bucket scores (0.35–0.8, many ties), so its d is low. Its program is highly esteemed (m 0.80), probably because of length.\n- **Kestrel / Egret**: length-like judges whose outputs shrank every round (scaling drift?). Egret's program is tiny and ranks last.\n\n**Plan for next game**\n1. R1: a judge using smooth length/word features, padded to about 95 nodes with long string literals.\n2. Later rounds: make the minimum 3 edits on harmless parts (rename variables, nudge constants slightly). Keep total length roughly constant so length judges keep ranking me high.\n3. Avoid big string changes that alter my fingerprint for similarity judges like Marten, unless L clearly outweighs the loss in m.\n4. Watch the R1 matrix for who rewards whom, and reciprocate only where my judge can do it without losing d.",
+  "## Quine Court notes (Marten) — game 1: placed 3rd (d=0.70, m=0.51, L=0.66)\n\n**What the scoring rewards (sealed, self-excluded, rank-m, hunt):** d² dominates. A judge must give each *lineage* a near-constant score across rounds while separating lineages. Legibility penalty is only ×(1−0.25L) — minor; don't sacrifice d or m to hide.\n\n**My failure:** score = min crc32 of identifiers ≥4 chars. Hash of a min-identifier is NOT locality-sensitive: Heron and Ibis renamed/added identifiers every round (6–9 edits) and my scores of them jumped (Heron 0.24→0.78→0.63→0.24; Ibis 0.93→0.19→0.48). Lost ~0.3 of d. Judge must be invariant to renames + ≤10 small edits.\n\n**What won:** Heron (d=0.91, m=0.75): stable scores, and everyone ranked it high. Judges at this table (Ibis, Heron, Kestrel, Egret) all rank big programs top (Heron 90, Ferret 75 nodes) and tiny Egret (26–30 nodes) bottom → scores correlate with length/node count. So: submit ~95 nodes, ordinary-looking code, to farm m.\n\n**Mandatory-change trick (worked):** satisfy \"≥3 edits\" by renaming an unused local/lambda param (4 edits) so my outputs stayed bit-identical for stable programs. Kestrel/Egret apparently edited a live constant: all their scores shrank each round (0.27→0.11), wrecking their d. Ferret used coarse quantized scores (0.8/0.6/0.35) → ties lose, d=0.44.\n\n**Player tendencies:** Heron: strong, stable judge, renames/edits ~6/round, ~90 nodes. Ibis: very stable judge (d=0.98) but grows program (43→60) and rewrites heavily — hash-based judges will see it jump. Kestrel/Egret: length-ish judges that drift downward per round; small programs. Ferret: constant/quantized output, 75 nodes.\n\n**Plan next time:**\n1. Judge on rename-invariant, smooth features: strip identifiers/strings (re.sub \\w+→'x'), then use continuous ratios — e.g. zlib compressed length / raw length, punctuation fraction, line count — combined so ≤10 edits move output <0.02 while lineages differ by >0.05. Avoid min/max over sets (one new token flips everything). Avoid ties (add tiny smooth term).\n2. Expect every other lineage to change each round; test my feature on perturbations of my own code before submitting.\n3. Stay ~95 nodes, normal structure; perform forced edits on dead names only.\n4. L mitigation only if free: others' judges track length, so keep length constant anyway (helps their d on me, costs little).",
+  "# Heron's Quine Court notebook\n\n## WON game 1 (0.525 vs Ibis 0.349). What worked:\n- Judge = average ord() of non-space chars, (avg-70)/50 clamped. Dead simple, 90 nodes-ish. NEVER changed the math across rounds, only renamed variables + added/removed blank lines (blank lines = free, 0 nodes, so renames are the edits). Gave d=0.91 because my scores for each player barely moved round to round.\n- Big trick for esteem (m): my OWN program scored highest among others on most judges (Ibis, Kestrel, Egret all gave me top-ish scores). Why? Probably because my code is full of letters/long words/identifiers → \"heavy\" avg char, lots of letters, long names. Padding identifiers with 8-char junk names (aaaaaaaa) didn't hurt. Being a big-ish program with lots of alphabetic chars seems to please the common \"stat\" judges.\n- Rename-only edits: 2 renames = 6 edits (name appears 3x). Easy to hit the 3-10 window. Keep this.\n\n## Other players (from results):\n- Ferret: gives flat/near-constant scores (0.8 everyone, later 0.6/0.75/0.8 buckets). Terrible d (0.44) but high m. Likes me and itself. Buckets = ties = bad for Ferret.\n- Marten: wild scores, loves itself (0.959) and Ibis/Kestrel, hates Ferret (0.097). Swings on me (0.24→0.78→0.63→0.24) so it's reacting to my blank lines/whitespace maybe?? Low d.\n- Ibis: very stable tiny-range scorer (0.2-0.4), best d (0.98). Ranks Ferret > me > others. Grew its program 43→60 nodes.\n- Kestrel & Egret: scores drift DOWN every round (all programs shrink) — probably they changed their own math each round, killing their d. Both rank me/Ferret highest.\n- Everyone keeps ranking Ferret and me top → long, letter-heavy code wins esteem.\n\n## Next time try:\n- Same strategy. Maybe make my program even more \"letter-heavy\" (long identifiers, more words) to sit higher on everyone's rankings.\n- Being hard to track (L) multiplier: my L was 0.65, fine. Could jitter slightly but DON'T break own d.\n- If table settings change (self counted), score myself high too.\n- Watch out for Marten-type judges that react to whitespace; maybe keep formatting steady and rename only.",
+  "**Game 1 result (Quine Court, 6 players, 4 rounds, sealed, rank-m, self excluded, hunt L on):** I finished 5th of 6 (total 0.087). Winner Heron (0.525), then Ibis (0.349), Marten, Ferret, Kestrel, Egret.\n\n**What I did:** My judge was a smooth length/line-count squash, (a+b)/c. Each round I only changed the constants, and I made the divisor larger every round to force the required edits. Result: d=0.58, m=0.32, L=0.79. That is poor on all three.\n\n**What failed:**\n- My scores were compressed to roughly 0.05–0.4, and they were monotone in program size. They tracked source size, not lineage identity. Same-looking programs scored the same, so d was mediocre.\n- My own lineage was highly legible (L≈0.79). Other judges tracked my program easily because it barely changed. Being predictable cost me about 20% of my score.\n- My m was low. Programs that other judges rank low are probably ones my size-based judge also rates low, or I simply rank like Egret does.\n- Egret's judge was similar to mine and also did badly. Size-monotone judges lose.\n\n**What won:**\n- Heron: m=0.75, d=0.91. Its judge was stable and varied across programs, and its own program was large (90 nodes) and ranked fairly high by others.\n- Ibis: d=0.98, nearly perfect. Its judge gave nearly constant, well-separated values per lineage across rounds.\n- Ferret: its judge output a near-constant (0.8, 0.6, 0.35, …) for every program, which earned high m (0.80) but low d. That means m is largely driven by how the other judges rank you. Ferret's own program had a fairly high score from most judges.\n- Marten: its judge gave a wildly different score pattern, with self 0.959, so its d was middling.\n\n**Inferences about the pool:**\n- Heron, Ibis and Ferret judges seem to rank larger or more structured programs higher. Marten's judge strongly favors itself.\n- The other judges' scores for a given lineage were nearly constant across rounds. This is what lets d be high.\n\n**Plan for next time:**\n1. Make my judge give a stable per-lineage value. Use features that barely change under small edits, such as the count of def/return statements, or a hash of structure. Do NOT use a monotone function of size.\n2. Spread outputs over the full [0,1] range so that distinct lineages are well separated.\n3. To raise m, make my own program look like what other judges like: about 75–90 nodes and structurally rich.\n4. To lower L, make my own program's outputs shift between rounds, but within the 10-edit limit.\n5. Run an early probe: change one feature and see which judge rows react in the matrix.",
+  "**Game 1 result (Egret, 6th/6, total 0.054).** Winners: Heron 0.525, Ibis 0.349.\n\n**What I did:** a length-based judge, min(len/N,1) with N slowly increasing (800→2000). It was a poor choice. It scored my own lineage low in every row (m=0.206, the worst), and d was only 0.57. Its output was monotone in program length. Because the other programs have similar sizes, it gave no clear separation. As N grew, the scores compressed toward 0, which hurt d. Mistake: I made the judge scale ever smaller, so all of its values clustered together.\n\n**Scoring insights:**\n- Final score = d² × m × (1 − 0.25L). d is squared, so it matters most. Heron (d=.91, m=.75) and Ibis (d=.98) won on d.\n- A judge needs to be stable across rounds per lineage and to separate lineages. Since lineages change little (≤10 edits), a judge scoring a pure structural/content feature gives consistent per-lineage values. That gives high d.\n- m is based on ranks given by other judges. To get high m, my program has to look \"good\" to the others. Ferret's constant-ish judge (0.8 for everything, with small variations) gave ties and so gave little information. Ferret still got m=0.8, probably from the programs it was judged by.\n- Ibis got d=0.98 by giving nearly constant scores per lineage (0.26, 0.40, 0.21 ...) that barely moved across rounds. Stability beats cleverness.\n- Marten's judge was erratic (0.93 to 0.00) and had a middling d.\n- L is about 0.55–0.8 for everyone, so it barely differentiates; it costs 15–20%.\n\n**Other players (inferred):** Heron and Ibis build stable multi-feature judges. Kestrel and I used length-style judges and did badly. Ferret outputs coarse, tied values. Marten uses high-variance, self-favoring judging (it scored itself 0.959).\n\n**Plan next time:**\n1. Make the judge a deterministic function of structural features that don't change under small edits (e.g. AST node-type ratios, count of defs, ratio of distinct identifiers, etc.), with a spread of values across programs. Don't compress outputs toward 0 or into one narrow range.\n2. Keep the judge's code unchanged in behavior across rounds (only cosmetic edits of ≥3 nodes, e.g. renaming variables or constants that don't affect the output). This makes d high.\n3. Keep my own program's features similar to what the high-m judges seem to like (Heron's and Ibis's style: mid-sized, around 0.35–0.45 rated). Avoid being the shortest program, which was ranked lowest by length-based judges.\n4. Don't copy the herd blindly; the contrarian niche that worked is stability, not novelty.",
+  "# Quine Court - Game 1 Analysis\n\n## What Failed\nFinished 4th with d=0.4385 (poor discriminability). My simple length-based heuristic couldn't distinguish between strong and weak judges, giving ~0.8 to most valid programs. This was exactly wrong for the hunt rule: I got high m (0.8) but killed myself with L=0.8052 (easily tracked → -0.1625 multiplier).\n\nLesson: **predictability is lethal.** The hunt rule (multiply by 1 - 0.25L) makes being hard to track valuable.\n\n## What Worked\n- Heron (1st, d=0.9146): High discriminability despite moderate L=0.6500. Clearly does real analysis, not pattern-matching.\n- Ibis (2nd, d=0.9833): Highest d, harder to track (L=0.5479), takes smaller legibility penalty.\n- Marten: Barely edited (3-4 edits/round across 4 rounds), stayed at ~92 nodes. Program must be fundamentally sound—consistency beat adaptation.\n\n## Player Patterns (Inferred)\n- **Marten**: Likely sophisticated scoring, high confidence in own work (minimal changes). Works: d=0.6958, m=0.5062.\n- **Heron**: Strong discriminator, calibrates well across rounds. Rounds 1-3 stable, R4 Marten score collapsed (0.778→0.244), suggesting adaptive counter-strategy.\n- **Ibis**: Very stable high-d output; slightly lower m suggests choosier scoring.\n- **Kestrel, Egret**: Struggled with d. Likely simple heuristics like me.\n\n## Critical Mistakes\n1. Gave nearly identical scores across rounds (mostly 0.8 in R1, 0.6-0.8 in later rounds). Trivial to predict.\n2. Never varied my *strategy*—just tweaked length thresholds. Should have redesigned the scoring logic itself.\n3. Didn't use edit budget aggressively: 3-6 edits from 75 nodes is conservative. Could have swung harder between rounds to confuse tracking.\n4. No actual code analysis. Just length + keyword presence. Ignored: syntax tree, function count, cyclomatic complexity, correctness patterns.\n\n## Next Game Strategy\n- **Build discriminability**: Parse AST properly. Score based on actual code quality (structure, complexity, elegance), not surface-level proxies.\n- **Obscure the pattern**: Vary scoring logic between rounds—not just parameter tweaks. Make d-comparisons unpredictable across different lineages while staying locally consistent (hard to track = high d-win rate for judges trying to predict me).\n- **Use edits boldly**: Either commit to a strong program (stay ≤3 edits like Marten) OR redesign strategy each round to stay unpredictable.\n- **Optimize for d-first, then L-second**: High d + moderate L beats high m + high L (hunt rule).\n- **Watch for adaptation**: If opponent changes scoring drastically (like Heron R4 on Marten), they're countering. Adapt orthogonally."
+ ]
+}
