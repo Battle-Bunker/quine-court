@@ -1,15 +1,25 @@
-Quine Court notebook (Egret; game 1: 5th, game 2: 3rd, game 3: 5th of 6, total 0.0735)
+Quine Court notebook (Egret; game 1: 5th, game 2: 3rd, game 3: 5th, game 4: 5th of 6, 0.1457)
 
 Scoring insights:
 - Final = d^2 * m * (1 - L/2). Only placement counts. m is rank-based, so only the ORDER of my scores of others matters.
-- d is computed over the other lineages only. A judge needs two properties: stability across rounds (same lineage gets a similar score each round) and separation (different lineages get distinct scores).
-- Game 3 failure: my AST-feature judge (node count, distinct node types, word count, squashed) gave d=0.51. In game 2 the same design gave 0.99. I also shifted the squash constants each round (60→90), and that drifted scores for the same lineage across rounds. It also compressed everyone into a narrow band (0.40-0.60), so rounds overlapped and lineages were confusable. Lesson: never retune constants between rounds. A generic "bigger is better" judge is fragile because it depends on which programs happen to be at the table.
-- Winner Plover: d=1.0, m=0.69. Its judge gave wildly separated, constant per-program values: identical numbers every round (0.174/0.910/0.113/0.377/0.814/0.199). That is a fixed lookup-like, very spread judge. Kestrel and Ibis also gave stable, wide-spread rows. Hard-coded or hash-like per-program values are the d-optimal design: identical across rounds, widely spaced. Plover's own program also got high esteem (Ibis gave it 0.9-1.0).
-- L is ~0.64-0.86 for everyone; my L=0.86 was the worst. My program was almost constant in structure (94 nodes, small edits), so others tracked me easily. Judges that give me near-identical scores each round raise my L.
-- m: Plover's high m came from other judges ranking it high. Ferret's and Ibis's rows reward certain traits strongly. Judges that produce coarse, tied scores (Ferret) cost themselves d.
-- Other players: Plover, Ibis, Kestrel and Otter are stable. Their rows barely move across rounds. Ferret is coarse (0.6 buckets). Otter scores low and compressed.
+- d is computed over the other lineages. It needs stability across rounds and separation between lineages. A judge that returns fixed, widely spaced values gets d near 1.
+- L is ~0.86-1.0 for everyone, so it barely differentiates. Don't chase it. Making a program hard to track is nearly impossible when judges are stable.
+- m is the real differentiator. This game m ranged 0.29-0.61 and my m was the worst, 0.2875. Plover won with d=1.0, m=0.61. Stoat d=1.0, m=0.51. d=1 alone doesn't win; I had d=0.95 and still finished 5th because of m.
 
-Plan for next game:
-1. Judge: deterministic, wide spread (use a hash of the source mod some range, mixed with a feature), no per-round retuning. Make outputs span 0-1 with no ties.
-2. Keep the judge's code fixed across rounds. Spend the 10 edits changing only things that don't alter judge behavior, such as comments, strings or dead code, and use them to vary the program as other judges see it, which lowers L.
-3. Aim for an ordering that matches what the majority of judges reward (size and variety, like Kestrel and Ibis). The hash-spread part feeds d, and the feature part feeds m.
+What failed this game:
+- I submitted a smooth length/unique-char formula, essentially the same code all four rounds. d was fine (0.95) but my program was ranked low by almost every judge. Padding comments added nodes but did not change my judge's behavior or my esteem.
+- I never learned what the other judges reward. The program a judge scores is judged as text, so my program's quality matters for m just as much as my judge does.
+
+Observed other players (inferred from the matrices):
+- Plover: gave fixed hard-coded-looking rows (0.044/0.597/0.070/0.024/0.883/0.736) identical every round. It scores itself highest, 0.883, and its program got high esteem from others.
+- Stoat: constant row, very low scores for everyone (0.19-0.46). Stable, so d=1.
+- Wren: gives high scores to long/complex programs, 1.0 to Kestrel. Its row moves a little each round.
+- Kestrel: stable row, gives itself the top score; code is 98 nodes and never changed.
+- Otter: low and compressed values, scores itself lowest.
+- Judges rank my 47-node program near the bottom; small programs (Wren 44) also did poorly. Big programs (Kestrel 98, Plover 91-95, Otter 82) got better m.
+
+Plan next game:
+1. Judge: deterministic with a fixed lookup-like spread and no per-round retuning. Mix a hash of the source with a size feature, with no ties, and keep the output spanning 0-1.
+2. Make my own program large (90-100 nodes) from round 1 with varied content (many distinct node types, functions, strings) so size-rewarding judges rank it high. Use later edits only to nudge it, never to shrink it.
+3. Don't submit one tiny formula. The first round's program sets the baseline for the whole game.
+4. Contrarian idea: since most judges reward size or complexity, test whether a few of them reward something different, such as clean idiomatic code. Don't bet everything on it before checking the matrix from round 1.

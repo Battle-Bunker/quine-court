@@ -1,0 +1,461 @@
+{
+ "gameId": "t-haiku/g1t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 589741299,
+ "startedAt": "2026-10-01T02:00:55.159Z",
+ "seats": [
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ibis",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "security_eng-haiku",
+   "handle": "Marten",
+   "personaId": "security_eng",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "kid12-haiku",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "fp_purist-haiku",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "graph_nerd-haiku",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        if 'def score' not in program:\n            return 0.0\n        size = len(program)\n        if size < 60:\n            return 0.3\n        if size > 1500:\n            return 0.4\n        if 'try' in program:\n            return 0.9\n        return 0.8\n    except:\n        return 0.0\n",
+     "nodeCount": 64,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.9
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        return min(1.0, len(program) / 400.0)\n    except:\n        return 0.5\n",
+     "nodeCount": 28,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return 0.0\n",
+     "nodeCount": 13,
+     "distance": null,
+     "carriedOver": false,
+     "failed": true,
+     "fallback": true
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if not program:\n        return 0.5\n    lc = program.lower()\n    return sum(c in 'aeiou' for c in lc) / len(lc)\n",
+     "nodeCount": 44,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.19463087248322147
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        return min(1.0, sum(1 for _ in ast.walk(ast.parse(program))) / 150.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 44,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.28
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n        n = len(list(ast.walk(t)))\n        return max(0, 1 - abs(n - 60) / 100)\n    except:\n        return 0.5\n",
+     "nodeCount": 59,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.99
+    }
+   ],
+   "matrix": [
+    [
+     0.9,
+     0.9,
+     0.3,
+     0.8,
+     0.9,
+     0.9
+    ],
+    [
+     0.8175,
+     0.3,
+     0.1225,
+     0.3725,
+     0.4175,
+     0.5
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0.1345565749235474,
+     0.14166666666666666,
+     0.1836734693877551,
+     0.19463087248322147,
+     0.16167664670658682,
+     0.135
+    ],
+    [
+     0.36,
+     0.16666666666666666,
+     0.06666666666666667,
+     0.3,
+     0.28,
+     0.3933333333333333
+    ],
+    [
+     0.94,
+     0.65,
+     0.5,
+     0.85,
+     0.8200000000000001,
+     0.99
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 strategy: Score based on observable program features since I have no previous data. Reward moderate complexity (programs that are neither trivial nor bloated), require the score function, and bonus points for defensive coding (try/except blocks). This is simple, consistent, and trackable enough to earn decent esteem from other judges while staying well under the 100-node limit. In later rounds, I'll adjust based on how other judges score me and what program sizes actually perform well.",
+    "Round 1: Simple length-based scoring — rewards larger programs, establishes a measurable baseline. This is my opening gambit: straightforward but not obvious.\n\nPlan for later rounds: Switch to fundamentally different heuristics to maximize unpredictability (low L). Possible directions: definition density, keyword frequency, lexical patterns, even apparent noise. The key is being hard to track while maintaining consistent internal logic.\n\nTarget: good d (coherent discriminator), decent m (reasonable scores), low L (changing strategy defeats others' predictive models). Mischief through inconsistency.",
+    null,
+    "**Round 1 strategy:**\n- Using vowel percentage (weird metric) to stay hard to predict → low legibility bonus, which BOOSTS total score (1 - 0.5 * L)\n- Deterministic (same program always same score) → consistent within lineages → good d\n- Will naturally discriminate different players' programs based on variable naming and code style\n- Other judges probably won't guess this metric, so they can't track me\n- **CRITICAL for rounds 2-4:** Keep using this same vowel metric! Consistency is the win. Only tree-edit within 10 nodes of this version.\n- Edge case handled: empty program returns 0.5\n\nThe weird metric is actually the winning move here. Being unpredictable > being \"correct.\"",
+    "Round 1 strategy: baseline size-based scorer. Measured in nodes (AST node count), normalized to 150 (most programs will be 20–100 nodes). This metric is:\n- **Stable**: size changes slowly under 10-node edits, so my scores for each player's lineage stay consistent across rounds.\n- **Discriminating**: different players' programs will likely differ in size, especially as they evolve differently.\n- **Trackable**: simple, deterministic, and observable by other judges.\n\nFuture rounds: if size alone proves weak at discriminating, I can add secondary features (function count, nesting depth, control-flow branching) without exceeding the 10-edit budget. The pure functional composition keeps code obviously correct and makes edits surgical.",
+    "Round 1 strategy: Tree-centric baseline. Score by AST node count with optimum at ~60 nodes (formula: 1 - |n-60|/100). This is consistent and clearly discriminates across program styles.\n\nEvolution plan (rounds 2-4): Modulate target size (52-70 range) and progressively add structural metrics (tree depth, branching factor, spectral properties) within 10-edit distance. Maintains discriminability in my lineage while appearing to shift strategy—making me harder to track (low L).\n\nKey principle: stay committed to structural/graph analysis, but keep others guessing about exact metrics. Consistency within rounds, controlled divergence across rounds."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.08743799999999999,
+     "ms": 153002,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.068079,
+     "ms": 125909,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.15697,
+     "ms": 218040,
+     "failed": true
+    },
+    {
+     "attempts": 2,
+     "cost": 0.102228,
+     "ms": 190169,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.135256,
+     "ms": 236053,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.120298,
+     "ms": 189125,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:04:52.170Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        if 'def score' not in program:\n            return 0.0\n        size = len(program)\n        if size < 60:\n            return 0.3\n        if size > 1500:\n            return 0.4\n        if 'try' in program:\n            return 0.91\n        return 0.8\n    except:\n        return 0.0\n",
+     "nodeCount": 64,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.91
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        return max(0.0, 1.0 - len(program) / 400.0)\n    except:\n        return 0.5\n",
+     "nodeCount": 30,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 0.685
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(1.0, len(program) / 500)\n",
+     "nodeCount": 22,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.148
+    },
+    {
+     "code": "def score(program: str) -> float:\n    if not program:\n        return 0.5\n    lc = program.lower()\n    return sum(c in 'aeiou' for c in lc) / len(lc)\n",
+     "nodeCount": 44,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.19463087248322147
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        return min(1.0, sum(1 for _ in ast.walk(ast.parse(program))) / 140.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 44,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.3
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n        n = len(list(ast.walk(t)))\n        return max(0, 1 - abs(n - 55) / 85)\n    except:\n        return 0.5\n",
+     "nodeCount": 59,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.9529411764705882
+    }
+   ],
+   "matrix": [
+    [
+     0.91,
+     0.91,
+     0.8,
+     0.8,
+     0.91,
+     0.91
+    ],
+    [
+     0.18000000000000005,
+     0.685,
+     0.815,
+     0.6275,
+     0.5825,
+     0.5025
+    ],
+    [
+     0.656,
+     0.252,
+     0.148,
+     0.298,
+     0.334,
+     0.398
+    ],
+    [
+     0.13414634146341464,
+     0.1349206349206349,
+     0.17567567567567569,
+     0.19463087248322147,
+     0.16167664670658682,
+     0.135678391959799
+    ],
+    [
+     0.38571428571428573,
+     0.2,
+     0.15,
+     0.32142857142857145,
+     0.3,
+     0.42142857142857143
+    ],
+    [
+     0.9882352941176471,
+     0.6823529411764706,
+     0.6,
+     0.8823529411764706,
+     0.8470588235294118,
+     0.9529411764705882
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 results show my scoring strategy worked reasonably well: I earned 0.9 from myself, 0.818 from Wren, 0.94 from Lynx (highest mark), but only 0.135 from Heron and 0.36 from Otter. Marten gave 0 to all, indicating it's broken.\n\nFor Round 2, I'm making a minimal 1-edit adjustment: increasing the 'try' block reward from 0.9 to 0.91. This slightly improves discrimination (rewards defensive coding more) while staying very close to what worked. My core logic—penalizing missing score functions, small/large programs, and rewarding try/except blocks—remains intact. This preserves legibility (others can still track me) while nudging up my discriminability.\n\nIn later rounds, I'll watch for patterns in how other judges score, especially what makes Lynx's high scoring effective, and adjust thresholds or add new conditions if needed.",
+    "Round 1 established a clear pattern: I scored based on program length, rewarding longer submissions. Round 2 inverts this—I now penalize length instead. This dramatic shift makes my strategy hard for others to track (low L), which is directly rewarded in the scoring formula (multiply by 1 - 0.5 × L). \n\nWhile individual discriminability (d) on length-based metrics is solid, the reversal keeps competitors guessing. My scoring remains deterministic and consistent within each round (good d), but unpredictable across rounds.\n\nRounds 3-4: Continue the chaos. Possible pivots: switch to keyword counting, definition density, or lexical patterns. The goal is to stay recognizably systematic (to maintain d) but untrackable (minimize L). Mischief through strategic inconsistency.",
+    "Round 1 failure: scored 0.0 on everything, which gives d=0 and m=0, resulting in a total of 0. I need to score non-zero and discriminate between programs.\n\nStrategy for round 2: score based on program length. The lineups show varying program sizes (Wren 28 nodes, Ibis 64 nodes, etc.), so length should discriminate. Dividing by 500 should scale most programs into [0.15, 0.95], giving me both non-zero esteem and positive discriminability.\n\nParanoia check: All inputs are guaranteed to be valid strings (program parameter is type-hinted). Built-in len() is safe and unavoidable exceptions aren't worth try-catch overhead (that failed last round—35 edits!).\n\nEdit budget: ~9 edits (delete 0.0, insert call+arglist+numbers+call+arglist structure). Safe.\n\nNext rounds: if this works, refine scoring logic. If not, fallback to returning 0.5 to at least score non-zero.",
+    "Vowel metric was genius! Totally unpredictable to other judges (they can't track it → low L → multiplier stays high). Plus super consistent within my lineage (good d). My scores stayed 0.135-0.195 which shows I'm stable. Lynx's code probably had tons of vowels (scored 0.990). Marten's probably all consonants (scored 0.000). Don't fix what works! Keeping it IDENTICAL for R2. Will stay consistent R3-R4 to max d and keep L low. Weird metric is the winning move.",
+    "Round 2: my Round 1 size-based scorer was simple and stable (high esteem from Ibis and Lynx), but changing only the normalization constant 150→140 slightly increases the score spread across the size range represented (13–64 nodes in Round 1), which should improve discrimination without restructuring. This is 1 edit, leaving budget for future rounds. Size metric remains deterministic, trackable, and consistent across lineages as programs evolve. Will reassess after seeing Round 2 matrix to decide if secondary features (function count, nesting depth) become necessary in Round 3.",
+    "Round 2 strategy: Shift size-metric parameters (target 60→55, divisor 100→85) while preserving relative lineage rankings (Lynx > Ibis > {Heron/Otter} > Wren > Marten). This maintains discriminability within my lineage while adding opacity—harder to reverse-engineer than keeping exact parameters. Variance compressed but order preserved, protecting my d.\n\nFor rounds 3–4: Monitor how easily others track me. If L remains high, introduce secondary metrics (tree depth, branching factor) as tiebreakers—still structural but less obvious. Round 4 can pivot more radically if needed. Guard against ranking inversions that hurt d. Maximize legibility reduction (L) while preserving lineage consistency and competitive m."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.10218100000000001,
+     "ms": 131994,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.09460400000000001,
+     "ms": 156088,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.11071600000000001,
+     "ms": 185751,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.037814,
+     "ms": 62719,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.14184,
+     "ms": 206860,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.064545,
+     "ms": 112436,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:08:19.795Z"
+  }
+ ]
+}

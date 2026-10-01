@@ -51,5 +51,8 @@ out["j-drift"] = { ...iSeason("j-drift", { measure: "bounded", self: "excluded",
 const T_PERSONAS = ["kid12", "fp_purist", "graph_nerd", "mischief", "security_eng", "plain"];
 for (const m of MODELS) out[`t-${m}`] = { name: `t-${m}`, generations: 5, seed: 5151, tableSize: 6, effort: "medium",
   roster: T_PERSONAS.map((p) => ({ persona: p, model: m })), base: { ...SEALED, measure: "bounded", self: "excluded", m: "rank", hunt: true }, digest: true, reflect: true };
+// P2 (analyst checkpoint 2): consensus-discounted esteem - a judge's ranks count with weight (1 - rho)/2 where rho
+// is its agreement with the other judges, so whatever everyone rewards stops paying. Stacked on esteem+hunt.
+out["k-disc-hunt"] = { ...iSeason("k-disc-hunt", { measure: "bounded", self: "excluded", m: "rank-disc", hunt: true }), generations: 4 };
 for (const [k, v] of Object.entries(out)) fs.writeFileSync(`${__dirname}/${k}.json`, JSON.stringify(v, null, 1));
 console.log(Object.keys(out).join(" "));

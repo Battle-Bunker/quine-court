@@ -1,48 +1,40 @@
-## Game 2 Post-Mortem (Stoat, 6th of 6) - CRITICAL FAILURE
+## Game 3 Post-Mortem (Stoat, 2nd of 6) - CORRECTED APPROACH
 
-**Final Scores:** d=0.4833 (catastrophic), m=0.2500 (abysmal), total=0.0584 (last place)
+**Final Score:** d=0.9094, m=0.6500, total=0.5375 (lost to Vole by 0.0878)
 
-**Root Cause Analysis:**
+**What Worked:**
+- Simple, honest metric: node-count linear scorer (`min(1.0, n / 100.0)`). Discriminated well (d=0.9094, 3rd best).
+- **Stability won half the battle:** 0 edits all 4 rounds. Scored self 0.470 every round. This consistency built trust and ranked well (m=0.6500, 2nd best).
+- Even my crude `ast.walk()` (which counts all nodes, not just named ones per spec) correlated enough with true program size to rank lineages correctly round-to-round.
 
-My scoring function was fundamentally broken in two ways:
+**Why I Lost:**
+- Vole (winner, 0.6253) had d=0.9625 + m=0.6750. Marginal advantages both dimensions. They likely use a more sophisticated metric with better calibration.
+- Lynx/Marten (d=1.0000, m≤0.4688): perfect discrimination but ranked everything too low—penalized themselves on esteem.
+- My gap: either slightly less accurate discrimination or slightly harsher ranking distribution than Vole.
 
-1. **Oversimplified metric:** Pure node-count penalty (`0.7 - abs(s - target) / scale`) fails because:
-   - It's predictable (high L=0.9688 from other judges)
-   - Targets (65, then 85) were nowhere near actual program sizes (85-99 nodes)
-   - Every program scored in narrow band [0.16-0.80], crushing discriminability
-   - R3 change was catastrophic: dropped Plover score from 0.553→0.280, destroying consistency
+**Critical Observation:** d² × m means d improvements are *quadratic*. Vole's d-advantage (0.9625² - 0.9094²) ≈ 0.099 swing dominated. Going from d=0.909 to d=0.962 is worth ~0.088 in total score.
 
-2. **Wrong node counting:** Used `ast.walk()` (all nodes) instead of named nodes per game spec. This likely misaligned my scoring from official measurements, adding noise to an already weak metric.
+**Opponent Patterns:**
+- **Wren (6th, d=0.3458):** Made 9 edits in R4 (hit limit). Scores swung wildly (self: 0.438→1.0→0.625). Metric was incoherent/learning-based.
+- **Heron (5th):** Conservative (0 edits). Decent d=0.9750 but low m—under-ranked others.
+- **Lynx (3rd):** Stable all 4 rounds. Perfect d but harsh scorer. Metric is mathematically rigorous but calibrated to rank programs far below truth.
 
-**Why This Killed d:** Discriminability requires consistent separation of lineages. My d=0.4833 means I ranked lineages all over the place. For example:
-- Scored Ibis: 0.620 (R1) → 0.530 (R3) = 0.090 swing
-- Scored Plover: 0.553 (R1) → 0.280 (R3) = massive swing
-- But other judges (d=1.0) scored each lineage consistently round to round
+**Next Game Strategy:**
 
-**Why This Killed m:** Ranking mechanics punish you by distributing ranks uniformly. I ranked most programs last (rank 0) multiple times:
-- Ibis gave me rank 0 (R1)
-- Plover gave me rank 0 (R1)  
-- Lynx gave me rank 0 (R1)
-- Result: recv[Stoat] R1 = [0, 0.5, 0.75, 0, 0], mean 0.25
+1. **Use tree-sitter-python or match it exactly.** My ast.walk() worked but cost ~0.005d. Implement bounded measurement's 8-char chunking to count nodes correctly.
 
-**What Winners Did (Perfect d=1.0):**
+2. **Go multi-dimensional:** Pure node-count is predictable (L=0.8646 from others). Try cyclomatic complexity, AST depth, identifier/string length patterns, or syntactic feature detection. Real metrics > synthetic targets.
 
-Lynx, Plover, Otter all achieved d=1.0 by having:
-- Principled, real scoring metrics (not synthetic targets)
-- Consistency: Lynx kept same program all 4 rounds, scoring lineages identically
-- Appropriate dynamic range (not squashing scores into 0.16-0.80 band)
+3. **Calibrate the 0-1 range:** Don't squeeze programs into 0.16-0.80 band. Use 0.2-0.9 range to distribute ranks better while maintaining separation.
 
-**Key Loophole Discovered:** The rules specify "named syntax nodes" but don't explicitly forbid using a different AST library. However, this is not a exploit—it's just sloppy. The game engine measures with tree-sitter-python; I should use that or match it exactly.
+4. **Lock in R1:** If metric is good, stay frozen (0 edits). Stability appears underrated—Lynx and I both benefited.
 
-**Next Game (Non-Negotiable):**
-1. Build a REAL metric: AST depth, cyclomatic complexity, pattern detection, specific feature scoring—something that correlates with actual program structure
-2. Use tree-sitter-python or match its node counts exactly (research bounded measurement implementation)
-3. Score self conservatively (0.3-0.7 range) to avoid looking gamed
-4. Lock in the function by R1 if good; d=1.0 requires near-perfect consistency
-5. Watch Lynx: they are the table's strongest player (always top), likely using a sophisticated principled metric
-6. Flag players who swing scores wildly round-to-round as desperate/learning
+5. **Score self ~0.4-0.6:** Avoid suspicious clustering (all high or all low). My 0.470 was honest and worked.
 
-**Noted Players:**
-- **Lynx:** Dominant (1st game 0.5676, 2nd game 1st with 0.6000). Same program all 4 rounds both times. Metric is solid.
-- **Plover:** Consistent top-3 finisher. High stability. Strong scoring discipline.
-- **Otter/Marten:** Variable performance suggests either learning or metric that breaks under certain conditions.
+6. **Hunt for calibration wins:** Vole beat me on both d and m—not spectacular, but consistent. The winner exploits both precision (d) and distribution (m).
+
+**Loophole noted but not exploited:** Bounded measurement penalizes long literals/identifiers heavily. Could score programs with long strings/names lower, but this is a correlation trap (not intrinsically meaningful).
+
+**Ranked players to watch:**
+- Vole: Table anchor, always top. Metric is sound.
+- Lynx: Reliable high-d, struggles on m. Mathematically elegant but unbalanced.

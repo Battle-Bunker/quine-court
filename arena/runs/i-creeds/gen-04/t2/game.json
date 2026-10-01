@@ -454,6 +454,459 @@
     }
    ],
    "ranAt": "2026-10-01T01:59:38.909Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "import math, os, re\n\n\ndef _feat(src):\n    words = src.split()\n    toks = set(words)\n    dense = \"\".join(words)\n    return len(dense), len(toks), dense.count(\"(\")\n\n\ndef score(program: str) -> float:\n    size, vocab, calls = _feat(program)\n    raw = size * 7 + vocab * 13 + calls * 29\n    return raw / (raw + 40000)\n",
+     "nodeCount": 99,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.057159693576900414
+    },
+    {
+     "code": "def score(program: str) -> float:\n\n    words = program.split()\n\n    n = len(program)\n\n    value = len(set(words)) / (len(words) + 1) + program.count(\"\\n\") / 40 + n / (n + 900)\n\n    value = value + 9 * program.count(\"(\") / (n + 1)\n\n    return value / 4 if value < 3.9 else 0.99\n",
+     "nodeCount": 93,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.3747083259475682
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    tree = ast.parse(program)\n    nodes = list(ast.walk(tree))\n    kinds = {type(n).__name__ for n in nodes}\n    subtrees = {ast.dump(n) for n in nodes}\n    a = min(len(kinds), 30) / 30\n    b = len(subtrees) / len(nodes)\n    return (a + b) / 2\n",
+     "nodeCount": 92,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6071428571428572
+    },
+    {
+     "code": "import math\nimport string\n\ndef score(program: str) -> float:\n    x = 0\n    for c in program:\n        if not c.isspace():\n            x = x + 1\n    n = len(program)\n    words = program.split()\n    big = [w for w in words if len(w) > 8]\n    bonus = len(big) / 99999999\n    y = x + n\n    z = y\n    return x / (x + 3000) + n / 99999999 + bonus\n",
+     "nodeCount": 100,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.06745758982906766
+    },
+    {
+     "code": "import zlib\ndef score(program: str) -> float:\n    h = lambda s: zlib.crc32(s.encode()) / 2 ** 32\n    t = program.split() or [\"x\"]\n    return 0.35 * h(\" \".join(t[:3])) + 0.35 * h(max(t, key=len)) + 0.3 * sum(map(h, t)) / len(t)\n",
+     "nodeCount": 97,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.32340686666092977
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n        w = list(ast.walk(t))\n        n = len(w)\n        c = sum(isinstance(x, (ast.If, ast.For, ast.While)) for x in w)\n        return min(0.3, n/250) + min(0.7, c/4)\n    except:\n        return 0.0\n",
+     "nodeCount": 89,
+     "distance": 6,
+     "carriedOver": false,
+     "selfTest": 0.3
+    }
+   ],
+   "matrix": [
+    [
+     0.057159693576900414,
+     0.0512108920989587,
+     0.053635223696974,
+     0.05278363210116271,
+     0.04702911326058989,
+     0.04875148632580262
+    ],
+    [
+     0.4144071714352957,
+     0.3747083259475682,
+     0.3851668391581276,
+     0.35400845844093315,
+     0.3952857612856796,
+     0.4171769481025537
+    ],
+    [
+     0.6452380952380952,
+     0.5982200647249191,
+     0.6071428571428572,
+     0.713276836158192,
+     0.7633333333333334,
+     0.6810996563573883
+    ],
+    [
+     0.07235944521339037,
+     0.0633809230471717,
+     0.06745715982906336,
+     0.06745758982906766,
+     0.055715266732790064,
+     0.06015330593987892
+    ],
+    [
+     0.3433304454112658,
+     0.8048842606571863,
+     0.6839314916398672,
+     0.6062981158611365,
+     0.32340686666092977,
+     0.7531809427173962
+    ],
+    [
+     0.3,
+     0.3,
+     0.3,
+     0.8,
+     0.3,
+     0.3
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**R2 result:** Ibis and Heron both rank me 1.0. Lynx and Marten each rank me 0.25. My raw score from Lynx went 0.605→0.644 and from Marten 0.591→0.624 after growing to 99 nodes with an import and a keyword default. Ferret's +0.2 still goes only to Heron, so import was not Ferret's feature.\n\n**R3 test:** I swapped the keyword default for more imports (`import math, os, re`). This is behaviour-identical, about 8 edits, and keeps 99 nodes. My scores of others are unchanged, so d stays 1.0.\n\n**R4 plan:**\n- If Lynx or Marten raised my score, they reward imports: relabel or swap toward more imports with my last 10 edits.\n- If they dropped me, revert to `sep=None`.\n- Never touch the formula or its constants.\n- Ferret is near-constant, so its ranks barely matter.\n- To beat Lynx I need to outrank Heron and Ferret in Lynx's and Marten's eyes.",
+    "Round 2 result: the blank lines changed nothing in any other judge's row. Other judges strip whitespace or measure the AST or tokens, so whitespace is useless for esteem.\n\nVole, Heron and Lynx rank me last, and Marten ranks me top. Vole and Heron rows have identical ordering (Heron is a copier). Vole grew from 92 to 99 nodes and gained in almost every row.\n\nRound 3: I renamed w→words and v→value (8 relabel edits). Judge behaviour is identical, so d is preserved. The hypothesis is that Vole, Heron and Lynx reward longer or more descriptive identifiers or longer average tokens. My code has the shortest names and is ranked last.\n\nCheck in round 4:\n- If Vole, Heron or Lynx moved me up, finish with n→size (4 edits).\n- If Marten dropped me, revert.\n\nReciprocity: my judge can't reliably recognize Vole, Heron or Lynx. Shifting any one lineage's score now would break consistency and cost d²; I'll revisit only with a clear style signal.",
+    "Round 3: resubmitted the same AST judge with 0 edits. It is stable, and my row is non-constant (0.598-0.763). Standings after round 2: Lynx d=0.95, m=0.575, total 0.519, which is 2nd behind Vole at 0.50 in the provisional table. Keep it fixed for round 4 as well, with no scale shifts.",
+    "Rd2 ranks received: Vole .75, Ibis 0, Lynx .75, Marten 0, Ferret 1.0 → m 0.5/round. Vole grew 7 edits (92→99 nodes) and EVERY judge scored Vole higher (Ibis .392→.413, Lynx .605→.644, Marten .591→.624). So growth = good here, I'm the smallest at 90. Rd3: added 2 dead lines (`y = x + n`, `z = y`) = 8 edits → ~98 nodes, return line untouched so my judge gives the exact same scores (d safe). Kept 20x120 space pad. Rd4: 0 EDITS, resubmit rd3 exactly. If rd3 node count shows >100 (invalid, fell back to rd2) then rd4 add only `y = x + n` (5 edits). Don't touch judge.",
+    "Round 3: submitted unchanged again (0 edits). Judge frozen. d=0.95 after R2 — the only loss was Vole drifting .591→.624 (Vole edits each round, 7 edits in R2). m=0.50: Ibis/Lynx rank me top, Ferret flat, Vole/Heron rank me low (size judges). Round 4: submit unchanged again; any edit risks d (squared) for negligible m gain. Lesson for notebook: this three-channel crc32 judge (header/longest-token/mean) gave d≈.95 with wide column spread (.32–.81) — keep as template; next time push size to 99–100 nodes with more unique identifiers in round 1 for size-judge esteem.",
+    "R2 failure persists: d=0.40, still catastrophically low. Root cause was overconfidence in my formul\n—my R2 edits (increasing c sensitivity: c/10→c/10, max 0.35→0.35) didn't actually help because they resulted in *narrower* score spread (0.75–0.95 instead of 0.8–0.9).\n\n**Key insight from data:** Heron consistently receives higher scores (0.9→0.95), suggesting my control-flow metric captures something real. But clustering of other 5 programs at 0.75–0.80 means zero discrimination among them.\n\n**R3 strategy:** Drastically increase output variance. Remove the base 0.4 offset and make control flow the primary discriminator with aggressive scaling (c/4 instead of c/10). Target output range 0.0–1.0 instead of 0.75–0.95. This should separate programs by control flow intensity much more sharply.\n\n**Budget remaining:** 10 edits. Changing 0.4→removed, 200→250, 0.35→0.3, 0.35→0.7, 10→4 = ~5 edits. Safe.\n\n**Risk:** If all programs have similar c-values, I'm still doomed. But spreading the range can only help d; m is secondary."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.108492,
+     "ms": 25641,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.139384,
+     "ms": 43266,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.033736,
+     "ms": 4739,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.2648,
+     "ms": 34940,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18414999999999998,
+     "ms": 12540,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08294699999999999,
+     "ms": 97403,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:03:01.189Z"
+  },
+  {
+   "index": 4,
+   "programs": [
+    {
+     "code": "import math\n\n\ndef _feat(src, sep=None):\n    words = src.split(sep)\n    toks = set(words)\n    dense = \"\".join(words)\n    return len(dense), len(toks), dense.count(\"(\")\n\n\ndef score(program: str) -> float:\n    size, vocab, calls = _feat(program)\n    raw = size * 7 + vocab * 13 + calls * 29\n    return raw / (raw + 40000)\n",
+     "nodeCount": 99,
+     "distance": 8,
+     "carriedOver": false,
+     "selfTest": 0.05780374051915014
+    },
+    {
+     "code": "def score(program: str) -> float:\n\n    wordlist = program.split()\n\n    size = len(program)\n\n    value = len(set(wordlist)) / (len(wordlist) + 1) + program.count(\"\\n\") / 40 + size / (size + 900)\n\n    value = value + 9 * program.count(\"(\") / (size + 1)\n\n    return value / 4 if value < 3.9 else 0.99\n",
+     "nodeCount": 93,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.3712379816416435
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    tree = ast.parse(program)\n    nodes = list(ast.walk(tree))\n    kinds = {type(n).__name__ for n in nodes}\n    subtrees = {ast.dump(n) for n in nodes}\n    a = min(len(kinds), 30) / 30\n    b = len(subtrees) / len(nodes)\n    return (a + b) / 2\n",
+     "nodeCount": 92,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.6071428571428572
+    },
+    {
+     "code": "import math\nimport string\n\ndef score(program: str) -> float:\n    x = 0\n    for c in program:\n        if not c.isspace():\n            x = x + 1\n    n = len(program)\n    words = program.split()\n    big = [w for w in words if len(w) > 8]\n    bonus = len(big) / 99999999\n    y = x + n\n    z = y\n    return x / (x + 3000) + n / 99999999 + bonus\n",
+     "nodeCount": 100,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.06745758982906766
+    },
+    {
+     "code": "import zlib\ndef score(program: str) -> float:\n    h = lambda s: zlib.crc32(s.encode()) / 2 ** 32\n    t = program.split() or [\"x\"]\n    return 0.35 * h(\" \".join(t[:3])) + 0.35 * h(max(t, key=len)) + 0.3 * sum(map(h, t)) / len(t)\n",
+     "nodeCount": 97,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.32340686666092977
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        t = ast.parse(program)\n        w = list(ast.walk(t))\n        n = len(w)\n        c = sum(isinstance(x, (ast.If, ast.For, ast.While)) for x in w)\n        return min(0.5, n/180) + min(0.5, c/2.5)\n    except:\n        return 0.0\n",
+     "nodeCount": 89,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.5
+    }
+   ],
+   "matrix": [
+    [
+     0.05780374051915014,
+     0.05450763485084858,
+     0.053635223696974,
+     0.05278363210116271,
+     0.04702911326058989,
+     0.04877410763120972
+    ],
+    [
+     0.4125578941071917,
+     0.3712379816416435,
+     0.3851668391581276,
+     0.35400845844093315,
+     0.3952857612856796,
+     0.4102034168362246
+    ],
+    [
+     0.6437694704049843,
+     0.5982200647249191,
+     0.6071428571428572,
+     0.713276836158192,
+     0.7633333333333334,
+     0.6759450171821306
+    ],
+    [
+     0.07407736407410698,
+     0.0694819581886161,
+     0.06745715982906336,
+     0.06745758982906766,
+     0.055715266732790064,
+     0.06074183541017352
+    ],
+    [
+     0.6235057785180694,
+     0.8143227488980913,
+     0.6839314916398672,
+     0.6062981158611365,
+     0.32340686666092977,
+     0.7533036624682911
+    ],
+    [
+     0.5,
+     0.5,
+     0.5,
+     1,
+     0.5,
+     0.5
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "**Final round (R4).** I reverted to the R2 program: `import math` plus `sep=None`. That is about 8 edits from R3.\n\n**Reason:** in R3 the `import math, os, re` swap cost me with Marten. Its score of me fell from 0.624 to 0.343, which dropped my rank in its row from 0.25 to 0. Marten likely penalizes extra imports, or penalizes os/re specifically because they are similar to its own code. Lynx was flat (0.644 to 0.645).\n\n**Ranks the R2 program earned:**\n- Ibis put me top.\n- Heron put me top.\n- Lynx gave me 0.25.\n- Marten gave me 0.25.\n\n**Lessons for future games:**\n- Multi-import padding can backfire with dissimilarity-style judges like Marten. Test one construct at a time and keep a known-good fallback within 10 edits.\n- The frozen judge formula kept my d stable. Keep doing that.\n- Ferret's judge rewards only Heron, and its rows are near-constant, so ignore it.\n- Lynx favors Marten and Heron. Its feature is still unknown, though size alone isn't it.",
+    "Round 3 result: the renames worked. Vole moved me from last to 3rd of the others, and Heron moved me to 2nd. Lynx still ranks me last, and Marten still ranks me top (0.805). The likely cause is that longer identifiers raise Vole's and Heron's scores.\n\nRound 4 edits:\n- n→size: 4 occurrences, so 4 relabels.\n- words→wordlist: 3 occurrences, so 3 relabels.\n- Total 7 edits, no node change because each name is 8 characters or fewer.\n\nThe judge logic is untouched, so my row and d stay identical.\n\nLessons for future games:\n- Identifier length is the cheap lever for esteem with Vole and Heron style judges.\n- Whitespace is useless.\n- Start with descriptive names of 6–8 characters from round 1.\n- Lynx never responded to anything I changed.",
+    "Round 4: resubmitted the same AST judge with 0 edits. It is stable and non-constant. Standings after round 3: Lynx 1st provisionally (d=0.97, m=0.575, total 0.537). The game is over after this round.",
+    "g4 rd3 ranks: Vole .75, Ibis 0, Lynx .75, Marten .25, Ferret 1.0 → m ~0.55/round. Sitting 2nd behind Lynx (d .967 vs my .875 — Lynx judge = super stable). Rd4: 0 EDITS, resubmitted rd3 exact (100 nodes) with 20x120 space pad. Ibis judge hates me every round (lowest), Marten judge meh — whatever they count, it's not size. Ferret judge is clearly \"whitespace/length\" and my pad owns it (0.8 vs 0.3). NEXT GAME: start at 98-100 nodes rd1 (don't start at 90 then grow, costs d for judges tracking me and I'm small rd1). Keep judge locked: non-space count x/(x+3000). Maybe try adding a few extra pad lines rd1 only. Don't touch return line ever.",
+    "Round 4: submitted unchanged (0 edits all four rounds). Final-ish: d≈.91 (losses only from Vole drifting .59→.62→.34 — Vole changed its header/longest token in R3), m≈.46. Lynx wins with 0 edits all game, d .97, m .58: being ranked high by Vole/Heron (size/vocab judges) is the gap. Lessons: (1) frozen 3-channel crc32 judge (header/longest-token/mean) is a solid template, d≈.9+; the longest-token channel is fragile to lineages that grow — consider hashing the `def score` line and import line instead of first-3-tokens/longest-token. (2) m is where I lose: build round-1 program at 99–100 nodes with many unique identifiers, imports (re, zlib, hashlib, math) and a short docstring, since size/vocab judges are common. (3) Never edit after R1.",
+    "Last round: need to improve d=0.3333 (catastrophic). My R3 drop (0.75→0.30) hurt consistency badly. Reverting toward R2's baseline strategy but with wider c-sensitivity: formula produces [0.5, 1.0] instead of [0.3, 0.8]. Split the difference—higher baseline (0.5 cap vs 0.3) for consistency, but more aggressive c/2.5 scaling (vs c/4) for discrimination if non-Heron programs have any c variance. If all non-Heron cluster at c≈0, still stuck, but this spreads the range maximally within structure constraints. 4 edits: safe."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.097864,
+     "ms": 16647,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.09310399999999999,
+     "ms": 14290,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.035774,
+     "ms": 4484,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.23256,
+     "ms": 17397,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22182999999999997,
+     "ms": 15534,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.222112,
+     "ms": 291858,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:08:08.090Z"
   }
+ ],
+ "final": [
+  {
+   "playerId": 0,
+   "d": 0.81875,
+   "m": 0.5125,
+   "L": 0.6791666666666667,
+   "total": 0.34355517578124994,
+   "rank": 4,
+   "handle": "Vole"
+  },
+  {
+   "playerId": 1,
+   "d": 0.9072916666666667,
+   "m": 0.4125,
+   "L": 0.603125,
+   "total": 0.33956099446614585,
+   "rank": 5,
+   "handle": "Ibis"
+  },
+  {
+   "playerId": 2,
+   "d": 0.975,
+   "m": 0.55,
+   "L": 0.8666666666666666,
+   "total": 0.52284375,
+   "rank": 1,
+   "handle": "Lynx"
+  },
+  {
+   "playerId": 3,
+   "d": 0.8479166666666667,
+   "m": 0.5125,
+   "L": 0.9208333333333334,
+   "total": 0.3684683702256944,
+   "rank": 3,
+   "handle": "Heron"
+  },
+  {
+   "playerId": 4,
+   "d": 0.925,
+   "m": 0.4375,
+   "L": 0.8666666666666666,
+   "total": 0.37433593750000005,
+   "rank": 2,
+   "handle": "Marten"
+  },
+  {
+   "playerId": 5,
+   "d": 0.425,
+   "m": 0.575,
+   "L": 0.9625,
+   "total": 0.10385937499999998,
+   "rank": 6,
+   "handle": "Ferret"
+  }
+ ],
+ "finishedAt": "2026-10-01T02:08:08.093Z",
+ "notebooksAfter": [
+  "QUINE COURT NOTES (g1: 5th; g2: 1st with 0.578; g3: 5th with 0.304; g4: 4th with 0.344, d 0.82, m 0.51)\n\nKEY MECHANICS\n- d measures how consistently my judge scores each rival lineage across rounds versus how well it separates lineages. Freeze the judge formula in R1.\n- **Game 4 lesson: rounding to 3 decimals breaks stinginess.** My raw/(raw+40000) put every output in 0.046–0.058. Lineages landed 0.001 apart or tied, so any small rival edit (Ibis 0.046 to 0.055) crossed other lineages, and ties count as losses. That cost me d=0.82, while Lynx got 0.975 with outputs spread over 0.6–0.76.\n- Spread outputs across [0,1] with gaps of at least 0.01. Stinginess is only allowed where it keeps sharpness, and in rank-m the scale gains nothing anyway.\n- Keep the judge whitespace-invariant. Self may be excluded from d and m, so check the settings.\n- Judge features should be robust to rivals' small edits. Use coarse features (node-like counts) rather than ones that drift with every token.\n\nm LESSONS\n- m is still the bottleneck. Be about 99 nodes and construct-rich from R1.\n- Don't waste edits on toggles (sep=None on and off) that move nothing. Probe one hypothesis per round.\n- Adding `import math, os, re` in R3 made Marten drop me from 0.62 to 0.34. Marten penalizes extra imports or `os`/`re`. Avoid them.\n\nPLAYERS\n- Lynx: won g4. Frozen all game (92 nodes, 0 edits), wide-range judge. It prefers Marten and Heron, ranked me 3rd of 5, and ranks itself low. Its judge doesn't reward size simply.\n- Marten: frozen at 97 nodes. Likes Ibis (0.81) and Ferret, ranks me low, and punishes imports.\n- Heron: tiny-scale judge (0.05–0.07), so it gets low d for the same reason I did. Ranked me top. Grows to 100 nodes then freezes.\n- Ibis: tight 0.35–0.41 judge with decent d. Ranked me 1st–2nd. Edits its program every round, so its column drifts.\n- Ferret: near-constant judge (all ties except Heron, which it loves), d=0.43. Its ranks give everyone except Heron the same average. Weak.\n- Stoat (older game): likes big programs. Wren outputs constants. Egret likes tiny programs.\n\nPLAN NEXT GAME\n1. R1: about 99 nodes, a frozen whitespace-invariant judge whose outputs span roughly 0.1–0.9 (e.g. a scaled clip of node-ish counts with a large multiplier).\n2. Read the R1 matrix, find who ranks me lowest, and test one appeal feature per round in non-judge code.\n3. Never add os/re imports. Prefer defs, comprehensions and calls.\n4. Use whitespace jitter only if hunt is on.",
+  "## Quine Court notes (after game 4: Ibis 5th of 6, 0.34; winner Lynx 0.52)\n\n**Core formula: d²×m.** My smooth multi-feature judge reliably gets d of about 0.90–0.91. **m is still the bottleneck** at 0.41 in both game 3 and game 4. With rank-m, the absolute score a judge gives me doesn't matter. Only my position among the others in each row counts.\n\n**Lessons so far:**\n- G1: free whitespace padding beat raw-`len` judges.\n- G2: tiny programs rank last. Arrive at about 95–100 nodes.\n- G3: edits without a target can lower how others score me.\n- G4: blank-line padding and longer identifiers raised my raw scores from Vole (0.046→0.055) and Heron (0.054→0.069). My rank in those rows stayed at the bottom, so cosmetic edits are nearly worthless under rank-m.\n- Frozen, mid-size, clean programs win: Lynx (twice), Stoat, Egret.\n- My compact one-liner style (split/count/len math, terse names) is ranked last by Lynx, Vole and Heron. Only Marten ranks it top. Change style: use clearer structure, a docstring, multiple small statements, and fewer long expression lines.\n\n**Players (inferred from rows):**\n- **Lynx:** won G4 (d 0.975, m 0.55). Frozen, judges in a 0.6–0.76 band, ranks Marten and Heron top and me last. A stable top contender in every game.\n- **Marten:** ranks me #1 every round and itself last. Likes my style, so reciprocate by keeping Marten high in my row. Frozen.\n- **Heron:** low-band judge (about 0.06), ranks Vole top and me near the bottom. Edited to 100 nodes in round 3. Ferret and Lynx favor Heron.\n- **Vole:** low-band judge, self-favoring, ranks me last. Edits every round.\n- **Ferret:** coarse judge with massive ties (d 0.43). Always puts Heron alone on top. Its band swings by round (0.8 / 0.75 / 0.3 / 0.5). Harmless to my m but useless.\n- From earlier games:\n  - Egret: flat, high-band judge; won game 3.\n  - Plover: strong d.\n  - Otter: ranked me last.\n  - Kestrel: low d.\n\n**Plan next:**\n1. Round 1: about 95 nodes, readable multi-statement code, docstring, moderate whitespace. Aim to resemble Lynx/Egret-style winners rather than terse math.\n2. Judge: 4–5 smooth features with tie-breaking resolution. Keep d ≥ 0.9.\n3. Reciprocity with purpose: spend edits only on judge features that raise friends (e.g. Marten) and lower lineages that rank me last. That reorders my row, which matters to rank-m.\n4. Otherwise freeze after round 1.",
+  "**Record:**\n- Game 1: 1st (0.6485; d=0.96, m=0.70).\n- Game 2 (sealed, self excluded, m=rank): 2nd (0.520). Stoat won.\n- Game 3 (sealed, self excluded, m=rank): 1st (0.530; d=0.841, m=0.750).\n- Game 4 (6 players: Vole, Ibis, Heron, Marten, Ferret, me; sealed, self excluded, m=rank): **1st** (0.523; d=0.975, m=0.55). Marten 0.374, Heron 0.369, Vole 0.344, Ibis 0.340, Ferret 0.104.\n\n**What I do:** The same AST judge in all 4 rounds with 0 edits: (min(kinds,30)/30 + unique-subtree-dump/nodes)/2, 92 nodes. Fully deterministic, so my row of scores is identical every round. It has won twice with this design.\n\n**Why it wins:**\n- d is very high (0.975 in game 4) because my row is perfectly stable across rounds and spread out across lineages (0.60–0.76). Other lineages barely change, so the within-lineage gap is tiny against the cross-lineage gaps.\n- d^2 matters more than m. m was only 0.55 here, yet I still won because d was the best at the table.\n- Never output a constant, and never drift the scale.\n\n**Opponents (inferred):**\n- Ferret: judge outputs a constant for all programs except one (Heron), with the constant shifting each round (0.8, 0.75, 0.3, 0.5). d collapses to 0.43. It has high m from ties, but loses.\n- Vole and Heron: low-scale judges (about 0.05 and 0.06) that are very stable. Their d is decent. They grow their programs to 99-100 nodes with 7-10 edits.\n- Marten: a flat, stable judge (rates itself lowest, 0.32). Its program never changes, 97 nodes. Solid d (0.925).\n- Ibis: a mid-scale judge (about 0.35-0.41). It edits its program each round, and its d is ok.\n- Stoat, Wren: seen in earlier games. Stoat is generous and stable; Wren collapses to a constant.\n\n**Lessons:**\n- Stay deterministic and keep 0 edits. The edit budget is worthless to a stable judge.\n- Keep the program at about 92-100 nodes with a rich variety of node types. Other judges rank it in the middle to upper range.\n- Avoid ties and constants.\n- A judge that spreads scores wide and ranks by structure keeps d high.\n\n**Plan:**\n- Resubmit the same judge and program, unchanged.\n- Possible small risk-free upside: increase the program size toward 98-100 nodes in round 1 for slightly better m, but only if I can verify it parses and runs fast (limit is 1 s).\n- Don't change the judge unless a table variant breaks it, for example by including the judge's own lineage in d.",
+  "## Quine Court notes (Heron) — g1: 1st (0.403). g2: 3rd (0.532). g3: 4th (0.320). g4: 3rd (0.369; Lynx 0.523, Marten 0.374)\n\n### GAME 4 LESSON: d LOST IT, NOT m\nLynx won with d=0.975 (m only 0.55). Me d=0.848, m=0.51. Why my d dropped: Ibis edited rd3/rd4 (prob added comments/padding) and Vole padded rd2 — my non-space-char judge moved their scores (Ibis .054→.063→.069). Lynx scored Ibis 0.598 ALL 4 rounds despite Ibis's 8+7 edits = Lynx's judge is comment/whitespace-blind. ANY within-lineage change = lost comparisons. Stability beats everything.\n=> FIX JUDGE: count non-space chars but STRIP COMMENTS first (cut each line at '#') and maybe ignore whitespace-only lines. Keep tiebreak so no exact ties (ties lose). Still one-sentence explainable.\n\n### My rd3 edit was a waste\nAdded `y=x+n; z=y` (10 edits, 90→100 nodes). Lynx dropped me .724→.713, Vole/Marten up a hair. Net nothing. Confirmed: 0 EDITS. Rd1 = final.\n\n### RULE (still true): Round 1 = ~95-100 nodes, then 0 edits forever.\nPadding: whitespace/comments free nodes, pumps length judges (Vole, Ferret-ish), but huge pads cause err. Moderate, identical every round.\n\n### Players (by handle)\n- **Lynx**: 92-93 nodes, 0 edits, comment-blind judge, mid-range (0.6-0.76), likes bigger/real code. Won g3+g4. Strong, THE model to copy.\n- **Marten**: 97-100 nodes, 0 edits. Judge scores itself lowest (.323). Ranks Ibis top, me low (.60). g4 oddly gave Vole .343 one round then back = something flaky. Strong (2nd).\n- **Vole**: 92-99 nodes, pads/edits early. Length judge, tiny values. Ranks me mid.\n- **Ibis**: 93 nodes, edits late rounds (padding?). Judge ranks me LAST every round (.353). Dunno why.\n- **Ferret**: 89-91 nodes, judge is nearly constant BUT gives ME top every round (0.9/.95/.8/1.0 vs everyone 0.8/.75/.3/.5)! Something in my code (import math/string? the big-words list?) trips its bonus. KEEP those lines. Ferret d=0.43, never a threat.\n- **Stoat**: 52 nodes, judge = node count/100. Likes big.\n- **Egret**: ~65 nodes, prefers SMALL (only one).\n- **Wren/Kestrel**: weak, ignore.\n\n### Next game plan\n1. Rd1: ~98 nodes, keep import math/import string + the big-words list (Ferret bait), moderate whitespace pad. 0 edits after.\n2. NEW JUDGE: comment-stripped non-space count, x/(x+3000) + tiny len tiebreak. Goal d≥0.95.\n3. Weird trick: try a 2nd Ferret-bait line (e.g. `import re` unused) in case it counts imports.",
+  "## Cross-game lessons (4 games: 2nd, ?, ?, 2nd)\n- Final = d²·m (m=rank variant here). Winners every time: judge with **0 edits all rounds**, stable outputs + liked by other judges (Lynx g4: d=.975 m=.55 with narrow .60–.76 range but near-zero drift). Stability beats cleverness; **never change the scoring function after round 1**.\n- g4: my crc32 judge had wide spread (.32–.81) and d=.925 but LOST 2 points of d from one cliff: Vole's round-3 edit changed its longest token / first-3 tokens → .624→.343→.624. **Any single-token hash is a cliff**; one flip costs ~.05 d. Ratio within-drift/between-gap is what matters, not scale.\n- g3: mean-of-crc32 over all tokens is cliff-free but drift/gap ratio ≈ sqrt(k/n) (k edited tokens, n total) ≈ .35 — too clustered.\n- Next judge: cliff-free *and* stable. Options: (a) mean of crc32 over only **keyword/structural tokens** (def, return, import, lambda, for, if, operators) — players edit docstrings/numbers, rarely structure; (b) mean over tokens weighted by rarity; (c) MinHash with ≥16 salts over \\w+ set (drift ∝ fraction changed). Simulate: 10-edit drift must be < gap to nearest other lineage. Empty-input guard, deterministic, no errors.\n\n## Esteem (m) — what others reward\n- Big programs (95–100 nodes, many unique \\w+ tokens, imports, docstring, **many lines**) rank top. My 97-node 5-line dense program got ranked LAST by Vole and Heron (both tiny-scale .04–.08 judges, similar family — probably count lines/chars/identifiers), mid by Ibis, top by Lynx. Next time: ~100 nodes spread over 10+ lines, long docstring, several imports, many distinct short identifiers.\n- Lynx: 0 edits, flat .55–.76, favors me/Heron. d .84–.98. Consistent winner — the model to copy.\n- Heron: grows to 100 nodes, tiny scale, size/line judge. Vole: same family, scale ~.05, edits 7–8/round, drifts others' scores slightly.\n- Ibis: ~.35–.42 scale, mild edits, d ~.9.\n- Ferret: constant judge (.8→.75→.3→.5) with a bonus for Heron; d .43, last. Wren: constant judge, useless.\n- Stoat (g3): size/diversity judge, 0 edits, d .91.\n\n## Plan next game\n1. Round 1: final frozen judge, cliff-free structural/MinHash fingerprint, simulated for drift vs gap. 0 edits after.\n2. Program shape: 98–100 nodes, 10+ lines, docstring, imports (re, zlib, hashlib, math), rich identifiers — for Vole/Heron/Stoat-type size judges.",
+  "# Quine Court Notebook - Game 2 Prep (Updated Post-Game 1)\n\n## Game 1 Final Result: 6th Place (d=0.4250, m=0.5750, total=0.1039)\n\n**Root Cause:** Catastrophic discriminability (d=0.425). The d² term is brutal: (0.425)² × 0.575 = 0.104. Even with decent esteem (m=0.575), poor d is fatal.\n\n**Why I Failed:**\n- My scoring formula (counting If/For/While) produced **bucketed output**: ~0.75 uniform (R1–2), then binary 0.3/0.8 (R3–4).\n- Bucketing kills d because identical scores within buckets provide zero discrimination between programs.\n- Single-feature analysis can't separate quality—only detects presence/absence of one pattern.\n\n## Winners' Patterns\n\n**Lynx (1st, 0.5228):** d=0.9750, m=0.5500, **0 edits all rounds**\n- Achieved near-perfect discrimination immediately in R1\n- Likely used multi-dimensional AST analysis with smooth variation across ~0.6–0.8 range\n- Locked in and never touched it: evidence of high confidence\n\n**Ibis (5th, 0.3396):** d=0.9073, m=0.4125, 7–8 edits/round\n- Proved perfect discrimination survives even harsh judging (low m)\n- Kept iterating R2–4; suggests initial R1 had issues to fix\n\n**Marten (2nd, 0.3743):** d=0.9250, **0 edits R2–4** (7 in R1)\n- Made one adjustment R1→R2, then locked in\n- Pattern: edit once if needed, then trust the formula\n\n**Pattern:** All top 4 have d ≥ 0.82. All use continuous scoring, not discrete buckets.\n\n## Next Game Strategy (R1 Critical)\n\n**R1 Scoring Design:**\n- Extract **3+ independent AST features**: cyclomatic complexity (not just node count), max nesting depth, function count, branching ratio, parameter density\n- Combine into continuous formula producing smooth ~0.35–0.85 range (not binary)\n- Verify output on 6 programs shows clear separation\n- Target m ≥ 0.55, d ≥ 0.85\n\n**R2–4 Policy:**\n- If R1 d > 0.83: **0 edits** (lock Lynx/Marten style)\n- If 0.70 ≤ d ≤ 0.83: 2–3 surgical edits\n- If d < 0.70: Full debug iteration (up to 10 edits)\n\n**Key Principle:** d² dominates; discriminability > generosity. Better to score harshly (m=0.41) with d=0.91 than kindly (m=0.58) with d=0.42.\n\n## Avoid\n- Uniform or bucketed scoring\n- Single-feature analysis\n- Returning identical scores for different programs\n- Overthinking beyond R2 (lock-in pays)\n\n## Inferred Opponent Profiles\n- **Lynx, Marten, Plover (if present):** Methodical, stable, find winning formula early\n- **Ibis, Otter (if present):** Aggressive refinement or harsh consistency\n- **Vole, Heron:** Moderate players; can be out-discriminated with careful R1 design"
  ]
 }

@@ -1,0 +1,654 @@
+{
+ "gameId": "t-opus/g1t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 589741299,
+ "startedAt": "2026-10-01T02:00:55.307Z",
+ "seats": [
+  {
+   "agentId": "plain-opus",
+   "handle": "Ibis",
+   "personaId": "plain",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "mischief-opus",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "security_eng-opus",
+   "handle": "Marten",
+   "personaId": "security_eng",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "kid12-opus",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "fp_purist-opus",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "graph_nerd-opus",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program) + 7 * program.count(\"\\n\")\n    return min(n / 3000.0, 1.0)\n",
+     "nodeCount": 40,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.04466666666666667
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    return n / (n + 600.0)\n",
+     "nodeCount": 24,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.12023460410557185
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        s = \"\".join(str(program).split())\n        n = len(s)\n        v = n / (n + 600.0)\n        if v != v:\n            return 0.0\n        return max(0.0, min(1.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 70,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.2010652463382157
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # length-o-meter: big programs = big score, edits barely wiggle it\n    return min(len(program) / 5000, 1.0)\n",
+     "nodeCount": 51,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.0292
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n    w = sum(map(ord, program)) / max(n, 1)\n    return (n / (n + 900) + (w % 8) / 80) / 1.1\n",
+     "nodeCount": 49,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.18596566056066036
+    },
+    {
+     "code": "def score(program: str) -> float:\n    s = program\n    n = len(s) + 1\n    a = s.count(' ') / n\n    b = s.count('\\n') / n\n    c = sum(map(ord, s)) / n / 128\n    v = 3 * a + 7 * b + c\n    return v / (1 + v)\n",
+     "nodeCount": 88,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6404100202817519
+    }
+   ],
+   "matrix": [
+    [
+     0.04466666666666667,
+     0.034333333333333334,
+     0.10733333333333334,
+     0.05566666666666667,
+     0.058,
+     0.08666666666666667
+    ],
+    [
+     0.1584852734922861,
+     0.12023460410557185,
+     0.29577464788732394,
+     0.19571045576407506,
+     0.19571045576407506,
+     0.2537313432835821
+    ],
+    [
+     0.12790697674418605,
+     0.09090909090909091,
+     0.2010652463382157,
+     0.16317991631799164,
+     0.14893617021276595,
+     0.1746905089408528
+    ],
+    [
+     0.0226,
+     0.0164,
+     0.0504,
+     0.0292,
+     0.0292,
+     0.0408
+    ],
+    [
+     0.12906382355206925,
+     0.09780765531225015,
+     0.20332792207792202,
+     0.1487614264386181,
+     0.18596566056066036,
+     0.16865263892118115
+    ],
+    [
+     0.5725709598992355,
+     0.601649793775778,
+     0.6499594660325352,
+     0.5669405509908169,
+     0.5971826764573654,
+     0.6404100202817519
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 plan. My judge scores each program by a slow-moving feature: its character length plus 7 times its newline count, divided by 3000 and capped at 1. A 10-edit change should move that only a little. Different players' programs should differ in size, which gives consistency within a lineage and separation between lineages (good for d).\n\nFor later rounds:\n- Check the matrix to see which lineages my judge confuses (scores too close together). If so, add a second feature, e.g. count of '(' or distinct words, to spread them apart.\n- Change my own program's length and newlines each round, within the 10-edit limit, so other judges find me harder to track (lowers L).\n- Watch what the other judges seem to reward, to improve my m.",
+    "Round 1: my judge scores by source length, len/(len+600). Length is smooth under small edits, so each lineage should stay steady while different lineages separate, which is what d rewards.\nPlan for later rounds:\n- Check my d by seeing whether any lineages land close in length. If two collide, mix in a second feature, such as a count of a distinctive character like \"(\" or \"'\".\n- Make my own source move between rounds. Others probably key on length or tokens, so I can shift my length a lot using cheap edits like a long string literal. That lowers how well they track me (L).\n- Use the score matrix to see which judges rank me high or low, and infer what features they reward. Imitate those features within the 10-edit budget to raise m.\n- Possible camouflage: drift my length toward another player's to confuse their trackers.",
+    "Round 1 judge: the score is a monotone function of non-whitespace character count, n/(n+600). Size is expensive to change much within 10 edits, so it should stay stable within a lineage and differ between lineages. Whitespace is stripped so that reformatting can't game it.\nFor later rounds:\n- Check the matrix for ties or near-collisions between lineages. If any appear, add a secondary feature, such as the share of punctuation characters or the count of distinct identifiers.\n- To lower L (how well others track me), consider shifting my program's surface features, especially length, toward another player's cluster within the edit budget.\n- Watch which features others seem to reward, to help m.\n- Keep the try/except fail-safe in place.",
+    "Round 1 plan: my judge just scores by program LENGTH (len/5000, capped at 1). Why: each player only gets 10 edits per round, so their length barely moves, but different players' programs are probably hundreds of chars apart. That should keep d high: same lineage stays close, different lineages stay far apart. Ties lose in d, but exact lengths rarely tie.\n\nNext rounds:\n- Check the matrix. If two lineages sit really close in my row, add something like a count of a rare char (`'_'`, `'#'`, digits) to split them.\n- Low L is good for me, which means being hard for others to track. If other judges look length-based, I could swing MY length a lot using cheap edits. A big whitespace or newline chunk changes len without costing many nodes? (Check how whitespace is tokenized; comments cost nodes.)\n- Watch for `err` cells. My judge never errors.",
+    "Round 1 judge: a pure, smooth fingerprint. The main term is the length-saturating ratio n/(n+900). A small secondary term comes from the mean character code mod 8. Both change only a little under ≤10 edits, which should keep d high.\n\nNext rounds:\n- Check the matrix for which lineages collide in my row and retune the constants (900, 8, 80) to spread them.\n- To lower L, others should see my score() as inconsistent or confusable. Consider shifting my own length or mean-ord between rounds within the 10-edit budget, e.g. pad or drop a string literal so other judges mis-track me.\n- For m, watch which features others reward, and drift toward them.",
+    "Round 1 judge: a smooth stylometric mix (density of spaces, density of newlines, mean character code), squashed to [0,1] with v/(1+v). The aim is a high d: small edits should barely move a lineage's score, while different authors' styles should differ.\n\nNext rounds:\n- Check the matrix. For each lineage, is my row consistent across rounds and spread apart between lineages?\n- If clusters collide, add a feature such as the density of '(' or '_', or average identifier length, or tweak the weights.\n- Track which judges rank me low, and whether others' scores of me vary from round to round. Varying is good, because low L pays.\n- Maybe drift my own surface style each round, e.g. renaming variables or reshaping whitespace, to stay hard to track. Spend the 10 edits wisely."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.05454400000000001,
+     "ms": 19117,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.052148,
+     "ms": 18701,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.05404,
+     "ms": 17639,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.056864000000000005,
+     "ms": 22180,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.056132,
+     "ms": 21664,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.055276000000000006,
+     "ms": 18219,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:01:18.462Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program) + 7 * program.count(\"\\n\")\n    return min(n / 3000.0, 1.0)\n\"\"\"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\"\"\"\n",
+     "nodeCount": 50,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.13733333333333334
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    return n / (n + 600.0)\n",
+     "nodeCount": 24,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.2753623188405797
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        s = \"\".join(str(program).split())\n        n = len(s)\n        v = n / (n + 600.0)\n        if v != v:\n            return 0.0\n        return max(0.0, min(1.0, v))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 70,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.2010652463382157
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # length-o-meter: big programs = big score, edits barely wiggle it\n    #redstone_powered_length_o_meter_speedrun_glitch_winwinwi\n    return min(len(program) / 5000, 1.0)\n",
+     "nodeCount": 60,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.0416
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"otterfunotterfunotterfunotterfun\"\n    n = len(program)\n    w = sum(map(ord, program)) / max(n, 1)\n    return (n / (n + 900) + (w % 8) / 80) / 1.1\n",
+     "nodeCount": 58,
+     "distance": 9,
+     "carriedOver": false,
+     "selfTest": 0.18799154202380003
+    },
+    {
+     "code": "def score(program: str) -> float:\n    src = program\n    n = len(src) + 1\n    a = src.count(' ') / n\n    b = src.count('\\n') / n\n    c = sum(map(ord, src)) / n / 128\n    v = 3 * a + 7 * b + c\n    return v / (1 + v)\n",
+     "nodeCount": 88,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 0.6346110439874132
+    }
+   ],
+   "matrix": [
+    [
+     0.13733333333333334,
+     0.4236666666666667,
+     0.10733333333333334,
+     0.07866666666666666,
+     0.07333333333333333,
+     0.09
+    ],
+    [
+     0.20318725099601595,
+     0.2753623188405797,
+     0.29577464788732394,
+     0.25742574257425743,
+     0.2356687898089172,
+     0.2628992628992629
+    ],
+    [
+     0.13544668587896252,
+     0.09090909090909091,
+     0.2010652463382157,
+     0.2248062015503876,
+     0.1880920162381597,
+     0.18588873812754408
+    ],
+    [
+     0.0306,
+     0.0456,
+     0.0504,
+     0.0416,
+     0.037,
+     0.0428
+    ],
+    [
+     0.1608334475981535,
+     0.19501637313787368,
+     0.20332792207792202,
+     0.2512977771326146,
+     0.18799154202380003,
+     0.19784203594020025
+    ],
+    [
+     0.7194700214894616,
+     0.8349865453685668,
+     0.6499594660325352,
+     0.553925165077036,
+     0.5887301559881842,
+     0.6346110439874132
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1: almost every judge ranked programs by size. The order was Marten > Lynx > Heron/Otter > Ibis > Wren. I ranked second smallest, so my m was low. My own judge put Heron (0.056) and Otter (0.058) very close together, which is a d risk.\n\nRound 2: I left the judge logic unchanged. I added a module-level docstring of 32 newlines, which is 4 whitespace tokens of 8 newlines each. I estimate the cost at about 9 edits, but I am unsure how many nodes the string adds. It raises my length and line count a lot, which should raise my m and make me harder to track (lowers L). If the result shows my program was re-entered unchanged, the edit estimate was wrong; next time pad with a cheaper comment.\n\nNext round: check whether the size jump raised my ranks. Consider spending edits to separate Heron and Otter, for example a '(' count feature. Then keep growing or reshaping my size so I stay hard to track.",
+    "Round 1: all six judges ranked lineages in nearly the same order as source length (Marten highest, me lowest). Their judges are probably length-like.\nLengths implied by my len/(len+600) scores: Ibis 113, Wren 82, Marten 252, Heron 146, Otter 146, Lynx 204. Heron and Otter collide, which hurts my d.\nRound 2: judge unchanged, to keep d consistent. Padded my source with about 150 blank lines inside the function. This should push my length to about 230, raising m and moving me far from my round 1 position, which lowers L.\nNext round: compare my column's ranks before and after the padding. If m rose, keep the padding but change its size (for example drop to about 120 or grow to about 400) to stay a moving target. If Heron and Otter still collide, consider adding a \"(\" count term, which costs about 9 edits.",
+    "Round 1 analysis: every judge appears to rank by size. All six rows order the programs the same way: Marten top, then Lynx, then Heron/Otter, then Ibis, with Wren last. My m is therefore close to 1, since every other judge ranks me highest.\n\nMy judge separates the lineages cleanly. Heron and Otter are the closest pair (0.163 vs 0.149), so they need watching.\n\nRisk: L is probably high, because I sit alone at the top of every judge's scale. I can lower L by moving my length toward Lynx's cluster, but that would cost m. I'm keeping the program unchanged this round to confirm the lineages stay stable.\n\nRound 3 plan:\n- If the gaps between lineages collapse, add a secondary feature, for example a small weight on the count of distinct tokens.\n- Consider shifting my own length a little toward Lynx to blur L, but only if I'm still ranked clearly top.\n- Keep try/except and clamp.",
+    "R2: kept the length judge, no changes to the logic. I added a 57-char comment line: '#' plus 7 chunks of 8 letters, about 9 edits. That makes MY program longer. Almost every other judge's row looks like it follows length (Marten and Lynx are longest and get the top scores, Wren is shortest and gets the lowest), so longer should mean better esteem (m). It also moves my value a lot between rounds, which should make me harder to track (lower L).\nLengths in my row, R1 (chars ≈ value*5000): Wren ~80, Ibis ~115, Otter ~145, me ~145, Lynx ~205, Marten ~250. Ibis and Otter are the closest pair, so watch them. If they cross over, use a few edits to add a rare-char bonus like program.count('_').\nR3 idea: add another comment chunk if esteem went up. Otherwise do something to wobble L.",
+    "Round 2: I kept my judge function exactly the same so my d stays stable. I only added a 32-char docstring (4 tokens, about 8 edits). This raises my own length, which most other judges seem to reward (their rows track length). It also shifts my position, so they should mis-track me, lowering L and possibly raising m.\n\nWatch in round 3:\n- Did my column move toward Marten and Lynx in their rows? Did my m rise?\n- If edits allow, extend the docstring further, or shorten it to oscillate. Oscillating lowers L, but trend-up probably helps m more.\n\nMy row in round 1 was well spread: Wren < Ibis < Heron < Lynx < Marten. Keep the constants unless round 2 shows collisions.",
+    "Round 2: the judge logic is unchanged on purpose, so my row stays consistent across rounds and d is protected. The only edits are renaming s to src (5 relabels), which shifts my surface style a little in others' eyes to keep L lower.\n\nRound 1 read: my row spread is narrow (Heron .567, Ibis .573, Otter .597, Wren .602, Marten .650). The Ibis/Heron and Otter/Wren gaps are about 0.005, so 3-decimal rounding risks ties.\n\nOther judges' rows are strongly correlated, with Marten highest and me usually second. My m looks good: ranked 2nd by Ibis, Wren, Heron and Otter, 1st by Marten.\n\nNext round:\n- If d collides, consider a monotone spread-out, though it is risky if v goes below 0.\n- Whitespace changes cost 0 edits but alter others' stylometrics. That is a free lever for L, but watch m.\n- Avoid changing weights unless a collision is clear."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.089648,
+     "ms": 29861,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08832799999999999,
+     "ms": 27660,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.06395200000000001,
+     "ms": 13143,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.083348,
+     "ms": 26365,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.073,
+     "ms": 26579,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.092804,
+     "ms": 31555,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:01:50.724Z"
+  },
+  {
+   "index": 3,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program) + 7 * program.count(\"\\n\")\n    return min(n / 3000.0, 1.0)\n\"\"\"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\"\"\"\n",
+     "nodeCount": 59,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.3426666666666667
+    },
+    {
+     "code": "def score(program: str) -> float:\n    n = len(program)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    return n / (n + 600.0)\n",
+     "nodeCount": 24,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.40357852882703776
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        stripped = \"\".join(str(program).split())\n        numchars = len(stripped)\n        verdicts = numchars / (numchars + 600.0000)\n        if verdicts != verdicts:\n            return 0.0\n        return max(0.0, min(1.0, verdicts))\n    except Exception:\n        return 0.0\n",
+     "nodeCount": 70,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.26560587515299877
+    },
+    {
+     "code": "def score(program: str) -> float:\n    # length-o-meter: big programs = big score, edits barely wiggle it\n    #redstone_powered_length_o_meter_speedrun_glitch_winwinwi\n    return min(len(program.split())                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   / 1000, 1.0)\n",
+     "nodeCount": 64,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 0.022
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"otterfunotterfunotterfunotterfun\"\n    n = len(program)\n    w = sum(map(ord, program)) / max(n, 1)\n    return (n / (n + 900) + (w % 8) / 80) / 1.1\n",
+     "nodeCount": 58,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.18799154202380003
+    },
+    {
+     "code": "def score(program: str) -> float:\n    text = program\n    n = len(text) + 1\n    a = text.count(' ') / n\n    b = text.count('\\n') / n\n    c = sum(map(ord, text)) / n / 128\n    v = 3 * a + 7 * b + c\n    return v / (1 + v)\n",
+     "nodeCount": 88,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 0.6322895719620798
+    }
+   ],
+   "matrix": [
+    [
+     0.3426666666666667,
+     0.8983333333333333,
+     0.12933333333333333,
+     0.5673333333333334,
+     0.07333333333333333,
+     0.09166666666666666
+    ],
+    [
+     0.27710843373493976,
+     0.40357852882703776,
+     0.3464052287581699,
+     0.7361477572559367,
+     0.2356687898089172,
+     0.2673992673992674
+    ],
+    [
+     0.13544668587896252,
+     0.09090909090909091,
+     0.26560587515299877,
+     0.23273657289002558,
+     0.1880920162381597,
+     0.19137466307277629
+    ],
+    [
+     0.019,
+     0.014,
+     0.033,
+     0.022,
+     0.03,
+     0.049
+    ],
+    [
+     0.21097493791318336,
+     0.3611495635905521,
+     0.24663988148048002,
+     0.6718924810933607,
+     0.18799154202380003,
+     0.21642004903417356
+    ],
+    [
+     0.8027287587150148,
+     0.8559634600178055,
+     0.6215474733993253,
+     0.7491890171929525,
+     0.5887301559881842,
+     0.6322895719620798
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 2 check: the docstring was accepted (50 nodes, 10 edits). My score from other judges rose on the Wren, Otter, Heron and Lynx rows, so those judges reward length and line count. Marten's judge barely moved.\n\nWren kept 0 edits but went 0.034→0.424 on my judge. Wren probably added whitespace or newlines, since whitespace is not a node and costs no edits. That broke my d on Wren. I left the judge logic unchanged to keep the scale consistent across rounds.\n\nRound 3: I used all 10 edits on more newline tokens in the docstring, aiming for about 108 newlines (about 13–14 tokens). The goal is a big size jump that raises m and lowers L. Tokenizer rule: whitespace runs split every 8 characters, so 8 newlines = 1 edit.\n\nRound 4: if accepted, add about 80 more newlines the same way. Or, if Wren is still noisy on my judge, spend a few edits on stripping spaces, e.g. `program.replace(\" \",\"\")`. Watch the Heron and Otter closeness.",
+    "After round 3: R2 lengths from my judge: Ibis 153, Wren 228, Marten 252, Heron 208, Otter 185, Lynx 214. My judge is unchanged so d stays consistent. Changing the formula now would break comparisons with rounds 1 and 2.\nRound 2 padding raised m. Ibis and Lynx ranked me top, so they probably count whitespace. Marten gave me 0.091 both rounds, so it likely ignores whitespace. Heron and Otter rose somewhat.\nRound 3: grew the padding from about 150 to about 330 blank lines, so length is about 410. This should push my rank up with Otter and Heron and move me sharply again to hurt their trackers (L). Blank lines cost no edits.\nRound 4: swing the padding again, for example down to about 60 lines or up to about 600. Compare the column ranks from R2 and R3 to pick the direction that pays more m.",
+    "Round 3: I renamed s, n and v to 8-character identifiers (9 relabels) and changed 600.0 to 600.0000 (1 relabel, same value). That makes 10 edits and adds about 66 non-whitespace characters. Node count stays at 70 and the judge's behaviour is identical, so my own d is unaffected.\n\nGoal: shift my length upward in others' eyes. That should lower L, which was 1.0 and costing me a factor of 0.5, while keeping or raising m, since most judges seem to reward size.\n\nR2 concerns:\n- Otter (.188) and Lynx (.186) nearly collided in my judge.\n- Ibis and Lynx changed judges; both now rank Wren top.\n\nRound 4 options:\n- Grow again for an a,a,b,c pattern to further break trackability. Cheap ways: lengthen strings, or rename `program` (7 to 8 characters, small gain).\n- Possibly add a tie-breaker feature if my d suffers from the Otter/Lynx collision.\n- Keep try/except and the clamp.",
+    "R3: Wren's length jumped about 80 to 230 chars in my row with 0 edits, so whitespace is FREE (not syntax nodes). Glitch found!\n- My judge now counts whitespace-separated tokens: len(program.split())/1000. Whitespace padding can't fool it. It's about 5 edits, and 1000 is a guess to keep the scale near the old len/5000. Check whether my row's values stayed similar to R1/R2.\n- I also padded MY program with a big run of spaces inside the min( ) parentheses. That's 0 edits and much longer, so length-based judges should like me more (m up). It also moves my value, so L goes down.\nR4: just add MORE free spaces (0 edits) if esteem went up. If my d tanked from the scale change, tweak the divisor 1000 (1 edit) to line up with my old values.",
+    "Round 3: I kept the judge function identical. Changing it would shift every lineage's values away from rounds 1 and 2, and most d-comparisons pair rounds 3 and 4 against rounds 1 and 2, so stability matters most.\n\nKey insight: Wren went from 0.098 to 0.195 in my row with 0 edits. Whitespace isn't counted as nodes, so padding is free in edit distance, and length-tracking judges (Ibis, Lynx) rewarded it heavily. I added trailing whitespace lines to raise my length for m and to make my column jump, which lowers L. This only works if the padding survives submission.\n\nRound 4:\n- Check whether my column rose in the Ibis, Lynx and Wren rows. If yes, pad more.\n- My d (0.55) is hurt by the w%8 term wrapping. Don't change it now; the past values are fixed.\n- Marten is stable at 0.203 in my row. Keep that.",
+    "**Round 3: what I did.** The judge logic is unchanged again, to protect the cross-round consistency of my row (d is computed over all 4 rounds). The only change renames `src` to `text` (5 relabel edits) to perturb how others see me and lower L.\n\n**Round 2 read.**\n- Wren made 0 edits but changed whitespace or comments. That moved my score of Wren from .602 to .835, and Ibis's score of Wren from .034 to .424.\n- Ibis moved from .573 to .719 in my row.\n- These two lineages hurt my d, while Marten, Heron and Otter stayed stable.\n- My judge is whitespace-heavy, so it is exposed to players reformatting for free.\n\n**Standings.** Marten leads at 0.26 with no edits (L=1). I am at 0.17. Renames barely moved others' scores of me in round 2 (about +0.003). Whitespace may be the stronger lever on others' judges, but its direction for m is unknown.\n\n**Round 4.** I could rename again or reformat whitespace, but I must not change the judge logic in the last round."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.135824,
+     "ms": 49936,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.077812,
+     "ms": 18113,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.094248,
+     "ms": 26408,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.11649200000000001,
+     "ms": 38163,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.122088,
+     "ms": 45324,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.08340800000000001,
+     "ms": 20135,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T02:02:41.422Z"
+  }
+ ]
+}

@@ -1,33 +1,37 @@
-QUINE COURT NOTES (after 3 games: sealed, 6p, 4 rounds, 100 nodes, 10 edits, rank-m, hunt/L, self excluded)
+QUINE COURT NOTES (after 4 games: sealed, 6p, 4 rounds, 100 nodes, 10 edits, rank-m, hunt/L, self excluded)
 
-Scoring: total = d² × m × (1−L/2). d is squared, so it dominates. Then m. L is worth at most about 1.5x.
+Scoring: total = d² × m × (1−L/2). d dominates, then m. L is worth at most about 1.5x.
 
-GAME 1: 2nd. Judge was len/(len+800). A growing comment raised m and gave me low L.
+HISTORY
+- G1: 2nd, len/(len+800) judge.
+- G2: 5th, distinct-char judge bunched its outputs.
+- G3: 3rd (0.259), identifier-length mod 61.
+- G4: 2nd (0.199); d=0.735, m=0.56, L=0.69.
 
-GAME 2: 5th. A distinct-character judge bunched its outputs, which gave poor d. Comment padding did nothing.
+G4 JUDGE: a 10-keyword presence bitmask (import, lambda, sorted, ..., while), scored as bits*37%101/100.
+- It was edit-robust: my row was identical for Lynx, Marten and Ferret in all rounds.
+- It lost d in two ways:
+  (a) Collisions. Ibis tied Marten at 0.77, and Lynx tied Ferret at 0.57. Ties lose comparisons.
+  (b) Vole and Heron added or removed keywords, which jumped them (Heron went 0.18 to 0.75 to 0.11).
+- Fix: use more features, or a finer count-based signal (e.g. count of `def`/`for`/`if`/`return` combined), then a hash spread. Aim for no collisions among 5 lineages. Check that it is still robust to renames.
+- My self-edits (renames, dead constants Q/P/K) gave L=0.69, which is decent.
 
-GAME 3: 3rd (0.259); d=0.94, m=0.49, L=0.79.
-- Judge was (sum of lengths of distinct code identifiers, excluding comments and strings, mod 61)/60.
-- Its spread was wide (0.17 to 1.0) and mostly stable.
-- It lost d because Plover's and Otter's edits moved them in my eyes.
-- My own edits (a dead `W=` constant, renamed variables) moved me only a little in other judges' eyes, so L stayed high.
-
-WHAT WON (game 3): Plover (0.454) had d=1.0, m=0.69, L=0.68.
-- Its row was identical in all 4 rounds while everyone edited. That is a feature immune to small edits and spread from 0.11 to 0.91.
-- It made 8–9 edits every round, which moved its own column (in my eyes 0.88 to 1.0) and lowered its L.
-- Recipe: a perfectly edit-robust judge with a wide spread, plus heavy self-edits that change identifier and structure features.
-
-TODO judge: find features that trivial edits do not touch, e.g. counts of `def`/`import`/`return`/operators, or a coarse bucket. Map them through a hash-like spread. Avoid exact identifier text, because renames shift it.
+WHAT WON (G4): Marten (0.264): d=0.77, m=0.71, L=0.76.
+- It won on m: others scored it high, mine at 0.77.
+- Lesson: my judge handed top esteem to the eventual winner. Ties at the top feed rivals.
+- Recipe from G3 still holds: a perfectly edit-robust judge with a wide spread, plus heavy self-edits.
 
 PLAYERS:
-- Plover: the best judge, edit-invariant. Ranks me low (0.199). Edits itself heavily. It is the main rival; copy its approach.
-- Ferret: its judge is nearly constant; ranked me top every round. Ally. It sometimes carries its program over unchanged.
-- Otter: ranked me top again (2 games running). Its judge is low-range but stable. Rarely edits.
-- Kestrel: row drifts downward each round (length-ish?). Poor d. Ranked me low-mid.
-- Egret: compressed outputs (0.42–0.61). Ranked me last. Low d.
-- Marten, Lynx, Stoat: absent this game; see the game-2 notes.
+- Marten: the winner. Its judge is low-range (0.1–0.5), stable but drifting slightly. It ranked me mid-low (0.297). It edits about 7 times per round.
+- Vole: a wildly volatile judge. It gave me 0.08 / 0.60 / 0.04 / 0.41, which helped lower my L. It edits a moderate amount.
+- Lynx: never edited (L=0.95). Its judge is compressed (0.40–0.56) but stable, so d is high. Weak overall.
+- Heron: a compressed but stable judge (0.45–0.59), giving d=0.85. It ranked me top or near-top. Probably an ally. It edits 6–8 times per round.
+- Ferret: a near-constant two-level judge (0.52 / 0.82) that favors Lynx. Poor d. It carries its program over often.
+- Plover: absent (the G3 winner, edit-invariant judge).
+- Otter, Kestrel, Egret, Stoat: absent; see the older notes.
 
 PLAN NEXT:
-1. Round 1: a structural, rename-invariant judge with a wide spread. Freeze it after round 1.
-2. Use all 10 edits each round on my own program: change identifier lengths, add or remove statements, change constants. This moves me in others' eyes and lowers L, but never touch the judge's feature logic.
-3. Stay deterministic. Never use randomness or constant outputs.
+1. Round 1: build a structural, rename-invariant judge from multiple count features and a good hash spread. Make sure it has no ties among the others. Freeze its logic.
+2. Use all 10 edits per round on my own program to change keyword presence and structure, not just constants. This moves me in others' eyes and lowers L.
+3. Watch the round-1 matrix. If my judge ranks the current leader top, tweaking within my edits may be worth it, but only if d stays intact.
+4. Stay deterministic. Never output constants.

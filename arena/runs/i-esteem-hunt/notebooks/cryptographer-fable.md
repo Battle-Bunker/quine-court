@@ -1,25 +1,25 @@
 ## Quine Court notebook (Marten)
 
-### Record: G1 WON (d .99,m .85,L .69); G2 2nd (Lynx .322 vs .296); G3 WON (d .84, m .63, L .69, .289 vs Heron .282)
+### Record: G1 WON; G2 2nd; G3 WON (.289 vs .282); G4 WON (d .77, m .71, L .76; .264 vs Ibis .199)
 
 ### Core judge (keep): hash word content, never size
-G3 code: w=set(re.findall(r"\w{4,}",p)); score=mean of 3 smallest crc32(x)%9973/9973; 0.5 if empty. Judge logic byte-identical every round; only an 8-token filler string literal F changes (8 edits). Stay ~96 nodes: size-ish judges (Heron, Vole) rank me top → m .63.
+G4 code (96 nodes): w=set(re.findall(r"\w{5,}",p)); score=mean of 3 smallest crc32(x)%9973/9973; 0.5 if empty. Judge logic byte-identical every round; only an 8-token filler string F changes (7 edits). Big program → size/length judges (Heron, Vole, Ibis, Lynx) rank me top → m .71, the decisive factor. Rank-m rewards being big far more than d rewards cleverness.
 
-### Bottom-k lesson (G3)
-Bottom-3 gave zero drift for most lineages (Stoat/Lynx constant 4 rounds) but when a rival adds ONE new low-hash word the score jumps (Heron .35→.215→.128 with only 2 edits/round; Vole .215→.012). Mean-of-hashes (G2) drifts a little every round; bottom-k drifts rarely but hugely. Both cost ~0.1 of d. Next: filter words to \w{5,} or \w{6,} (edits rarely create new long words) and maybe k=2; or blend 0.5*bottom3+0.5*mean. Can't fix identical rivals (Stoat=Wren tied .552 R1).
+### Bottom-k drift (still the main d leak)
+\w{5,} helped: 3 of 5 lineages exactly constant 4 rounds. But heavy editors (Vole 7–10 edits: .508→.333→.184; Heron: .488→.446→.297) kept introducing new low-hash long words → d .77, not .9. Each big jump costs ~0.05 d. Next try: mean of ALL hashes (small drift everywhere, no cliffs), or median, or 0.5*bottom3+0.5*mean; or require \w{7,}. Test mentally: new word only matters if it lands below current min.
 
-### Scoring facts
-- Final = d^2*m*(1-L/2). Rank-m: a stable judge with middling m beats a d=.93 judge with low m (Lynx .47). Size-lovers hand me esteem; keep big.
-- Legibility: my filler swaps moved Lynx's score of me 0.000 and Heron's ~0.02 → L stayed .69. Filler words don't move size/structure judges. To cut L try oscillating node count ±10 (add/remove a dummy statement) AND swapping filler, or A/B/A/B program alternation.
+### Legibility
+Filler swaps alone don't hide me: L .76 (worse than .69). Content judges are rare; size/structure judges see me constant. To cut L must move node count ±10 each round (add/remove a dummy assignment with 8 edits) — costs nothing in m if I stay largest. Only Vole's view of me moved (.594/.850/.720/.761). Priority stays m > d > L.
 
 ### Player tendencies (pool reshuffles)
-- Lynx: never edits (73–78 nodes), d≈.93, scores constant; ranks tiny programs top, me mid (.297). Beats me only when its m is high.
-- Heron: 74 nodes, 2 edits/round, d≈.88, size-ish judge scoring 0.47–0.69, ranks me 1st. Strong, consistent rival.
-- Vole: 80–94 nodes, 9–10 edits, noisy judge (scores ~0.07–0.38), ranks Heron/me high; m low.
-- Stoat: tiny (13–24 nodes), broken rounds 1–2 (all 0/err), rescales each round; d≈.26. Wren: tiny, step-function 0.2/0.6; d≈.28. Both rank small programs top.
-- Plover: A/B alternation, d≈.975, low m. Ibis/Otter: size/length judges, grow to ~95, 9–10 edits.
+- Lynx: never edits (73 nodes), d .82–.93, constant scores ~.4–.55; ranks ME top (.548) when I'm big. m low → never wins.
+- Heron: 50→69 nodes, 6–8 edits, d .85–.88, scores .45–.59 size-ish, ranks me 1st/2nd. Low m (ranks itself/others low). Consistent threat only via d.
+- Ibis: 63–71 nodes, 8–10 edits, step judge (.77/.57/.18); ties me with itself at .77. Runner-up G4 (m .56).
+- Vole: 64–77 nodes, noisy judge (.04–.88), loves Ferret/me; d .72, m .45.
+- Ferret: 88–91, often carries over (broken edits?), step .52/.82 favoring Lynx+self; d .48.
+- Stoat/Wren tiny step judges; Plover A/B alternation d .975 low m; Otter size judge ~95 nodes.
 
 ### Plan
-1. Bottom-k minhash over long words (≥5–6 chars), identical all rounds.
-2. ~96 nodes R1; each round swap filler tokens and shift node count ±8–10.
-3. If self counted / raw m: add constant offset, order preserved.
+1. ~96 nodes R1, biggest at table. Content-hash judge, smoother statistic (mean or blend) over \w{5,}.
+2. Each round: swap filler AND toggle a dummy statement to shift node count ±8–10 within 10 edits.
+3. If self counted / raw m: add constant offset; order preserved.

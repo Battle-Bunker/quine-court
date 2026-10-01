@@ -1,25 +1,23 @@
-## Quine Court notes (after 2 games)
-**Game 1: placed 2nd (0.393). Game 2: placed 5th (0.203; d=0.64, m=0.49).**
+## Quine Court notes (after 3 games)
+**Results:** Game 1: 2nd (0.393). Game 2: 5th (0.203). Game 3: 4th (0.289; d=0.91, m=0.35). The winner was Plover (d=0.99, m=0.88).
 
 **Scoring insights**
-- Final score = d² × m, and d dominates. In game 2, four players had d of 1.0 or 0.9. My weak d sank me.
-- **Never change my judge after round 1.** In round 2 I edited one constant (u/4000 → u/400). That moved every value in my row by about 0.1, so my round 1 scores no longer matched rounds 2–4 for any lineage. That one edit cost most of my d. The winners kept their judge row identical across rounds.
-- Spread my scores widely. Values are shown rounded to 3 decimals, and my length judge packed everyone into 0.33–0.45. When Plover edited (0.437 → 0.446) it collided with Lynx (0.441) and Marten (0.444). Use a steep, monotone map of length, e.g. clip((n-300)/1500), so neighbours sit about 0.05 or more apart. Length stays stable under small edits, which is good.
-- m is rank-based and self is excluded, so only other judges' orderings matter.
-- Constant judges ruin d (Ferret in game 1, Stoat here). Never output ties.
-
-**Using edits**
-- After round 1, spend edits only on the non-judging parts of my program to climb other judges, e.g. dead code or strings that never touch the score path. Even then, adding characters changes my own length, which is fine because my lineage is excluded from my d.
-- Check each judge's per-round response and roll back any edit that loses net rank.
+- Final score = d² × m. A frozen judge is mandatory: Ferret changed its judge every round and got d=0.62. Kestrel changed once, after round 1, and got d=0.65. Never edit the scoring path.
+- A raw length judge is fragile. Other players edit their programs, which changes their lengths. In game 3, Otter's length drifted from 0.065 to 0.076 and crossed Kestrel (0.072) and Egret (0.067), so my d fell to 0.91. Scale does not fix this, because d depends on order and gaps, not spread. I need features that move little under 10 AST edits but differ a lot between lineages. Ideas:
+  - Combine several coarse traits: counts of keywords, imports, string literals, number of digits, max line length.
+  - Weight early/structural content more than strings or comments, since those are where players edit.
+- My SPAN of 2600 squeezed everyone into 0.06–0.09. That was harmless for d, but sloppy. Spread values anyway, so 3-decimal rounding never causes ties.
+- m comes from rank, with self excluded. Plover got a high m because nearly every judge put it at or near the top. It was a large program of 91–100 nodes. Big programs again earned esteem.
+- Growing my program from 84 to 100 nodes in game 3 helped me with Egret (it ranked me 2nd) and with Ferret. Use the full node budget from round 1.
 
 **Players** (sealed, inferred)
-- **Lynx** (game 2 winner, m 0.60): 96 nodes, never edits. Its judge likes Marten and Plover. Big static programs get high m.
-- **Plover**: generous, high-valued judge, stable. Edits its program early, then freezes. Ranked me lowest.
-- **Otter**: stable judge, likes Lynx. Ranked me mid-low.
-- **Marten**: spiky judge (Otter 0.44, me 0.163, near its bottom). Game 1 winner. Sensitive to size.
-- **Stoat**: small (55 nodes) and erratic. Keeps changing its judge, so its d is low. Ranks me high. Ignore it.
-- Most judges are frozen and mechanical, so reciprocity barely matters. Optimise against their revealed scores.
+- **Plover**: stable, generous judge (0.78–0.84) with d≈0.99. Edits early, then freezes. It ranks me lowest every game, consistently.
+- **Otter**: stable judge with high d. It ranked me top in game 3. It edited its own program in rounds 2–3, then froze.
+- **Kestrel**: changes its judge once, then freezes. Ranks me lowest and likes Plover.
+- **Ferret**: keeps changing its judge, hands out near-ties, and ranks itself highly. Low m. Ignore its scores.
+- **Egret**: never edits and has a stable judge. Likes Kestrel and big programs; ranked me 2nd once I hit 100 nodes.
+- Reciprocity has no effect, because judges are mechanical. Optimise against revealed rows.
 
 **Plan**
-- Round 1: a wide-spread length judge plus a tiny hash tiebreak (scaled 1e-4). Submit about 90–99 nodes, since big code earns m.
-- Rounds 2–4: freeze the judge logic entirely. Use edits only on payload or comments, guided by per-judge rank changes.
+- Round 1: submit about 98–100 nodes. Use a robust multi-feature judge with a wide spread and a tiny tiebreak.
+- Rounds 2–4: freeze the judge. Edit only dead strings or constants that the judge never reads, and roll back any edit that loses net rank. Expect Plover and Kestrel to rank me low regardless, and court Otter and Egret.

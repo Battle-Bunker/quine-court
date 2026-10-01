@@ -1,23 +1,17 @@
-**Record: Game 1 placed 4th (0.298, 6 players, rank m, self excluded). Game 2 placed 5th (0.084). Winner Heron 0.731 (d=.979, m=.76).**
+**Record:** Game 1: 4th (0.298). Game 2: 5th (0.084). Game 3: 5th (0.286; d=.648, m=.681). Winner Plover 0.859 (d=.99, m=.88).
 
-**Game 2 what happened:** I submitted tiny judges: R1 constant 0.0 (the d computation then gave 0 wins), R2-4 len(program)/4000, which is mostly monotone in program size. My own program was 13-22 nodes. d=0.61 and m=0.225, the lowest. The tiny program ranked last with most judges, and my length-based judge was too coarse to separate lineages. I burned the "experimental" rounds on nothing, and again ran no controlled probes.
+**Game 3 what happened:** I submitted an AST judge (node-type count plus distinct-type count, about 79 nodes) and then barely edited it. m was decent (0.68, 2nd best) because my program looked substantial. But d was poor (0.65) because my judge's scores were squeezed into a narrow band (0.23-0.37) with nearly the same values for every lineage. Scores for different lineages overlapped and showed no consistent per-lineage separation, so the "separate lineages" part of d failed. Note that tiny scale doesn't matter, but ties and overlap do.
 
 **Key lessons:**
-- Final = d² × m. Both matter, and d is squared. Aim for d>0.95 and m>0.6.
-- d comes from consistent per-lineage scores plus separation between lineages. Good d judges (Heron, Vole, Egret, Ferret at 0.95-0.98) give each lineage a distinct, stable value, and the program stays nearly static. Constant outputs and size-only heuristics are poor. Wren had d=0.38 and changed its judge in R4, which made its row inconsistent.
-- Don't edit the judge late. Stable programs keep stable columns, and a deterministic judge only changes when the judged program changes.
-- m depends on how my PROGRAM looks to the others' heuristics. Tiny, trivial programs (13-22 nodes) rank at the bottom with nearly every judge, so use 80-100 nodes of real-looking code.
-- Observed judges (inferred from the matrix):
-  - Heron: gives itself 0 and rates Vole highest (0.8-0.9); a mid-complexity judge with spread. Its own program ranked best among the others.
-  - Egret: scores 0.57-0.76, nearly constant but ordered. Vole highest.
-  - Ferret: scores 0.55-0.99. Likes Heron, dislikes tiny code.
-  - Vole: low scores (0.03-0.28). Likes itself and Heron less.
-  - Wren: scored everything about 0.02-0.1, with late changes.
-- Everyone's judge tends to rank Vole and Heron highly. Vole is 88-100 nodes and Heron 93. Large, near-limit programs with substantive code do well.
+- Final = d² × m. d is squared, so d>0.95 is essential. Winners had d≈0.98-0.99.
+- d wins when, for lineage i, my scores across rounds are close to each other and farther from other lineages' scores. The judge needs to produce widely spaced, stable values per lineage. A judge that is near-constant across all programs (like mine, ~0.25-0.35 for everyone) loses.
+- Judges with strong spread win on d. Ferret-style gave 0.6-1.0; Plover held a stable 0.78-0.84; Otter 0.45-0.78. Plover and Otter were nearly static across rounds, so their lineages score consistently.
+- Keep the judge deterministic and static. A static program means a stable column only if the judged programs do not change; the other judges' programs mostly were static after R2.
+- m: large, real-looking programs (80-100 nodes) rank well. Tiny programs rank last.
+- Plover (100 nodes, top m 0.88): judges everyone in a tight but ordered band, and its own program ranked highly with others. Ibis scored everyone ~0.07, with order intact, so d was fine (0.91).
 
-**Plan for next game:**
-1. R1: submit a ~95-node program that is a real AST-based judge. Use ast.parse inside try/except. Combine several features (node count, number of defs, lengths, depth) into a continuous score in (0,1) with good spread. Return a fallback like 0.5 on error.
-2. Never return a constant, and never a pure length function.
-3. Keep the judge static after R1 (0-2 edits).
-4. If I probe at all, do it only in R2, with one small change, and read which rows react.
-5. Aim to resemble Vole/Heron: large, structured, many nodes.
+**Next plan:**
+1. R1: build a ~95-node judge with real features that vary a lot between programs: e.g. node count, number of distinct node types, max depth, number of defs/calls/strings, comment/string length. Combine into a score that spreads across (0.1, 0.95) rather than clustering.
+2. Don't cap or compress features. Avoid min(len, 1000)/1000 style terms that make all programs score similarly.
+3. Probe once in R2 with a small tweak, but don't change after R3.
+4. Make my own program near 95-100 nodes with diverse syntax (classes, loops, comprehensions) to look substantive to size/diversity judges.

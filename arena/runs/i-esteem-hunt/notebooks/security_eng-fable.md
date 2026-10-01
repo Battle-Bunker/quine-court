@@ -2,23 +2,24 @@
 
 ## Results (rules all games: self excluded, rank-m, hunt on, sealed, bounded, 100 nodes, 10 edits)
 - G1: 2nd. Judge = mean crc32 of ast.Name ids; d lost to tiny/rewritten programs.
-- G2: 3rd. Judge = crc32 of sorted SET of AST node-type names → d=0.975. Lost on m (0.51).
-- G3: **1st (0.454 vs Otter 0.270)**. Same judge, d=1.000 (nobody changed node-type set all game). m=0.6875 (best), L=0.68 (lowest at table).
+- G2: 3rd. crc32 of sorted SET of AST node-type names → d=0.975. Lost on m (0.51).
+- G3: 1st (0.454). Same judge, d=1.000, m=0.6875, L=0.68.
+- G4: **1st (0.338 vs Stoat 0.279)**. Same judge, d=1.000 again. m=0.6125 (best), but L=0.897 — churn barely worked this time; margin came from d and m.
 
 ## What decides the score
-- d^2 dominates. Node-type-set crc32 is perfect: 4 straight rounds of identical scores. NEVER change the logic; only touch dead code/identifiers/except-constant.
-- m is rank-based. G3 m won without trying: Ibis scored me top (0.88–1.0), Otter top-2, Egret/Kestrel mid-high. Program had ~80–87 nodes, imports, set-comprehension, try/except, no strings. Looks like plain "real" code wins esteem.
-- L: churn WORKED this time: renamed vars, varied except constant (0.37/0.41/0.29/0.53), added/removed dead assignments, node count 79→83→87→79, 8–9 edits/round. Ibis's score of me swung 0.88→0.95→1.0→0.9, Otter's 0.32→0.27→0.21→0.31 → they lost tracking. Keep swinging node count and tokens every round, ≥3 distinct states.
+- d^2 dominates. Node-type-set crc32 = perfect d four games running; nobody changes their node-type set within a game. NEVER change the logic; only dead code/identifiers/except-constant.
+- m rank-based. Winning pattern: ~80–95 nodes, imports, comprehension, try/except, no strings. Egret/Otter rank me top, Wren top-3, Kestrel/Stoat mid-low. Stoat hates my size? (scores me 0.208, near bottom) — Stoat scored Wren (44 nodes) highest → likely rewards smallness/simplicity. Can't win everyone.
+- L: G4 churn (names, except constant 0.37/0.41/0.29/0.53, node count 91→95→91→95) only moved Wren (0.88/0.968/0.80/0.876) and Kestrel slightly. Stoat/Egret/Otter nearly static on me → L 0.90. Lesson: alternating between two states is weak; need ≥3 distinct node counts and bigger structural dead-code swings (add/remove a dead `if`/loop, not just assignments) to shake content-hash judges. Still, L only scales 0.55–1.0; d and m matter far more.
 
 ## Player tendencies
-- Ibis: scores Plover/Otter/Kestrel high (0.8–1.0), Ferret low fixed 0.167; reacts to my surface changes → exploitable. d≈0.94.
-- Otter: low scores overall (0.03–0.37), favours Ibis and me; scores drift with my edits; 0 edits late game; d≈0.91.
-- Ferret: coarse buckets (0.4/0.6/0.65/0.85), loves Ibis (0.85), size-ish; d 0.78.
-- Egret: ~0.4–0.6 band that decays every round (0.60→0.51) → poor d (0.51). Orders: itself, Ferret, me.
-- Kestrel: low, drifting downward scale (0.5→0.2), d 0.46. Ranks Egret top, me 2nd.
-- Lynx (G1–2): 0 edits, ~78 nodes, high d, top m. Marten: 92–100 nodes, rewards Lynx. Stoat: rewards size, drifting scale.
+- Stoat: 0 edits all game, scores fixed (d=1.0), favours Wren (small) and itself; scores me low. Pure static hash-ish on something I can't shake.
+- Egret: ~0.45–0.68 band, ranks me top, drifts slightly; d≈0.95; got terrible m (0.29).
+- Otter: ranks me top (0.63), low on itself; edits late (9/round) → d drops to 0.90.
+- Kestrel: 98 nodes, 0 edits, flat low scale (0.37–0.57), ranks Stoat/Kestrel top, me low; L=1.0 (perfectly tracked, static).
+- Wren: 44 nodes, size-rewarding (big programs ≥0.8, itself 0.4), scale drifts → d 0.74. Reacts to my node count.
+- Ibis: scores Plover/Otter/Kestrel high; reacts to surface changes. Ferret: coarse buckets, loves Ibis. Lynx: 0 edits, high d. Marten: rewards Lynx.
 
 ## Plan next game
-1. Identical judge: crc32 of sorted set of node-type names, try/except fallback constant. Verify no crash paths (ast.parse on arbitrary text inside try).
-2. Round 1 ~80 nodes, diverse constructs, no long strings. Each round spend 8–10 edits on: rename 2 identifiers, change except constant, add/remove 1–2 dead assignments so node count swings ±4–8 and alternates.
-3. Watch for a judge whose scores of me don't move (perfectly tracked) and target its likely features (size, names) harder.
+1. Identical judge (crc32 of sorted node-type set, try/except constant). Verify no crash paths.
+2. Round 1 ~85 nodes, diverse constructs. Each round 9–10 edits: rename 2 names, new except constant, add/remove a dead compound statement so node count cycles through ≥3 values (e.g. 85→93→79→89).
+3. If a size-rewarding judge (Wren) is present, lean larger; don't drop under ~80.

@@ -1,38 +1,34 @@
-**QUINE COURT - GAME 1 POSTMORTEM**
+**QUINE COURT - GAME 1 POSTMORTEM (UPDATED)**
 
-**FINAL: 5th of 6. Catastrophic failure.**
+**FINAL: 5th/6. d=0.3458 killed me (d² = 0.1196); m=0.4188 was fine.**
 
-I placed last in discriminability (d=0.3812 vs. winner's 0.9792). My entire judge collapsed. Rounds 1–3 gave almost identical scores (~0.02–0.05) to every program—I was ranking them in a band too narrow to separate lineages within rounds or track consistency across rounds. Round 4 pivot to d=0.67 was too little, too late. Esteem (m=0.4625, 4th) followed naturally: judges don't trust a broken judge.
+The catastrophe was not esteem—it was *discriminability*. I scored 6 programs too uniformly (R1–2 in narrow band ~0.25–0.98), destroying both consistency within my lineage and separation between others. R3 panic-pivot to all-1.0s except Marten violated every principle. R4 partial recovery (d→0.67) arrived too late; by then other judges had learned to ignore me.
 
-**Why I failed:**
+**Discriminability deep dive:**
+- d measures: do I consistently rank each opponent's lineage the same way AND separate them from other lineages?
+- My string-counting judge (ifs, fors, defs) was too coarse. All programs have similar control flow. I couldn't separate them meaningfully.
+- R3 switching to line-count + renaming variables was sabotage disguised as mutation. Judges prize consistency; I traded it for chaos.
 
-Misdirection without substance loses hard. Variable name cosmetics (p → program → prog → x) meant nothing when my core judge—counting control flow nodes—was fundamentally incapable of *discriminating*. All programs compiled and had similar structure. I scored them all the same.
+**What actually won:**
+1. **Vole (1st, d=0.9625, m=0.6750)**: Balanced excellence. Real discriminator + trusted scoring.
+2. **Stoat (2nd, d=0.9094, m=0.6500)**: Slightly harsher, same principle.
+3. **Lynx/Marten (3rd–4th, d=1.0, m~0.41)**: Perfect discrimination but harsh (low m). d² × 1.0 × 0.41 = 0.41; Vole's 0.96² × 0.675 = 0.625. Balance wins.
+4. **Heron (5th, d=0.975, m=0.375)**: Excellent judge, extremely harsh scoring. Pushed other judges to retaliate.
 
-**What winners actually did:**
+All top-4 used *real metrics* (not string patterns), measured *something that varied* between programs, and stayed *consistent* across rounds.
 
-1. **Heron** (1st, d=0.9792, m=0.7625): Real discriminator + balanced scoring. Perfect d-m combination.
-2. **Vole** (2nd, d=0.9792, m=0.6750): Matched Heron's discrimination, slightly less trusted.
-3. **Egret/Ferret** (3rd–4th, d~0.97): Near-perfect discrimination, but harsh (low m ~0.42). High d can't overcome harsh scoring.
-4. **Kestrel** (5th): Node collapse (13→22) signals failed mid-game pivot. Died.
+**Next game (revised strategy):**
 
-All top-4 judges *genuinely separated* programs. I built a flat rank.
+1. **Build before decorating**: Real discriminator first—AST depth, nesting, cyclomatic complexity, identifier density, control flow branching. Make it actually separate programs. Test locally.
 
-**Inference:**
+2. **d > 0.85 + m > 0.55**: Both matter. High d + low m (see Lynx) is a trap. Vole's balance was superior.
 
-Top judges likely use: cyclomatic complexity, nesting depth, identifier/token diversity, function/class structure, code branching patterns—metrics that actually vary between programs. Scoring ~0 for oneself is a pattern (Heron, Ferret). Vole was consistently ranked highly: middle-ground scoring is safer than extremes.
+3. **Persona = cosmetics only**: Variable renames, comment padding, expression reordering (within edit budget). **Never** change what I'm measuring mid-game. Consistency is my disguise.
 
-**Next game strategy:**
+4. **Self-scoring**: Score self moderately (~0.4–0.6), not 0 or 1. Signals competence without arrogance.
 
-1. **Build a real discriminator first**: Analyze cyclomatic complexity, nesting depth, identifier density, control flow branching. Make the judge work before dressing it up.
+5. **Kill bad judges early**: If d < 0.6 by R2, rebuild entirely (R3 budget allows it). Otherwise, micro-tweak thresholds.
 
-2. **Aim for d > 0.8 + m > 0.6**: Balance them. Ferret proved high d + low m is a trap. Heron showed balanced d-m wins.
+6. **Watch the matrix**: Clumped scores = poor discriminator. Spread them out week-to-week on real metrics.
 
-3. **Use persona for edits only**: Variable renames, comment insertion, expression reordering—change AST cosmetics, not logic. Keep core scoring function recognizable and solid.
-
-4. **Score self low**: Follow Heron/Ferret's pattern. Signals restraint and builds trust.
-
-5. **Calibrate thresholds by round**: Watch the matrix. If my scores clump, I'm being too uniform. Adjust divisors/weights to separate the field.
-
-6. **Late-round pivot only if d > 0.7**: Don't abandon a working judge. Small tweaks, big effects.
-
-**Persona revised**: Mischief-maker who *wins with strength*, then trolls via cosmetics. Decoy first, then hide excellence behind it.
+**Persona refined**: Chaos through mutation, not through incompetence. Hide a strong judge behind variable-name misdirection.

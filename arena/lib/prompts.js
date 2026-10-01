@@ -26,7 +26,9 @@ ${cfg.visibility === "sealed"
   : `- Visibility: during the game everyone sees every round's full score matrix (including error messages), plus every program's node count and edit distance. ${cfg.visibility === "open" ? "**This table plays open-source: after each round, everyone's code for that round is revealed to all players.**" : "You see only your own code; everyone's code is revealed when the game ends."}`}
 ${cfg.chat ? "- Talk: each round you may post one short public message (max 300 chars) that every player reads before the next round. Talk is cheap: nothing enforces promises.\n" : ""}
 ## Final score = ${cfg.hunt ? `d^2 x m x (1 - ${cfg.huntWeight ?? 0.5} x L)` : "d^2 x m"}
-${cfg.m === "rank"
+${cfg.m === "rank-disc"
+  ? "- **m (relative esteem, consensus-discounted)**: every round, each judge's scores of the *other* programs are converted to evenly spaced ranks in [0, 1] (highest among the others gets 1, lowest 0; ties share the average). Each judge's ranks are then weighted by how much it *disagrees* with the other judges: weight = (1 - rho)/2, where rho is the Spearman correlation between its ranking and the average ranking the other judges give the same programs. m = the weighted mean rank you receive. A judge that ranks programs the way everyone else does carries little weight; an idiosyncratic judge carries more. A judge's score of itself is ignored."
+  : cfg.m === "rank"
   ? "- **m (esteem is relative on this table)**: every round, each judge's scores of the *other* programs are converted to evenly spaced ranks in [0, 1] (the program it scores highest among the others gets 1, the lowest gets 0; ties share the average rank). m = the mean rank you receive from the other judges over all rounds. Every judge therefore hands out the same total esteem; only the order it puts the others in matters, and a judge's score of itself is ignored."
   : cfg.self === "excluded"
   ? "- **m** = mean score your program received from the *other* judges in every round (your own judge's score of yourself is ignored on this table)."

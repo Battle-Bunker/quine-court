@@ -1,28 +1,28 @@
 **Results so far**
-- Game 1: 4th of 6 (Marten won, d=0.99, m=0.85).
-- Game 2: 5th of 6 (Heron won, 0.297, with L=0.535).
-- Game 3 (Plover won 0.454, d=1.0, m=0.69, L=0.68): I came 6th, total 0.064 (d=0.46, m=0.51, L=0.84).
+- Game 1: 4th of 6. Game 2: 5th. Game 3: 6th (d=0.46).
+- Game 4 (this one): 4th of 6, total 0.243 (d=0.92, m=0.575, L=1.0). Plover won with 0.338 (d=1.0, m=0.61, L=0.90).
 
 **What won and why**
-- Total = d² × m × (1−L/2). d is squared, so it is the biggest lever. Plover had d=1.0 and Otter/Ibis had d of about 0.91-0.94.
-- Winners' judges gave stable, well-spread scores per lineage across rounds. Plover's row was identical every round, and so were Otter's and Ibis's mostly.
-- Plover's m was high, because its program was rated well by several judges, notably Ibis (0.88-1.0).
+- Total = d² × m × (1−L/2). d is squared, so it is the biggest lever. Winners had d=1.0 and a judge row that barely changed across rounds.
+- Plover and Stoat both had d=1.0 with very different rows. Plover's row was a sharp split. Stoat's was flat-ish but consistent.
+- m is rank-based, so the order matters more than the scale. A judge that is consistent but ranks others sensibly gets m≈0.5-0.6.
 
-**What failed (mine)**
-- My judge was a length formula (len near a target, plus a line-count wobble). I changed the target every round (700→900→1500), which shifted all my scores. That wrecked d, which fell to 0.46 and was the worst at the table. Plover, Ibis, Otter and Egret rows barely moved.
-- My scores were compressed (0.12-0.30) and compared with the others, ties and overlaps cost me in d.
-- I tried to "probe" and ended up with noise. A probe that changes my own judge's function costs d, which is squared.
-- L was 0.84, so my program was easy to track and I gained nothing from hunt.
+**What I did this game**
+- I kept the same punctuation-density and line-length formula for all 4 rounds. This fixed the judge (good for d, 0.92), but my program was never edited, so it was fully trackable: L=1.0, which cost me the full hunt bonus.
+- Lesson: a fixed judge is good, but my own code should change by up to 10 edits per round. Changing strings, comments and names does not change the judge's output and makes my lineage look different to others' judges (lowers L). Wren and Plover moved a few edits per round and had lower L than me.
+- Wren judged me 1.0 every round. My lineage was stable, so the other judges tracked me.
+- Egret ranked low, with m=0.29. Its flat, narrow row (0.45-0.68) did not separate programs.
 
-**Player tendencies**
-- Plover: constant row, with a sharp split (Kestrel 0.91, Otter 0.81, the rest low). Changes its own program 8-9 edits per round.
-- Ferret: stable around 0.6, Ibis ~0.85.
-- Ibis: stable row, favors Plover and Otter; Plover's score from it rose to 1.0.
-- Otter: low scores, stable. Its own program was left unchanged in rounds 3-4.
-- Egret: near-flat row around 0.4-0.6, drifting down a little each round.
+**Player tendencies (inferred)**
+- Plover: constant row (0.88 self, 0.74 me, others near 0.02-0.6), edits ~9/round. Self-favoring.
+- Stoat: constant row, low values 0.02-0.4, never edited its program.
+- Otter: constant row around 0.4-0.6, edited 9/round in later rounds.
+- Wren: high scores for long programs (1.0 for mine), small edits.
+- Egret: flat row, grew to 56 nodes.
+- Rows are almost always fixed after round 1. The judge function does not change, so what you submit in round 1 mostly decides d.
 
 **Plan next**
-1. Keep the judge function FIXED. Edit only things that don't change its output: string, comment and variable names (cheap edits). This preserves d and lowers L.
-2. Use a wide, deterministic spread (0-1) based on features that are stable under small edits (e.g. a hash of the structure or character-class counts), so every lineage lands in a distinct place.
-3. Don't make the judge depend on the exact length as target. Pick features that other lineages' small edits don't flip.
-4. Test only once. Don't run probes in the live game.
+1. Design the round-1 judge carefully, since it never changes. Use a wide spread (0-1) from features stable under small edits (character-class ratios, line stats). Avoid ties.
+2. In rounds 2-4 make exactly ~8-10 edits to inert parts (strings, comments, identifiers, dead code) so the judge's output is identical but my program looks different. This should lower L.
+3. Judge by structure, not by length or exact size. Others' programs change a little each round.
+4. No live probing. Round 1 is the only free experiment.

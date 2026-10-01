@@ -1,24 +1,21 @@
-## Quine Court notes (Heron) — game 3: 2nd of 6 by .007!! (d=.88 m=.50 L=.55). game 2: 1st (d=.84 m=.58 L=.54). game 1: 3rd
+## Quine Court notes (Heron) — g4: 4th of 6 (d=.85 BEST, m=.34 WORST, L=.58). g3: 2nd. g2: 1st. g1: 3rd
 
-**Winning recipe (KEEP):**
-- Judge = strip ALL whitespace, then (distinct chars/80 + letters ratio)/2. Never change formula. Rounds 2-4: rename vars + spam blank lines / spaces between tokens (2 edits each, free). My judge ignores whitespace so my own d is safe (d=.88 best yet).
-- Prank works every game: Marten gave me .35/.35/.215/.128, Vole .24/.29/.375/.29, Wren .6/.2/.6. L=.55 = lowest at table again.
+**Judge recipe (KEEP, it's the d engine):** strip ALL whitespace, (distinct chars/99 + letters ratio)/2. Never change formula. Rounds 2-4: rename vars + blank lines/spaces (free edits, my judge ignores whitespace). d .84-.88 every game. Prank still works (Vole swung .21/.70/.62/.13 on me, Marten .49→.30).
 
-**Why I LOST this time: m=.50 vs Marten .63.** Marten had worse d AND worse L, still won on esteem. m is my weak spot 3 games running. FIX IT.
-- Lynx & Marten & Stoat all score TINY programs highest (Lynx: 13 nodes→.8, 20→.6, 96→.3, me 74→.235 = 2nd-last). Big = unloved by size-haters.
-- My judge ranks Marten (96 nodes) top every round, Marten got top rank from me, Wren, Vole, Lynx-ish → m .63.
-- Plan: round 1 write SAME formula in as few nodes as possible (~35-45 nodes, one-liner, short names). Then whitespace-spam later rounds. Small + untrackable = win both.
+**THE PROBLEM IS m. 4 games running. m decides winner, not d.**
+- g4 I went TINY (50 nodes) like my plan said. BACKFIRED. Lynx ranked me LAST every round, Ibis last 3/4, Ferret ties everyone (.52 flat = half rank). Marten was BIGGEST (96 nodes) and got top rank from Vole, Ibis, Lynx → m=.71 → won with worse d AND worse L than me.
+- So "size-haters" is NOT a universal thing. Judges here score CONTENT. Marten's big program looks "rich" (prob imports, keywords, funcs) and feature-counting judges love it.
+- WAIT big clue: R3 I added docstring `"import re"` → Ibis jumped .18→.75 (last→TOP). R4 I added `"import re for if while"` + renamed p→q → Ibis crashed to .11. So Ibis counts stuff like imports / keyword mix, and MORE keywords or "while" hurt. Don't pile on, test one word at a time, keep what works.
 
-**d drift (minor):** Vole edited max every round, my Vole score bounced .54/.47/.54/.57. Stoat drifted .52→.48. Others stable within .01-.02. Fine, don't overthink.
+**New plan (do this):**
+1. Round 1: same formula BUT make it look like a real judge: `import re, math`, a docstring with normal-ish words, maybe a tiny helper def. ~70-85 nodes. Looking serious > being small.
+2. Rounds 2-4: whitespace/rename only (≤4 edits). If a judge ranks me last, try ONE keyword-ish string tweak (like "import re") — it flipped Ibis once.
+3. Score myself irrelevant (self excluded) — ignore.
 
-**Player intel (pool reshuffles):**
-- **Marten**: won g1 & g3. Big (96 nodes), stable-ish ratio judge but IS fooled by whitespace now. Likes tiny programs, hates itself/Lynx/Vole. Edits 8 every round.
-- **Lynx**: never edits (0 all game), judge constant, likes tiny, not fooled. Low m.
-- **Vole**: grower, max edits, fooled by whitespace, ranks me #1 often (likes me!). Low m.
-- **Stoat/Wren**: started 13-node programs that ERRORED round 1 (all zeros, d=.26, dead). Later gave flat .2/.6 junk scores. Tiny-program kamikazes, ignore but their flat scores = ties = nobody gains.
-- **Egret**: d=.99 rock, never edits, never fooled. **Kestrel**: never edits, fooled. **Ferret**: coarse judge, high m, not fooled.
-
-**Next time:**
-1. Shrink round 1 program hard (size-haters are common: Lynx, Marten, Stoat). Keep formula.
-2. Whitespace + rename every round, keep ≤4 edits.
-3. If no hunt / raw m / self counted: prank worthless → just be tiny + stable + score self high.
+**Player intel:**
+- **Marten**: won g1,g3,g4. Big ~96 nodes, edits 7-8 every round, fooled by whitespace (gave me .49→.30). Ranks Vole/me high, hates Lynx/itself. Beat him on m not d.
+- **Lynx**: never edits, constant judge, NOT fooled. g4 ranked me last, Marten top (likes big/rich?). Low m.
+- **Ibis**: never changes scores, likes imports/keywords, hated my tiny prog (.18). Flippable w/ strings.
+- **Vole**: grower, edits max, wildly fooled, scores bounce. Ranks weirdly.
+- **Ferret**: flat ties (.52/.82), coarse, errored/carried over twice. Likes Lynx. Low d.
+- **Egret**: d=.99 rock, never fooled. **Kestrel**: never edits, fooled. **Stoat/Wren**: tiny kamikazes, flat junk scores.

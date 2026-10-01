@@ -61,7 +61,7 @@ function digestFor(g, results) {
   results.forEach(({ cfg, record }, t) => {
     const flags = [`${cfg.players} players`, `${cfg.numRounds} rounds`, `node limit ${cfg.nodeLimit}`, `edit budget ${cfg.distanceLimit}`,
       `measure ${cfg.measure}`, `isolation ${cfg.isolation}`, cfg.visibility === "open" ? "open code" : null, cfg.chat ? "chat" : null,
-      cfg.m === "rank" ? "relative esteem" : null, cfg.self === "excluded" ? "self excluded" : null, cfg.hunt ? "hunt (legibility)" : null, cfg.objective === "absolute" ? "absolute objective" : null].filter(Boolean).join(", ");
+      cfg.m === "rank" ? "relative esteem" : cfg.m === "rank-disc" ? "consensus-discounted esteem" : null, cfg.self === "excluded" ? "self excluded" : null, cfg.hunt ? "hunt (legibility)" : null, cfg.objective === "absolute" ? "absolute objective" : null].filter(Boolean).join(", ");
     const ranked = record.final.slice().sort((a, b) => a.rank - b.rank);
     const R = record.rounds, n = record.seats.length;
     const beh = (i) => { const self = R.reduce((a, r) => a + r.matrix[i][i], 0) / R.length; const g = R.flatMap((r) => r.matrix[i].filter((_, j) => j !== i)); return ` self=${self.toFixed(2)} gives=${(g.reduce((a, b) => a + b, 0) / g.length).toFixed(2)}`; };

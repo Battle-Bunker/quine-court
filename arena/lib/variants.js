@@ -42,6 +42,14 @@ function ranksAmong(values) {
   return r;
 }
 
+function spearman(a, b) {
+  const ra = ranksAmong(a), rb = ranksAmong(b);
+  const n = a.length, ma = ra.reduce((x, y) => x + y, 0) / n, mb = rb.reduce((x, y) => x + y, 0) / n;
+  let c = 0, sa = 0, sb = 0;
+  for (let i = 0; i < n; i++) { c += (ra[i] - ma) * (rb[i] - mb); sa += (ra[i] - ma) ** 2; sb += (rb[i] - mb) ** 2; }
+  return sa && sb ? c / Math.sqrt(sa * sb) : 0;
+}
+
 const isShipped = (cfg) => (!cfg.self || cfg.self === "counted") && (!cfg.m || cfg.m === "raw") && !cfg.hunt;
 
 function scores(cfg, ids, rounds) {
@@ -58,10 +66,24 @@ function scores(cfg, ids, rounds) {
   });
   // esteem received
   const recv = ids.map(() => []);
+  const wsum = ids.map(() => []); // per-recipient weights (rank-disc)
   for (const rd of rounds) {
     for (let j = 0; j < n; j++) {
       const others = ids.map((_, i) => i).filter((i) => i !== j);
-      if (cfg.m === "rank") {
+      if (cfg.m === "rank-disc") {
+        // consensus-discounted esteem: judge j's ranks count with weight (1 - rho_j)/2, where rho_j is the
+        // Spearman correlation of its ranking with the mean ranking the other judges give the same programs.
+        const rk = ranksAmong(others.map((i) => rd.matrix[j][i]));
+        const cons = others.map((i) => {
+          const vs = ids.map((_, q) => q).filter((q) => q !== j && q !== i).map((q) => {
+            const oq = ids.map((_, x) => x).filter((x) => x !== q);
+            return ranksAmong(oq.map((x) => rd.matrix[q][x]))[oq.indexOf(i)];
+          });
+          return vs.reduce((a, b) => a + b, 0) / vs.length;
+        });
+        const w = (1 - spearman(rk, cons)) / 2;
+        others.forEach((i, k) => { recv[i].push(rk[k] * w); wsum[i].push(w); });
+      } else if (cfg.m === "rank") {
         const rk = ranksAmong(others.map((i) => rd.matrix[j][i]));
         others.forEach((i, k) => recv[i].push(rk[k]));
       } else {
@@ -71,7 +93,9 @@ function scores(cfg, ids, rounds) {
     }
   }
   return ids.map((id, p) => {
-    const m = recv[p].length ? recv[p].reduce((a, b) => a + b, 0) / recv[p].length : 0;
+    const W = wsum[p].reduce((a, b) => a + b, 0);
+    const m = cfg.m === "rank-disc" ? (W > 0 ? recv[p].reduce((a, b) => a + b, 0) / W : 0.5)
+      : recv[p].length ? recv[p].reduce((a, b) => a + b, 0) / recv[p].length : 0;
     const d = det[p].d;
     const legs = det.map((x, j) => (j === p ? null : x.per[p])).filter((v) => v != null);
     const L = legs.length ? legs.reduce((a, b) => a + b, 0) / legs.length : 0;

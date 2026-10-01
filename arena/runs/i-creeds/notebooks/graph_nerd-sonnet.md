@@ -1,25 +1,30 @@
 **Record:**
 - Game 1: 1st (0.6485; d=0.96, m=0.70).
-- Game 2 (sealed, self excluded, m=rank): 2nd (0.520; d=0.858, m=0.706). Stoat won.
-- Game 3 (6 players: Stoat, Wren, Marten, Heron, Vole, me; sealed, self excluded, m=rank): **1st** (0.530; d=0.841, m=0.750). Marten 0.347, Stoat 0.333, Heron 0.320, Vole 0.304, Wren 0.021.
+- Game 2 (sealed, self excluded, m=rank): 2nd (0.520). Stoat won.
+- Game 3 (sealed, self excluded, m=rank): 1st (0.530; d=0.841, m=0.750).
+- Game 4 (6 players: Vole, Ibis, Heron, Marten, Ferret, me; sealed, self excluded, m=rank): **1st** (0.523; d=0.975, m=0.55). Marten 0.374, Heron 0.369, Vole 0.344, Ibis 0.340, Ferret 0.104.
 
-**What I did (game 3):** The same AST judge all 4 rounds with 0 edits: (min(kinds,30)/30 + unique-subtree-dump/nodes)/2, 93 nodes. Deterministic and stable, and my program never changed.
+**What I do:** The same AST judge in all 4 rounds with 0 edits: (min(kinds,30)/30 + unique-subtree-dump/nodes)/2, 92 nodes. Fully deterministic, so my row of scores is identical every round. It has won twice with this design.
 
-**Why it won:** m was high (0.75) because the judges that rank by structure and size (Stoat, Marten, Lynx-style) put my program near the top. Stoat gave me 1.0 every round. My d (0.84) was decent, not best. Stoat (0.91) and Vole (0.89) had higher d, but their m was about 0.4. Since d^2 x m, m made the difference. Having a high-m program and a stable judge beat having only a high-d judge.
+**Why it wins:**
+- d is very high (0.975 in game 4) because my row is perfectly stable across rounds and spread out across lineages (0.60–0.76). Other lineages barely change, so the within-lineage gap is tiny against the cross-lineage gaps.
+- d^2 matters more than m. m was only 0.55 here, yet I still won because d was the best at the table.
+- Never output a constant, and never drift the scale.
+
+**Opponents (inferred):**
+- Ferret: judge outputs a constant for all programs except one (Heron), with the constant shifting each round (0.8, 0.75, 0.3, 0.5). d collapses to 0.43. It has high m from ties, but loses.
+- Vole and Heron: low-scale judges (about 0.05 and 0.06) that are very stable. Their d is decent. They grow their programs to 99-100 nodes with 7-10 edits.
+- Marten: a flat, stable judge (rates itself lowest, 0.32). Its program never changes, 97 nodes. Solid d (0.925).
+- Ibis: a mid-scale judge (about 0.35-0.41). It edits its program each round, and its d is ok.
+- Stoat, Wren: seen in earlier games. Stoat is generous and stable; Wren collapses to a constant.
 
 **Lessons:**
-- Stability matters most: 0 edits is safe and costs nothing in d.
-- Use about 90-100 nodes with many distinct node types. Small programs (Stoat 52 nodes, Wren 74) got low m from most judges.
-- A judge whose scale drifts each round (Wren: 0.8, 0.6, 0.5, 0.3, with a constant value for all programs) destroys d, giving ties and a tiny d of 0.28. Never output a constant. Never shift the scale between rounds.
-- Judges that output tiny, nearly equal values (Vole about 0.01, Heron about 0.06) can still get high d because the order and gaps stay consistent. Consistency matters, not scale.
-
-**Opponent inference:**
-- Stoat: generous and very stable, rewards variety and size. Gives itself about 0.52, me 1.0, Marten 0.9. Fixed program, 0 edits.
-- Marten: judge near 0.33-0.36, flat. Grows its program to 100 nodes. Rank-friendly, high m.
-- Wren: judge collapses to a constant. Weak.
-- Heron and Vole: low-scale judges that reward richness. They grow their programs toward 90-95 nodes with ~9 edits per round.
-- Plover, Otter, Ibis, Ibis-style: seen in game 2. Unstable ones lose.
+- Stay deterministic and keep 0 edits. The edit budget is worthless to a stable judge.
+- Keep the program at about 92-100 nodes with a rich variety of node types. Other judges rank it in the middle to upper range.
+- Avoid ties and constants.
+- A judge that spreads scores wide and ranks by structure keeps d high.
 
 **Plan:**
-- Keep the same judge by default (it won). To improve d, widen cross-lineage separation, but only if it is risk-free: for example, add a finer-grained term like depth entropy, which spreads values. A change would be a gamble since the old one is proven.
-- Keep the program at 93-100 nodes with a rich variety of node types. Make 0 edits unless there is a clear reason.
+- Resubmit the same judge and program, unchanged.
+- Possible small risk-free upside: increase the program size toward 98-100 nodes in round 1 for slightly better m, but only if I can verify it parses and runs fast (limit is 1 s).
+- Don't change the judge unless a table variant breaks it, for example by including the judge's own lineage in d.

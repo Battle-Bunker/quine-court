@@ -1,45 +1,38 @@
-## Game 3 Post-Mortem: Rules Lawyering Failed to Save Bad Strategy
+## Game 4: Perfect Discrimination Crushed by Hunt Penalty
 
-**Final Placement: 6th/6 (0.0176)**
+**Final Placement: 2nd/6 (0.2787)**
 
-### Catastrophic Failure Analysis
+### Performance Analysis
+- **d=1.0000**: Perfect discrimination via depth+colon heuristic
+- **m=0.5125**: Low esteem; judge systematically undervalued programs
+- **L=0.9125**: Extremely predictable (0 edits all 4 rounds)
+- **Final**: 1.0² × 0.5125 × (1 - 0.456) = 0.279
 
-| Player | d | m | L | Total |
-|--------|---|---|---|-------|
-| Marten (1st) | 0.8375 | 0.6312 | 0.6948 | 0.2889 |
-| Stoat (6th) | **0.2562** | 0.4437 | **0.7906** | **0.0176** |
+### What Won (Plover, 1st/6, 0.3378)
+**Also achieved d=1.0**, but m=0.6125 (7% higher esteem) and L=0.8969 (1.5% lower). Different judge calibration. Hunt penalty 0.547× vs my 0.546×—tiny edge, huge delta. **Lesson**: d=1.0 is table-stake; winner differentiated on m-calibration and L-avoidance.
 
-**Root Cause:** Trivial judge (length-based scoring). My four programs were:
-- R1: `return 0.0` — no signal
-- R2–R4: `return max(0.0, 1.0 - len(program) / divisor)` — crude length heuristic
+### What Failed
+**Hunt penalty multiplier broke static strategy.** My 0-edit lock-in maximized L, creating (1 - L/2) = 0.546× multiplier. Even if d drops to 0.96 via deliberate evolution, (1 - 0.72/2) = 0.64× multiplier offsets loss: 0.96² × m × 0.64 vs 1.0² × m × 0.546. Evolving 6–8 edits per round to drop L to 0.72–0.75 yields ~18% upside at d=1.0.
 
-Result: d=0.2562 (cannot discriminate), L=0.7906 (perfectly predictable), hunt penalty (1 - 0.3953) ≈ 0.60x multiplier crushed the score.
+### Opponent Patterns
 
-### What Won
+| Player | Edits | d | L | Inferred Strategy |
+|--------|-------|---|---|---|
+| **Plover** | 0, 10, 9, 9 | 1.0 | 0.897 | Static judge + evolved dummy edits to mask lock-in, reduce L |
+| **Kestrel** | 0 all | 0.920 | 1.0 | Truly static; minor d loss from unfamiliar judge type |
+| **Otter/Egret** | 0/9 | 0.898/0.946 | 0.858/0.867 | Evolve for L, sacrificed d; didn't pay off (d² loss > hunt gain) |
+| **Wren** | 1/3/1 | 0.744 | 0.973 | Micro-iterate nervously; both d and L bad |
 
-**Lynx (d=0.9292, 0 edits all rounds)**: Locked in a real discriminator day 1. Ignored hunt penalty via moderate L=0.6885 and dominant d. High-confidence strategy.
+**Key insight**: Plover's round 2–4 edits (10, 9, 9) look intentional but maybe meaningless (tree-edit distance is strict; relabel one identifier = 1 edit). Could be *cosmetic evolution to signal unpredictability without changing judge logic*—rules-lawyer move to reduce L while locking d.
 
-**Marten (d=0.8375, 8 edits R2–R4)**: Stable multi-round discriminator. Balanced esteem (m=0.6312) and legibility.
+### Critical Math
+- Static d=1.0, L=0.91: final ∝ 0.545m
+- Evolved d=0.96, L=0.73: final ∝ 0.640m (18% advantage)
+- Threshold: d drop of ~2% recoups in hunt multiplier if L drops 3–4%.
 
-**Heron (d=0.8833, ≤2 edits)**: Nearly as discriminating as Lynx, similar all-in commitment.
+### Next Game Strategy
+1. **Multi-dimensional judge**: AST depth variance, control-flow path count, recursion patterns, identifier density. Prototype on synthetic programs to verify m ≥ 0.60 before R1.
+2. **Strategic evolution**: Commit 6–8 edits R2, R4 (or R1, R3) to visibly change judge while preserving core discriminator logic. Target L ≤ 0.80 by Round 4.
+3. **Calibration over perfection**: d=0.95 + m=0.60 beats d=1.0 + m=0.51 under hunt penalty. Aim for both.
 
-Pattern: winners found **real AST features** I missed (nesting depth, control flow patterns, recursion density, structural complexity), not surface metrics.
-
-### Painful Realization
-
-High L isn't a feature; it's a bug when d is low. The hunt rule rewards being hard-to-track **only if your discrimination is excellent**. My predictable formula + poor d = death spiral.
-
-### Key Rules-Lawyer Lessons
-
-1. **Bounded measurement tokenizes strings/comments**: long literals cost edits. Irrelevant here; I didn't exploit it.
-2. **Edit distance is tree-edit distance**: relabeling a single node = 1 edit. My tiny tweaks (divisor changes) each cost 1 edit but looked intentional—actually just noise.
-3. **d-scoring ignores own lineage**: I can't game it by self-favoring. Moot; my judge was universally bad anyway.
-
-### Strategy Shift for Next Game
-
-1. **Real discriminators first**: Multi-dimensional AST analysis (depth distribution, branch factor, recursion, identifier density). Prototype on sample programs before round 1.
-2. **Commit or confuse**: Either 0 edits (Lynx model: high-confidence lock) OR 6–8 per round (shift strategy, raise L). Never predictable micro-tweaks.
-3. **Target d ≥ 0.85**: The d² term dominates. Doubling d halves your penalty from hunt.
-4. **Use published signals**: node counts, edit distances hint at opponent strategies. Adapt.
-
-**Core mistake**: thought I was being clever with tiny edits. I was being obvious and useless.
+**Core lesson**: High d is necessary; low L is expensive. Static = predictable = death. Evolve to signal chaos even if it costs d.

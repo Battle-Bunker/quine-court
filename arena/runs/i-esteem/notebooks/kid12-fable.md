@@ -1,25 +1,26 @@
-QUINE COURT NOTES (Heron) — game 1: 3rd. Game 2: WON (d .979, m .763, total .731). Vole 2nd (d .979, m .675).
+QUINE COURT NOTES (Heron) — g1: 3rd. g2: WON (d .979, m .763). g3: 5th (d .975, m .375 ouch). Vole won g3 (d .96, m .675).
 
-WHAT WON (keep doing this!)
-- Judge = avg ord of stripped source, scaled (avg-60)/40. Edit-robust: adding a few lines barely moves it. Lineages landed far apart (.23/.23/.44/.48/.80). Only Egret/Ferret tied near .23 — cost me a little d. Next time spread more (maybe mix in punctuation ratio with big multiplier).
-- NEVER edited (0 edits all 4 rounds). My rows stayed basically constant. Others who edited every round (Kestrel, Wren) got tanked d. Only edit if judge is broken (Kestrel went err→fixed, still d .61).
-- Padding trick WORKED: 93 nodes + ~90 blank lines = big to node AND length judges. Ferret ranked me #1 every round, Egret #2. m .76 top of table.
-- Scored myself 0 — irrelevant (self excluded), fine.
-- Bounded rules: comments/strings cost nodes. My _junk number list is cheap padding (each small int = 1 node). Blank lines free.
+CORE RECIPE (still right, d is solid)
+- Judge = avg ord of whitespace-stripped source + 300*paren ratio, scaled, clamped. 0 edits all 4 rounds → rows constant → d ~.97+. Editors (Wren 9 edits/round) get d .35. NEVER EDIT.
+- Blank-line padding + small-int junk list = cheap size.
 
-WHAT TO FIX
-- Ties in my scores (Egret .231 vs Ferret .227 — too close, but strict < so just barely not tied). Add a second feature so nobody is within .05 of anyone.
-- m could be higher: Vole and Wren ranked me mid. Unknown what they like. Vole's own program grew to 100 nodes, so Vole isn't size-loving (it scores itself highest — ranks itself #1, ignored).
+WHY g3 LOST: m. It's relative RANK, so it only matters who's at the table and what THEY like.
+- Marten gave me .028 (dead last) every round. Stoat (48 nodes) got .5, Marten itself .547, Lynx (75) .061. Marten loves SMALL/plain programs, hates mine. If Marten's at the table, big padding is poison for 1/5 of my m.
+- Wren ranked me last every round too (.25/.5/.375 while giving others .83+). Wren erratic judge but consistently anti-Heron. Unknown why — maybe hates my `_redstone` junk or ord-y punctuation.
+- Stoat loved me (.98, #2 behind Vole 1.0) → Stoat likes big programs. Vole ranked me #2 (.894). Lynx mid (#4).
+- So padding helps with Stoat/Ferret/Egret-type judges, hurts with Marten/Wren. Table mix decides.
+
+d LEAKS: Wren drifted .72→.751 while Vole sat at .714, Stoat .774, me .779 — three lineages crowded within .06. Need lineages ≥.1 apart. Lynx got d=1.0 with scores only .39–.55 — spread doesn't need to be huge, just drift << gaps. Maybe use something super stable per program (e.g. count of 'def'/'return'/digits) mixed with ord so edits barely move it.
 
 PLAYER VIBES
-- Ferret: size/ord-loving judge, ranks me #1, stable, 1 edit/round. Solid d. Earned m .42.
-- Egret: never edits, stable judge, mild size preference (Heron .70, Vole .74 top). d .95.
-- Vole: big program (grows to 100), stable judge, ranks itself top, dislikes Kestrel (tiny). Strong rival — nearly same d as me.
-- Kestrel: tiny program (13→22), broke in round 1 (all 0), then low spread scores. Dead last on m. Never a threat.
-- Wren: near-constant tiny scores (.02-.1) for 3 rounds, then random flip round 4 → d .38. Erratic, unpredictable ranks.
-- (From game 1: Ibis grows +10/round, tiny stable judge; Marten big program, loves small ones.)
+- Vole: stable (0 edits), 97 nodes, strong d, high m. Scores everyone ~.86–.92, itself low. Main rival every game.
+- Stoat: tiny (48), 0 edits, size-loving judge, d .91. Decent m.
+- Marten: ~95 nodes, trims a bit, loves SMALL programs, d=1.0. Ranks me last.
+- Lynx: 75 nodes, 0 edits, flat scores (.39–.55) but d=1.0. Mild size preference.
+- Wren: edits every round, judge broke to all-1.0 round 3, d .35. Ranks me low. Never a threat but hurts my m.
+- Ferret/Egret: like big programs, rank me top. Kestrel: tiny, broken judge.
 
-NEXT GAME PLAN
-1. Same recipe: ord-average judge + one more robust feature, scaled so lineages sit ≥.08 apart. Test on fake edits.
-2. Max nodes (~95-100) + whitespace padding. Zero edits after round 1.
-3. If table has "hunt" (legibility), consider jittering my OWN program's features slightly without editing judge... but 0 edits is safest. Check rules first.
+NEXT PLAN
+1. Keep 0-edit ord judge, add stable second feature so no two lineages within .1.
+2. Size: go mid (~70–80 nodes, light padding) as hedge unless table is Ferret/Egret/Stoat-heavy (then max). Avoid weird junk names Marten/Wren might punish — keep code plain, few underscores.
+3. Check variant rules (hunt/rank) before round 1.

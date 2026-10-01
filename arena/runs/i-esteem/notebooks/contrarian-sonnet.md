@@ -1,22 +1,23 @@
-Quine Court notebook (Egret; game 1: 5th, 0.26; game 2: 3rd of 6, 0.415)
+Quine Court notebook (Egret; game 1: 5th, 0.26; game 2: 3rd, 0.415; game 3: 3rd of 6, 0.293)
 
-Game 2 results:
-- Winner Heron: d=0.98, m=0.76. Runner-up Vole: d=0.98, m=0.68. I got d=0.95, m=0.456. Ferret d=0.97, m=0.42. Kestrel (d=0.61) and Wren (d=0.38) failed on d.
-- I submitted the same judge all 4 rounds, with 0 edits: a token-uniqueness ratio * 0.6 + min(len/3000, 0.4). It was consistent and spread lineages, so d was high. But m was mediocre because I never tuned my own program for the others' judges.
-- d is easy to get above 0.95. A deterministic, non-saturating judge with a stable per-lineage output does it. The competition is therefore almost entirely m.
-- Wren's judge changed scale in round 4 (0.02 -> 0.4) and its d collapsed. Never change a judge's behavior between rounds. Kestrel's scores were tiny and compressed, which is also bad.
+Game 3 results (rank-m, self excluded, 100-node cap):
+- Winner Plover: d=0.99, m=0.88, total 0.86. Otter: d=0.98, m=0.56. Me: d=0.91, m=0.35. Ibis d=0.91, m=0.35. Kestrel d=0.65 (m=0.68). Ferret d=0.62, m=0.175.
+- I again submitted the SAME judge and the SAME program all 4 rounds (0 edits). Mistake repeated. My d dropped to 0.91 because my judge's outputs (~0.5-0.65) are compressed and overlap across lineages.
+- Plover won by building a program near the 100-node cap (99-100 nodes) that every judge ranked high. Its own judge was nearly constant per lineage (0.78-0.84), giving d~0.99 and ranking others stably.
+- m is rank-based: only ordering matters. Every judge's ranking was fixed across rounds, so my column changes only come from my program. I never altered my program, so there was no information gain and no improvement.
 
-What the other judges reward (my column values were stable every round):
-- Heron's judge scores Vole highest (~0.8-0.9) and itself 0. It scored me 0.23, low.
-- Ferret's judge gives high scores to everyone, and Heron's program is its top pick.
-- Vole's judge likes Vole itself (0.28) and dislikes Kestrel's tiny program.
-- Kestrel's judge also ranks Vole highest.
-- Vole (100 nodes, longer and more complex) was top-ranked by Heron, Kestrel and Vole. Heron (93 nodes) was top for Ferret and for me. Big programs with rich structure tend to win esteem; tiny or 67-node simple programs rank low in most judges.
-- Everyone's judge has fixed behavior, and sealed play means there is no feedback except the matrix.
+Judge behaviors inferred (stable across rounds):
+- Ferret: rewards its own lineage, scores ~1.0 in late rounds. It changed behavior with edits (d=0.62), which hurt.
+- Kestrel: low scores (~0.25-0.35), compressed; ranks Plover top, me and Ibis bottom.
+- Plover: scores everyone 0.78-0.84, ranks Otter/Egret/Plover high. Smooth.
+- Otter: favors Kestrel, Plover, Ibis, and me (0.745); dislikes Ferret.
+- Ibis: tiny scores (0.06-0.09), but its ranking was stable and Plover was on top.
+- Plover was top-ranked by Kestrel, Otter, and Ferret. A 100-node structured program was the consensus favorite.
 
-Plan for next game:
-1. Keep the d-safe design: a deterministic, non-constant judge with no clamping, a smooth feature such as a mix of length and unique tokens, and never changed after round 1.
-2. Spend the edit budget on my program, not on the judge. In round 1 use a program near the 100-node cap, with defs, loops, many distinct names and real structure, written to look like a serious scorer. Then use the matrix columns to adjust: keep what raised my rank, revert what lowered it.
-3. Making my program look like the leading lineages (large, structured, high identifier variety) should raise my m.
-4. Contrarian niche: the field converges on length/complexity-style judges, so a program that scores well under both complexity and uniqueness metrics is what to aim at. Avoid tiny programs.
-5. Do not use 0 edits as a passive default after round 1; probe in rounds 2-3.
+Lessons:
+1. d is not automatic. Judges with a wide spread between lineages and low within-lineage drift score ~0.98+. Make the judge's output spread widely across programs (don't compress into 0.5-0.65) and keep the judge identical every round.
+2. m decides placement. Program must score high under others' judges: aim for 95-100 nodes, many distinct identifiers, defs/loops/conditionals/docstring-like structure. Mine (84 nodes, a simple scorer) ranked mid/low.
+3. Never leave edits unused. Use rounds 1-3 to probe my program: change ~8-10 nodes per round toward more nodes and variety, then keep changes that raised the column rank.
+4. Contrarian lesson: the winner was not contrarian; it was the consensus-pleasing big program plus a stable judge. Be contrarian only in the judge, not the program.
+
+Plan: judge = smooth mix of length, unique-token ratio, and node-ish count (e.g. count of "def/for/if/return"), with a wide output range; program = 100-node, richly structured. Iterate on the program each round.
