@@ -1,18 +1,18 @@
-Quine Court notes (Heron, 2 games so far)
+Quine Court notes (Heron, 3 games so far)
 
-Game 2 result (rank-m, self excluded, hunt L-penalty table): I finished 4th of 6 (total 0.231). Marten won (0.386), Lynx 2nd, Otter 3rd. I kept my round-1 program unchanged all 4 rounds (len + keyword-count / 1500). d=0.99, but m=0.41 was weak.
+Game 3 result (rank-m, self excluded, hunt L-penalty): 5th of 6 (total 0.122). Lynx won (0.423), Wren 2nd, Marten 3rd, Ibis 4th, Otter last. My judge: (ast nodes + 4*node-type-variety)/400, with a docstring I grew each round to burn my edit budget. d=0.85, m=0.29 (bad).
 
-Key lessons:
-- Placement is decided by m (mean rank received) once d is near 1. d^2 matters too: Wren's inconsistent judge gave d=0.43 and a near-zero total.
-- Most players freeze their programs, so matrices barely change. Round 1 is the real game. Later rounds only add information if someone edits. Wren was the only one who changed its judge, and that hurt it.
-- L is about 0.8-0.95 for everyone, so (1 - 0.5L) is roughly a constant 0.55-0.6. Don't chase L.
-- Rank-based m: only the ORDER other judges put me in matters. My program was ranked low by most judges, and my 80-node program with a pure-length judge lost to Marten (98 nodes) and Lynx/Otter.
-- Inferred judge styles (from rows): Lynx gives high scores and likes Marten, Otter and itself. Marten likes itself and Otter, and ranks Marten > Otter > Lynx. Ibis gives tiny scores, with Marten first. Wren is erratic. Judges consistently rank Marten first (98 nodes, near the limit). Larger, near-limit programs seem to be favored, with Marten at the top.
-- My judge was fine for d (it is a deterministic function of the text), but its order matched the others only loosely: Marten was my top pick, as it was for most judges.
+What I learned:
+- Placement is decided by m, the mean rank other judges give me. d is roughly 0.85-0.99 for most, so it matters less. Lynx won with d=0.9875 AND a decent m. Lynx's own L was low (0.33), so its multiplier was the best. Lynx's judge was the only one that clearly changed, and it moved toward the consensus: it was rated higher each round.
+- Rows were frozen for almost everyone (Ibis, Marten, Otter, Wren had 0 edits after round 1). My row was also frozen, so the matrix said little. Round 1 is the real game.
+- Consensus judge order: Wren ≳ Marten ≈ Ibis > Lynx > Heron > Otter. Judges who pick Wren, Marten and Ibis (88-98 nodes, near the limit) score high. My program, at 71-97 nodes with a pure-length judge, was ranked low. Docstring filler didn't help: Heron 5th, Otter 6th even at 98 nodes. So size alone doesn't win m. Wren's program probably has the actual quality features other judges reward. Lynx got a top rank from many judges by round 4 (0.9 from itself, 0.77 from Wren, 0.62 from Marten), so its program must have changed meaningfully toward those features.
+- Inferred judge styles: Lynx gives high scores to everything. Ibis gives scores around 0.45 and Otter around 0.35, both compressed. Marten and Wren spread more. A compressed judge is fine since only rank matters.
+- L is about 1.0 for most (they track me easily), so (1-0.5L) is about 0.5-0.55. Don't chase L.
 
-Plan for next game:
-- Submit a program near the 100-node limit (95-100), containing a docstring and many def/return/for/if/min/max/len constructs. This is what the winners looked like.
-- Judge: a deterministic pure function of the text with a wide spread, ideally monotone in size/structure, since judges seem to agree that Marten-like programs are best. Avoid regexes and try/except that could error; wrap in try and return 0.5 on failure.
-- Never use randomness. Never change the judge between rounds unless edits stay within 10 and are tiny. Freezing was safe.
-- Test the judge on odd inputs (empty string, syntax errors).
-- Idea to try: a judge scoring ast node count plus the variety of node types, so it matches the "bigger and richer is better" consensus and also tends to rate my own bigger program highly (self-score is ignored, though).
+Mistakes: I spent all my edits on comment/docstring text, which did nothing useful. My judge was a plain size metric, and my program was a plain size metric, so it was easy to rank low.
+
+Plan next game:
+- Make the SUBMITTED program a good "citizen" of what the judges reward. Try a program with real structure: several functions, a docstring, loops, comprehensions, near 95-100 nodes, and clean code. Compare against Wren/Marten/Ibis.
+- Make the judge a deterministic function that prefers moderate-to-large, well-structured, varied code. Never use randomness; wrap everything in try and return 0.5 on failure.
+- Use later-round edits to move my program toward what the highest-scoring programs seem to be (watch which column gets the highest average), not to pad comments.
+- Don't expect other judges' ranks to be fixed: Lynx adapts, Wren is erratic, others freeze.

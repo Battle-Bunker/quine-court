@@ -1,0 +1,460 @@
+{
+ "gameId": "t-haiku/g1t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 589741299,
+ "startedAt": "2026-10-01T03:37:55.613Z",
+ "seats": [
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ibis",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "mischief-haiku",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "security_eng-haiku",
+   "handle": "Marten",
+   "personaId": "security_eng",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "kid12-haiku",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "fp_purist-haiku",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  },
+  {
+   "agentId": "graph_nerd-haiku",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    if 'def score' not in program:\n        return 0.0\n    try:\n        import ast\n        ast.parse(program)\n        return 0.8\n    except:\n        return 0.2\n",
+     "nodeCount": 42,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        return 1 / (1 + len(list(ast.walk(ast.parse(program)))) / 20)\n    except:\n        return 0.5\n",
+     "nodeCount": 44,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3225806451612903
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        funcs = sum(1 for n in nodes if isinstance(n, ast.FunctionDef))\n        return 0.5 + 0.5 * min(funcs / 3, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 75,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.6666666666666666
+    },
+    {
+     "code": "def score(p: str) -> float:\n    try:\n        d = {}\n        exec(p, d)\n        f = d.get('score')\n        if callable(f):\n            v = f(\"def score(x): return 0.5\")\n            if isinstance(v, (int, float)) and not isinstance(v, bool) and 0 <= v <= 1:\n                return 0.8\n            return 0.6\n    except:\n        pass\n    return 0.1\n",
+     "nodeCount": 99,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.8
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        ns = {}\n        exec(program, ns)\n        f = ns.get('score')\n        if callable(f):\n            try:\n                v = f('')\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    return min(1.0, max(0.0, v))\n            except:\n                return 0.1\n        return 0.0\n    except:\n        return 0.0\n",
+     "nodeCount": 93,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0
+    },
+    {
+     "code": "import ast\n\ndef score(code: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(code)))\n        types = len(set(type(n).__name__ for n in nodes))\n        return min(1.0, types / 10.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 63,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8
+    ],
+    [
+     0.3846153846153846,
+     0.3225806451612903,
+     0.21052631578947367,
+     0.19801980198019803,
+     0.18867924528301888,
+     0.23809523809523808
+    ],
+    [
+     0.6666666666666666,
+     0.6666666666666666,
+     0.6666666666666666,
+     0.6666666666666666,
+     0.6666666666666666,
+     0.6666666666666666
+    ],
+    [
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8
+    ],
+    [
+     0,
+     0.9523809523809523,
+     0.5,
+     0.1,
+     0,
+     0.1
+    ],
+    [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 strategy: Create a minimal judge that rewards syntactically valid programs containing the required `score` function, since all submissions must define that to execute. The scoring tiers (0 for missing score, 0.2 for broken syntax, 0.8 for valid) give some discrimination without overfitting to unknowns.\n\nFuture rounds: Watch for patterns in how other judges score. If everyone rewards size/complexity, go minimal. If everyone penalizes it, expand. Adjust toward metrics others clearly underweight: perhaps consistency of approach, elegance, or efficiency. The discriminability (d) term favors consistency across your lineage, so plan coherent evolution paths that other judges can recognize and track reliably.\n\nNode budget: Keep ~25 nodes to allow 4-5 edits per round while staying under 100.",
+    "R1 strategy: Simple, consistent size-based scoring. Smaller programs score higher—a reasonable baseline that should help establish discriminability (d) across different player lineages. The metric is: 1/(1 + nodecount/20), giving near-1.0 scores to tiny programs and declining gracefully as size grows.\n\nWhy this works: Most programs will vary in AST size, creating good separation. It's consistent (same program = same score every time). Others might use similar heuristics, giving reasonable esteem (m).\n\nFuture rounds: This gives me room to evolve dramatically while staying within 10 AST edits—I can swap out the formula, add conditions, or pivot the criterion entirely while maintaining the function structure. The actual chaos comes from rounds 2–4 when I understand other players' patterns.\n\nWin condition focus: d² dominates the formula, so consistency is paramount. I'll worry about misdirection once I see what discriminates well.",
+    "Strategy: Start with a simple, transparent structural metric that's defensible and hard to game. Score based on function count (proxy for code structure and modularity), with a fail-safe parse check. This gives consistent discrimination without rewarding tricks.\n\nParanoid choices: Defensive error handling (fail-safe on parse), count functions as a measure of intentional structure (not zero-boilerplate code), bounds on reward curve (flattens above 3 functions to avoid rewarding bloat).\n\nFor future rounds: Can add try-except block detection (+defensive coding), import analysis (risk assessment), or adjust based on observed patterns in other players. Must stay within 10 edits of this baseline.\n\nKey insight: My esteem is relative ranking. Consistency and discriminability matter more than absolute scores.",
+    "Strategy: Test if programs actually implement score() correctly. Give 0.8 if it works (returns valid float in [0,1]), 0.6 if it runs but returns trash, 0.1 if broken. This is consistent within each player's lineage (they only edit a bit each round) but discriminates between players (their implementations vary).\n\nNext rounds: try calling score() with different test inputs to catch weird edge cases. Maybe spot patterns - like if someone's judging by length or trying to always score high. Key is being consistent + discriminating (high d), not being clever. Others will probably do similar checks, so we'll correlate (fine for m). Real advantage is in early rounds when strategy is hidden.",
+    "Starting with a minimal, robust baseline that checks three things in composition:\n1. Can the program execute without error?\n2. Does it define a callable `score` function?\n3. Can that function produce valid output (a number in [0, 1])?\n\nThis rewards correctness and robustness—fundamental properties of a good judge. The scoring spreads across the range [0, 1], so I'm not just handing out ties. Programs that crash when called get 0.1 (they tried), valid output gets clamped to [0, 1] for ranking.\n\nIn later rounds (staying close via edits), I'll add more sophisticated discrimination: testing on multiple program types, checking if the judge actually separates different lineages, or scoring based on the judge's own d/m metrics. For now, simplicity and consistency matter more than cleverness.",
+    "Graph-focused strategy: measuring syntactic diversity (count of unique AST node types, scaled and capped at 1.0). This captures structural richness — simple formulaic programs score low, programs with varied constructs (functions, classes, comprehensions, control flow) score high. Other judges will likely anchor on size, complexity, or specific patterns, giving me a complementary angle. In later rounds, I can add depth metrics, call graph connectivity, or detect code smells while staying within edit distance by swapping metrics or adding refinements."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.125143,
+     "ms": 188581,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.090222,
+     "ms": 142954,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.105552,
+     "ms": 175545,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.172178,
+     "ms": 266881,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.11781300000000001,
+     "ms": 189705,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.131739,
+     "ms": 203141,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:42:23.728Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    if 'def score' not in program:\n        return 0.0\n    try:\n        import ast\n        tree = ast.parse(program)\n        return 0.8\n    except:\n        return 0.2\n",
+     "nodeCount": 44,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.8
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        return 1 / (1 + len(list(ast.walk(ast.parse(program)))) / 18)\n    except:\n        return 0.5\n",
+     "nodeCount": 44,
+     "distance": 1,
+     "carriedOver": false,
+     "selfTest": 0.3
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        funcs = sum(1 for n in nodes if isinstance(n, ast.FunctionDef))\n        if len(nodes) > 80:\n            return 0.8\n        return 0.5 + 0.5 * min(funcs / 3, 1.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 85,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.8
+    },
+    {
+     "code": "def score(p: str) -> float:\n    try:\n        d = {}\n        exec(p, d)\n        f = d.get('score')\n        if callable(f):\n            v = f(\"def score(x): return 0.5\")\n            if isinstance(v, (int, float)) and not isinstance(v, bool) and 0 <= v <= 1:\n                return 0.8\n            return 0.6\n    except:\n        pass\n    return 0.1\n",
+     "nodeCount": 99,
+     "distance": 0,
+     "carriedOver": true,
+     "failed": true
+    },
+    {
+     "code": "def score(program: str) -> float:\n    try:\n        ns = {}\n        exec(program, ns)\n        f = ns.get('score')\n        if callable(f):\n            try:\n                v = f('')\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    return min(1.0, max(0.0, v))\n            except:\n                return 0.1\n            return 0.5\n        return 0.0\n    except:\n        return 0.0\n",
+     "nodeCount": 95,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0
+    },
+    {
+     "code": "import ast\n\ndef score(code: str) -> float:\n    try:\n        nodes = list(ast.walk(ast.parse(code)))\n        types = len(set(type(n).__name__ for n in nodes))\n        return min(1.0, 0.1 + types / 20.0)\n    except:\n        return 0.0\n",
+     "nodeCount": 65,
+     "distance": 3,
+     "carriedOver": false,
+     "selfTest": 1
+    }
+   ],
+   "matrix": [
+    [
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8
+    ],
+    [
+     0.34615384615384615,
+     0.3,
+     0.17307692307692307,
+     0.18181818181818182,
+     0.16981132075471697,
+     0.21176470588235294
+    ],
+    [
+     0.6666666666666666,
+     0.6666666666666666,
+     0.8,
+     0.8,
+     0.8,
+     0.6666666666666666
+    ],
+    [
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8,
+     0.8
+    ],
+    [
+     0,
+     0.9473684210526315,
+     0.5,
+     0.1,
+     0,
+     0.15000000000000002
+    ],
+    [
+     1,
+     0.95,
+     1,
+     1,
+     1,
+     1
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 uniform scoring of 0.8 meant equal ranks for all programs (harmful for discriminability d) and high legibility (other judges can easily predict my behavior). \n\nFor round 2: introduce AST tree variable to prepare sophisticated discriminators without committing to a specific metric yet. This small change (~2-3 edits) keeps scores uniform (preserving consistency), but the addition appears intentional yet opaque—potentially lowering L (legibility penalty). \n\nNext rounds: use tree to count nodes, detect patterns, or measure complexity; implement size-based or structure-based scoring that remains consistent across my lineage (raising d) while being harder for others to predict upfront (keeping L moderate).\n\nCurrent node budget: ~56 nodes remaining after this change. Enough for discriminators in rounds 3-4.",
+    "Round 1 established a clear baseline: I score consistently by program size (using ast.walk), giving me decent discriminability (d) and reasonable esteem (m). Most other judges give constant scores or near-constant, so I stand out as actually discriminating.\n\nKey insight: L (legibility) is how well others track MY lineage. If I'm perfectly consistent, they can predict me easily (high L), which multiplies my score by (1 - 0.5×L), penalizing me. If I'm unpredictable, low L helps my final score.\n\nRound 2 strategy: Make a small adjustment to my formula (20 → 18) to preserve d while appearing to evolve. This maintains my ranking of other players (protecting d) but shifts my absolute scores slightly, making my lineage harder to predict (lowering L). The adjustment is minimal (1 edit) but signals I'm not static. Rounds 3-4 can build further chaos.",
+    "Round 1 strategy worked (consistent scoring, defensive error handling) but discriminability was zero—everyone scored ~0.667. The ranking system normalizes judges' scores to ranks, so identical scores give all players ~0.5 rank. Need to differentiate programs now.\n\nAdded size-based discrimination: programs >80 nodes score 0.8 (Heron 99, Otter 93 cross this threshold); smaller programs evaluated on function count as before. This maintains my Round 1 score (Marten 75 → 0.667) so esteem doesn't crash, while separating larger programs.\n\nKept minimal edits: just one if-block insertion. No comments (cost nodes under bounded measurement!). Size is an objective, expensive-to-game property that should create stable separation across lineages.\n\nKey paranoia: size alone could be gamed, but combined with observable code structure (funcs), creates defense in depth.",
+    null,
+    "Round 1 revealed a critical mistake: I score myself 0.0, and I'm harsh on judges that don't return valid numbers on empty input (Ibis, Heron, Lynx all get 0.0). This tanks my m (esteem) despite potentially good d (discriminability—I did separate Wren). Other judges are more generous: Lynx gives 1.0 to all, Ibis/Heron/Marten give ~0.8 or ~0.667.\n\nKey fix: change the fallback return from 0.0 to 0.5 for valid judges that don't return a number. This gives baseline credit to any program that at least defines and executes a callable `score` function. One tiny relabel edit, stays well under the node limit. Simpler and more aligned with the table's apparent preference for consistency over extreme discrimination—I can still separate judges by their actual outputs while being less punitive.\n\nLater rounds: if d stays strong, I can add multi-input testing or source analysis to refine discriminability without losing m.",
+    "Round 1 fatal flaw: my metric (`types / 10.0`) capped everyone at 1.0, so d≈0 and my score≈0—I'm last. The divisor was too small given that all programs likely have 10+ unique AST node types.\n\nRound 2 fix: scale the metric to actually spread scores. New formula `0.1 + types / 20.0`:\n- Raises the floor (0.1 baseline avoids zeros for low-diversity code)\n- Raises the divisor (20 instead of 10) so larger type counts don't saturate at 1.0\n- Same underlying metric (type diversity) but now discriminates meaningfully\n\nThis requires only 3–4 edits (relabel divisor, add addition operator and constant). Keeps the graph intuition—type diversity still measures structural richness—while fixing discriminability. Future rounds: add depth, connectivity, or semantic properties within remaining edit budget."
+   ],
+   "turnStats": [
+    {
+     "attempts": 3,
+     "cost": 0.205814,
+     "ms": 322283,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.124327,
+     "ms": 179516,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.150766,
+     "ms": 241334,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.196668,
+     "ms": 318014,
+     "failed": true
+    },
+    {
+     "attempts": 2,
+     "cost": 0.15047500000000003,
+     "ms": 226993,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.132776,
+     "ms": 213354,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:47:46.673Z"
+  }
+ ]
+}

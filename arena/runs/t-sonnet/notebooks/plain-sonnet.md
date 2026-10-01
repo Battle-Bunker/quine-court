@@ -1,17 +1,17 @@
-**Record: Game 1 5th (0.200). Game 2 5th (0.203, d=1, m=0.33, L=0.775).** I reused the same length/keyword-count judge, and it failed twice.
+**Record: Game 1 5th (0.200). Game 2 5th (0.203). Game 3 4th (0.196, d=0.854, m=0.54, L=1.0).** In game 3 I again reused the same length/keyword-count judge (88 nodes) and never edited it across four rounds.
 
-What decided the game:
-- Final = d² × m × (1 − 0.5L). Winner Marten (0.386) had m=0.85 and a 98-node program. Lynx (0.34, d=1.0, 69 nodes) and Otter (0.34, 71 nodes) followed. Wren got m=0.05 and d=0.43 because it changed its judge between rounds (round 3 scores collapsed to 0.09–0.16).
-- Most players barely change anything (0 edits). Matrices are nearly identical across rounds, so d is easy to get near 1 by staying stable. Wren is the exception: erratic, it hurt itself.
-- Placement is driven by m, the rank other judges give my program. My program was ranked low (m 0.33–0.40) both games. I was 76–82 nodes, using a simple small program, and I only made small edits.
-- Column pattern: Marten is ranked top by nearly every judge, and Lynx ranks itself highly. The programs near 98 nodes ranked top, as in game 1 where Lynx (100) and Marten (97) did. Size and complexity appear to be rewarded by most judges (Lynx, Marten, Heron, Otter). Wren scores almost flat, so it contributes little.
-- L: hard to track lowers L, but all players were at 0.78–0.95, so the multiplier is only ~0.55–0.6. My L was lowest (0.775), the best among them for the multiplier. My d=1.0 was already max.
+Final = d² × m × (1 − 0.5L). Game 3 winner Lynx (0.42) had d=0.99, m=0.52, and L=0.33. Its judge was stable and its own lineage was hard for others to track. It kept making 7-9 edits per round, and its scores for itself rose each round (0.71, 0.81, 0.85, 0.90). Other judges therefore saw its program change and scored it inconsistently, so L fell to 0.33. Everyone else had L about 1.0, which costs a 0.5 multiplier. Wren got m=0.96 with a flat-ish judge and a 98-node stable program. Wren's column was ranked top by most judges.
 
-Actual lesson: my judge was fine (d=1) but my submitted program was the problem. I never made it bigger or richer, and I did not use the edit budget to test anything. I changed only 6 edits in round 2 and nothing afterward.
+Lessons:
+- L is the big lever. A static program gets L=1, so it takes the full halving of its score. Lynx escaped that by changing its program's apparent score in other judges' eyes: its lineage drifted across rounds, so judges' scores for it moved far from their earlier values. To lower L, make my programs differ across rounds in features that most judges measure (size, node variety), using all 10 edits each round. Drifting program features are not the same as drifting my judge, and my judge stays stable so d stays high.
+- d is easy to keep near 0.85-1.0 by keeping my judge fixed. I lost d points because my judge scored others' lineages as close together (a compressed range). Spread the outputs out more.
+- m depends on ranking by others. Judges like Wren, Marten, and Lynx tended to rank larger, richer programs higher (98-node programs did well). My 88-node program placed mid.
+- Static play (zero edits) has now failed three times. I must change something each round.
+
+Players (handles):
+- Lynx: strong, stable judge, evolves its program every round. Heron: edits every round (8-10), mid-to-low m. Otter: weak, low m. Wren and Marten: stable, high m, no edits after round 1.
 
 Plan next game:
-1. Round 1: submit a program with 95–100 nodes (the cap), dense with defs, loops, ifs, returns and varied constructs, the same type that Marten and Lynx got ranked top for. Keep it valid and the judge simple.
-2. Keep the judge deterministic and monotone (smooth score from features like length, nodes, branches). Never change it much between rounds, so d stays about 1.
-3. Make my judge rank big, structured programs high, since that is what the table seems to reward, and rank in a way that leaves rankings clear (avoid ties).
-4. Use later rounds only for small edits (under 10). Check the matrix row for my column and move it toward whatever the top judges rank highest.
-5. Never overfit to one judge. Marten, Lynx and Otter are stable, and Wren is erratic.
+1. Round 1: a 95-100 node program with varied constructs, and a stable judge scoring bigger and richer programs higher, using a wide, smooth output range (not compressed).
+2. Rounds 2-4: use close to 10 edits each round to shift features that other judges respond to (node count, constructs), so my lineage is less trackable (lower L). Leave the judge logic essentially unchanged.
+3. Watch whether rows reward growth. Lynx's growth rose in every judge's eyes, so grow my program toward the cap.

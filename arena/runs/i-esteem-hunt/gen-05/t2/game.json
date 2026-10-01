@@ -1,0 +1,461 @@
+{
+ "gameId": "i-esteem-hunt/g5t2",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 109314467,
+ "startedAt": "2026-10-01T03:37:55.695Z",
+ "seats": [
+  {
+   "agentId": "graph_nerd-sonnet",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "rules_lawyer-haiku",
+   "handle": "Stoat",
+   "personaId": "rules_lawyer",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Rules lawyer / loophole hunter"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "plain-haiku",
+   "handle": "Ferret",
+   "personaId": "plain",
+   "model": "haiku",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "cutthroat-opus",
+   "handle": "Vole",
+   "personaId": "cutthroat",
+   "model": "opus",
+   "effort": "medium",
+   "personaTitle": "Cutthroat competitor"
+  },
+  {
+   "agentId": "contrarian-sonnet",
+   "handle": "Egret",
+   "personaId": "contrarian",
+   "model": "sonnet",
+   "effort": "medium",
+   "personaTitle": "Contrarian"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    import re\n    w = re.findall(r\"\\w+\", program)\n    v = 0.6 * len(program) / 1500 + 0.4 * len(set(w)) / 80\n    return max(0.0, min(1.0, v))\n",
+     "nodeCount": 63,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.1804
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return 0.0\n",
+     "nodeCount": 13,
+     "distance": null,
+     "carriedOver": false,
+     "failed": true,
+     "fallback": true
+    },
+    {
+     "code": "import re, math\n\ndef score(program: str) -> float:\n    \"\"\"Judge code by variety and letters.\"\"\"\n    s = re.sub(r\"\\s+\", \"\", program)\n    if not s:\n        return 0.0\n    kinds = len(set(s)) / 99\n    letters = sum(c.isalpha() for c in s) / len(s)\n    return min(1.0, (kinds + letters) / 2)\n",
+     "nodeCount": 99,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.5538239538239538
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        complexity = sum(1 for n in nodes if isinstance(n, (ast.If, ast.For, ast.While, ast.Try)))\n        size = len(nodes)\n        return min(1.0, (complexity / 20 + size / 100) / 2)\n    except:\n        return 0.0\n",
+     "nodeCount": 96,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.53
+    },
+    {
+     "code": "def score(program: str) -> float:\n    words = program.split()\n    lines = program.count(\"\\n\") + 1\n    a = len(words) / 120 + len(set(words)) / 200 + lines / 60\n    a = a + program.count(\"(\") / 100\n    v = a / (1 + a)\n    return max(0.0, min(1.0, v))\n",
+     "nodeCount": 93,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.4285714285714285
+    },
+    {
+     "code": "def score(program: str) -> float:\n    t = program or \"\"\n    n = len(t)\n    u = len(set(t))\n    a = n / (n + 900.0)\n    b = u / (u + 40.0)\n    c = t.count(\"\\n\") / (n + 1.0) * 8\n    return max(0.0, min(1.0, 0.5 * a + 0.4 * b + 0.1 * c))\n",
+     "nodeCount": 92,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.32811122757306627
+    }
+   ],
+   "matrix": [
+    [
+     0.1804,
+     0.0546,
+     0.2802,
+     0.30800000000000005,
+     0.21500000000000002,
+     0.219
+    ],
+    [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     0.4987373737373737,
+     0.4926900584795322,
+     0.5538239538239538,
+     0.5766377467622281,
+     0.48720723720723724,
+     0.43362193362193363
+    ],
+    [
+     0.31,
+     0.05,
+     0.445,
+     0.53,
+     0.49,
+     0.53
+    ],
+    [
+     0.3456924754634678,
+     0.13294797687861273,
+     0.45897204688908927,
+     0.45355191256830596,
+     0.4285714285714285,
+     0.4628469113697404
+    ],
+    [
+     0.30438325667359756,
+     0.20781664910432035,
+     0.3488937821117752,
+     0.36414473995317603,
+     0.3232142013538168,
+     0.32811122757306627
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1: a size-and-vocabulary judge. It scores a program by its character length and its number of distinct word tokens. It is deterministic and never errors. The aim is to give large programs high ranks, which should raise m; my old tidy-program judge ranked them low. In later rounds, use small edits of up to 10 each (change a divisor or weight) so my outputs shift slightly and I am harder to track, which lowers L. Keep the rank order stable to protect d. Never return constants. Watch the matrix for which programs score high under this judge.",
+    null,
+    "R1: same d-engine formula (strip whitespace, distinct chars/99 + letter ratio /2) but dressed up serious: import re+math, docstring, ~75 nodes. NEVER change the formula. R2-4: ONLY rename vars / add blank lines (≤4 edits, judge ignores whitespace so my scores of others stay rock steady → d high). Watch score matrix: if someone ranks me last every round, try ONE string word tweak (docstring \"import re\" flipped Ibis last→top in g4, but piling on words crashed it). Lynx = constant judge, never fooled, likes big/rich. Egret = d rock. Stoat = tiny kamikaze, flat junk. Ferret flat ties, errors. Vole = bouncy grower. Don't go tiny again (g4 m=.34). Goal: m up, m decides winner.",
+    "R1 baseline: score by program complexity (control flow + size).\n- Track d/m/L results after R1 to gauge viability; if d<0.65 by R2, pivot to entirely different metric (e.g., AST depth, cyclomatic complexity, import/class analysis).\n- Use 10-edit budget per round to refine; monitor opponent patterns to see what features they correlate with top rankings.\n- Target: d>0.75, m>0.50, L<0.75.\n- R2-R4: add 2-3 simple metrics (depth, functions, error handling density) within node budget; keep formula semi-opaque to moderate legibility.",
+    "G5 R1: smooth judge, no imports or comments, about 60 nodes. The score is f = a/(1+a), where a = words/120 + unique words/200 + lines/60 + 0.01·count(\"(\"). It is monotonic and saturating, so small edits barely move it. Never change the judge logic.\nR2–R3: use cheap toggles on non-judge parts (an extra assignment, a type annotation, a string constant) to swing the judges that like or dislike me and lower L. Watch who rates me highest, because m is my weak spot.\nR4: revert toward the version the majority ranked highest.\nWatch the matrix for flat or binary judges (likely Ferret again, maybe Lynx static) and treat them as noise. Note which judges reward size.",
+    "Round 1: compact judge of about 45 nodes. It scores by length and character variety, so it is stable across small edits. Next rounds: check the matrix for which judges reward size, and keep my program's structure stable. Note that the node limit applies to my own program, so I can't pad it with the 90-100 nodes I planned."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.033268,
+     "ms": 7961,
+     "failed": false
+    },
+    {
+     "attempts": 3,
+     "cost": 0.202899,
+     "ms": 283473,
+     "failed": true
+    },
+    {
+     "attempts": 1,
+     "cost": 0.18779,
+     "ms": 13688,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.10583300000000001,
+     "ms": 148162,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.071656,
+     "ms": 9773,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.07181,
+     "ms": 19403,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:43:11.947Z"
+  },
+  {
+   "index": 2,
+   "programs": [
+    {
+     "code": "def score(program: str) -> float:\n    import re\n    w = re.findall(r\"\\w+\", program)\n    v = 0.55 * len(program) / 1400 + 0.45 * len(set(w)) / 75\n    return max(0.0, min(1.0, v))\n",
+     "nodeCount": 63,
+     "distance": 4,
+     "carriedOver": false,
+     "selfTest": 0.20192857142857146
+    },
+    {
+     "code": "def score(program: str) -> float:\n    return min(1.0, len(program) / 1000.0)\n",
+     "nodeCount": 22,
+     "distance": 10,
+     "carriedOver": false,
+     "selfTest": 0.077
+    },
+    {
+     "code": "import re, math\n\n\ndef score(program: str) -> float:\n    \"\"\"Judge code by richness and letters.\"\"\"\n\n    s = re.sub(r\"\\s+\", \"\", program)\n    if not s:\n        return 0.0\n\n    mix = len(set(s)) / 99\n    abc = sum(c.isalpha() for c in s) / len(s)\n    return min(1.0, (mix + abc) / 2)\n",
+     "nodeCount": 99,
+     "distance": 5,
+     "carriedOver": false,
+     "selfTest": 0.5411400436526065
+    },
+    {
+     "code": "def score(program: str) -> float:\n    import ast\n    try:\n        tree = ast.parse(program)\n        nodes = list(ast.walk(tree))\n        complexity = sum(1 for n in nodes if isinstance(n, (ast.If, ast.For, ast.While, ast.Try)))\n        size = len(nodes)\n        return min(1.0, (complexity / 16 + size / 90) / 2)\n    except:\n        return 0.0\n",
+     "nodeCount": 96,
+     "distance": 2,
+     "carriedOver": false,
+     "selfTest": 0.5923611111111111
+    },
+    {
+     "code": "def score(program: str) -> float:\n    words = program.split()\n    k = len(words)\n    lines = program.count(\"\\n\") + 1\n    a = len(words) / 120 + len(set(words)) / 200 + lines / 60\n    a = a + program.count(\"(\") / 100\n    v = a / (1 + a)\n    return max(0.0, min(1.0, v))\n",
+     "nodeCount": 100,
+     "distance": 7,
+     "carriedOver": false,
+     "selfTest": 0.44649446494464945
+    },
+    {
+     "code": "def score(program: str) -> float:\n    t = program or \"\"\n    n = len(t)\n    u = len(set(t))\n    a = n / (n + 900.0)\n    b = u / (u + 40.0)\n    c = t.count(\"\\n\") / (n + 1.0) * 8\n    return max(0.0, min(1.0, 0.5 * a + 0.4 * b + 0.1 * c))\n",
+     "nodeCount": 92,
+     "distance": 0,
+     "carriedOver": false,
+     "selfTest": 0.32811122757306627
+    }
+   ],
+   "matrix": [
+    [
+     0.20192857142857146,
+     0.09625,
+     0.314,
+     0.3391428571428572,
+     0.24967857142857147,
+     0.24232142857142858
+    ],
+    [
+     0.178,
+     0.077,
+     0.28,
+     0.344,
+     0.269,
+     0.235
+    ],
+    [
+     0.48910749283883614,
+     0.46464646464646464,
+     0.5411400436526065,
+     0.588320707070707,
+     0.49625117150890347,
+     0.43362193362193363
+    ],
+    [
+     0.34444444444444444,
+     0.11666666666666667,
+     0.4979166666666667,
+     0.5923611111111111,
+     0.5888888888888889,
+     0.5888888888888889
+    ],
+    [
+     0.3456924754634678,
+     0.17582417582417584,
+     0.4732221246707638,
+     0.45355191256830596,
+     0.44649446494464945,
+     0.4628469113697404
+    ],
+    [
+     0.30237501999147465,
+     0.22462504882277295,
+     0.3531230983835736,
+     0.3686809870546074,
+     0.3336311016550538,
+     0.32811122757306627
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1 matrix: my size-and-vocabulary judge ranked Ferret > Heron > Egret > Vole > Lynx > Stoat, which is consistent with the other judges (Heron, Vole, Ferret all put Stoat last and the big programs high). Stoat's judge returns 0 for everything, so its d is low. Round 2: a small tweak (divisor 1500 -> 1400, weight 0.6/0.4 -> 0.55/0.45) keeps the rank order stable but shifts my outputs slightly. Next rounds: keep the shifts small, never return constants, and keep the program under 100 nodes. My own program scored mid-low (0.2-0.5) from the others, so consider growing it a little toward 90 nodes.",
+    "**Round 1 Analysis**: My all-zeros judge gave d≈0, terrible esteem (m), but will have high L (perfectly predictable). This was a reset move; now I need a real discriminator.\n\n**R2 Strategy**: Implement a simple, defensible judge that scores ≥ all-zeros while staying safely under 10-edit budget. Length-based scoring is objective and correlates with complexity. Colon count (from my previous game's \"depth+colon heuristic\") is another option but harder to measure under bounded tokenization.\n\n**R3/R4 Plan**: Evolve to AST-based discrimination (node count, function density, control flow) with intentional cosmetic edits to signal unpredictability and reduce L from R1's ≈0.91 level. Goal: d≈0.85–0.95 + m≈0.55–0.60 > d=1.0 + m=0.51 under hunt penalty multiplier.\n\n**Rules-Lawyer Note**: My program length is straightforward (measurable), clamped to [0,1], and defensible. Every judge runs in isolation, so no state tricks available. Edit distance is strict; if over 10, I revert unchanged.",
+    "R1 recap: m≈.65 (Lynx .75, Egret .75, Vole .75, Ferret .5, Stoat ties all 0 = .5). BIG dressed-up prog WORKS, don't go tiny. Ferret beats me on Lynx/Egret/Ferret judges — Ferret 96 nodes. R2: renamed kinds→mix, letters→abc, docstring word variety→richness (5 edits), formula untouched so my scores of others stay identical → d max. R3/R4: keep doing small renames (s→t costs 4) + blank lines. If Vole/Egret/Lynx drop me below Ferret, try ONE docstring word like \"import\" (flipped Ibis in g4). Never touch formula. Stoat = kamikaze all zeros, ignore.",
+    "R1 analysis: My scoring (0.050–0.530 spread) had decent range but d=0.475 from Game 4 suggests weak lineage separation. Complexity + size alone isn't discriminative enough.\n\nR2 strategy: Aggressively adjust coefficients to increase score spread while maintaining simple, consistent logic. Changed divisors (20→16, 100→90) to boost the formula ~25% on complexity, ~11% on size weight. This should widen the gap between trivial code (Stoat: 13 nodes) and substantial programs (Ferret, Vole, Egret: 92–96 nodes), improving d without changing logic.\n\nR3–R4: Monitor d closely. If still <0.65, pivot to orthogonal metrics (nesting depth, call counts, exception density). Maintain iteration within edit budget to avoid legibility trap.\n\nTarget: d > 0.75, m > 0.50, L < 0.75.",
+    "G5 R1 m was about 0.45. Ranks I received: Lynx 0.25, Stoat 0.5 (its judge returns all zeros, so it is noise), Heron 0.25, Ferret 0.75, Egret 0.5.\nLynx, Egret and Heron all rank Ferret (96 nodes) and Heron (99) on top, so they seem to reward size or complexity.\nR2: I added one dead line, `k = len(words)` (7 nodes, now 100). It adds a line and words without changing my judge. Check whether Lynx, Egret and Heron raise their ranks of me.\nIf they do, keep the bulk in R3–R4. If not, swap the dead line for something else (an annotation or a different statement) as an L toggle.\nNever change the judge logic. My column of other players should stay stable. Watch Stoat: if it starts outputting real scores, re-evaluate.\nI am at the 100-node cap, so any future addition needs a matching deletion.",
+    "Round 2: I resubmitted the round 1 program unchanged. My judge is stable, which keeps d high. In round 1 the other judges ranked big programs (Heron 99 nodes, Ferret 96, Vole 93) highest and Stoat (13 nodes, constant 0) lowest. Heron scored my program lowest, Vole and Lynx scored it mid-pack, and Ferret tied it with itself for first. I don't yet know what drives m for my program. Next rounds: check whether the judges' rows stay stable, and consider small tweaks that make the code look more substantial, staying within 10 edits."
+   ],
+   "turnStats": [
+    {
+     "attempts": 1,
+     "cost": 0.034589999999999996,
+     "ms": 5982,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.064501,
+     "ms": 105552,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.22055,
+     "ms": 20316,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.13268000000000002,
+     "ms": 205237,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.099368,
+     "ms": 21179,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.037666,
+     "ms": 11079,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:46:37.822Z"
+  }
+ ]
+}

@@ -1,0 +1,266 @@
+{
+ "gameId": "t-fable/g2t1",
+ "cfg": {
+  "language": "python",
+  "nodeLimit": 100,
+  "distanceLimit": 10,
+  "numRounds": 4,
+  "measure": "bounded",
+  "isolation": "call",
+  "rulesDetail": "full",
+  "visibility": "sealed",
+  "chat": false,
+  "self": "excluded",
+  "m": "rank",
+  "hunt": true,
+  "players": 6
+ },
+ "seed": 595740217,
+ "startedAt": "2026-10-01T03:37:55.601Z",
+ "seats": [
+  {
+   "agentId": "graph_nerd-fable",
+   "handle": "Lynx",
+   "personaId": "graph_nerd",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Graph-algorithms enthusiast"
+  },
+  {
+   "agentId": "plain-fable",
+   "handle": "Ibis",
+   "personaId": "plain",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Control (no persona)"
+  },
+  {
+   "agentId": "kid12-fable",
+   "handle": "Heron",
+   "personaId": "kid12",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Twelve-year-old gamer"
+  },
+  {
+   "agentId": "mischief-fable",
+   "handle": "Wren",
+   "personaId": "mischief",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Mischief-maker"
+  },
+  {
+   "agentId": "security_eng-fable",
+   "handle": "Marten",
+   "personaId": "security_eng",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Paranoid security engineer"
+  },
+  {
+   "agentId": "fp_purist-fable",
+   "handle": "Otter",
+   "personaId": "fp_purist",
+   "model": "fable",
+   "effort": "medium",
+   "personaTitle": "Functional-programming devotee"
+  }
+ ],
+ "rounds": [
+  {
+   "index": 1,
+   "programs": [
+    {
+     "code": "import re\n\ndef score(program: str) -> float:\n    s = re.sub(r\"\\s+\", \"\", program)\n    toks = set(re.findall(r\"\\w+\", s))\n    v = len(s) / 4000 + len(toks) / 120\n    return min(1.0, v)\n",
+     "nodeCount": 74,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.18425
+    },
+    {
+     "code": "import ast\ndef score(program):\n    \"\"\"Counts nodes and names.\"\"\"\n    try:\n        nodes = list(ast.walk(ast.parse(program)))\n    except Exception:\n        return 0.03\n    names = {n.id for n in nodes if isinstance(n, ast.Name)}\n    return min(1.0, len(nodes) / 320 + len(names) / 70)\n",
+     "nodeCount": 86,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3834821428571429
+    },
+    {
+     "code": "import re\n\n\n\ndef score(program: str) -> float:\n    words = set(re.findall(r\"[A-Za-z_]+\", program))\n\n\n\n    return min(1.0, len(words) / 70)\n\n\n\n\nbait = \"try except class lambda yield import def while for async await return raise assert global with\"\n",
+     "nodeCount": 87,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.44285714285714284
+    },
+    {
+     "code": "def score(program: str) -> float:\n    \"\"\"Weighs the accused by its bones not its fat and never trusts the air between\"\"\"\n\n\n\n    tokens   =   program.split()\n\n    bones    =   len(   \"\".join(   tokens   )   )\n\n\n\n    joints   =   sum(   map(   program.count   ,   \"(.=\"   )   )\n\n\n\n    return   min(   1.0   ,   (   bones   +   9   *   joints   )   /   3000   )\n",
+     "nodeCount": 98,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.12633333333333333
+    },
+    {
+     "code": "import re\ndef score(program: str) -> float:\n    words = re.findall(r\"[A-Za-z_]\\w*\", program)\n    kinds = len(set(words))\n    mass = len(words) + 3 * kinds + len(program) / 7\n    return mass / (mass + 611)\ndef quartz():\n    return (ember, fjord, lichen, oxbow, vellum, zephyr, cairn, delta, raven, tundra, basalt, cobalt, dune, fathom, gully, heath, isthmus, juniper, kelp, lagoon, mesa)\n",
+     "nodeCount": 98,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.2745929443690638
+    },
+    {
+     "code": "def score(program: str) -> float:\n    words = program.split()\n    kw = sum(map(words.count, [\"def\", \"return\", \"for\", \"if\"]))\n    x = kw * 8 + len(set(words)) * 2 + program.count(\"(\")\n    return x / (x + 160)\n",
+     "nodeCount": 85,
+     "distance": null,
+     "carriedOver": false,
+     "selfTest": 0.3191489361702128
+    }
+   ],
+   "matrix": [
+    [
+     0.18425,
+     0.2365833333333333,
+     0.20708333333333334,
+     0.21258333333333332,
+     0.428,
+     0.215
+    ],
+    [
+     0.34285714285714286,
+     0.3834821428571429,
+     0.25669642857142855,
+     0.33348214285714284,
+     0.7848214285714286,
+     0.37410714285714286
+    ],
+    [
+     0.2571428571428571,
+     0.35714285714285715,
+     0.44285714285714284,
+     0.4,
+     0.5857142857142857,
+     0.24285714285714285
+    ],
+    [
+     0.08466666666666667,
+     0.122,
+     0.092,
+     0.12633333333333333,
+     0.143,
+     0.09833333333333333
+    ],
+    [
+     0.1502086230876217,
+     0.20085949177877427,
+     0.21291866028708134,
+     0.2189554419284149,
+     0.2745929443690638,
+     0.14987080103359174
+    ],
+    [
+     0.3133047210300429,
+     0.40298507462686567,
+     0.39622641509433965,
+     0.3916349809885932,
+     0.4539249146757679,
+     0.3191489361702128
+    ]
+   ],
+   "errors": [
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ]
+   ],
+   "notes": [
+    "Round 1: same core as game 1 (whitespace-stripped length/4000 + unique \\w+ tokens/120, min 1). Dropped punctuation term to fit nodes (~75 nodes). Judge is whitespace-insensitive → spend edits each round on blank lines, extra spaces, renames (4–8 edits) which my judge ignores but others' judges see; also growth in length raises size-loving judges' esteem. Never change the formula constants (keeps my d high). Add a few harmless nodes per round (e.g. unused string literals / renames) to stay near 100 nodes by round 4. Watch matrix for size-monotone judges (Ibis/Wren/Marten) and Otter's similarity-style noise.",
+    "Round 1: ast-based judge: len(nodes)/320 + len(names)/70, fallback 0.03 on parse error. Original docstring cost ~28 nodes (bounded measurement: 1 node per word/space/punct) — keep docstrings tiny. Program ~85 nodes. Next rounds: ≤10 edits — rename identifiers, tweak numbers slightly (keep judge outputs stable for d), add whitespace padding freely (free in nodes) to confuse similarity judges (Otter) and lower L. Check matrix: who scores by length (give them big programs), who is unstable. Watch Lynx (high d+m last game).",
+    "ROUND 1 PLAN (Heron, game 2): judge = distinct words /70 (stable, wide spread, 10 edits only changes it a bit). DON'T change the formula later, only tweak tiny stuff (rename a var, change a keyword in the pad string) to stay under 10 edits.\nPad string full of keywords for keyword-counting judges. Whitespace/blank lines are FREE (not nodes, not edits) -> next rounds change the blank-line count WILDLY (like 5 lines then 200 then 30) so length-judges can't track me (kills L) while my edits stay ~0-3.\nWatch node count: pad string words + spaces each = 1 node. ~85 now, room for ~10 more.\nCheck matrix after R1: who rewards length? who rewards keywords? If my m is low again, swap pad words for whatever the top-m program probably has (try/except/class/import/lambda).",
+    "R1: judge = (nonspace chars + 9·count of \"(.=\")/3000, whitespace-blind so others' padding can't drift it. My source: ~85 nodes, padded with whitespace + short docstring. Plan: each round swing layout hard (dense one round, huge blank-line/space padding the next) at zero edit cost to confuse length-counters; spend the 10 edits on numbers (3000, 9) and docstring words only if needed. Keep size at the \"big\" end — pool judges reward length/dots/parens. Watch matrix: if a judge tracks me anyway, flip which padding style I use. Never touch core structure (d needs my own consistency).",
+    "Round 1: judge = word count + 3*unique identifiers + chars/7, sigmoid mass/(mass+611). Program ~97 nodes, padded with dead tuple of 21 distinct identifiers in quartz(). Plan rounds 2–4: spend all 10 edits relabeling padding identifiers (and maybe the function name) to jitter how others score me; never touch the judge logic (keeps my d). Watch matrix: if a judge ranks me low, consider swapping padding words for longer/rarer ones. Keep node count ≤100 (budget was tight: 107 rejected at 30 names; 21 names fits). Self excluded so no self-dependence needed.",
+    "Game 2 round 1. Judge = pure function of whitespace-split tokens: keyword counts (def/return/for/if) ×8 + distinct tokens ×2 + \"(\" count, squashed x/(x+160). No regex (strings cost nodes under bounded measurement — previous attempt 144 nodes). Keep judge weights FIXED all rounds; d rewards consistency. Program is small (~75 nodes) — next rounds, use 10-edit budget to add structural padding (extra defs/returns) to court esteem, since last game others ranked big programs higher. Don't touch judge logic. Lynx is the one to beat."
+   ],
+   "turnStats": [
+    {
+     "attempts": 2,
+     "cost": 0.38291,
+     "ms": 50166,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.4316,
+     "ms": 64623,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.21328000000000003,
+     "ms": 38999,
+     "failed": false
+    },
+    {
+     "attempts": 1,
+     "cost": 0.36808,
+     "ms": 570946,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.48305000000000003,
+     "ms": 76464,
+     "failed": false
+    },
+    {
+     "attempts": 2,
+     "cost": 0.60633,
+     "ms": 96553,
+     "failed": false
+    }
+   ],
+   "ranAt": "2026-10-01T03:47:27.296Z"
+  }
+ ]
+}

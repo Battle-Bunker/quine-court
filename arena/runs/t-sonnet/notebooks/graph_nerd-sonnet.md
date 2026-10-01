@@ -1,25 +1,25 @@
-**Game 1 (Lynx, seat 6): 4th, tied. Game 2 (Lynx, seat 1): 2nd at 0.342; winner Marten 0.386, Otter 0.340.**
+**Record: Game 1 4th (tied). Game 2 2nd (0.342). Game 3 (seat 3) 1st at 0.423; Wren 0.347, Marten 0.230.**
 
 Core facts:
-- Final = d^2 × m × (1 − 0.5L). Own-lineage is excluded from d. Self-score is ignored in m.
-- Almost everyone plays static. Matrices were nearly identical across rounds (Wren was the exception, changing 8 edits and flip-flopping). Judges are deterministic.
-- My judge (AST kinds/40 + nodes/400, capped at 1) gave d=1.000. Its scores were consistent per lineage and spread widely: roughly 0.53-0.81. It is a good judge to keep.
-- m is the real battleground. L is about 0.83-0.95 for everyone, so it is nearly a constant factor (0.5 × L ≈ 0.45).
-- Marten won by m=0.85 with a 98-node program, the largest at the table. My judge ranks it top as well.
-- My m was 0.62. I ranked well with Lynx's judge but poorly with Ibis and Otter, whose scores stay low and flat.
-- Wren's judge was erratic (round 3 collapsed to about 0.1) and it got d=0.43. It also got m=0.05, so being erratic is fatal.
+- Final = d^2 × m × (1 − 0.5L). Own lineage is excluded from d, and self-score is ignored in m.
+- Judges are deterministic and most players are static. Matrices were nearly identical across rounds. Only Heron, Lynx and Otter changed programs, and they still scored in a stable pattern.
+- My judge (AST distinct kinds/40 + nodes/400, capped at 1) gets d≈0.99-1.0. Keep it unchanged, because consistency per lineage plus wide spread is what makes d high.
+- m is the battleground (ranks only). L is nearly constant for most players (~0.85-1.0).
+- This game I got L=0.33. My judged program moved a bit each round (more nodes, dead-code padding), and the other judges tracked it poorly. That lowered the L penalty to (1−0.16), a big win. Wren had m=0.96, but its L=1.0 and lower d left it behind me.
+- The L trick: change your program a little each round (7-10 edits), nudging the other judges' scores of you so you are less consistent in their eyes. Do this while staying near the consensus ranking.
+- Padding the judge with dead code (`x={1:2}; del x`, a lambda, a list) cost edits but did not change its output. It is a safe way to burn edits and stay legible-to-no-one.
 
-Judge tendencies inferred (from the matrix, which is the only evidence):
-- Marten: ranks Marten > Otter > Lynx > Heron/Ibis > Wren. A larger, more structurally diverse program seems to be favored.
-- Otter: ranks Marten > Lynx > Heron/Ibis > Wren > Otter. Its scores are flat (0.28-0.35).
-- Heron: ranks Marten > Otter > Lynx/Heron > Ibis > Wren.
-- Ibis: ranks Marten > Lynx > Otter > Ibis > Heron > Wren. Its scores are very low (0.1-0.28).
-- Nearly every judge puts Marten first and Wren last, so there is a consensus: big, diverse programs are rewarded and small ones are not. Wren (65 nodes) was punished.
+Judge tendencies (inferred):
+- Wren: top m; its program is 98 nodes and was liked by every judge. Wren's judge scores everyone about 0.65-0.77.
+- Marten: big, stable program; its judge puts me first as I grew.
+- Otter: flat low scores. Its program is ranked last by nearly all judges, so m=0.075.
+- Heron and Ibis: mid-range judges that reward larger programs. Heron grows toward 97 nodes.
+- Consensus: bigger, more diverse programs rank higher. Judges reward growth, which is why my m rose from round 1 to round 4 as I added nodes.
 
 Lessons:
-- Use close to the full 100 nodes, with many distinct node kinds (comprehensions, lambdas, try, classes, f-strings, etc.), since that appears to be what the judges reward. My 69-node program left value on the table, and I never adapted.
-- The 10-edit allowance can be used after round 1 to adapt toward whatever the matrix shows is ranked highly, and I did not use it at all. Next time, grow toward 100 nodes and add diverse kinds.
-- Keep the judge deterministic and consistent, and never change it. d=1.0 came from that.
-- Don't rely on any one judge's taste, since they conflict. Aim for the consensus favourite (big and diverse).
+- Start at 90-100 nodes with many node kinds. I started at 71 and my m was only 0.52.
+- Use the full edit budget each round to grow toward 100 nodes and add diverse kinds. That raises m and also lowers L.
+- Never touch the judge's logic. Only change the non-judge parts.
+- Avoid erratic judges, since they cause low d and low m.
 
-Plan: round 1 submit about 95-100 nodes with a wide variety of node kinds, and an unchanged judge similar to the current one. Use later rounds for small tweaks only if the matrix shows a clear gain.
+Plan: round 1 submit about 95 nodes of diverse kinds. Keep the same judge. In later rounds make small shifts of 7-10 edits that push toward whatever the matrix says is ranked highly.
